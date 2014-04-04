@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("SnapDotNet.Windows")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Snapchat for Windows 8.1")]
+[assembly: AssemblyDescription("Snapchat client for Windows 8.1")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SnapDotNet.Windows")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCompany("WumboSoft")]
+[assembly: AssemblyProduct("Snapchat for Windows 8.1")]
+[assembly: AssemblyCopyright("Copyright © WumboSoft 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
