@@ -7,16 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource AppPageBackgroundThemeBrush}">
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-50,0,0">
+    <Grid Background="Black" HorizontalAlignment="Stretch">
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#CC1D1D1D">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
             <Grid.Resources>
@@ -40,8 +40,8 @@
                 Snapchat for Windows 8.1
             </TextBlock>
             
-            <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" x:Uid="SignInButton">sign in</Button>
-            <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" x:Uid="CreateAccountButton">create account</Button>
+            <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" x:Uid="SignInButton">sign in</Button>
+            <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" x:Uid="CreateAccountButton">create account</Button>
         </Grid>
 
         <TextBlock VerticalAlignment="Bottom" Margin="5" Foreground="#FFCCCCCC">This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</TextBlock>
