@@ -25,6 +25,15 @@ namespace SnapDotNet.Pages
 		public StartPage()
 		{
 			this.InitializeComponent();
+			this.SizeChanged += (object sender, SizeChangedEventArgs e) =>
+			{
+
+
+				if (e.NewSize.Width <= (int) Resources["MinimalViewMaxWidth"])
+					VisualStateManager.GoToState(this, "MinimalLayout", true);
+				else
+					VisualStateManager.GoToState(this, "DefaultLayout", true);
+			};
 		}
 	}
 }

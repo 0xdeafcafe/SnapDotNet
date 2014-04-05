@@ -6,11 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    
+    <Page.Resources>
+        <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
+    </Page.Resources>
 
     <Grid Background="Black" HorizontalAlignment="Stretch">
-        <Image Stretch="UniformToFill" Source="ms-appx:///Assets/tempBackground.jpg" />
+        <Image Stretch="UniformToFill" Source="ms-appx:///Assets/tempBackground.jpg" HorizontalAlignment="Center"/>
         
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#BB1D1D1D">
+        <!-- Default View -->
+        <Grid x:Name="defaultView" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#BB1D1D1D">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -45,7 +50,63 @@
             <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" x:Uid="SignInButton">sign in</Button>
             <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" x:Uid="CreateAccountButton">create account</Button>
         </Grid>
+        
+        
+        <!-- Small View -->
+        <Grid x:Name="minimalView" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#BB1D1D1D">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock VerticalAlignment="Bottom" Margin="10" Foreground="#FF000000" x:Uid="Disclaimer">This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</TextBlock>
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="25"/>
+                    <Setter Property="Width" Value="200"/>
+                </Style>
+            </Grid.Resources>
+
+            <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="150">
+                <SymbolIcon.RenderTransform>
+                    <CompositeTransform ScaleX="5" ScaleY="5"/>
+                </SymbolIcon.RenderTransform>
+            </SymbolIcon>
+
+            <TextBlock x:Uid="StartPageTitle"
+                       Grid.ColumnSpan="2"
+                       Grid.Row="1"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource HeaderTextBlockStyle}"
+                       FontSize="25">
+                Snapchat for Windows 8.1
+            </TextBlock>
+
+            <Button Grid.Row="2" HorizontalAlignment="Center" Margin="0,30,0,15" x:Uid="SignInButton">sign in</Button>
+            <Button Grid.Row="3" HorizontalAlignment="Center" Margin="0,0,0,30" x:Uid="CreateAccountButton">create account</Button>
+        </Grid>
+
+        <!-- Legal disclaimer -->
+        <TextBlock VerticalAlignment="Bottom" Margin="10" Foreground="#FFFFFFFF" x:Uid="Disclaimer" TextWrapping="Wrap">This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</TextBlock>
+
+        <!-- Different Layout States -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="DefaultLayout"/>
+
+                <VisualState x:Name="MinimalLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="defaultView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="minimalView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
     </Grid>
 </Page>

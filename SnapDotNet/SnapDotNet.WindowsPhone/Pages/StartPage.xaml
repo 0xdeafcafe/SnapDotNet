@@ -13,8 +13,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
+        <Image Grid.RowSpan="2" Stretch="UniformToFill" Source="https://scontent-b-dfw.xx.fbcdn.net/hphotos-ash3/t1.0-9/1601003_707295035988062_618433636_n.jpg"/>
         
-        <Grid Grid.RowSpan="2" VerticalAlignment="Center" Margin="0,-50,0,0" HorizontalAlignment="Center">
+        <Grid Grid.RowSpan="2" VerticalAlignment="Center" Margin="0,-10,0,0" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -22,17 +24,27 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Logo + Name -->
-            <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50">
+            <!-- Logo Shadow -->
+            <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50" Foreground="Black">
                 <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="2" ScaleY="2"/>
+                    <CompositeTransform ScaleX="2.4" ScaleY="2.4" TranslateX="0" TranslateY="-5"/>
                 </SymbolIcon.RenderTransform>
             </SymbolIcon>
-            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}">Snapchat for Windows Phone</TextBlock>
+            
+            <!-- Logo -->
+            <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50" Margin="5">
+                <SymbolIcon.RenderTransform>
+                    <CompositeTransform ScaleX="2" ScaleY="2" TranslateY="-5"/>
+                </SymbolIcon.RenderTransform>
+            </SymbolIcon>
+            
+            <!-- App Title -->
+            <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Fill="#BB1D1D1D"/>
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Padding="5" Style="{StaticResource TitleTextBlockStyle}">Snapchat for Windows Phone</TextBlock>
         
             <!-- Buttons -->
-            <Button Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,25,0,0" x:Uid="SignInButton">sign in</Button>
-            <Button Grid.Row="3" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton">create new account</Button>
+            <Button Grid.Row="2" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,300,0,0" x:Uid="SignInButton">sign in</Button>
+            <Button Grid.Row="3" Width="200" HorizontalAlignment="Center" x:Uid="CreateAccountButton">create new account</Button>
         </Grid>
         
         <!-- Disclaimer -->
