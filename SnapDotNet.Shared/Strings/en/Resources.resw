@@ -123,8 +123,14 @@
   <data name="Disclaimer.Text" xml:space="preserve">
     <value>This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</value>
   </data>
+  <data name="PasswordBox.Header" xml:space="preserve">
+    <value>Password</value>
+  </data>
   <data name="SignInButton.Content" xml:space="preserve">
     <value>sign in</value>
+  </data>
+  <data name="SignInUsername.Header" xml:space="preserve">
+    <value>Username or email</value>
   </data>
   <data name="StartPageTitle.Text" xml:space="preserve">
     <value>Snapchat for Windows 8.1</value>

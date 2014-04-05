@@ -32,6 +32,11 @@ namespace SnapDotNet.Apps
 		}
 
 		/// <summary>
+		/// Gets the current frame.
+		/// </summary>
+		public static Frame CurrentFrame { get { return (Frame) Window.Current.Content; } }
+
+		/// <summary>
 		///     Invoked when the application is launched normally by the end user.  Other entry points
 		///     will be used when the application is launched to open a specific file, to display
 		///     search results, and so forth.
