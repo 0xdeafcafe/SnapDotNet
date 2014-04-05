@@ -9,8 +9,6 @@ namespace SnapDotNet.Apps.ViewModels
     {
 		public StartViewModel()
 		{
-			IsSignInPageVisible = true;
-
 			OpenSignInPageCommand = new RelayCommand(() =>
 			{
 				IsSignInPageVisible = true;
