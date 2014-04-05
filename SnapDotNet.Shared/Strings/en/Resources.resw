@@ -117,17 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Birthday.Header" xml:space="preserve">
+    <value>Birthday</value>
+  </data>
   <data name="CreateAccountButton.Content" xml:space="preserve">
-    <value>create account</value>
+    <value>Create account</value>
   </data>
   <data name="Disclaimer.Text" xml:space="preserve">
     <value>This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</value>
+  </data>
+  <data name="Email.Header" xml:space="preserve">
+    <value>Email</value>
   </data>
   <data name="PasswordBox.Header" xml:space="preserve">
     <value>Password</value>
   </data>
   <data name="SignInButton.Content" xml:space="preserve">
-    <value>sign in</value>
+    <value>Sign in</value>
   </data>
   <data name="SignInUsername.Header" xml:space="preserve">
     <value>Username or email</value>
