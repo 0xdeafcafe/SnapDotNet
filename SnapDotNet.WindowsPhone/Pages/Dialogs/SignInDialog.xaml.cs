@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace SnapDotNet.Pages.Dialogs
+namespace SnapDotNet.Apps.Pages.Dialogs
 {
 	public sealed partial class SignInDialog : ContentDialog
 	{

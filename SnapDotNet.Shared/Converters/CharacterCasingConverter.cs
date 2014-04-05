@@ -2,7 +2,7 @@
 using Windows.UI.Text;
 using Windows.UI.Xaml.Data;
 
-namespace SnapDotNet.Converters
+namespace SnapDotNet.Apps.Converters
 {
     public class CharacterCasingConverter
 		: IValueConverter

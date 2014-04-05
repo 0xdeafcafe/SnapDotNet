@@ -7,8 +7,8 @@
     <ProjectGuid>{1B26E745-508E-4C01-BB08-18B3EF0F55B1}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SnapDotNet</RootNamespace>
-    <AssemblyName>SnapDotNet.Windows</AssemblyName>
+    <RootNamespace>SnapDotNet.Apps</RootNamespace>
+    <AssemblyName>SnapDotNet.Apps.Windows</AssemblyName>
     <DefaultLanguage>en</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
