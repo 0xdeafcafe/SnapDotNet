@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
-namespace SnapDotNet.Core.SnapchatApi.DataModels
+namespace SnapDotNet.Core.Snapchat.Models
 {
 	/// <summary>
 	/// Indicates an account's privacy mode.
@@ -31,7 +31,7 @@ namespace SnapDotNet.Core.SnapchatApi.DataModels
 		public Collection<string> BestFriends { get; set; }
 
 		[DataMember(Name = "is_vip")]
-		public bool IsVIP { get; set; }
+		public bool IsVip { get; set; }
 
 		[DataMember(Name = "score")]
 		public int Score { get; set; }

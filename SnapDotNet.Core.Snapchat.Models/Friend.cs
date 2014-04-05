@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace SnapDotNet.Core.SnapchatApi.DataModels
+namespace SnapDotNet.Core.Snapchat.Models
 {
 	/// <summary>
 	/// Indicates the state of a friend request.

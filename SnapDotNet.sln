@@ -3,23 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SnapDotNet.Shared", "SnapDotNet\SnapDotNet.Shared\SnapDotNet.Shared.shproj", "{886DB274-BACA-4986-AF5F-57D786DFCF2D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Windows", "SnapDotNet\SnapDotNet.Windows\SnapDotNet.Windows.csproj", "{1B26E745-508E-4C01-BB08-18B3EF0F55B1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.WindowsPhone", "SnapDotNet\SnapDotNet.WindowsPhone\SnapDotNet.WindowsPhone.csproj", "{A92F4564-8F8B-4E84-998E-748484BE45F3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SnapDotNet.Core", "SnapDotNet.Core", "{F9870B4E-8AFF-4477-851C-FA1073EA9BF2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.SnapchatApi", "SnapDotNet\SnapDotNet.Core\SnapDotNet.Core.SnapchatApi\SnapDotNet.Core.SnapchatApi.csproj", "{DF095A52-69BA-4344-8D58-BEF13A8C2FCB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SnapDotNet.Apps", "SnapDotNet.Apps", "{3A1AB068-0B25-492A-AC10-C47F98392F7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Snapchat.Models", "SnapDotNet.Core.Snapchat.Models\SnapDotNet.Core.Snapchat.Models.csproj", "{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Snapchat", "Snapchat", "{B13E0700-E76D-4401-8295-5233370E0841}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Miscellaneous", "Miscellaneous", "{810D39C3-0100-4FA2-992B-ABFE04EA2F21}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SnapDotNet.Shared", "SnapDotNet.Shared\SnapDotNet.Shared.shproj", "{886DB274-BACA-4986-AF5F-57D786DFCF2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Windows", "SnapDotNet.Windows\SnapDotNet.Windows.csproj", "{1B26E745-508E-4C01-BB08-18B3EF0F55B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.WindowsPhone", "SnapDotNet.WindowsPhone\SnapDotNet.WindowsPhone.csproj", "{A92F4564-8F8B-4E84-998E-748484BE45F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Miscellaneous.Models", "SnapDotNet.Miscellaneous.Models\SnapDotNet.Miscellaneous.Models.csproj", "{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Snapchat.Api", "SnapDotNet.Core.Snapchat.Api\SnapDotNet.Core.Snapchat.Api.csproj", "{DF095A52-69BA-4344-8D58-BEF13A8C2FCB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		SnapDotNet\SnapDotNet.Shared\SnapDotNet.Shared.projitems*{a92f4564-8f8b-4e84-998e-748484be45f3}*SharedItemsImports = 4
-		SnapDotNet\SnapDotNet.Shared\SnapDotNet.Shared.projitems*{1b26e745-508e-4c01-bb08-18b3ef0f55b1}*SharedItemsImports = 4
-		SnapDotNet\SnapDotNet.Shared\SnapDotNet.Shared.projitems*{886db274-baca-4986-af5f-57d786dfcf2d}*SharedItemsImports = 13
+		SnapDotNet.Shared\SnapDotNet.Shared.projitems*{a92f4564-8f8b-4e84-998e-748484be45f3}*SharedItemsImports = 4
+		SnapDotNet.Shared\SnapDotNet.Shared.projitems*{1b26e745-508e-4c01-bb08-18b3ef0f55b1}*SharedItemsImports = 4
+		SnapDotNet.Shared\SnapDotNet.Shared.projitems*{886db274-baca-4986-af5f-57d786dfcf2d}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +40,16 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Release|x64.ActiveCfg = Release|Any CPU
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}.Release|x86.ActiveCfg = Release|Any CPU
 		{1B26E745-508E-4C01-BB08-18B3EF0F55B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1B26E745-508E-4C01-BB08-18B3EF0F55B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B26E745-508E-4C01-BB08-18B3EF0F55B1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -76,6 +94,16 @@ Global
 		{A92F4564-8F8B-4E84-998E-748484BE45F3}.Release|x86.ActiveCfg = Release|x86
 		{A92F4564-8F8B-4E84-998E-748484BE45F3}.Release|x86.Build.0 = Release|x86
 		{A92F4564-8F8B-4E84-998E-748484BE45F3}.Release|x86.Deploy.0 = Release|x86
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Release|x64.ActiveCfg = Release|Any CPU
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF095A52-69BA-4344-8D58-BEF13A8C2FCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF095A52-69BA-4344-8D58-BEF13A8C2FCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF095A52-69BA-4344-8D58-BEF13A8C2FCB}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -91,9 +119,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E} = {B13E0700-E76D-4401-8295-5233370E0841}
+		{B13E0700-E76D-4401-8295-5233370E0841} = {F9870B4E-8AFF-4477-851C-FA1073EA9BF2}
+		{810D39C3-0100-4FA2-992B-ABFE04EA2F21} = {F9870B4E-8AFF-4477-851C-FA1073EA9BF2}
 		{886DB274-BACA-4986-AF5F-57D786DFCF2D} = {3A1AB068-0B25-492A-AC10-C47F98392F7A}
 		{1B26E745-508E-4C01-BB08-18B3EF0F55B1} = {3A1AB068-0B25-492A-AC10-C47F98392F7A}
 		{A92F4564-8F8B-4E84-998E-748484BE45F3} = {3A1AB068-0B25-492A-AC10-C47F98392F7A}
-		{DF095A52-69BA-4344-8D58-BEF13A8C2FCB} = {F9870B4E-8AFF-4477-851C-FA1073EA9BF2}
+		{AADFDACF-81A3-4DE7-ACDD-AED7F328F26C} = {810D39C3-0100-4FA2-992B-ABFE04EA2F21}
+		{DF095A52-69BA-4344-8D58-BEF13A8C2FCB} = {B13E0700-E76D-4401-8295-5233370E0841}
 	EndGlobalSection
 EndGlobal

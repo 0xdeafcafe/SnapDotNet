@@ -1,4 +1,4 @@
-﻿namespace SnapDotNet.Core.SnapchatApi
+﻿namespace SnapDotNet.Core.Snapchat.Api
 {
 	public static class Settings
 	{

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
-namespace SnapDotNet.Core.SnapchatApi.DataModels
+namespace SnapDotNet.Core.Snapchat.Models
 {
 	/// <summary>
 	/// Represents a person's activity which is visible to other users.

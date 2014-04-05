@@ -5,11 +5,11 @@
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DF095A52-69BA-4344-8D58-BEF13A8C2FCB}</ProjectGuid>
+    <ProjectGuid>{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SnapDotNet.Core.SnapchatApi</RootNamespace>
-    <AssemblyName>SnapDotNet.Core.SnapchatApi</AssemblyName>
+    <RootNamespace>SnapDotNet.Core.Snapchat.Models</RootNamespace>
+    <AssemblyName>SnapDotNet.Core.Snapchat.Models</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -33,25 +33,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
   <ItemGroup>
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\NotifyPropertyChangedBase.cs" />
-    <Compile Include="DataModels\Account.cs" />
-    <Compile Include="DataModels\PublicActivity.cs" />
-    <Compile Include="DataModels\Friend.cs" />
-    <Compile Include="DataModels\Response.cs" />
-    <Compile Include="DataModels\Snap.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Account.cs" />
+    <Compile Include="Friend.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublicActivity.cs" />
+    <Compile Include="Response.cs" />
+    <Compile Include="Snap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

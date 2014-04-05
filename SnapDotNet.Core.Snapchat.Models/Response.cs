@@ -1,8 +1,6 @@
-﻿using SnapDotNet.Core.SnapchatApi.Common;
-using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace SnapDotNet.Core.SnapchatApi.DataModels
+namespace SnapDotNet.Core.Snapchat.Models
 {
 	/// <summary>
 	/// Represents a response from the Snapchat API.
