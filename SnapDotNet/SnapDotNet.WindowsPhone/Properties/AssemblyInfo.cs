@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Snapchat for Windows Phone 8.1")]
 [assembly: AssemblyCopyright("Copyright © WumboSoft 2014")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Version information for an assembly consists of the following four values:
 //

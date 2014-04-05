@@ -8,7 +8,9 @@
     mc:Ignorable="d">
 
     <Grid Background="Black" HorizontalAlignment="Stretch">
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#CC1D1D1D">
+        <Image Stretch="UniformToFill" Source="ms-appx:///Assets/tempBackground.jpg" />
+        
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#BB1D1D1D">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -44,6 +46,6 @@
             <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" x:Uid="CreateAccountButton">create account</Button>
         </Grid>
 
-        <TextBlock VerticalAlignment="Bottom" Margin="5" Foreground="#FFCCCCCC">This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</TextBlock>
+        <TextBlock VerticalAlignment="Bottom" Margin="10" Foreground="#FF000000" x:Uid="Disclaimer">This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</TextBlock>
     </Grid>
 </Page>

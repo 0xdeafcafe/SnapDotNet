@@ -13,8 +13,10 @@
             
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
+                    <!--
                     <x:String x:Key="GlobalAppTitle">Snapchat</x:String>
                     <x:String x:Key="GlobalAppTitleLowerCase">snapchat</x:String>
+                    -->
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

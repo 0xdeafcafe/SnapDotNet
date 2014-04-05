@@ -31,8 +31,8 @@
             <TextBlock Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}">Snapchat for Windows Phone</TextBlock>
         
             <!-- Buttons -->
-            <Button Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,25,0,0">sign in</Button>
-            <Button Grid.Row="3" HorizontalAlignment="Stretch">create account</Button>
+            <Button Grid.Row="2" HorizontalAlignment="Stretch" Margin="0,25,0,0" x:Uid="SignInButton">sign in</Button>
+            <Button Grid.Row="3" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton">create new account</Button>
         </Grid>
         
         <!-- Disclaimer -->
