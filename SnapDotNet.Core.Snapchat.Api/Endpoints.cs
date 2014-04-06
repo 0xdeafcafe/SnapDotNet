@@ -22,6 +22,12 @@ namespace SnapDotNet.Core.Snapchat.Api
 			_webConnect = new WebConnect();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="username"></param>
+		/// <param name="password"></param>
+		/// <returns></returns>
 		public async Task<Account> Login(string username, string password)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();

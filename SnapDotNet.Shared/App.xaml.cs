@@ -98,6 +98,9 @@ namespace SnapDotNet.Apps
 				}
 			}
 
+			// Register for Push Notifications
+			//InitNotificationsAsync();
+
 			// Ensure the current window is active
 			Window.Current.Activate();
 		}
@@ -115,7 +118,7 @@ namespace SnapDotNet.Apps
 			rootFrame.Navigated -= RootFrame_FirstNavigated;
 		}
 #endif
-
+		
 		/// <summary>
 		///     Invoked when application execution is being suspended.  Application state is saved
 		///     without knowing whether the application will be terminated or resumed with the contents
