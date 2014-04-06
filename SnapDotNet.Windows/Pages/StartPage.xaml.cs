@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -36,6 +37,26 @@ namespace SnapDotNet.Apps.Pages
 				else
 					VisualStateManager.GoToState(this, "DefaultLayout", true);
 			};
+		}
+
+		protected override void OnNavigatedTo(NavigationEventArgs e)
+		{
+			SettingsPane.GetForCurrentView().CommandsRequested += OnSettingsCommandsRequested;
+			base.OnNavigatedTo(e);
+		}
+
+		protected override void OnNavigatedFrom(NavigationEventArgs e)
+		{
+			SettingsPane.GetForCurrentView().CommandsRequested -= OnSettingsCommandsRequested;
+			base.OnNavigatedFrom(e);
+		}
+
+		void OnSettingsCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+		{
+			args.Request.ApplicationCommands.Add(new SettingsCommand("privacy_policy", "Privacy policy", delegate
+			{
+				// TODO: Open privacy policy
+			}));
 		}
 	}
 }
