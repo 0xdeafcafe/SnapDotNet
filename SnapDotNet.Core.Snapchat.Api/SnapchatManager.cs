@@ -11,20 +11,29 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public Account Account { get; private set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public SnapChatManager()
 		{
 			Endpoints = new Endpoints(this);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="username"></param>
+		/// <param name="authToken"></param>
+		/// <param name="getUpdates"></param>
 		public SnapChatManager(string username, string authToken, bool getUpdates = false)
 		{
+			Endpoints = new Endpoints(this);
+
 			UpdateUsername(username);
 			UpdateAccessCode(authToken);
 
-			if (!getUpdates)
-				return;
-
-			Endpoints.GetUpdatesAsync(username).Wait();
+			if (getUpdates)
+				Endpoints.GetUpdatesAsync().Wait();
 		}
 
 		#region Setters

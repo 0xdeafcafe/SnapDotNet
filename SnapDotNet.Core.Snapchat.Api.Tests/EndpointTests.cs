@@ -12,7 +12,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 		{
 			var authentication = SettingsLoader.GetAuthencationInfo();
 			var snapChatManager = new SnapChatManager(authentication.Username, authentication.AuthToken);
-			var account = await snapChatManager.Endpoints.GetUpdatesAsync(authentication.Username);
+			var account = await snapChatManager.Endpoints.GetUpdatesAsync();
 
 			Assert.AreEqual(true, account.Logged);
 			Assert.AreEqual(authentication.Username.ToLowerInvariant(), account.Username.ToLowerInvariant());
