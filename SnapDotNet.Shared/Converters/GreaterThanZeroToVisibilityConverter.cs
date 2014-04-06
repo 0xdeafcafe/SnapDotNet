@@ -1,20 +1,20 @@
 ﻿using System;
-using Windows.UI.Text;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace SnapDotNet.Apps.Converters
 {
-    public class CharacterCasingConverter
-		: IValueConverter
-    {
-		public LetterCase LetterCase { get; set; }
+	public sealed class GreaterThanZeroToVisibilityConverter
+		 : IValueConverter
+	{
+		public bool IsInverse { get; set; }
 
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			if (LetterCase == LetterCase.Lower)
-				return value.ToString().ToLowerInvariant();
+			if (IsInverse)
+				return (decimal) value > 0 ? Visibility.Collapsed : Visibility.Visible;
 			else
-				return value.ToString().ToUpperInvariant();
+				return (decimal) value > 0 ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, string language)

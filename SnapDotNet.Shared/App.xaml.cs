@@ -1,4 +1,4 @@
-﻿using SnapDotNet.Pages;
+﻿using SnapDotNet.Apps.Pages;
 using System;
 using System.Diagnostics;
 using Windows.ApplicationModel;
@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
-namespace SnapDotNet
+namespace SnapDotNet.Apps
 {
 	/// <summary>
 	///     Provides application-specific behavior to supplement the default Application class.
@@ -30,6 +30,11 @@ namespace SnapDotNet
 			InitializeComponent();
 			Suspending += OnSuspending;
 		}
+
+		/// <summary>
+		/// Gets the current frame.
+		/// </summary>
+		public static Frame CurrentFrame { get { return (Frame) Window.Current.Content; } }
 
 		/// <summary>
 		///     Invoked when the application is launched normally by the end user.  Other entry points

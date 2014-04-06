@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SnapDotNet.Core")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Snap.NET Core")]
+[assembly: AssemblyDescription("Core essentials for the .NET-based Snapchat API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SnapDotNet.Core")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCompany("WumboSoft")]
+[assembly: AssemblyProduct("Snap.NET Core")]
+[assembly: AssemblyCopyright("Copyright © WumboSoft 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]

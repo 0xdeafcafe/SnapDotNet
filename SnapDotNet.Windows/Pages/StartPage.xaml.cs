@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SnapDotNet.Apps.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -15,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace SnapDotNet.Pages
+namespace SnapDotNet.Apps.Pages
 {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
@@ -24,11 +26,11 @@ namespace SnapDotNet.Pages
 	{
 		public StartPage()
 		{
+			DataContext = new StartViewModel();
+
 			this.InitializeComponent();
 			this.SizeChanged += (object sender, SizeChangedEventArgs e) =>
 			{
-
-
 				if (e.NewSize.Width <= (int) Resources["MinimalViewMaxWidth"])
 					VisualStateManager.GoToState(this, "MinimalLayout", true);
 				else
