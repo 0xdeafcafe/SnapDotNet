@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 namespace SnapDotNet.Core.Snapchat.Models

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Converters.Json;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
@@ -70,6 +72,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public Collection<string> Recents { get; set; }
 
 		[DataMember(Name = "added_friends_timestamp")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime AddedFriendsTimestamp { get; set; }
 
 		[DataMember(Name = "notification_sound_setting")]

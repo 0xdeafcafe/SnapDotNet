@@ -14,7 +14,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 			var snapChatManager = new SnapChatManager();
 			var account = await snapChatManager.Endpoints.Login(authentication.Username, authentication.Password);
 
-			Assert.IsTrue(true);
+			Assert.AreEqual(true, account.Logged);
 		}
 	}
 }

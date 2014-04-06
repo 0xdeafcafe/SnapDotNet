@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
