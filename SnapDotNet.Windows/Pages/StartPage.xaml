@@ -267,14 +267,17 @@
             </TextBlock>
 
             <Button Grid.Row="2"
-				HorizontalAlignment="Center"
-				Margin="0,30,0,15"
-				x:Uid="SignInButton" Content="sign in"/>
+				    HorizontalAlignment="Center"
+				    Margin="0,30,0,15"
+				    x:Uid="SignInButton"
+                    Command="{Binding OpenSignInPageCommand}"
+                    Content="sign in"/>
             <Button Grid.Row="3"
-				HorizontalAlignment="Center"
-				Margin="0,0,0,30"
-				x:Uid="CreateAccountButton"
-				Command="{Binding OpenSignInPageCommand}" Content="create account"/>
+				    HorizontalAlignment="Center"
+				    Margin="0,0,0,30"
+				    x:Uid="CreateAccountButton"
+				    Command="{Binding OpenRegisterPageCommand}"
+                    Content="create account"/>
         </Grid>
 
         <!-- Legal disclaimer -->

@@ -130,6 +130,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Models\SnapDotNet.Core.Snapchat.Models.csproj">
+      <Project>{3c6638cf-75e9-494d-af5a-6f64bc5c4f9e}</Project>
+      <Name>SnapDotNet.Core.Snapchat.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
