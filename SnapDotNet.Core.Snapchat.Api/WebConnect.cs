@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
+using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
@@ -21,8 +25,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
 		/// <returns>Http Response Message</returns>
-		public async Task<HttpResponseMessage> Post(string endpoint, Dictionary<string, string> postData,
+		public async Task<T> Post<T>(string endpoint, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
+			where T : Response
 		{
 			var webClient = new HttpClient();
 			webClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", Settings.UserAgent);
@@ -41,7 +46,19 @@ namespace SnapDotNet.Core.Snapchat.Api
 				await
 					webClient.PostAsync(new Uri(Settings.ApiBasePoint + endpoint),
 						new StringContent(postBody, Encoding.UTF8, "application/x-www-form-urlencoded"));
-			return response;
+
+			switch (response.StatusCode)
+			{
+				case HttpStatusCode.OK:
+						// Http Request Worked
+						var data = await response.Content.ReadAsStringAsync();
+						var deseralizedData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(data));
+						return deseralizedData;
+
+				default:
+					// Well, fuck
+					throw new InvalidHttpResponseException(response.ReasonPhrase, response);
+			}
 		}
 
 		/// <summary>

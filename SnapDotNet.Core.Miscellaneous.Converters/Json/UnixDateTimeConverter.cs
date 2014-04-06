@@ -11,7 +11,7 @@ namespace SnapDotNet.Core.Miscellaneous.Converters.Json
 			JsonSerializer serializer)
 		{
 			if (reader.TokenType != JsonToken.Integer)
-				throw new Exception(String.Format("Unexpected token parsing date. Expected Integer, got {0}.", reader.TokenType));
+				return null;
 
 			return Timestamps.ConvertToDateTime((long) reader.Value);
 		}
@@ -19,6 +19,12 @@ namespace SnapDotNet.Core.Miscellaneous.Converters.Json
 		public override void WriteJson(JsonWriter writer, object value,
 			JsonSerializer serializer)
 		{
+			if (value == null)
+			{
+				writer.WriteNull();
+				return;
+			}
+
 			long ticks;
 			if (value is DateTime)
 			{

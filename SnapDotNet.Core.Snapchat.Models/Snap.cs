@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Converters.Json;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
@@ -43,12 +45,14 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public string ScreenName { get; set; }
 
 		[DataMember(Name = "ts")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime Timestamp { get; set; }
 
 		[DataMember(Name = "st")]
 		public SnapStatus Status { get; set; }
 
 		[DataMember(Name = "sts")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime SentTimestamp { get; set; }
 
 		[DataMember(Name = "c_id")]
@@ -64,9 +68,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public double CapturePosition { get; set; }
 
 		[DataMember(Name = "t")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime? CaptureTime { get; set; }
 
 		[DataMember(Name = "oat")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime? OpenedAt { get; set; }
 
 		[DataMember(Name = "rsecs")]

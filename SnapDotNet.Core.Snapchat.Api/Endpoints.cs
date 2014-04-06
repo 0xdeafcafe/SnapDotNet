@@ -37,28 +37,16 @@ namespace SnapDotNet.Core.Snapchat.Api
 				{"username", username},
 				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
 			};
-			var response =
-				await _webConnect.Post(LoginEndpointUrl, postData, Settings.StaticToken, timestamp.ToString(CultureInfo.InvariantCulture));
 
-			switch (response.StatusCode)
-			{
-				case HttpStatusCode.OK:
-				{
-					// Http Request Worked
-					var data = await response.Content.ReadAsStringAsync();
-					var accountData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<Account>(data));
+			var account =
+				await
+					_webConnect.Post<Account>(LoginEndpointUrl, postData, Settings.StaticToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
 
-					// Check if we were logged in
-					if (!accountData.Logged)
-						throw new InvalidCredentialsException();
+			if (account == null || !account.Logged)
+				throw new InvalidCredentialsException();
 
-					// Yup, save the data and return true
-					return accountData;
-				}
-				default:
-					// Well, fuck
-					throw new InvalidHttpResponseException("Unable to connect to SnapChat's services.", response);
-			}
+			return account;
 		}
 	}
 }
