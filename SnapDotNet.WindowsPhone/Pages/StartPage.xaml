@@ -40,7 +40,7 @@
             
             <!-- App Title -->
             <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Fill="#BB1D1D1D"/>
-            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Padding="5" Style="{StaticResource TitleTextBlockStyle}">Snapchat for Windows Phone</TextBlock>
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Padding="5" Style="{StaticResource TitleTextBlockStyle}" FontWeight="Light">Snapchat for Windows Phone</TextBlock>
         
             <!-- Buttons -->
             <Button Grid.Row="2" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,300,0,0" x:Uid="SignInButton">sign in</Button>

@@ -1,6 +1,8 @@
 ﻿using SnapDotNet.Apps.Common;
 using System;
 using System.Windows.Input;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
 
 namespace SnapDotNet.Apps.ViewModels
 {
@@ -36,8 +38,8 @@ namespace SnapDotNet.Apps.ViewModels
 				IsStartPageVisible = true;
 			});
 
-			SignInCommand = new RelayCommand(SignIn);
-			RegisterCommand = new RelayCommand(Register);
+			SignInCommand = new RelayCommand<Page>(SignIn);
+			RegisterCommand = new RelayCommand<Page>(Register);
 		}
 
 		/// <summary>
@@ -123,17 +125,19 @@ namespace SnapDotNet.Apps.ViewModels
 		/// <summary>
 		/// Attempts to sign the user into Snapchat.
 		/// </summary>
-		private void SignIn()
+		private void SignIn(Page nextPage)
 		{
-
+			// TODO: API stuff
+			App.CurrentFrame.Navigate(nextPage.GetType());
 		}
 
 		/// <summary>
 		/// Attempts to create a new account.
 		/// </summary>
-		private void Register()
+		private void Register(Page nextPage)
 		{
-
+			// TODO: API stuff
+			App.CurrentFrame.Navigate(nextPage.GetType());
 		}
     }
 }

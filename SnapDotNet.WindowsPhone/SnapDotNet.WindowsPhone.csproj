@@ -83,8 +83,8 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\Dialogs\SignInDialog.xaml.cs">
-      <DependentUpon>SignInDialog.xaml</DependentUpon>
+    <Compile Include="Pages\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
@@ -106,7 +106,7 @@
     <Content Include="StoreManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\Dialogs\SignInDialog.xaml">
+    <Page Include="Pages\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
