@@ -6,6 +6,6 @@
 
 		public string Password { get; set; }
 
-		public string AccessToken { get; set; }
+		public string AuthToken { get; set; }
 	}
 }

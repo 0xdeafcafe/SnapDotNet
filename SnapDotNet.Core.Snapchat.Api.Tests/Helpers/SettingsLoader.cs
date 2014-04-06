@@ -8,7 +8,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests.Helpers
 		{
 			return new Authentication
 			{
-				AccessToken = Settings.AccessToken,
+				AuthToken = Settings.AuthToken,
 				Password = Settings.Password,
 				Username = Settings.Username
 			};

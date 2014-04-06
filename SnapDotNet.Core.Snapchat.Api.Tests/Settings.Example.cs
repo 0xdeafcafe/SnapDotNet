@@ -10,6 +10,6 @@
 
 		public static string Password = "Your snapchat Password";
 
-		public static string AccessToken = "Your snapchat AccessToken";
+		public static string AuthToken = "Your snapchat AuthToken";
 	}
 }
