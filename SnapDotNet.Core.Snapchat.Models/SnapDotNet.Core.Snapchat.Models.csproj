@@ -45,6 +45,12 @@
     <Compile Include="Response.cs" />
     <Compile Include="Snap.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnapDotNet.Miscellaneous.Models\SnapDotNet.Miscellaneous.Models.csproj">
+      <Project>{aadfdacf-81a3-4de7-acdd-aed7f328f26c}</Project>
+      <Name>SnapDotNet.Miscellaneous.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
