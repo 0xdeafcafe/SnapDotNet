@@ -2,16 +2,16 @@
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
-	public class SnapchatManager
+	public class SnapChatManager
 	{
 		public String AccessCode { get; private set; }
 
-		public SnapchatManager()
+		public SnapChatManager()
 		{
 			Endpoints = new Endpoints(this);
 		}
 
-		public SnapchatManager(string accessCode)
+		public SnapChatManager(string accessCode)
 			: base()
 		{
 			UpdateAccessCode(accessCode);

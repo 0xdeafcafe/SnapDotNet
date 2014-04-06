@@ -1,13 +1,20 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using SnapDotNet.Core.Snapchat.Api.Tests.Helpers;
 
 namespace SnapDotNet.Core.Snapchat.Api.Tests
 {
 	[TestClass]
 	public class EndpointTests
 	{
-		public string Email = "";
-		public string Password = "";
+		[TestMethod]
+		public async Task LoginAsyncTest()
+		{
+			var authentication = SettingsLoader.GetAuthencationInfo();
+			var snapChatManager = new SnapChatManager();
+			var account = await snapChatManager.Endpoints.Login(authentication.Username, authentication.Password);
 
-
+			Assert.IsTrue(true);
+		}
 	}
 }
