@@ -5,11 +5,11 @@
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C6638CF-75E9-494D-AF5A-6F64BC5C4F9E}</ProjectGuid>
+    <ProjectGuid>{1CC5FC95-2AE3-449A-BC3A-AFA90A8C3BC2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SnapDotNet.Core.Snapchat.Models</RootNamespace>
-    <AssemblyName>SnapDotNet.Core.Snapchat.Models</AssemblyName>
+    <RootNamespace>SnapDotNet.Core.Miscellaneous.Converters</RootNamespace>
+    <AssemblyName>SnapDotNet.Core.Miscellaneous.Converters</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -38,22 +38,8 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="Friend.cs" />
+    <Compile Include="Json\UnixDateTimeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PublicActivity.cs" />
-    <Compile Include="Response.cs" />
-    <Compile Include="Snap.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SnapDotNet.Core.Miscellaneous.Converters\SnapDotNet.Core.Miscellaneous.Converters.csproj">
-      <Project>{1cc5fc95-2ae3-449a-bc3a-afa90a8c3bc2}</Project>
-      <Name>SnapDotNet.Core.Miscellaneous.Converters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SnapDotNet.Miscellaneous.Models\SnapDotNet.Miscellaneous.Models.csproj">
-      <Project>{aadfdacf-81a3-4de7-acdd-aed7f328f26c}</Project>
-      <Name>SnapDotNet.Miscellaneous.Models</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -62,6 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Helpers\SnapDotNet.Core.Snapchat.Helpers.csproj">
+      <Project>{1ac5610b-f69c-4450-8a43-e4fd4733bb5d}</Project>
+      <Name>SnapDotNet.Core.Snapchat.Helpers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

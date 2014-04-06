@@ -147,6 +147,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SnapDotNet.Core.Miscellaneous.Converters\SnapDotNet.Core.Miscellaneous.Converters.csproj">
+      <Project>{1cc5fc95-2ae3-449a-bc3a-afa90a8c3bc2}</Project>
+      <Name>SnapDotNet.Core.Miscellaneous.Converters</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Api\SnapDotNet.Core.Snapchat.Api.csproj">
       <Project>{df095a52-69ba-4344-8d58-bef13a8c2fcb}</Project>
       <Name>SnapDotNet.Core.Snapchat.Api</Name>

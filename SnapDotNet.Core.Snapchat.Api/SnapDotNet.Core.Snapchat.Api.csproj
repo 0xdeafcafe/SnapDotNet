@@ -44,14 +44,16 @@
     <Compile Include="Endpoints.cs" />
     <Compile Include="Exceptions\InvalidCredentialsException.cs" />
     <Compile Include="Exceptions\InvalidHttpResponseException.cs" />
-    <Compile Include="Helpers\Timestamps.cs" />
-    <Compile Include="Helpers\Tokens.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnapChatManager.cs" />
     <Compile Include="WebConnect.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Helpers\SnapDotNet.Core.Snapchat.Helpers.csproj">
+      <Project>{1ac5610b-f69c-4450-8a43-e4fd4733bb5d}</Project>
+      <Name>SnapDotNet.Core.Snapchat.Helpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Models\SnapDotNet.Core.Snapchat.Models.csproj">
       <Project>{3c6638cf-75e9-494d-af5a-6f64bc5c4f9e}</Project>
       <Name>SnapDotNet.Core.Snapchat.Models</Name>

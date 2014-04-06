@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using SnapDotNet.Core.Snapchat.Api.Helpers;
+using SnapDotNet.Core.Snapchat.Helpers;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
@@ -34,7 +34,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 				foreach (var header in headers)
 					webClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
 
-			postData["req_token"] = Tokens.GenerateRequestToken(typeToken, timeStamp);
+			postData["req_token"] = Tokens.GenerateRequestToken(Settings.StaticToken, Settings.HashingPattern, typeToken, timeStamp);
 			postData["version"] = "5.0.0";
 			var postBody = PostBodyParser(postData);
 			var response =

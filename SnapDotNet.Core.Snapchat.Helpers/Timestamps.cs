@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace SnapDotNet.Core.Snapchat.Api.Helpers
+namespace SnapDotNet.Core.Snapchat.Helpers
 {
 	/// <summary>
 	///     A Timestamp Helper for Snapchat
