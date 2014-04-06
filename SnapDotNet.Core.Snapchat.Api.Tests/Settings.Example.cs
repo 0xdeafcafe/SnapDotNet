@@ -4,7 +4,7 @@
 	/// Populate this with real info, then rename it to Settings.cs 
 	/// (and rename the class to Settings) - xoxo
 	/// </summary>
-	public static class Settings
+	public static class SettingsExample
 	{
 		public static string Username = "Your snapchat Username";
 
