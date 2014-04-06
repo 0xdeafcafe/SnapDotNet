@@ -6,7 +6,31 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:SnapDotNet.Apps.ViewModels"
+    xmlns:tk="using:WinRTXamlToolkit.Controls"
+    xmlns:converters="using:SnapDotNet.Apps.Converters"
+    xmlns:snapchat="using:SnapDotNet.Core.Snapchat.Models"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:RemainingSecondsToDegreeConverter x:Key="RemainingSecondsToDegreeConverter" MaximumDuration="10"/>
+
+        <!-- Width threshold for switching between the default and minimal views -->
+        <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
+    </Page.Resources>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="Create snap" Icon="Camera"/>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="View snap" Icon="View"/>
+                <AppBarButton Label="View story" Icon="ViewAll"/>
+                <AppBarButton Label="Delete" Icon="Delete"/>
+                <AppBarButton Label="Block" Icon="BlockContact"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <!-- Already specified in the constructor, but placed here too for design time conveinence -->
     <Page.DataContext>
@@ -14,44 +38,101 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource AppPageBackgroundThemeBrush}">
-        
-        <SemanticZoom>
-            <SemanticZoom.ZoomedInView>
-                <Hub>
-                    <Hub.Resources>
-                        <Style TargetType="HubSection">
-                            <Setter Property="MinWidth" Value="320"/>
-                        </Style>
-                    </Hub.Resources>
 
-                    <HubSection Header="Snaps">
-                        <DataTemplate>
-                            <ListView Width="300">
-                                <ListViewItem>Alex Reed</ListViewItem>
-                                <ListViewItem>somedude93</ListViewItem>
-                                <ListViewItem>somedude93</ListViewItem>
-                                <ListViewItem>somedude93</ListViewItem>
-                                <ListViewItem>orange</ListViewItem>
-                                <ListViewItem>somedude93</ListViewItem>
-                            </ListView>
-                        </DataTemplate>
-                    </HubSection>
+        <!-- Different Layout States -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="DefaultLayout"/>
 
-                    <HubSection Header="Stories">
-                        <DataTemplate>
-                            <GridView>
+                <VisualState x:Name="PortraitLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="defaultView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="portraitView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="minimalView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
 
-                            </GridView>
-                        </DataTemplate>
-                    </HubSection>
-                </Hub>
-            </SemanticZoom.ZoomedInView>
-            
-            <SemanticZoom.ZoomedOutView>
-                <GridView>
-                    
-                </GridView>
-            </SemanticZoom.ZoomedOutView>
-        </SemanticZoom>
+                <VisualState x:Name="MinimalLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="defaultView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="portraitView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="minimalView" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!-- Default layout -->
+        <Grid x:Name="defaultView">
+            <ListView ItemsSource="{Binding Snaps}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Remaining seconds -->
+                            <tk:RingSlice InnerRadius="20" Radius="29" Fill="Orange" EndAngle="{Binding RemainingSeconds, Converter={StaticResource RemainingSecondsToDegreeConverter}}"/>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" FontWeight="Light" Text="{Binding RemainingSeconds}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!--
+            <Hub>
+                <Hub.Resources>
+                    <Style TargetType="HubSection">
+                        <Setter Property="MinWidth" Value="320"/>
+                    </Style>
+                </Hub.Resources>
+
+                <HubSection Header="Snaps" IsHeaderInteractive="True" DataContext="{Binding Snaps}">
+                    <DataTemplate>
+                        
+                    </DataTemplate>
+                </HubSection>
+
+                <HubSection Header="Stories" IsHeaderInteractive="True">
+                    <DataTemplate>
+                        <GridView>
+
+                        </GridView>
+                    </DataTemplate>
+                </HubSection>
+
+                <HubSection Header="Friends" IsHeaderInteractive="True">
+                    <DataTemplate>
+                        
+                    </DataTemplate>
+                </HubSection>
+            </Hub>
+            -->
+        </Grid>
+
+        <!-- Portrait Layout (content needs to scroll vertically, not horizontally) -->
+        <Grid x:Name="portraitView" Visibility="Collapsed"/>
+
+        <!-- Minimal Layout -->
+        <Grid x:Name="minimalView" Visibility="Collapsed"/>
+
     </Grid>
 </Page>

@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CharacterCasingConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\GreaterThanZeroToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\RemainingSecondsToDegreeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartViewModel.cs" />
   </ItemGroup>
