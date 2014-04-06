@@ -7,7 +7,7 @@ using SnapDotNet.Core.Snapchat.Api.Helpers;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
-	public static class WebConnect
+	public class WebConnect
 	{
 		/// <summary>
 		///     Posts data to the Snapchat API
@@ -21,7 +21,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
 		/// <returns>Http Response Message</returns>
-		public static async Task<HttpResponseMessage> Post(string endpoint, Dictionary<string, string> postData,
+		public async Task<HttpResponseMessage> Post(string endpoint, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
 			var webClient = new HttpClient();
@@ -49,7 +49,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </summary>
 		/// <param name="postEntries">A dictionary of post data entries.</param>
 		/// <returns>The post body query string</returns>
-		public static string PostBodyParser(Dictionary<string, string> postEntries)
+		private static string PostBodyParser(Dictionary<string, string> postEntries)
 		{
 			var first = true;
 			var output = "";
