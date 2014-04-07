@@ -15,6 +15,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		Delivered,
 		Opened,
 		Screenshotted,
+		Downloading,
 	}
 
 	/// <summary>
@@ -35,6 +36,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 	public class Snap
 		: Response
 	{
+		public Snap()
+		{
+			Status = SnapStatus.None;
+		}
+
 		[DataMember(Name = "id")]
 		public string Id { get; set; }
 
@@ -77,5 +83,8 @@ namespace SnapDotNet.Core.Snapchat.Models
 
 		[DataMember(Name = "rsecs")]
 		public int? RemainingSeconds { get; set; }
+
+		[IgnoreDataMember]
+		public bool HasMedia { get; set; }
 	}
 }

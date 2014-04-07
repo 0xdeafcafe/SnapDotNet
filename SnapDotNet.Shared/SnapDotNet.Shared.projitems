@@ -24,6 +24,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CharacterCasingConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\GreaterThanZeroToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\RemainingSecondsToDegreeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToFriendlyTextConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToIconConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToForegroundConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\SnapItemTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartViewModel.cs" />
   </ItemGroup>

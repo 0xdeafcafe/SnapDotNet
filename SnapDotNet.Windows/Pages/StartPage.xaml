@@ -79,6 +79,11 @@
                            Grid.Row="1"
                            HorizontalAlignment="Center"
                            Style="{StaticResource HeaderTextBlockStyle}">
+                    <TextBlock.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition/>
+                        </TransitionCollection>
+                    </TextBlock.Transitions>
 					<Run Text="Snapchat for Windows 8.1"/>
                 </TextBlock>
 
@@ -86,12 +91,24 @@
 					    HorizontalAlignment="Right"
 					    x:Uid="SignInButton"
 					    Command="{Binding OpenSignInPageCommand}"
-                        Content="Sign in"/>
+                        Content="Sign in">
+                    <Button.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition/>
+                        </TransitionCollection>
+                    </Button.Transitions>
+                </Button>
                 <Button Grid.Row="2" Grid.Column="1"
 					    HorizontalAlignment="Left"
 					    x:Uid="CreateAccountButton"
                         Command="{Binding OpenRegisterPageCommand}"
-                        Content="Create account"/>
+                        Content="Create account">
+                    <Button.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition/>
+                        </TransitionCollection>
+                    </Button.Transitions>
+                </Button>
             </Grid>
 
             <!-- Default sign in view -->
