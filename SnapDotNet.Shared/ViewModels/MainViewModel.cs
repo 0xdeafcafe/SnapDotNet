@@ -11,34 +11,35 @@ namespace SnapDotNet.Apps.ViewModels
     {
 		public MainViewModel()
 		{
-			Snaps = new ObservableCollection<Snap>();
+			RecentSnaps = new ObservableCollection<Snap>();
 
 #if DEBUG
+			string[] names = new[]{
+				"alexerax",
+				"Matt Saville",
+				"collindaginger"
+			};
 			var random = new Random();
-			for (int i = 0; i < 13; i++)
+			for (int i = 0; i < 24; i++)
 			{
-				Snaps.Add(new Snap { RemainingSeconds = random.Next(10) });
+				SnapStatus status = (SnapStatus) random.Next(5);
+
+				RecentSnaps.Add(new Snap
+				{
+					RemainingSeconds = random.Next(9) + 1,
+					ScreenName = names[random.Next(names.Length)],
+					Status = status,
+					Timestamp = DateTime.Now,
+				});
 			}
 #endif
-
-			DispatcherTimer timer = new DispatcherTimer();
-			timer.Interval = TimeSpan.FromSeconds(1);
-			timer.Tick += delegate
-			{
-				foreach (var snap in Snaps)
-				{
-					if (snap.RemainingSeconds != null && snap.RemainingSeconds.Value > 0)
-						snap.RemainingSeconds--;
-				}
-			};
-			timer.Start();
 		}
 
-		public ObservableCollection<Snap> Snaps
+		public ObservableCollection<Snap> RecentSnaps
 		{
-			get { return _snaps; }
-			set { SetField(ref _snaps, value); }
+			get { return _recentSnaps; }
+			set { SetField(ref _recentSnaps, value); }
 		}
-		private ObservableCollection<Snap> _snaps;
+		private ObservableCollection<Snap> _recentSnaps;
     }
 }

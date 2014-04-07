@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -17,6 +18,8 @@ namespace SnapDotNet.Apps
 	/// </summary>
 	public sealed partial class App : Application
 	{
+		public static readonly ResourceLoader Loader = new ResourceLoader();
+
 #if WINDOWS_PHONE_APP
 		private TransitionCollection transitions;
 #endif

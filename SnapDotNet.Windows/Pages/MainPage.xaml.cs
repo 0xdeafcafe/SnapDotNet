@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -53,10 +54,51 @@ namespace SnapDotNet.Apps.Pages
 
 		void OnSettingsCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
 		{
+			args.Request.ApplicationCommands.Add(new SettingsCommand("account", "Account", delegate
+			{
+				// TODO: Open account settings flyout
+			}));
+
+			args.Request.ApplicationCommands.Add(new SettingsCommand("sign_out", "Sign out", delegate
+			{
+				// TODO: Sign out
+				App.CurrentFrame.Navigate(typeof(StartPage));
+			}));
+
 			args.Request.ApplicationCommands.Add(new SettingsCommand("privacy_policy", "Privacy policy", delegate
 			{
 				// TODO: Open privacy policy
 			}));
+		}
+
+		private void OnSnapSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			// This is annoying as hell
+			/*(if (e.AddedItems.Count > 0)
+			{
+				this.BottomAppBar.IsOpen = true;
+				this.BottomAppBar.IsSticky = true;
+			}
+			else
+			{
+				this.BottomAppBar.IsOpen = false;
+				this.BottomAppBar.IsSticky = false;
+			}*/
+		}
+
+		private void OnBottomAppBarHintEntered(object sender, PointerRoutedEventArgs e)
+		{
+			(sender as Grid).Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xD6, 0x91, 0x11));
+		}
+
+		private void OnBottomAppBarHintExited(object sender, PointerRoutedEventArgs e)
+		{
+			(sender as Grid).Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0xA5, 0x00));
+		}
+
+		private void OnBottomAppBarHintTapped(object sender, TappedRoutedEventArgs e)
+		{
+			this.BottomAppBar.IsOpen = true;
 		}
 	}
 }

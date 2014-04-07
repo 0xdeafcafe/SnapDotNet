@@ -120,6 +120,9 @@
   <data name="Birthday.Header" xml:space="preserve">
     <value>Birthday</value>
   </data>
+  <data name="BottomAppBarHint.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Show more commands (Windows logo key+Z, or right-click)</value>
+  </data>
   <data name="CreateAccountButton.Content" xml:space="preserve">
     <value>Create account</value>
   </data>
@@ -129,6 +132,9 @@
   <data name="Email.Header" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="MainPageHub.Header" xml:space="preserve">
+    <value>snapchat</value>
+  </data>
   <data name="PasswordBox.Header" xml:space="preserve">
     <value>Password</value>
   </data>
@@ -137,6 +143,27 @@
   </data>
   <data name="SignInUsername.Header" xml:space="preserve">
     <value>Username or email</value>
+  </data>
+  <data name="SnapStatusDelivered" xml:space="preserve">
+    <value>Delivered</value>
+  </data>
+  <data name="SnapStatusDownloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="SnapStatusOpened" xml:space="preserve">
+    <value>Opened</value>
+  </data>
+  <data name="SnapStatusScreenshotted" xml:space="preserve">
+    <value>Screenshot!</value>
+  </data>
+  <data name="SnapStatusSent" xml:space="preserve">
+    <value>Sent</value>
+  </data>
+  <data name="SnapStatusTapAndHold" xml:space="preserve">
+    <value>Tap and hold to view</value>
+  </data>
+  <data name="SnapStatusTapToLoad" xml:space="preserve">
+    <value>Tap to load</value>
   </data>
   <data name="StartPageTitle.Text" xml:space="preserve">
     <value>Snapchat for Windows 8.1</value>

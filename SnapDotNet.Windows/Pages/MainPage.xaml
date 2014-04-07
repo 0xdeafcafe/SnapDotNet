@@ -9,10 +9,24 @@
     xmlns:tk="using:WinRTXamlToolkit.Controls"
     xmlns:converters="using:SnapDotNet.Apps.Converters"
     xmlns:snapchat="using:SnapDotNet.Core.Snapchat.Models"
+    xmlns:selectors="using:SnapDotNet.Apps.Selectors"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <converters:SnapStatusToFriendlyTextConverter x:Key="SnapStatusToFriendlyTextConverter"/>
         <converters:RemainingSecondsToDegreeConverter x:Key="RemainingSecondsToDegreeConverter" MaximumDuration="10"/>
+        <converters:SnapStatusToIconConverter x:Key="SnapStatusToIconConverter"
+                                              DeliveredIcon="Stop"
+                                              DownloadingIcon="Download"
+                                              OpenedIcon="View"
+                                              ScreenshottedIcon="Important"
+                                              SentIcon="Go"/>
+        <converters:SnapStatusToForegroundConverter x:Key="SnapStatusToForegroundConverter"
+                                                    DeliveredForeground="#FF0080FF"
+                                                    DownloadingForeground="Orange"
+                                                    OpenedForeground="Orange"
+                                                    ScreenshottedForeground="#FFFF3838"
+                                                    SentForeground="White"/>
 
         <!-- Width threshold for switching between the default and minimal views -->
         <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
@@ -38,6 +52,11 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource AppPageBackgroundThemeBrush}">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
 
         <!-- Different Layout States -->
         <VisualStateManager.VisualStateGroups>
@@ -76,41 +95,144 @@
 
         <!-- Default layout -->
         <Grid x:Name="defaultView">
-            <ListView ItemsSource="{Binding Snaps}">
-                <ListView.ItemTemplate>
+
+            <Hub x:Uid="MainPageHub" Header="snapchat">
+                <Hub.Resources>
+                    <Style TargetType="HubSection">
+                        <Setter Property="MinWidth" Value="320"/>
+                        <Setter Property="Transitions">
+                            <Setter.Value>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition/>
+                                </TransitionCollection>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Hub.Resources>
+                
+                <Hub.HeaderTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                        <Grid Margin="0,0,0,0">
+                            <Grid.Transitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition/>
+                                </TransitionCollection>
+                            </Grid.Transitions>
+                            
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Remaining seconds -->
-                            <tk:RingSlice InnerRadius="20" Radius="29" Fill="Orange" EndAngle="{Binding RemainingSeconds, Converter={StaticResource RemainingSecondsToDegreeConverter}}"/>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25" FontWeight="Light" Text="{Binding RemainingSeconds}"/>
+                            <SymbolIcon Margin="20,0,30,0" Symbol="VideoChat" RenderTransformOrigin="0.5,0.5">
+                                <SymbolIcon.RenderTransform>
+                                    <CompositeTransform ScaleX="3" ScaleY="3"/>
+                                </SymbolIcon.RenderTransform>
+                            </SymbolIcon>
+                            <TextBlock Grid.Column="1" Text="{Binding}"/>
                         </Grid>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </Hub.HeaderTemplate>
 
-            <!--
-            <Hub>
-                <Hub.Resources>
-                    <Style TargetType="HubSection">
-                        <Setter Property="MinWidth" Value="320"/>
-                    </Style>
-                </Hub.Resources>
-
-                <HubSection Header="Snaps" IsHeaderInteractive="True" DataContext="{Binding Snaps}">
+                <HubSection Header="Snaps" IsHeaderInteractive="True">
                     <DataTemplate>
-                        
+                        <GridView ItemsSource="{Binding RecentSnaps}" SelectionChanged="OnSnapSelectionChanged" Margin="0,0,0,50">
+                            <GridView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition/>
+                                    <AddDeleteThemeTransition/>
+                                </TransitionCollection>
+                            </GridView.ItemContainerTransitions>
+                            
+                            <GridView.ItemTemplateSelector>
+                                <selectors:SnapItemTemplateSelector>
+                                    
+                                    <!-- Countdown template -->
+                                    <selectors:SnapItemTemplateSelector.CountdownTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="300" Margin="10" ToolTipService.ToolTip="{Binding Timestamp}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Remaining seconds -->
+                                                <tk:RingSlice InnerRadius="20" Radius="29" Grid.RowSpan="2" Fill="Orange" EndAngle="{Binding RemainingSeconds, Converter={StaticResource RemainingSecondsToDegreeConverter}}"/>
+                                                <TextBlock HorizontalAlignment="Center" Grid.RowSpan="2" VerticalAlignment="Center" FontSize="25" FontWeight="Light" Text="{Binding RemainingSeconds}"/>
+
+                                                <!-- Sender name -->
+                                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                                   Margin="10,0,0,0"
+                                                   Text="{Binding ScreenName}"
+                                                   Style="{StaticResource TitleTextBlockStyle}"
+                                                   VerticalAlignment="Center"
+                                                   TextWrapping="NoWrap"
+                                                   TextTrimming="CharacterEllipsis"/>
+
+                                                <!-- Status text -->
+                                                <TextBlock Grid.Row="1" Grid.Column="1"
+                                                   Margin="10,0,0,0"
+                                                   Text="{Binding Converter={StaticResource SnapStatusToFriendlyTextConverter}}"
+                                                   Foreground="#FFCCCCCC"
+                                                   FontSize="12"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </selectors:SnapItemTemplateSelector.CountdownTemplate>
+                                    
+                                    <!-- Default template -->
+                                    <selectors:SnapItemTemplateSelector.DefaultTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="300" Margin="10" ToolTipService.ToolTip="{Binding Timestamp}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Icon -->
+                                                <SymbolIcon Grid.RowSpan="2"
+                                                            Symbol="{Binding Status, Converter={StaticResource SnapStatusToIconConverter}}"
+                                                            Width="58" Height="58"
+                                                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                            Foreground="{Binding Status, Converter={StaticResource SnapStatusToForegroundConverter}}"
+                                                            RenderTransformOrigin="0.5,0.5">
+                                                    <SymbolIcon.RenderTransform> 
+                                                        <CompositeTransform ScaleX="2.5" ScaleY="2.5"/>
+                                                    </SymbolIcon.RenderTransform>
+                                                </SymbolIcon>
+
+                                                <!-- Sender name -->
+                                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                                   Margin="10,0,0,0"
+                                                   Text="{Binding ScreenName}"
+                                                   Style="{StaticResource TitleTextBlockStyle}"
+                                                   VerticalAlignment="Center"
+                                                   TextWrapping="NoWrap"
+                                                   TextTrimming="CharacterEllipsis"/>
+
+                                                <!-- Status text -->
+                                                <TextBlock Grid.Row="1" Grid.Column="1"
+                                                   Margin="10,0,0,0"
+                                                   Text="{Binding Converter={StaticResource SnapStatusToFriendlyTextConverter}}"
+                                                   Foreground="#FFCCCCCC"
+                                                   FontSize="12"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </selectors:SnapItemTemplateSelector.DefaultTemplate>
+                                </selectors:SnapItemTemplateSelector>
+                            </GridView.ItemTemplateSelector>
+                        </GridView>
                     </DataTemplate>
                 </HubSection>
 
+                <!-- Stories Hub -->
                 <HubSection Header="Stories" IsHeaderInteractive="True">
                     <DataTemplate>
                         <GridView>
@@ -119,13 +241,13 @@
                     </DataTemplate>
                 </HubSection>
 
+                <!-- Friends Hub -->
                 <HubSection Header="Friends" IsHeaderInteractive="True">
                     <DataTemplate>
                         
                     </DataTemplate>
                 </HubSection>
             </Hub>
-            -->
         </Grid>
 
         <!-- Portrait Layout (content needs to scroll vertically, not horizontally) -->
@@ -134,5 +256,12 @@
         <!-- Minimal Layout -->
         <Grid x:Name="minimalView" Visibility="Collapsed"/>
 
+        <Grid Grid.Row="1" Background="Orange"
+              PointerEntered="OnBottomAppBarHintEntered"
+              PointerExited="OnBottomAppBarHintExited"
+              Tapped="OnBottomAppBarHintTapped"
+              x:Uid="BottomAppBarHint">
+            <SymbolIcon Symbol="More" Foreground="Black" HorizontalAlignment="Right" Margin="0,0,55,0"/>
+        </Grid>
     </Grid>
 </Page>
