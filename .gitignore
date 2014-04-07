@@ -156,3 +156,5 @@ $RECYCLE.BIN/
 .DS_Store
 packages/
 SnapDotNet.Core.Snapchat.Api.Tests/Settings.cs
+*.mdf
+*.ldf
