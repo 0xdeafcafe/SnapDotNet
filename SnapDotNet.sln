@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Miscellaneo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Snapchat.Helpers", "SnapDotNet.Core.Snapchat.Helpers\SnapDotNet.Core.Snapchat.Helpers.csproj", "{1AC5610B-F69C-4450-8A43-E4FD4733BB5D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SnapDotNet.Azure", "SnapDotNet.Azure", "{250C29F0-AF9A-4F43-915A-EF5F4AA26890}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Azure.Atlas", "SnapDotNet.Azure.Atlas\SnapDotNet.Azure.Atlas.csproj", "{442C6B19-D8FD-499A-A06B-F179B953572B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SnapDotNet.Shared\SnapDotNet.Shared.projitems*{a92f4564-8f8b-4e84-998e-748484be45f3}*SharedItemsImports = 4
@@ -178,6 +182,16 @@ Global
 		{1AC5610B-F69C-4450-8A43-E4FD4733BB5D}.Release|ARM.ActiveCfg = Release|Any CPU
 		{1AC5610B-F69C-4450-8A43-E4FD4733BB5D}.Release|x64.ActiveCfg = Release|Any CPU
 		{1AC5610B-F69C-4450-8A43-E4FD4733BB5D}.Release|x86.ActiveCfg = Release|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Release|x64.ActiveCfg = Release|Any CPU
+		{442C6B19-D8FD-499A-A06B-F179B953572B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,5 +210,6 @@ Global
 		{194757E6-0DFF-4CF2-BFFB-7625B1A2F789} = {1559A670-DFBA-4E74-9A7A-F9FC974C7CEB}
 		{1CC5FC95-2AE3-449A-BC3A-AFA90A8C3BC2} = {810D39C3-0100-4FA2-992B-ABFE04EA2F21}
 		{1AC5610B-F69C-4450-8A43-E4FD4733BB5D} = {B13E0700-E76D-4401-8295-5233370E0841}
+		{442C6B19-D8FD-499A-A06B-F179B953572B} = {250C29F0-AF9A-4F43-915A-EF5F4AA26890}
 	EndGlobalSection
 EndGlobal

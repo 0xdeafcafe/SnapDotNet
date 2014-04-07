@@ -7,6 +7,10 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Networking.PushNotifications;
+#if WINDOWS_PHONE_APP
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
+#endif
 
 namespace SnapDotNet.Apps
 {
@@ -16,7 +20,7 @@ namespace SnapDotNet.Apps
 	public sealed partial class App
 	{
 #if WINDOWS_PHONE_APP
-		private TransitionCollection transitions;
+		private TransitionCollection _transitions;
 #endif
 
 		public static MobileServiceClient MobileService = new MobileServiceClient(
@@ -82,10 +86,10 @@ namespace SnapDotNet.Apps
 				// Removes the turnstile navigation for startup.
 				if (rootFrame.ContentTransitions != null)
 				{
-					transitions = new TransitionCollection();
+					_transitions = new TransitionCollection();
 					foreach (Transition c in rootFrame.ContentTransitions)
 					{
-						transitions.Add(c);
+						_transitions.Add(c);
 					}
 				}
 
@@ -118,7 +122,7 @@ namespace SnapDotNet.Apps
 		private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
 		{
 			var rootFrame = sender as Frame;
-			rootFrame.ContentTransitions = transitions ?? new TransitionCollection {new NavigationThemeTransition()};
+			rootFrame.ContentTransitions = _transitions ?? new TransitionCollection {new NavigationThemeTransition()};
 			rootFrame.Navigated -= RootFrame_FirstNavigated;
 		}
 #endif
@@ -128,6 +132,7 @@ namespace SnapDotNet.Apps
 		/// </summary>
 		private static async void InitNotificationsAsync()
 		{
+#if WINDOWS_PHONE_APP
 			// Request a push notification channel.
 			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
 			await MobileService.GetPush().RegisterNativeAsync(channel.Uri);
@@ -135,6 +140,7 @@ namespace SnapDotNet.Apps
 			{
 
 			};
+#endif
 		}
 		
 
