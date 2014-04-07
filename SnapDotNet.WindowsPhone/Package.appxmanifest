@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="fd2c5f6f-1701-4ecb-9390-c66f0486234b" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Snapchat for Windows Phone 8.1</DisplayName>
-    <PublisherDisplayName>Xeraxic Software</PublisherDisplayName>
+    <PublisherDisplayName>WumboSoft</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
