@@ -80,18 +80,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public async Task<Account> GetUpdatesAsync()
 		{
-			string username;
-			if (_snapchatManager.Account != null)
-				username = _snapchatManager.Account.Username;
-			else if (_snapchatManager.Username != null)
-				username = _snapchatManager.Username;
-			else
-				throw new InvalidCredentialsException("There is no username set in the Snapchat Manager.");
-
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
-				{"username", username},
+				{"username", GetAuthedUsername()},
 				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
 			};
 
@@ -128,18 +120,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public async Task<Stories> GetStoriesAsync()
 		{
-			string username;
-			if (_snapchatManager.Account != null)
-				username = _snapchatManager.Account.Username;
-			else if (_snapchatManager.Username != null)
-				username = _snapchatManager.Username;
-			else
-				throw new InvalidCredentialsException("There is no username set in the Snapchat Manager.");
-
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
-				{"username", username},
+				{"username", GetAuthedUsername()},
 				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
 			};
 
@@ -164,5 +148,19 @@ namespace SnapDotNet.Core.Snapchat.Api
 		}
 
 		#endregion
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		private string GetAuthedUsername()
+		{
+			if (_snapchatManager.Account != null)
+				return _snapchatManager.Account.Username;
+			if (_snapchatManager.Username != null)
+				return _snapchatManager.Username;
+			
+			throw new InvalidCredentialsException("There is no username set in the Snapchat Manager.");
+		}
 	}
 }
