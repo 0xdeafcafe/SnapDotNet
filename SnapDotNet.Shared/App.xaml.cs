@@ -1,4 +1,5 @@
-﻿using SnapDotNet.Apps.Pages;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using SnapDotNet.Apps.Pages;
 using System;
 using System.Diagnostics;
 using Windows.ApplicationModel;
@@ -6,23 +7,25 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
+using Windows.Networking.PushNotifications;
 
 namespace SnapDotNet.Apps
 {
 	/// <summary>
 	///     Provides application-specific behavior to supplement the default Application class.
 	/// </summary>
-	public sealed partial class App : Application
+	public sealed partial class App
 	{
 		public static readonly ResourceLoader Loader = new ResourceLoader();
 
 #if WINDOWS_PHONE_APP
 		private TransitionCollection transitions;
 #endif
+
+		public static MobileServiceClient MobileService = new MobileServiceClient(
+			"https://snapdotnet-push.azure-mobile.net/",
+			"FtwlXPgTOpyyNkVazOzoPIzTfwaSUW32"
+		);
 
 		/// <summary>
 		///     Initializes the singleton application object.  This is the first line of authored code
@@ -61,10 +64,11 @@ namespace SnapDotNet.Apps
 			if (rootFrame == null)
 			{
 				// Create a Frame to act as the navigation context and navigate to the first page
-				rootFrame = new Frame();
-
-				// TODO: change this value to a cache size that is appropriate for your application
-				rootFrame.CacheSize = 1;
+				rootFrame = new Frame
+				{
+					// TODO: change this value to a cache size that is appropriate for your application
+					CacheSize = 1
+				};
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{
@@ -100,9 +104,9 @@ namespace SnapDotNet.Apps
 					throw new Exception("Failed to create initial page");
 				}
 			}
-
+			
 			// Register for Push Notifications
-			//InitNotificationsAsync();
+			InitNotificationsAsync();
 
 			// Ensure the current window is active
 			Window.Current.Activate();
@@ -121,7 +125,22 @@ namespace SnapDotNet.Apps
 			rootFrame.Navigated -= RootFrame_FirstNavigated;
 		}
 #endif
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private static async void InitNotificationsAsync()
+		{
+			// Request a push notification channel.
+			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+			await MobileService.GetPush().RegisterNativeAsync(channel.Uri);
+			channel.PushNotificationReceived += (sender, args) =>
+			{
+
+			};
+		}
 		
+
 		/// <summary>
 		///     Invoked when application execution is being suspended.  Application state is saved
 		///     without knowing whether the application will be terminated or resumed with the contents
@@ -129,9 +148,9 @@ namespace SnapDotNet.Apps
 		/// </summary>
 		/// <param name="sender">The source of the suspend request.</param>
 		/// <param name="e">Details about the suspend request.</param>
-		private void OnSuspending(object sender, SuspendingEventArgs e)
+		private static void OnSuspending(object sender, SuspendingEventArgs e)
 		{
-			SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
+			var deferral = e.SuspendingOperation.GetDeferral();
 
 			// TODO: Save application state and stop any background activity
 			deferral.Complete();
