@@ -44,6 +44,7 @@
     <Compile Include="PublicActivity.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Snap.cs" />
+    <Compile Include="Stories.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SnapDotNet.Core.Miscellaneous.Converters\SnapDotNet.Core.Miscellaneous.Converters.csproj">

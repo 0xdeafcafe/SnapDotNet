@@ -14,6 +14,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		private const string LoginEndpointUrl =			"login";
 		private const string UpdatesEndpointUrl =		"updates";
+        private const string StoriesEndpointUrl =		"stories";
 
 		/// <summary>
 		/// 
@@ -118,5 +119,50 @@ namespace SnapDotNet.Core.Snapchat.Api
 		}
 
 		#endregion
-	}
+
+        #region Stories
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Stories> GetStoriesAsync()
+        {
+            string username;
+            if (_snapchatManager.Account != null)
+                username = _snapchatManager.Account.Username;
+            else if (_snapchatManager.Username != null)
+                username = _snapchatManager.Username;
+            else
+                throw new InvalidCredentialsException("There is no username set in the Snapchat Manager.");
+
+            var timestamp = Timestamps.GenerateRetardedTimestamp();
+            var postData = new Dictionary<string, string>
+			{
+				{"username", username},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+            var stories =
+                await
+                    _webConnect.Post<Stories>(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
+                        timestamp.ToString(CultureInfo.InvariantCulture));
+
+            if (stories == null)
+                throw new InvalidCredentialsException();
+
+            return stories;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Stories GetStories()
+        {
+            return GetStoriesAsync().Result;
+        }
+
+        #endregion
+    }
 }
