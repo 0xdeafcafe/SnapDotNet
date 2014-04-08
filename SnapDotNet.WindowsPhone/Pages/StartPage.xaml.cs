@@ -6,6 +6,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Apps.ViewModels;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
@@ -81,7 +82,7 @@ namespace SnapDotNet.Apps.Pages
 
 			try
 			{
-				var account = await App.SnapChatManager.Endpoints.AuthenticateAsync(SignInUsernameTextBlock.Text,
+				await App.SnapChatManager.Endpoints.AuthenticateAsync(SignInUsernameTextBlock.Text,
 					SignInPasswordTextBlock.Password);
 			}
 			catch (InvalidCredentialsException)
@@ -104,9 +105,19 @@ namespace SnapDotNet.Apps.Pages
 				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 				ViewModel.ProgressModalVisibility = Visibility.Collapsed;
 
-				var storyboard = (Storyboard)Resources["HahaScienceStoryboard"];
+				var storyboard = (Storyboard) Resources["HahaScienceStoryboard"];
 				if (storyboard != null) storyboard.Begin();
 			}
+
+			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
+				return;
+
+			Frame.Navigate(typeof(MainPage));
+		}
+
+		private void OverrideButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+		{
+			Frame.Navigate(typeof(MainPage));
 		}
 	}
 }
