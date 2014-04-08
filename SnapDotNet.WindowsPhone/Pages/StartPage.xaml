@@ -5,7 +5,8 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:interactivity="using:Microsoft.Xaml.Interactivity" 
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
-	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
+	xmlns:media="using:Microsoft.Xaml.Interactions.Media" 
+	x:Name="Page"
 	x:Class="SnapDotNet.Apps.Pages.StartPage"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
@@ -33,11 +34,9 @@
 		
 		<Storyboard x:Name="SignInModalRevealStoryboard">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SignInModalGrid">
-				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainPageContent">
-				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SignInModalGrid">
@@ -57,11 +56,9 @@
 		</Storyboard>
 		<Storyboard x:Name="SignInModalHideStoryboard">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SignInModalGrid">
-				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainPageContent">
-				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SignInModalGrid">
@@ -78,6 +75,13 @@
 					</DiscreteObjectKeyFrame.Value>
 				</DiscreteObjectKeyFrame>
 			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Name="HahaScienceStoryboard">
+			<DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="WelcomeModal">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="0:0:2" Value="700" KeySpline="0.5,1,0.5,0"/>
+			</DoubleAnimationUsingKeyFrames>
+
 		</Storyboard>
 	</Page.Resources>
 	<interactivity:Interaction.Behaviors>
@@ -152,7 +156,7 @@
 					<ColumnDefinition Width="0.1*" />
 					<ColumnDefinition Width="0.35*" />
 				</Grid.ColumnDefinitions>
-				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="SignInButton_Click" Content="sign in" Background="#FFDAD104"
+				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="ShowSignInButton_Click" Content="sign in" Background="#FFDAD104"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}"/>
 				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="register" Background="#FF0EA0D6"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}" />
@@ -161,16 +165,43 @@
 		
 		<Grid x:Name="SignInModalGrid" Grid.Row="0" 
 			  Background="#7F8F8F8F"> <!--Visibility="Collapsed" Opacity="0"-->
-
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40" />
 				<RowDefinition Height="45" />
+				<RowDefinition Height="60" />
+				<RowDefinition Height="80" />
+				<RowDefinition Height="30" />
+				<RowDefinition Height="80" />
+				<RowDefinition Height="40" />
+				<RowDefinition Height="40" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="25" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="30" />
+			</Grid.ColumnDefinitions>
 			
-			<TextBlock Grid.Row="1" x:Uid="SignInHeader" Margin="20,0,0,0" FontFamily="Segoe WP Semilight" FontSize="30">
-				sign in to snapchat
-			</TextBlock>
+			<TextBlock Grid.Column="1" Grid.Row="1" x:Uid="SignInHeader" FontFamily="Segoe WP Semilight" 
+					   FontSize="30" Text="sign in to snapchat" />
+
+			<StackPanel Grid.Column="1" Grid.Row="3">
+				<TextBlock x:Uid="SignInUsername" FontSize="20">username or email</TextBlock>
+				<TextBox x:Name="SignInUsernameTextBlock" PlaceholderText="wumbalo..." InputScope="EmailSmtpAddress" />
+			</StackPanel>
+
+			<StackPanel Grid.Column="1" Grid.Row="5">
+				<TextBlock x:Uid="SignInPassword" FontSize="20">password</TextBlock>
+				<PasswordBox x:Name="SignInPasswordTextBlock" PlaceholderText="●●●●●●●●●●●●" />
+			</StackPanel>
+
+			<Button x:Uid="SignInButton" x:Name="SignInButton" Grid.Column="1" Grid.Row="7" Content="sign in" Background="#FFDAD104" 
+					HorizontalAlignment="Stretch" Style="{StaticResource DefaultWindowsPhoneButtonStyle}" Click="SignInButton_OnClick">
+			</Button>
+
+		</Grid>
+
+		<Grid Grid.Row="0" Background="#7F8F8F8F" Visibility="{Binding ProgressModalVisibility}">
 			
 		</Grid>
 	</Grid>

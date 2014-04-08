@@ -135,17 +135,17 @@
   <data name="MainPageHub.Header" xml:space="preserve">
     <value>snapchat</value>
   </data>
-  <data name="PasswordBox.Header" xml:space="preserve">
-    <value>Password</value>
-  </data>
   <data name="SignInButton.Content" xml:space="preserve">
     <value>sign in</value>
   </data>
   <data name="SignInHeader.Text" xml:space="preserve">
     <value>sign in to snapchat</value>
   </data>
-  <data name="SignInUsername.Header" xml:space="preserve">
-    <value>Username or email</value>
+  <data name="SignInPassword.Text" xml:space="preserve">
+    <value>password</value>
+  </data>
+  <data name="SignInUsername.Text" xml:space="preserve">
+    <value>username or email</value>
   </data>
   <data name="SnapStatusDelivered" xml:space="preserve">
     <value>Delivered</value>

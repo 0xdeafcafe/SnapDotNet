@@ -6,6 +6,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using SnapDotNet.Core.Snapchat.Api;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
@@ -35,7 +36,15 @@ namespace SnapDotNet.Apps
 		private TransitionCollection _transitions;
 #endif
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly ResourceLoader Loader = new ResourceLoader();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly SnapChatManager SnapChatManager = new SnapChatManager();
 
 		/// <summary>
 		///     Initializes the singleton application object.  This is the first line of authored code
