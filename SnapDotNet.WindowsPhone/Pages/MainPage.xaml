@@ -8,7 +8,29 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<!-- temp, will do proper UI later !-->
+			<ColumnDefinition Width="10"/>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="10"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="10"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="10"/>
+		</Grid.RowDefinitions>
 
-    </Grid>
+		<Canvas x:Name="ViewPortCanvas"
+			Grid.Column="1" Grid.Row="1"/>
+	</Grid>
+	<Page.BottomAppBar>
+		<CommandBar>
+			<AppBarButton x:Name="CameraTriggerButton" Label="Capture" Icon="Camera"/>
+			<AppBarButton x:Name="CameraReverseButton" Label="Capture" Icon="Up"/>
+			<CommandBar.SecondaryCommands>
+				<!--AppBarButton x:Name="other" Label="unspecified" /-->
+			</CommandBar.SecondaryCommands>
+		</CommandBar>
+	</Page.BottomAppBar>
 </Page>
