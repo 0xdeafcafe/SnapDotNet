@@ -8,7 +8,7 @@
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
-		<Storyboard x:Name="BackgroundAmbianceStoryboard"  RepeatBehavior="Forever">
+		<Storyboard x:Name="BackgroundAmbienceStoryboard"  RepeatBehavior="Forever">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
 				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
@@ -32,7 +32,7 @@
 
 	<Interactivity:Interaction.Behaviors>
 		<Core:EventTriggerBehavior EventName="Loaded">
-			<Media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbianceStoryboard}"/>
+			<Media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbienceStoryboard}"/>
 		</Core:EventTriggerBehavior>
 	</Interactivity:Interaction.Behaviors>
 
@@ -44,7 +44,7 @@
 		</Grid.RowDefinitions>
 
 		<Grid Grid.Row="0" Grid.RowSpan="3">
-			<Image x:Name="BackgroundImage1"
+			<Image
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
 			<Image x:Name="BackgroundImage2"
