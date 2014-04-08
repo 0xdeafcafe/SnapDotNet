@@ -1,17 +1,17 @@
 ﻿using SnapDotNet.Apps.Common;
-using System;
 using System.Windows.Input;
-using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
 namespace SnapDotNet.Apps.ViewModels
 {
-    public sealed class StartViewModel
+	public sealed class StartViewModel
 		: NotifyPropertyChangedBase
-    {
+	{
 		public StartViewModel()
 		{
 			IsStartPageVisible = true;
+
+			#region Register Commands
 
 			OpenSignInPageCommand = new RelayCommand(
 				() =>
@@ -19,8 +19,7 @@ namespace SnapDotNet.Apps.ViewModels
 					IsSignInPageVisible = true;
 					IsStartPageVisible = false;
 				},
-				() => { return IsStartPageVisible; }
-			);
+				() => IsStartPageVisible);
 
 			OpenRegisterPageCommand = new RelayCommand(
 				() =>
@@ -28,8 +27,7 @@ namespace SnapDotNet.Apps.ViewModels
 					IsRegisterPageVisible = true;
 					IsStartPageVisible = false;
 				},
-				() => { return IsStartPageVisible; }
-			);
+				() => IsStartPageVisible);
 
 			GoBackToStartCommand = new RelayCommand(() =>
 			{
@@ -40,6 +38,8 @@ namespace SnapDotNet.Apps.ViewModels
 
 			SignInCommand = new RelayCommand<Page>(SignIn);
 			RegisterCommand = new RelayCommand<Page>(Register);
+
+			#endregion
 		}
 
 		/// <summary>
@@ -139,5 +139,5 @@ namespace SnapDotNet.Apps.ViewModels
 			// TODO: API stuff
 			App.CurrentFrame.Navigate(nextPage.GetType());
 		}
-    }
+	}
 }
