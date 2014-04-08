@@ -1,11 +1,14 @@
 ﻿using System;
 using Windows.Phone.UI.Input;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Apps.ViewModels;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace SnapDotNet.Apps.Pages
 {
@@ -29,18 +32,13 @@ namespace SnapDotNet.Apps.Pages
 			HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 		}
 
-		/// <summary>
-		/// Invoked when this page is about to be displayed in a Frame.
-		/// </summary>
-		/// <param name="e">Event data that describes how this page was reached.
-		/// This parameter is typically used to configure the page.</param>
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			StatusBar.GetForCurrentView().BackgroundColor = new Color { A = 0x00, R = 0x00, G = 0x00, B = 0x00,  };
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 		}
 
-		private void SignInButton_Click(object sender, RoutedEventArgs e)
+		private void ShowSignInButton_Click(object sender, RoutedEventArgs e)
 		{
 			var storyboard = (Storyboard) Resources["SignInModalRevealStoryboard"];
 			if (storyboard == null) return;
@@ -73,6 +71,53 @@ namespace SnapDotNet.Apps.Pages
 			{
 				backPressedEventArgs.Handled = true;
 			}
+		}
+
+		private async void SignInButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			ViewModel.ProgressModalVisibility = Visibility.Visible;
+
+			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing In...";
+			await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+
+			try
+			{
+				await App.SnapChatManager.Endpoints.AuthenticateAsync(SignInUsernameTextBlock.Text,
+					SignInPasswordTextBlock.Password);
+			}
+			catch (InvalidCredentialsException)
+			{
+				var dialog =
+					new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
+						"Invalid Username/Password");
+				dialog.ShowAsync();
+			}
+			catch (InvalidHttpResponseException exception)
+			{
+				var dialog =
+					new MessageDialog(String.Format("Unable to connect to snapchat. The server responded: \n {0}.", exception.Message),
+						"Unable to connect to Snapchat");
+				dialog.ShowAsync();
+			}
+			finally
+			{
+				StatusBar.GetForCurrentView().ProgressIndicator.Text = "";
+				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
+				ViewModel.ProgressModalVisibility = Visibility.Collapsed;
+
+				var storyboard = (Storyboard) Resources["HahaScienceStoryboard"];
+				if (storyboard != null) storyboard.Begin();
+			}
+
+			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
+				return;
+
+			Frame.Navigate(typeof(MainPage));
+		}
+
+		private void OverrideButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+		{
+			Frame.Navigate(typeof(MainPage));
 		}
 	}
 }

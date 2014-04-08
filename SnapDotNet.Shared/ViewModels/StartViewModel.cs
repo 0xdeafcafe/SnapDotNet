@@ -1,4 +1,5 @@
-﻿using SnapDotNet.Apps.Common;
+﻿using Windows.UI.Xaml;
+using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
@@ -114,6 +115,13 @@ namespace SnapDotNet.Apps.ViewModels
 			private set { SetField(ref _isRegisterPageVisible, value); }
 		}
 		private bool _isRegisterPageVisible;
+
+		public Visibility ProgressModalVisibility
+		{
+			get { return _progressModalVisibility; }
+			set { SetField(ref _progressModalVisibility, value); }
+		}
+		private Visibility _progressModalVisibility = Visibility.Collapsed;
 
 		/// <summary>
 		/// Gets whether the starting menu should be visible.
