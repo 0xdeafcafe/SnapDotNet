@@ -96,7 +96,7 @@ namespace SnapDotNet.Apps
 				if (rootFrame.ContentTransitions != null)
 				{
 					_transitions = new TransitionCollection();
-					foreach (Transition c in rootFrame.ContentTransitions)
+					foreach (var c in rootFrame.ContentTransitions)
 					{
 						_transitions.Add(c);
 					}
@@ -131,6 +131,8 @@ namespace SnapDotNet.Apps
 		private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
 		{
 			var rootFrame = sender as Frame;
+			if (rootFrame == null) return;
+
 			rootFrame.ContentTransitions = _transitions ?? new TransitionCollection {new NavigationThemeTransition()};
 			rootFrame.Navigated -= RootFrame_FirstNavigated;
 		}
@@ -144,14 +146,34 @@ namespace SnapDotNet.Apps
 #if WINDOWS_PHONE_APP
 			UserTable = MobileService.GetTable<User>();
 			DeviceIdent = Sha.Sha256(BitConverter.ToString(HardwareIdentification.GetPackageSpecificToken(null).Id.ToArray()));
-
-			// Request a push notification channel.
 			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-			await MobileService.GetPush().RegisterNativeAsync(channel.Uri, new[] { DeviceIdent });
 			channel.PushNotificationReceived += (sender, args) =>
 			{
+				switch (args.NotificationType)
+				{
+					case PushNotificationType.Toast:
+						if (args.ToastNotification == null) return;
 
+						// TODO: Do logic work
+						args.ToastNotification.Group = "Dev";
+						break;
+
+					default:
+						throw new NotImplementedException();
+				}
 			};
+
+			try
+			{
+				// Request a push notification channel.
+				await MobileService.GetPush().RegisterNativeAsync(channel.Uri, new[] { DeviceIdent });
+			}
+			catch (Exception exception)
+			{
+				if (exception.HResult == 0x803E0103) // register request is already in progress
+					return;
+				throw;
+			}
 #endif
 		}
 		
