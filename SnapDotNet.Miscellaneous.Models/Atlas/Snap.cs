@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace SnapDotNet.Azure.Atlas.DataObjects
+namespace SnapDotNet.Core.Atlas
 {
 	public class Snap
 	{
+		public string Id { get; set; }
+
 		public int UserId { get; set; }
-		public virtual User User { get; set; }
 
 		public string SnapId { get; set; }
 

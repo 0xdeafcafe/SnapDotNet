@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.WindowsAzure.Mobile.Service;
 
-namespace SnapDotNet.Azure.Atlas.DataObjects
+namespace SnapDotNet.Azure.MobileService.DataObjects
 {
 	public class User : EntityData
 	{

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SnapDotNet.Azure.Atlas")]
+[assembly: AssemblyTitle("SnapDotNet.Azure.MobileService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SnapDotNet.Azure.Atlas")]
+[assembly: AssemblyProduct("SnapDotNet.Azure.MobileService")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0b2b21de-cec4-494e-8f1e-88899e32de3e")]
+[assembly: Guid("92b15ac6-71c4-4148-bf1e-15fb155c3cb6")]
 
 // Version information for an assembly consists of the following four values:
 //

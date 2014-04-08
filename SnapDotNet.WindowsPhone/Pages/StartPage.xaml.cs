@@ -1,30 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+using SnapDotNet.Core.Atlas;
 
 namespace SnapDotNet.Apps.Pages
 {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class StartPage : Page
+	public sealed partial class StartPage
 	{
 		public StartPage()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 		}
 
 		/// <summary>
@@ -34,6 +24,19 @@ namespace SnapDotNet.Apps.Pages
 		/// This parameter is typically used to configure the page.</param>
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
+		}
+
+		private async void SignInButton_Click(object sender, RoutedEventArgs e)
+		{
+			var user = new User
+			{
+				DeviceIdent = App.DeviceIdent,
+				AuthExpired = false,
+				SnapchatAuthToken = new Random().Next(0xaaaaaaa, 0xfffffff).ToString("X8"),
+				SnapchatUsername = "alexerax"
+			};
+
+			await App.MobileService.GetTable<User>().InsertAsync(user);
 		}
 	}
 }

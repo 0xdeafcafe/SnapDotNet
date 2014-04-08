@@ -1,5 +1,4 @@
-﻿using Microsoft.WindowsAzure.MobileServices;
-using SnapDotNet.Apps.Pages;
+﻿using SnapDotNet.Apps.Pages;
 using System;
 using System.Diagnostics;
 using Windows.ApplicationModel;
@@ -7,8 +6,13 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.Networking.PushNotifications;
 #if WINDOWS_PHONE_APP
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.System.Profile;
+using Microsoft.WindowsAzure.MobileServices;
+using Windows.Networking.PushNotifications;
+using SnapDotNet.Core.Atlas;
+using SnapDotnet.Miscellaneous.Crypto;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 #endif
@@ -20,16 +24,18 @@ namespace SnapDotNet.Apps
 	/// </summary>
 	public sealed partial class App
 	{
-		public static readonly ResourceLoader Loader = new ResourceLoader();
-
 #if WINDOWS_PHONE_APP
+		public static MobileServiceClient MobileService = new MobileServiceClient(
+			"https://snapdotnet.azure-mobile.net/",
+			"sTdykEmtfJsTQmafUMxrKalcdkaphW67"
+		);
+
+		public static String DeviceIdent;
+		public static IMobileServiceTable<User> UserTable;
 		private TransitionCollection _transitions;
 #endif
 
-		public static MobileServiceClient MobileService = new MobileServiceClient(
-			"https://snapdotnet-push.azure-mobile.net/",
-			"FtwlXPgTOpyyNkVazOzoPIzTfwaSUW32"
-		);
+		public static readonly ResourceLoader Loader = new ResourceLoader();
 
 		/// <summary>
 		///     Initializes the singleton application object.  This is the first line of authored code
@@ -136,9 +142,12 @@ namespace SnapDotNet.Apps
 		private static async void InitNotificationsAsync()
 		{
 #if WINDOWS_PHONE_APP
+			UserTable = MobileService.GetTable<User>();
+			DeviceIdent = Sha.Sha256(BitConverter.ToString(HardwareIdentification.GetPackageSpecificToken(null).Id.ToArray()));
+
 			// Request a push notification channel.
 			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-			await MobileService.GetPush().RegisterNativeAsync(channel.Uri);
+			await MobileService.GetPush().RegisterNativeAsync(channel.Uri, new[] { DeviceIdent });
 			channel.PushNotificationReceived += (sender, args) =>
 			{
 

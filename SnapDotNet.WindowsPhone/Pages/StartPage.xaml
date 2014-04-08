@@ -2,7 +2,6 @@
     x:Class="SnapDotNet.Apps.Pages.StartPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SnapDotNet.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -43,7 +42,7 @@
             <TextBlock Grid.Row="1" HorizontalAlignment="Center" Padding="5" Style="{StaticResource TitleTextBlockStyle}" FontWeight="Light">Snapchat for Windows Phone</TextBlock>
         
             <!-- Buttons -->
-            <Button Grid.Row="2" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,300,0,0" x:Uid="SignInButton">sign in</Button>
+            <Button x:Name="SignInButton" Grid.Row="2" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,300,0,0" x:Uid="SignInButton" Click="SignInButton_Click">sign in</Button>
             <Button Grid.Row="3" Width="200" HorizontalAlignment="Center" x:Uid="CreateAccountButton">create new account</Button>
         </Grid>
         
