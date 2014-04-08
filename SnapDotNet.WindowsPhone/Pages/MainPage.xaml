@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+	>
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -21,8 +22,10 @@
 			<RowDefinition Height="10"/>
 		</Grid.RowDefinitions>
 
-		<Canvas x:Name="ViewPortCanvas"
-			Grid.Column="1" Grid.Row="1"/>
+		<Canvas
+			Grid.Column="1" Grid.Row="1">
+			<CaptureElement x:Name="CameraPreview" Width="320" Height="240"/>
+		</Canvas>
 	</Grid>
 	<Page.BottomAppBar>
 		<CommandBar>
