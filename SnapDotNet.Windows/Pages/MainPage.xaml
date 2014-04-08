@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:Name="page"
     x:Class="SnapDotNet.Apps.Pages.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -38,7 +38,6 @@
                 <AppBarButton Label="Create snap" Icon="Camera"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="View snap" Icon="View"/>
                 <AppBarButton Label="View story" Icon="ViewAll"/>
                 <AppBarButton Label="Delete" Icon="Delete"/>
                 <AppBarButton Label="Block" Icon="BlockContact"/>
@@ -52,7 +51,7 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource AppPageBackgroundThemeBrush}">
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="15"/>
@@ -96,10 +95,48 @@
         <!-- Default layout -->
         <Grid x:Name="defaultView">
 
+            <!-- Signed-in user box -->
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="65" Tapped="OnAccountBoxTapped">
+                <Grid.Transitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition/>
+                    </TransitionCollection>
+                </Grid.Transitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+                
+                <tk:PieSlice EndAngle="280" Radius="40" Grid.RowSpan="2" Margin="0,0,0,3">
+                    <tk:PieSlice.Fill>
+                        <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Assets/tempBackground.jpg"/>
+                    </tk:PieSlice.Fill>
+                </tk:PieSlice>
+
+                <TextBlock Text="msaville8"
+                           TextWrapping="NoWrap"
+                           TextTrimming="CharacterEllipsis"
+                           FontSize="20"
+                           VerticalAlignment="Bottom"
+                           Grid.Column="1"/>
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Top" Margin="0,0,0,3"
+                            Grid.Row="1" Grid.Column="1">
+                    <SymbolIcon Symbol="Favorite" Foreground="Orange"/>
+                    <TextBlock Text="1,780 Points" FontSize="14" Foreground="LightGray" VerticalAlignment="Center" Margin="2,2,0,0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Actual content -->
             <Hub x:Uid="MainPageHub" Header="snapchat">
                 <Hub.Resources>
                     <Style TargetType="HubSection">
-                        <Setter Property="MinWidth" Value="320"/>
                         <Setter Property="Transitions">
                             <Setter.Value>
                                 <TransitionCollection>
@@ -109,7 +146,7 @@
                         </Setter>
                     </Style>
                 </Hub.Resources>
-                
+
                 <Hub.HeaderTemplate>
                     <DataTemplate>
                         <Grid Margin="0,0,0,0">
@@ -118,7 +155,7 @@
                                     <EntranceThemeTransition/>
                                 </TransitionCollection>
                             </Grid.Transitions>
-                            
+
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -129,24 +166,75 @@
                                     <CompositeTransform ScaleX="3" ScaleY="3"/>
                                 </SymbolIcon.RenderTransform>
                             </SymbolIcon>
-                            <TextBlock Grid.Column="1" Text="{Binding}"/>
+
+                            <ContentControl x:Name="appTitleContainer" Grid.Column="1" Content="{Binding AppTitleContent, ElementName=page}"/>
                         </Grid>
                     </DataTemplate>
                 </Hub.HeaderTemplate>
 
+                <!-- Friends -->
+                <HubSection Header="Friends" IsHeaderInteractive="True">
+                    <HubSection.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="People"/>
+                                <TextBlock Text="{Binding}" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </HubSection.HeaderTemplate>
+
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <SearchBox x:Uid="FriendSearchBox" Width="300" PlaceholderText="Search friends" Padding="8"/>
+
+                            <ListView Grid.Row="1" Margin="0,10,0,0">
+                                <ListView.ItemContainerTransitions>
+                                    <TransitionCollection>
+                                        <AddDeleteThemeTransition/>
+                                    </TransitionCollection>
+                                </ListView.ItemContainerTransitions>
+
+                                <ListViewItem>alexerax</ListViewItem>
+                                <ListViewItem>collindaginger</ListViewItem>
+                                <ListViewItem>msaville8</ListViewItem>
+                                <ListViewItem>
+                                    <StackPanel Orientation="Horizontal">
+                                        <SymbolIcon Symbol="AddFriend"/>
+                                        <TextBlock VerticalAlignment="Center" Margin="20,0,0,0">Add matt_bigdick</TextBlock>
+                                    </StackPanel>
+                                </ListViewItem>
+                            </ListView>
+                        </Grid>
+                    </DataTemplate>
+                </HubSection>
+
+                <!-- Recent Snaps -->
                 <HubSection Header="Snaps" IsHeaderInteractive="True">
+                    <HubSection.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="Pictures"/>
+                                <TextBlock Text="{Binding}" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </HubSection.HeaderTemplate>
+
                     <DataTemplate>
                         <GridView ItemsSource="{Binding RecentSnaps}" SelectionChanged="OnSnapSelectionChanged" Margin="0,0,0,50">
                             <GridView.ItemContainerTransitions>
                                 <TransitionCollection>
-                                    <EntranceThemeTransition/>
                                     <AddDeleteThemeTransition/>
                                 </TransitionCollection>
                             </GridView.ItemContainerTransitions>
-                            
+
                             <GridView.ItemTemplateSelector>
                                 <selectors:SnapItemTemplateSelector>
-                                    
+
                                     <!-- Countdown template -->
                                     <selectors:SnapItemTemplateSelector.CountdownTemplate>
                                         <DataTemplate>
@@ -182,7 +270,7 @@
                                             </Grid>
                                         </DataTemplate>
                                     </selectors:SnapItemTemplateSelector.CountdownTemplate>
-                                    
+
                                     <!-- Default template -->
                                     <selectors:SnapItemTemplateSelector.DefaultTemplate>
                                         <DataTemplate>
@@ -203,7 +291,7 @@
                                                             HorizontalAlignment="Center" VerticalAlignment="Center"
                                                             Foreground="{Binding Status, Converter={StaticResource SnapStatusToForegroundConverter}}"
                                                             RenderTransformOrigin="0.5,0.5">
-                                                    <SymbolIcon.RenderTransform> 
+                                                    <SymbolIcon.RenderTransform>
                                                         <CompositeTransform ScaleX="2.5" ScaleY="2.5"/>
                                                     </SymbolIcon.RenderTransform>
                                                 </SymbolIcon>
@@ -234,17 +322,66 @@
 
                 <!-- Stories Hub -->
                 <HubSection Header="Stories" IsHeaderInteractive="True">
+                    <HubSection.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <SymbolIcon Symbol="ViewAll"/>
+                                <TextBlock Text="{Binding}" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </HubSection.HeaderTemplate>
+
                     <DataTemplate>
                         <GridView>
+                            <GridView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <AddDeleteThemeTransition/>
+                                </TransitionCollection>
+                            </GridView.ItemContainerTransitions>
 
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Width="250" Height="250" Margin="25">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <tk:PieSlice Radius="100" StartAngle="0" EndAngle="359" Opacity="0.1" Fill="Black" RenderTransformOrigin="0.5,0.5">
+                                            <tk:PieSlice.RenderTransform>
+                                                <CompositeTransform Rotation="1"/>
+                                            </tk:PieSlice.RenderTransform>
+                                        </tk:PieSlice>
+
+                                        <tk:PieSlice Radius="100" StartAngle="0" EndAngle="280">
+                                            <tk:PieSlice.Fill>
+                                                <ImageBrush Stretch="UniformToFill" ImageSource="ms-appx:///Assets/tempBackground.jpg"/>
+                                            </tk:PieSlice.Fill>
+                                        </tk:PieSlice>
+
+                                        <TextBlock Grid.Row="1" FontWeight="SemiBold" HorizontalAlignment="Center">
+                                            alexerax
+                                        </TextBlock>
+
+                                        <TextBlock Grid.Row="2" FontSize="12" Foreground="#FFCCCCCC" HorizontalAlignment="Center">
+                                            2 hours ago
+                                        </TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+
+                            <Button/>
+                            <Button/>
+                            <Button/>
+                            <Button/>
+                            <Button/>
+                            <Button/>
+                            <Button/>
+                            <Button/>
+                            <Button/>
+                            <Button/>
                         </GridView>
-                    </DataTemplate>
-                </HubSection>
-
-                <!-- Friends Hub -->
-                <HubSection Header="Friends" IsHeaderInteractive="True">
-                    <DataTemplate>
-                        
                     </DataTemplate>
                 </HubSection>
             </Hub>
@@ -261,7 +398,7 @@
               PointerExited="OnBottomAppBarHintExited"
               Tapped="OnBottomAppBarHintTapped"
               x:Uid="BottomAppBarHint">
-            <SymbolIcon Symbol="More" Foreground="Black" HorizontalAlignment="Right" Margin="0,0,55,0"/>
+            <SymbolIcon Symbol="More" Foreground="White" HorizontalAlignment="Right" Margin="0,0,55,0"/>
         </Grid>
     </Grid>
 </Page>

@@ -132,6 +132,12 @@
   <data name="Email.Header" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="FriendSearchBox.PlaceholderText" xml:space="preserve">
+    <value>Search friends</value>
+  </data>
+  <data name="MainPageAppTitle" xml:space="preserve">
+    <value>snapchat</value>
+  </data>
   <data name="MainPageHub.Header" xml:space="preserve">
     <value>snapchat</value>
   </data>

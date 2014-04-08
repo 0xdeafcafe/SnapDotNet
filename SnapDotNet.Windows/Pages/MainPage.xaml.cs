@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -13,8 +14,10 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using WinRTXamlToolkit.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,6 +28,14 @@ namespace SnapDotNet.Apps.Pages
 	/// </summary>
 	public sealed partial class MainPage : Page
 	{
+		public static DependencyProperty AppTitleContentProperty = DependencyProperty.Register("AppTitleContentppTitleContent", typeof(object), typeof(MainPage), new PropertyMetadata(null));
+
+		public object AppTitleContent
+		{
+			get { return ((base.GetValue(MainPage.AppTitleContentProperty))); }
+			set { base.SetValue(MainPage.AppTitleContentProperty, value); }
+		}
+
 		public MainPage()
 		{
 			DataContext = new MainViewModel();
@@ -38,6 +49,33 @@ namespace SnapDotNet.Apps.Pages
 				else
 					VisualStateManager.GoToState(this, "DefaultLayout", true);
 			};
+
+			// won't work at design time
+			var title = new CascadingTextBlock
+			{
+				Text = "snapchat",
+				Foreground = new SolidColorBrush(Colors.White),
+				CascadeInterval = TimeSpan.FromMilliseconds(150),
+				CascadeInDuration = TimeSpan.FromMilliseconds(75),
+				StartDelay = 700,
+			};
+			title.CascadeCompleted += async delegate
+			{
+				if (title.CascadeIn)
+				{
+					title.CascadeIn = false;
+					title.CascadeOut = true;
+					await Task.Delay(10000);
+				}
+				else
+				{
+					title.CascadeOut = false;
+					title.CascadeIn = true;
+				}
+
+				await title.BeginCascadingTransitionAsync();
+			};
+			AppTitleContent = title;
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -99,6 +137,11 @@ namespace SnapDotNet.Apps.Pages
 		private void OnBottomAppBarHintTapped(object sender, TappedRoutedEventArgs e)
 		{
 			this.BottomAppBar.IsOpen = true;
+		}
+
+		private void OnAccountBoxTapped(object sender, TappedRoutedEventArgs e)
+		{
+			// TODO: Navigate to accounts page
 		}
 	}
 }

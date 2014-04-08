@@ -8,7 +8,13 @@ namespace SnapDotNet.Apps.ViewModels
 {
     public sealed class MainViewModel
 		: NotifyPropertyChangedBase
-    {
+	{
+#if NETFX_CORE
+		public const int MaximumRecentSnaps = 7;
+#else
+		public const int MaximumRecentSnaps = 10;
+#endif
+			
 		public MainViewModel()
 		{
 			RecentSnaps = new ObservableCollection<Snap>();
@@ -20,7 +26,7 @@ namespace SnapDotNet.Apps.ViewModels
 				"collindaginger"
 			};
 			var random = new Random();
-			for (int i = 0; i < 24; i++)
+			for (int i = 0; i < MaximumRecentSnaps; i++)
 			{
 				SnapStatus status = (SnapStatus) random.Next(5);
 
@@ -35,11 +41,24 @@ namespace SnapDotNet.Apps.ViewModels
 #endif
 		}
 
+		/// <summary>
+		/// Gets or sets a collection of recent snaps.
+		/// </summary>
 		public ObservableCollection<Snap> RecentSnaps
 		{
 			get { return _recentSnaps; }
 			set { SetField(ref _recentSnaps, value); }
 		}
 		private ObservableCollection<Snap> _recentSnaps;
+
+		/// <summary>
+		/// Gets or sets a collection of recent story updates posted by friends.
+		/// </summary>
+		public ObservableCollection<Stories.FriendStory> RecentFriendStories
+		{
+			get { return _recentFriendStories; }
+			set { SetField(ref _recentFriendStories, value); }
+		}
+		private ObservableCollection<Stories.FriendStory> _recentFriendStories;
     }
 }
