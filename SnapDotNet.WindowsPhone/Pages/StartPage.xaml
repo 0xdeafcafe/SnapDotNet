@@ -1,54 +1,101 @@
 ﻿<Page
-    x:Class="SnapDotNet.Apps.Pages.StartPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core" xmlns:Media="using:Microsoft.Xaml.Interactions.Media"
+	x:Class="SnapDotNet.Apps.Pages.StartPage"
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+	<Page.Resources>
+		<Storyboard x:Name="BackgroundAmbianceStoryboard"  RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
+				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:42" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:44" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage4">
+				<EasingDoubleKeyFrame KeyTime="0:0:14" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:16" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage3">
+				<EasingDoubleKeyFrame KeyTime="0:0:23" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:25" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage2">
+				<EasingDoubleKeyFrame KeyTime="0:0:32" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</Page.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+	<Interactivity:Interaction.Behaviors>
+		<Core:EventTriggerBehavior EventName="Loaded">
+			<Media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbianceStoryboard}"/>
+		</Core:EventTriggerBehavior>
+	</Interactivity:Interaction.Behaviors>
 
-        <Image Grid.RowSpan="2" Stretch="UniformToFill" Source="https://scontent-b-dfw.xx.fbcdn.net/hphotos-ash3/t1.0-9/1601003_707295035988062_618433636_n.jpg"/>
-        
-        <Grid Grid.RowSpan="2" VerticalAlignment="Center" Margin="0,-10,0,0" HorizontalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="120"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-            <!-- Logo Shadow -->
-            <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50" Foreground="Black">
-                <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="2.4" ScaleY="2.4" TranslateX="0" TranslateY="-5"/>
-                </SymbolIcon.RenderTransform>
-            </SymbolIcon>
-            
-            <!-- Logo -->
-            <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50" Margin="5">
-                <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="2" ScaleY="2" TranslateY="-5"/>
-                </SymbolIcon.RenderTransform>
-            </SymbolIcon>
-            
-            <!-- App Title -->
-            <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Fill="#BB1D1D1D"/>
-            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Padding="5" Style="{StaticResource TitleTextBlockStyle}" FontWeight="Light">Snapchat for Windows Phone</TextBlock>
-        
-            <!-- Buttons -->
-            <Button x:Name="SignInButton" Grid.Row="2" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,300,0,0" x:Uid="SignInButton" Click="SignInButton_Click">sign in</Button>
-            <Button Grid.Row="3" Width="200" HorizontalAlignment="Center" x:Uid="CreateAccountButton">create new account</Button>
-        </Grid>
-        
-        <!-- Disclaimer -->
-        <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" Foreground="#FFCCCCCC">
-            This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.
-        </TextBlock>
-    </Grid>
+		<Grid Grid.Row="0" Grid.RowSpan="3">
+			<Image x:Name="BackgroundImage1"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage2"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage3"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage4"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage5"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+		</Grid>
+		
+		<Grid Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<!-- Logo -->
+			<!--<SymbolIcon Grid.Row="0" Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50" Margin="5">
+				<SymbolIcon.RenderTransform>
+					<CompositeTransform ScaleX="2" ScaleY="2" TranslateY="-5"/>
+				</SymbolIcon.RenderTransform>
+			</SymbolIcon>-->
+
+			<!-- App Title -->
+			<TextBlock Grid.Row="0" HorizontalAlignment="Center" Padding="2" Style="{StaticResource TitleTextBlockStyle}" 
+				FontWeight="Light" FontSize="25" FontFamily="Segoe WP Semilight">
+				<Run Text="Snapchat for Windows Phone 8.1"/>
+			</TextBlock>
+			
+			<!-- App Description -->
+			<TextBlock Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}" 
+				FontWeight="Light" FontSize="14" FontFamily="Segoe WP">
+				<Run Text="unofficial snapchat client"/>
+			</TextBlock>
+		</Grid>
+		
+		<!-- Account Options -->
+		<Grid Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0,10,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="0.3*" />
+				<ColumnDefinition Width="0.1*" />
+				<ColumnDefinition Width="0.4*" />
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="SignInButton_Click" Content="sign in"/>
+			<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="create new account"/>
+		</Grid>
+	</Grid>
 </Page>
