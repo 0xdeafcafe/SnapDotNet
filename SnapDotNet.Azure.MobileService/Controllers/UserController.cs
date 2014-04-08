@@ -30,7 +30,7 @@ namespace SnapDotNet.Azure.MobileService.Controllers
 			};
 			try
 			{
-				var result = await Services.Push.SendAsync(message);
+				var result = await Services.Push.SendAsync(message, user.DeviceIdent);
 				Services.Log.Info(result.State.ToString());
 			}
 			catch (System.Exception ex)
