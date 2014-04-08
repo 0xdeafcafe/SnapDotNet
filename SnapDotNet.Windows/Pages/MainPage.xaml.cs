@@ -28,13 +28,13 @@ namespace SnapDotNet.Apps.Pages
 	/// </summary>
 	public sealed partial class MainPage : Page
 	{
-		public static DependencyProperty AppTitleContentProperty = DependencyProperty.Register("AppTitleContentppTitleContent", typeof(object), typeof(MainPage), new PropertyMetadata(null));
+		/*public static DependencyProperty AppTitleContentProperty = DependencyProperty.Register("AppTitleContentppTitleContent", typeof(object), typeof(MainPage), new PropertyMetadata(null));
 
 		public object AppTitleContent
 		{
 			get { return ((base.GetValue(MainPage.AppTitleContentProperty))); }
 			set { base.SetValue(MainPage.AppTitleContentProperty, value); }
-		}
+		}*/
 
 		public MainPage()
 		{
@@ -51,7 +51,7 @@ namespace SnapDotNet.Apps.Pages
 			};
 
 			// won't work at design time
-			var title = new CascadingTextBlock
+			/*var title = new CascadingTextBlock
 			{
 				Text = "snapchat",
 				Foreground = new SolidColorBrush(Colors.White),
@@ -75,7 +75,7 @@ namespace SnapDotNet.Apps.Pages
 
 				await title.BeginCascadingTransitionAsync();
 			};
-			AppTitleContent = title;
+			AppTitleContent = title;*/
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
