@@ -30,7 +30,7 @@
 				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
-		
+
 		<Storyboard x:Name="SignInModalRevealStoryboard">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SignInModalGrid">
 				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
@@ -117,7 +117,7 @@
 				<RowDefinition Height="40"/>
 				<RowDefinition Height="20"/>
 			</Grid.RowDefinitions>
-			
+
 			<!-- Branding -->
 			<Grid Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Stretch">
 				<Grid.RowDefinitions>
@@ -154,24 +154,32 @@
 				</Grid.ColumnDefinitions>
 				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="SignInButton_Click" Content="sign in" Background="#FFDAD104"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}"/>
+
+				<!-- TESTING -->
+				<TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Uid="OverrideButton"
+						   Tapped="OverrideButton_Tapped" >SKIP</TextBlock>
+				<!-- TESTING -->
+
 				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="register" Background="#FF0EA0D6"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}" />
+
 			</Grid>
 		</Grid>
-		
+
 		<Grid x:Name="SignInModalGrid" Grid.Row="0" 
-			  Background="#7F8F8F8F"> <!--Visibility="Collapsed" Opacity="0"-->
+			  Background="#7F8F8F8F">
+			<!--Visibility="Collapsed" Opacity="0"-->
 
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40" />
 				<RowDefinition Height="45" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			
+
 			<TextBlock Grid.Row="1" x:Uid="SignInHeader" Margin="20,0,0,0" FontFamily="Segoe WP Semilight" FontSize="30">
 				sign in to snapchat
 			</TextBlock>
-			
+
 		</Grid>
 	</Grid>
 </Page>

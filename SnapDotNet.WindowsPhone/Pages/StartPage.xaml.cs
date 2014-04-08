@@ -74,5 +74,10 @@ namespace SnapDotNet.Apps.Pages
 				backPressedEventArgs.Handled = true;
 			}
 		}
+
+		private void OverrideButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+		{
+			this.Frame.Navigate(typeof(MainPage));
+		}
 	}
 }
