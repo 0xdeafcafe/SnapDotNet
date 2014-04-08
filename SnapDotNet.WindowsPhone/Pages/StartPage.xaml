@@ -3,12 +3,14 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core" xmlns:Media="using:Microsoft.Xaml.Interactions.Media"
+	xmlns:interactivity="using:Microsoft.Xaml.Interactivity" 
+	xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
+	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
 	x:Class="SnapDotNet.Apps.Pages.StartPage"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
-		<Storyboard x:Name="BackgroundAmbienceStoryboard"  RepeatBehavior="Forever">
+		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
 				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
@@ -28,22 +30,69 @@
 				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
+		
+		<Storyboard x:Name="SignInModalRevealStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SignInModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainPageContent">
+				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SignInModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MainPageContent">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Name="SignInModalHideStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SignInModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainPageContent">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SignInModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MainPageContent">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
 	</Page.Resources>
-
-	<Interactivity:Interaction.Behaviors>
-		<Core:EventTriggerBehavior EventName="Loaded">
-			<Media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbienceStoryboard}"/>
-		</Core:EventTriggerBehavior>
-	</Interactivity:Interaction.Behaviors>
+	<interactivity:Interaction.Behaviors>
+		<core:EventTriggerBehavior EventName="Loaded">
+			<media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbienceStoryboard}"/>
+		</core:EventTriggerBehavior>
+	</interactivity:Interaction.Behaviors>
 
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="120"/>
-			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<Grid Grid.Row="0" Grid.RowSpan="3">
+		<!-- Backgrounds -->
+		<Grid x:Name="BackgroundAmbienceGrid" Grid.Row="0">
 			<Image
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
@@ -60,42 +109,69 @@
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
 		</Grid>
-		
-		<Grid Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+
+		<Grid x:Name="MainPageContent" Grid.Row="0">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="120"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="40"/>
+				<RowDefinition Height="20"/>
 			</Grid.RowDefinitions>
-
-			<!-- Logo -->
-			<!--<SymbolIcon Grid.Row="0" Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50" Margin="5">
-				<SymbolIcon.RenderTransform>
-					<CompositeTransform ScaleX="2" ScaleY="2" TranslateY="-5"/>
-				</SymbolIcon.RenderTransform>
-			</SymbolIcon>-->
-
-			<!-- App Title -->
-			<TextBlock Grid.Row="0" HorizontalAlignment="Center" Padding="2" Style="{StaticResource TitleTextBlockStyle}" 
-				FontWeight="Light" FontSize="25" FontFamily="Segoe WP Semilight">
-				<Run Text="Snapchat for Windows Phone 8.1"/>
-			</TextBlock>
 			
-			<!-- App Description -->
-			<TextBlock Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}" 
-				FontWeight="Light" FontSize="14" FontFamily="Segoe WP">
-				<Run Text="unofficial snapchat client"/>
-			</TextBlock>
+			<!-- Branding -->
+			<Grid Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<!-- Logo -->
+				<!--<SymbolIcon Grid.Row="0" Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="50" Margin="5">
+					<SymbolIcon.RenderTransform>
+						<CompositeTransform ScaleX="2" ScaleY="2" TranslateY="-5"/>
+					</SymbolIcon.RenderTransform>
+				</SymbolIcon>-->
+
+				<!-- App Title -->
+				<TextBlock Grid.Row="0" HorizontalAlignment="Center" Padding="2" Style="{StaticResource TitleTextBlockStyle}" 
+						   FontWeight="Light" FontSize="28" FontFamily="Segoe WP Semilight">
+					<Run x:Uid="StartPageTitle" Text="Snapchat for Windows"/>
+				</TextBlock>
+
+				<!-- App Description -->
+				<TextBlock Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}" 
+						   FontWeight="Light" FontSize="16" FontFamily="Segoe WP">
+					<Run x:Uid="StartPageThirdParty" Text="unofficial snapchat client"/>
+				</TextBlock>
+			</Grid>
+
+			<!-- Account Options -->
+			<Grid Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.35*" />
+					<ColumnDefinition Width="0.1*" />
+					<ColumnDefinition Width="0.35*" />
+				</Grid.ColumnDefinitions>
+				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="SignInButton_Click" Content="sign in" Background="#FFDAD104"
+					Style="{StaticResource DefaultWindowsPhoneButtonStyle}"/>
+				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="register" Background="#FF0EA0D6"
+					Style="{StaticResource DefaultWindowsPhoneButtonStyle}" />
+			</Grid>
 		</Grid>
 		
-		<!-- Account Options -->
-		<Grid Grid.Row="2" VerticalAlignment="Bottom" Margin="10,0,10,0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="0.3*" />
-				<ColumnDefinition Width="0.1*" />
-				<ColumnDefinition Width="0.4*" />
-			</Grid.ColumnDefinitions>
-			<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="SignInButton_Click" Content="sign in"/>
-			<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="create new account"/>
+		<Grid x:Name="SignInModalGrid" Grid.Row="0" 
+			  Background="#7F8F8F8F"> <!--Visibility="Collapsed" Opacity="0"-->
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="40" />
+				<RowDefinition Height="45" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			
+			<TextBlock Grid.Row="1" x:Uid="SignInHeader" Margin="20,0,0,0" FontFamily="Segoe WP Semilight" FontSize="30">
+				sign in to snapchat
+			</TextBlock>
+			
 		</Grid>
 	</Grid>
 </Page>

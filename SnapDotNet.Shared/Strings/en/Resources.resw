@@ -124,7 +124,7 @@
     <value>Show more commands (Windows logo key+Z, or right-click)</value>
   </data>
   <data name="CreateAccountButton.Content" xml:space="preserve">
-    <value>Create account</value>
+    <value>register</value>
   </data>
   <data name="Disclaimer.Text" xml:space="preserve">
     <value>This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</value>
@@ -139,7 +139,10 @@
     <value>Password</value>
   </data>
   <data name="SignInButton.Content" xml:space="preserve">
-    <value>Sign in</value>
+    <value>sign in</value>
+  </data>
+  <data name="SignInHeader.Text" xml:space="preserve">
+    <value>sign in to snapchat</value>
   </data>
   <data name="SignInUsername.Header" xml:space="preserve">
     <value>Username or email</value>
@@ -165,7 +168,10 @@
   <data name="SnapStatusTapToLoad" xml:space="preserve">
     <value>Tap to load</value>
   </data>
+  <data name="StartPageThirdParty.Text" xml:space="preserve">
+    <value>unofficial snapchat client</value>
+  </data>
   <data name="StartPageTitle.Text" xml:space="preserve">
-    <value>Snapchat for Windows 8.1</value>
+    <value>Snapchat for Windows</value>
   </data>
 </root>

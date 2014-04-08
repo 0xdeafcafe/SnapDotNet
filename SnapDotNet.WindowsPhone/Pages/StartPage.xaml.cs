@@ -1,12 +1,11 @@
 ﻿using System;
+using Windows.Phone.UI.Input;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 using SnapDotNet.Apps.ViewModels;
-using SnapDotNet.Core.Atlas;
 
 namespace SnapDotNet.Apps.Pages
 {
@@ -22,6 +21,12 @@ namespace SnapDotNet.Apps.Pages
 			InitializeComponent();
 
 			DataContext = ViewModel = new StartViewModel();
+
+			// TODO: remove this
+			SignInModalGrid.Opacity = 0.0f;
+			SignInModalGrid.Visibility = Visibility.Collapsed;
+
+			HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 		}
 
 		/// <summary>
@@ -33,20 +38,41 @@ namespace SnapDotNet.Apps.Pages
 		{
 			StatusBar.GetForCurrentView().BackgroundColor = new Color { A = 0x00, R = 0x00, G = 0x00, B = 0x00,  };
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
-
 		}
 
-		private async void SignInButton_Click(object sender, RoutedEventArgs e)
+		private void SignInButton_Click(object sender, RoutedEventArgs e)
 		{
-			var user = new User
-			{
-				DeviceIdent = App.DeviceIdent,
-				AuthExpired = false,
-				SnapchatAuthToken = new Random().Next(0xaaaaaaa, 0xfffffff).ToString("X8"),
-				SnapchatUsername = "alexerax"
-			};
+			var storyboard = (Storyboard) Resources["SignInModalRevealStoryboard"];
+			if (storyboard == null) return;
+			storyboard.Begin();
+			ViewModel.OpenSignInPageCommand.Execute(null);
 
-			await App.MobileService.GetTable<User>().InsertAsync(user);
+			//var user = new User
+			//{
+			//	DeviceIdent = App.DeviceIdent,
+			//	AuthExpired = false,
+			//	SnapchatAuthToken = new Random().Next(0xaaaaaaa, 0xfffffff).ToString("X8"),
+			//	SnapchatUsername = "alexerax"
+			//};
+
+			//await App.MobileService.GetTable<User>().InsertAsync(user);
+		}
+
+		private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
+		{
+			if (ViewModel.IsSignInPageVisible)
+			{
+				var storyboard = (Storyboard)Resources["SignInModalHideStoryboard"];
+				if (storyboard == null) return;
+				storyboard.Begin();
+				ViewModel.GoBackToStartCommand.Execute(null);
+				backPressedEventArgs.Handled = true;
+			}
+
+			if (ViewModel.IsRegisterPageVisible)
+			{
+				backPressedEventArgs.Handled = true;
+			}
 		}
 	}
 }

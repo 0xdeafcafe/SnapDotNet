@@ -98,7 +98,10 @@ namespace SnapDotNet.Apps.ViewModels
 		public bool IsSignInPageVisible
 		{
 			get { return _isSignInPageVisible; }
-			private set { SetField(ref _isSignInPageVisible, value); }
+			private set
+			{
+				SetField(ref _isSignInPageVisible, value);
+			}
 		}
 		private bool _isSignInPageVisible;
 
