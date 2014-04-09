@@ -6,6 +6,7 @@ using Windows.Devices.Enumeration;
 using Windows.Media.MediaProperties;
 using Windows.Storage.Streams;
 using Windows.UI;
+using Windows.UI.Input;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -36,11 +37,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			DataContext = ViewModel = new MainViewModel();
 		}
+
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			CameraInitialStartupSequencer();
 
-			StatusBar.GetForCurrentView().BackgroundColor = new Color { A = 0x00, R = 0x00, G = 0x00, B = 0x00, };
+			StatusBar.GetForCurrentView().BackgroundColor = new Color {A = 0x00, R = 0x00, G = 0x00, B = 0x00,};
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 		}
 
@@ -77,6 +79,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_cameraInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
 			_microphoneInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.AudioCapture);
 		}
+
 		private async Task InitialiseCameraDevice() //must manually.stopPreviewAsync Before re-initialising.
 		{
 			ButtonCamera.IsEnabled = false;
@@ -97,6 +100,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			ButtonCamera.IsEnabled = true;
 			ButtonRecord.IsEnabled = true;
 		}
+
 		private void SetUiCameraXamlElements()
 		{
 			if (_cameraInfoCollection.Count < 2)
@@ -105,27 +109,46 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}
 		}
 
-		private async void CapturePhoto() //Also trigger off shutter key? IDK how in 8.1, no more CameraButtons.ShutterKeyPressed etc.
+		private async void CapturePhoto()
+			//Also trigger off shutter key? IDK how in 8.1, no more CameraButtons.ShutterKeyPressed etc.
 		{
 			var stream = new InMemoryRandomAccessStream();
 			var imageProperties = ImageEncodingProperties.CreateJpeg();
 
 			Debug.WriteLine("Capping Photo");
 			await _mediaCapture.CapturePhotoToStreamAsync(imageProperties, stream);
-			if (stream.Size > 0) { Debug.WriteLine("Capping Photo: OK, stream size " + stream.Size); }
+			if (stream.Size > 0)
+			{
+				Debug.WriteLine("Capping Photo: OK, stream size " + stream.Size);
+			}
 		}
 
 		private void ButtonPhoto_OnClick(object sender, RoutedEventArgs e)
 		{
 			CapturePhoto();
 		}
-
-		private void ButtonRecord_OnClick(object sender, RoutedEventArgs e)
+		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e)
 		{
-			throw new NotImplementedException();
+			if (e.HoldingState == HoldingState.Started)
+			{
+				var stream = new InMemoryRandomAccessStream();
+				var videoProperties = new MediaEncodingProfile();
+
+				Debug.WriteLine("Capping Video");
+				//await _mediaCapture.StartRecordToStreamAsync(videoProperties, stream);
+				if (stream.Size > 0)
+				{
+					Debug.WriteLine("Capping Video: OK, stream size " + stream.Size);
+				}
+			}
+			else
+			{
+				Debug.WriteLine("Stopping Video");
+				//await _mediaCapture.StopRecordAsync();
+				Debug.WriteLine("Stopping Video: OK");
+			}
+			
 		}
-
-
 		private void ButtonMessages_OnClick(object sender, RoutedEventArgs e)
 		{
 			throw new NotImplementedException();
@@ -143,7 +166,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			if (toggleButton == null) return;
 			if (toggleButton.IsChecked == null) return;
 
-			var imagePath = (bool)toggleButton.IsChecked
+			var imagePath = (bool) toggleButton.IsChecked
 				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
 				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
 			FrontFacingImage.Source = new BitmapImage(imagePath);
@@ -170,5 +193,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			throw new NotImplementedException();
 			//todo IDK what this is for? Alex?
 		}
+
+		
 	}
 }
