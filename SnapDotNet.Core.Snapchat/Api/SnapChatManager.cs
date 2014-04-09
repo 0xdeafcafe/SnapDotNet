@@ -3,10 +3,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Snapchat.Models;
+using SnapDotNet.Core.SnapchatApi.Common;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
 	public class SnapChatManager
+		: NotifyPropertyChangedBase
 	{
 		private const string AccountDataFileName = "accountData.json";
 		private const string RoamingSnapchatDataContainer = "SnapchatData";

@@ -2,6 +2,11 @@
 using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
+using System;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
+using Windows.UI.Popups;
+using System.Threading.Tasks;
+using SnapDotNet.Core.Atlas;
 
 namespace SnapDotNet.Apps.ViewModels
 {
@@ -12,7 +17,7 @@ namespace SnapDotNet.Apps.ViewModels
 		{
 			IsStartPageVisible = true;
 
-			#region Register Commands
+			#region Commands
 
 			OpenSignInPageCommand = new RelayCommand(
 				() =>
@@ -134,12 +139,112 @@ namespace SnapDotNet.Apps.ViewModels
 		private bool _isStartPageVisible;
 
 		/// <summary>
+		/// Gets or sets the current username.
+		/// </summary>
+		public string CurrentUsername
+		{
+			get { return _currentUsername; }
+			set { SetField(ref _currentUsername, value); }
+		}
+		private string _currentUsername;
+
+		/// <summary>
+		/// Gets or sets the current password.
+		/// </summary>
+		public string CurrentPassword
+		{
+			get { return _currentPassword; }
+			set { SetField(ref _currentPassword, value); }
+		}
+		private string _currentPassword;
+
+		/// <summary>
+		/// Gets or sets the current email.
+		/// </summary>
+		public string CurrentEmail
+		{
+			get { return _currentEmail; }
+			set { SetField(ref _currentEmail, value); }
+		}
+		private string _currentEmail;
+
+		/// <summary>
+		/// Gets or sets the desired password.
+		/// </summary>
+		public string DesiredPassword
+		{
+			get { return _desiredPassword; }
+			set { SetField(ref _desiredPassword, value); }
+		}
+		private string _desiredPassword;
+
+		/// <summary>
+		/// Gets or sets the current birthday.
+		/// </summary>
+		public DateTimeOffset CurrentBirthday
+		{
+			get { return _currentBirthday; }
+			set { SetField(ref _currentBirthday, value); }
+		}
+		private DateTimeOffset _currentBirthday;
+
+
+		/// <summary>
 		/// Attempts to sign the user into Snapchat.
 		/// </summary>
-		private void SignIn(Page nextPage)
+		private async void SignIn(Page nextPage)
 		{
-			// TODO: API stuff
-			App.CurrentFrame.Navigate(nextPage.GetType());
+			// Do nothing if username or password isn't filled in.
+			// Maybe show dialog instead?
+			if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
+				return;
+
+			ProgressModalVisibility = Visibility.Visible;
+
+			try
+			{
+				// Try and log into SnapChat
+				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
+
+#if WINDOWS_PHONE_APP
+				// Register device for Push Notifications
+				await
+					App.MobileService.GetTable<User>()
+						.InsertAsync(new User
+						{
+							AuthExpired = false,
+							DeviceIdent = App.DeviceIdent,
+							SnapchatAuthToken = App.SnapChatManager.AuthToken,
+							SnapchatUsername = App.SnapChatManager.Username
+						});
+#endif
+			}
+			catch (InvalidCredentialsException)
+			{
+				var dialog =
+					new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
+						"Invalid Username/Password");
+				var showDialogTask = dialog.ShowAsync();
+			}
+			catch (InvalidHttpResponseException exception)
+			{
+				var dialog =
+					new MessageDialog(String.Format("Unable to connect to snapchat. The server responded: \n {0}.", exception.Message),
+						"Unable to connect to Snapchat");
+				var showDialogTask = dialog.ShowAsync();
+			}
+			finally
+			{
+				ProgressModalVisibility = Visibility.Collapsed;
+			}
+
+			if (nextPage != null)
+			{
+				if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
+					return;
+
+				App.CurrentFrame.Navigate(nextPage.GetType());
+			}
 		}
 
 		/// <summary>

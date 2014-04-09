@@ -63,10 +63,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			VideoTimerBlock.Text = String.Format("{0}s", videoRecordStopwatch.Elapsed.Seconds);
 		}
 
-		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+		protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e)
 		{
 			if (_mediaCapture != null)
-				_mediaCapture.StopPreviewAsync();
+				await _mediaCapture.StopPreviewAsync();
 		}
 
 		private async void CameraInitialStartupSequencer()

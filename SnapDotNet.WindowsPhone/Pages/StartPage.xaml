@@ -184,13 +184,13 @@
 					   FontSize="30" Text="sign in to snapchat" />
 
 			<StackPanel Grid.Column="1" Grid.Row="3">
-				<TextBlock x:Uid="SignInUsername" FontSize="20">username or email</TextBlock>
-				<TextBox x:Name="SignInUsernameTextBlock" PlaceholderText="wumbalo..." InputScope="EmailSmtpAddress" />
+				<TextBlock x:Uid="SignInUsernameTitle" FontSize="20">username or email</TextBlock>
+				<TextBox x:Name="SignInUsernameTextBlock" Text="{Binding CurrentUsername, Mode=TwoWay}" InputScope="EmailSmtpAddress" />
 			</StackPanel>
 
 			<StackPanel Grid.Column="1" Grid.Row="5">
 				<TextBlock x:Uid="SignInPassword" FontSize="20">password</TextBlock>
-				<PasswordBox x:Name="SignInPasswordTextBlock" PlaceholderText="●●●●●●●●●●●●" />
+				<PasswordBox x:Name="SignInPasswordTextBlock" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
 			</StackPanel>
 
 			<Button x:Uid="SignInButton" x:Name="SignInButton" Grid.Column="1" Grid.Row="7" Content="sign in" Background="#FFDAD104" 

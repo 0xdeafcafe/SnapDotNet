@@ -134,7 +134,7 @@
             </Grid>
 
             <!-- Actual content -->
-            <Hub x:Uid="MainPageHub" Header="snapchat">
+            <Hub x:Uid="MainPageHub" Header="Snapchat">
                 <Hub.Resources>
                     <Style TargetType="HubSection">
                         <Setter Property="Transitions">
@@ -167,7 +167,7 @@
                                 </SymbolIcon.RenderTransform>
                             </SymbolIcon>
 
-                            <ContentControl x:Name="appTitleContainer" Grid.Column="1" Content="{Binding AppTitleContent, ElementName=page}"/>
+                            <TextBlock Text="{Binding}" Grid.Column="1"/>
                         </Grid>
                     </DataTemplate>
                 </Hub.HeaderTemplate>
