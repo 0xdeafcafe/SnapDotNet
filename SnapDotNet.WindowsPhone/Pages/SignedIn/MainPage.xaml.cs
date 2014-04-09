@@ -80,7 +80,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			ButtonRecord.IsEnabled = false;
 
 			_mediaCapture = new MediaCapture();
-			s
+
 			Debug.WriteLine("Initialising Camera");
 			Debug.WriteLine("Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
 			await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
@@ -144,7 +144,15 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		private void ButtonFlash_onClick(object sender, RoutedEventArgs e)
 		{
-			throw new NotImplementedException();
+			if (_mediaCapture.VideoDeviceController.FlashControl.Enabled == true)
+			{
+				_mediaCapture.VideoDeviceController.FlashControl.Enabled = false;
+			}
+			else
+			{
+				_mediaCapture.VideoDeviceController.FlashControl.Enabled = true;
+			}
+			Debug.WriteLine("FlashControl.Enabled set to: " + _mediaCapture.VideoDeviceController.FlashControl.Enabled);
 		}
 
 		private void Button4_onClick(object sender, RoutedEventArgs e)
