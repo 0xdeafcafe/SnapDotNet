@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Media.MediaProperties;
@@ -22,7 +23,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private MediaCapture _mediaCapture;
 		private MediaCaptureInitializationSettings _mediaCaptureSettings;
 		private DeviceInformationCollection _cameraInfoCollection;
+		private int _currentSelectedCameraDevice;
 		private DeviceInformationCollection _microphoneInfoCollection;
+		private int _currentSelectedAudioDevice;
 
 		public MainPage()
 		{
@@ -50,8 +53,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_mediaCaptureSettings = new MediaCaptureInitializationSettings();
 
 			//generate default settings
-			var cameraInfo = _cameraInfoCollection[0]; //default to first device
-			var microphoneInfo = _microphoneInfoCollection[0]; //default to first device
+			_currentSelectedAudioDevice = 0;
+			_currentSelectedCameraDevice = 0;
+			var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
+			var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
 			_mediaCaptureSettings.VideoDeviceId = cameraInfo.Id;
 			_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
 			_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
@@ -60,7 +65,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			await SetUICameraXAMLElements();
 			await InitialiseCameraDevice();
 			ButtonCamera.IsEnabled = true;
-			//ButtonRecord.IsEnabled = true; //not implemented
+			ButtonRecord.IsEnabled = true; //not implemented
 		}
 
 		private async Task GetCameraDevices()
@@ -70,9 +75,13 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		}
 		private async Task InitialiseCameraDevice()
 		{
+			ButtonCamera.IsEnabled = false;
+			ButtonRecord.IsEnabled = false;
+
 			_mediaCapture = new MediaCapture();
 
 			Debug.WriteLine("Initialising Camera");
+			Debug.WriteLine("Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
 			await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
 			Debug.WriteLine("Initialising Camera: OK");
 
@@ -80,6 +89,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			capturePreview.Source = _mediaCapture;
 			await _mediaCapture.StartPreviewAsync();
 			Debug.WriteLine("Starting Camera Preview: OK");
+
+			ButtonCamera.IsEnabled = true;
+			ButtonRecord.IsEnabled = true;
 		}
 		private async Task SetUICameraXAMLElements()
 		{
@@ -111,8 +123,19 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		private void ButtonFrontFacing_onClick(object sender, RoutedEventArgs e)
 		{
+			//cycle through video devices
+			_currentSelectedCameraDevice = _currentSelectedCameraDevice + 1;
 
-			throw new NotImplementedException();
+			if (_currentSelectedCameraDevice > _cameraInfoCollection.Count - 1)
+			{
+				_currentSelectedCameraDevice = _currentSelectedCameraDevice - _cameraInfoCollection.Count;
+			}
+			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
+
+			//_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
+			//_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
+
+			InitialiseCameraDevice();
 		}
 
 		private void ButtonLayers_onClick(object sender, RoutedEventArgs e)
