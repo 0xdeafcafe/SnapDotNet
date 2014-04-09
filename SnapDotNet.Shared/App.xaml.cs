@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Controls;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api;
 using System.Threading.Tasks;
+using SnapDotNet.Apps.Common;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;

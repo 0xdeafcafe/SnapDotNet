@@ -1,4 +1,5 @@
 ﻿using SnapDotNet.Apps.Common;
+using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -38,6 +39,11 @@ namespace SnapDotNet.Apps.ViewModels
 				});
 			}
 #endif
+		}
+
+		public SnapChatManager Manager
+		{
+			get { return App.SnapChatManager; }
 		}
 
 		/// <summary>
