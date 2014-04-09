@@ -144,7 +144,8 @@
                 <TextBox Grid.Row="0"
                          x:Uid="SignInUsername"
                          VerticalAlignment="Bottom"
-                         Header="Username or email">
+                         Header="Username or email"
+                         Text="{Binding CurrentUsername}">
                     <TextBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
@@ -155,7 +156,8 @@
                 <PasswordBox Margin="0,5,0,0"
                              Grid.Row="1"
                              x:Uid="PasswordBox"
-                             Header="Password">
+                             Header="Password"
+                             Password="{Binding CurrentPassword}">
                     <PasswordBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
@@ -207,7 +209,8 @@
                 <TextBox Grid.Row="0"
                          x:Uid="Email"
                          VerticalAlignment="Bottom"
-                         Header="Email">
+                         Header="Email"
+                         Text="{Binding CurrentEmail}">
                     <TextBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
@@ -218,7 +221,8 @@
                 <PasswordBox Margin="0,4,0,0"
                              Grid.Row="1"
                              x:Uid="PasswordBox"
-                             Header="Password">
+                             Header="Password"
+                             Password="{Binding DesiredPassword}">
                     <PasswordBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>

@@ -13,6 +13,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api;
+using System.Threading.Tasks;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
@@ -147,7 +148,7 @@ namespace SnapDotNet.Apps
 
 			if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
 
-			CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+			var navigateTask = CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof(StartPage)));
 		}
 

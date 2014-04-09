@@ -78,51 +78,24 @@ namespace SnapDotNet.Apps.Pages
 		{
 			ViewModel.ProgressModalVisibility = Visibility.Visible;
 
-			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing In...";
+			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
 			await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
 
 			try
 			{
-				// Try and log into SnapChat
-				await App.SnapChatManager.Endpoints.AuthenticateAsync(SignInUsernameTextBlock.Text,
-					SignInPasswordTextBlock.Password);
-
-				// Register device for Push Notifications
-				await
-					App.MobileService.GetTable<User>()
-						.InsertAsync(new User
-						{
-							AuthExpired = false,
-							DeviceIdent = App.DeviceIdent,
-							SnapchatAuthToken = App.SnapChatManager.AuthToken,
-							SnapchatUsername = App.SnapChatManager.Username
-						});
-			}
-			catch (InvalidCredentialsException)
-			{
-				var dialog =
-					new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
-						"Invalid Username/Password");
-				dialog.ShowAsync();
-			}
-			catch (InvalidHttpResponseException exception)
-			{
-				var dialog =
-					new MessageDialog(String.Format("Unable to connect to snapchat. The server responded: \n {0}.", exception.Message),
-						"Unable to connect to Snapchat");
-				dialog.ShowAsync();
+				ViewModel.SignInCommand.Execute(null);
 			}
 			finally
 			{
 				StatusBar.GetForCurrentView().ProgressIndicator.Text = "";
-				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
+				var hideTask = StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 				ViewModel.ProgressModalVisibility = Visibility.Collapsed;
 			}
 
 			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
 				return;
 
-			Frame.Navigate(typeof(MainPage), "removeBackStack");
+			App.CurrentFrame.Navigate(typeof(MainPage), "removeBackStack");
 		}
 	}
 }
