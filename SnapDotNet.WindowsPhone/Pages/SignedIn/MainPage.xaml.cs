@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Media.MediaProperties;
+using Windows.Phone.UI.Input;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Input;
@@ -37,6 +38,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		public MainPage()
 		{
 			InitializeComponent();
+
+			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 
 			DataContext = ViewModel = new MainViewModel();
 		}
@@ -135,6 +138,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		}
 
 		private void ButtonPhoto_OnClick(object sender, RoutedEventArgs e)
+		{
+			CapturePhoto();
+		}
+		void HardwareButtons_CameraPressed(object sender, CameraEventArgs e)
 		{
 			CapturePhoto();
 		}
