@@ -100,6 +100,7 @@
     <Content Include="Assets\Icons\appbar.box.layered.png" />
     <Content Include="Assets\Icons\appbar.camera.flash.off.png" />
     <Content Include="Assets\Icons\appbar.camera.flash.png" />
+    <Content Include="Assets\Icons\appbar.camera.flip.off.png" />
     <Content Include="Assets\Icons\appbar.camera.flip.png" />
     <Content Include="Assets\Icons\appbar.camera.png" />
     <Content Include="Assets\Icons\appbar.group.png" />

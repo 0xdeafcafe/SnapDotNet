@@ -94,7 +94,100 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		
+		<Style x:Key="WpSmallRoundToggleButtonStyle" TargetType="ToggleButton">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
+			<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+			<Setter Property="BorderThickness" Value="2.5"/>
+			<Setter Property="FontFamily" Value="Segoe WP"/>
+			<Setter Property="FontWeight" Value="Semibold"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Margin" Value="-15,0"/>
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Width" Value="40"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ToggleButton">
+						<Grid x:Name="Grid" Background="Transparent" VerticalAlignment="{TemplateBinding VerticalAlignment}" 
+							  HorizontalAlignment="{TemplateBinding HorizontalAlignment}" Margin="{TemplateBinding Margin}">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualStateGroup.Transitions>
+										<VisualTransition From="Pressed" To="PointerOver">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="PointerOver" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="Pressed" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Normal"/>
+									<VisualState x:Name="PointerOver"/>
+									<VisualState x:Name="Checked">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedForegroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedBackgroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Disabled">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBackgroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+							<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+									Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+									BorderThickness="{TemplateBinding BorderThickness}" 
+									Background="{TemplateBinding Background}" Margin="0"
+									CornerRadius="1000">
+
+								<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" 
+												  Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+												  ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" 
+												  Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}" 
+												  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+												  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							</Border>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
 		<Style x:Key="WpLargeRoundButtonStyle" TargetType="Button" BasedOn="{StaticResource WpSmallRoundButtonStyle}">
 			<Setter Property="BorderThickness" Value="4"/>
 			<Setter Property="Margin" Value="10,0"/>
@@ -182,8 +275,7 @@
 
 		<!--Image Grid.Row="0" Grid.RowSpan="3" Source="http://i.imgur.com/WLYZhR4.jpg" Stretch="UniformToFill"/-->
 		<CaptureElement x:Name="CapturePreview" 
-						Grid.Row="0" Grid.RowSpan="3" Stretch="UniformToFill" 
-						/>
+						Grid.Row="0" Grid.RowSpan="4" Stretch="UniformToFill" />
 
 		<TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"
 				   Text="0s" Opacity="0.4" Margin="10,0,0,10" FontSize="100"/>
@@ -199,15 +291,16 @@
 						Click="ButtonMessages_OnClick">
 					<Image Source="ms-appx:///Assets/Icons/appbar.box.layered.png" Margin="5" />
 				</Button>
-				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
+				<ToggleButton Style="{StaticResource WpSmallRoundToggleButtonStyle}"
 						x:Name="ButtonFrontFacing"
-						Click="ButtonFrontFacing_OnClick">
-					<Image Source="ms-appx:///Assets/Icons/appbar.camera.flip.png" Margin="5"/>
-				</Button>
-				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
-						Click="ButtonFlash_OnClick">
-					<Image Source="ms-appx:///Assets/Icons/appbar.camera.flash.png" Margin="5" />
-				</Button>
+						Checked="ButtonFrontFacing_CheckChanged" Unchecked="ButtonFrontFacing_CheckChanged">
+					<Image x:Name="FrontFacingImage" Source="ms-appx:///Assets/Icons/appbar.camera.flip.png" Margin="5"/>
+				</ToggleButton>
+				<ToggleButton Style="{StaticResource WpSmallRoundToggleButtonStyle}"
+						x:Name="FlashButton"
+						Checked="FlashButton_CheckChanged" Unchecked="FlashButton_CheckChanged">
+					<Image x:Name="FlashImage" Source="ms-appx:///Assets/Icons/appbar.camera.flash.png" Margin="5" />
+				</ToggleButton>
 				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
 						Click="ButtonFriends_OnClick">
 					<Image Source="ms-appx:///Assets/Icons/appbar.group.png" Margin="5" />

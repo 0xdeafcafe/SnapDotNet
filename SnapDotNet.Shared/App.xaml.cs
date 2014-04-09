@@ -102,9 +102,9 @@ namespace SnapDotNet.Apps
 				// Place the frame in the current Window
 				Window.Current.Content = rootFrame;
 			}
-
+			
 			// Create events
-			rootFrame.Navigating += RootFrameOnNavigating;
+			CurrentFrame.Navigating += CurrentFrameOnNavigating;
 
 			if (rootFrame.Content == null)
 			{
@@ -139,17 +139,17 @@ namespace SnapDotNet.Apps
 			Window.Current.Activate();
 		}
 
-		private static void RootFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
+		private static void CurrentFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
 		{
 			// TODO: work out why this isn't working...
-			//var requiresAuthentication =
-			//	navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
-			//		.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
+			var requiresAuthentication =
+				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
+					.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
 
-			//if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
+			if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
 
 			//navigatingCancelEventArgs.Cancel = true;
-			//CurrentFrame.Navigate(typeof (StartPage));
+			CurrentFrame.Navigate(typeof (StartPage));
 		}
 
 #if WINDOWS_PHONE_APP

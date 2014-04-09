@@ -8,6 +8,9 @@ using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
 using SnapDotNet.Apps.Attributes;
@@ -122,30 +125,42 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			throw new NotImplementedException();
 		}
 
-		private async void ButtonFrontFacing_OnClick(object sender, RoutedEventArgs e)
-		{
-			//cycle through video devices
-			_currentSelectedCameraDevice = _currentSelectedCameraDevice + 1;
-
-			if (_currentSelectedCameraDevice > _cameraInfoCollection.Count - 1)
-			{
-				_currentSelectedCameraDevice = _currentSelectedCameraDevice - _cameraInfoCollection.Count;
-			}
-			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
-
-			await _mediaCapture.StopPreviewAsync();
-			await InitialiseCameraDevice();
-		}
 
 		private void ButtonMessages_OnClick(object sender, RoutedEventArgs e)
 		{
 			throw new NotImplementedException();
 		}
 
-		private void ButtonFlash_OnClick(object sender, RoutedEventArgs e)
+		private async void ButtonFrontFacing_CheckChanged(object sender, RoutedEventArgs e)
 		{
-			_mediaCapture.VideoDeviceController.FlashControl.Enabled =
-				_mediaCapture.VideoDeviceController.FlashControl.Enabled != true;
+			_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
+			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
+
+			await _mediaCapture.StopPreviewAsync();
+			await InitialiseCameraDevice();
+
+			var toggleButton = sender as ToggleButton;
+			if (toggleButton == null) return;
+			if (toggleButton.IsChecked == null) return;
+
+			var imagePath = (bool)toggleButton.IsChecked
+				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
+				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
+			FrontFacingImage.Source = new BitmapImage(imagePath);
+		}
+
+		private void FlashButton_CheckChanged(object sender, RoutedEventArgs e)
+		{
+			var toggleButton = sender as ToggleButton;
+			if (toggleButton == null) return;
+			if (toggleButton.IsChecked == null) return;
+
+			_mediaCapture.VideoDeviceController.FlashControl.Enabled = (bool) !toggleButton.IsChecked;
+
+			var imagePath = (bool) toggleButton.IsChecked
+				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.off.png")
+				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.png");
+			FlashImage.Source = new BitmapImage(imagePath);
 
 			Debug.WriteLine("FlashControl.Enabled set to: " + _mediaCapture.VideoDeviceController.FlashControl.Enabled);
 		}
