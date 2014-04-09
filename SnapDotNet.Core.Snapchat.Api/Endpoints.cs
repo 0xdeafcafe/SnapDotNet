@@ -156,7 +156,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<bool> SendFriendActionAsync(string friendUsername, FriendAction action)
+		public async Task<Response> SendFriendActionAsync(string friendUsername, FriendAction action)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
@@ -167,22 +167,22 @@ namespace SnapDotNet.Core.Snapchat.Api
 				{"friend", friendUsername},
 			};
 
-			var stories =
+			var response =
 				await
 					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			if (stories == null)
+			if (response == null)
 				throw new InvalidCredentialsException();
 
-			return true;
+			return response;
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public bool SendFriendAction(string friendUsername, FriendAction action)
+		public Response SendFriendAction(string friendUsername, FriendAction action)
 		{
 			return SendFriendActionAsync(friendUsername, action).Result;
 		}
@@ -191,7 +191,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<bool> ChangeFriendDisplayNameAsync(string friendUsername, string newDisplayName)
+		public async Task<Response> ChangeFriendDisplayNameAsync(string friendUsername, string newDisplayName)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
@@ -203,22 +203,22 @@ namespace SnapDotNet.Core.Snapchat.Api
 				{"display", newDisplayName}
 			};
 
-			var stories =
+			var response =
 				await
 					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
-
-			if (stories == null)
+			
+			if (response == null)
 				throw new InvalidCredentialsException();
 
-			return true;
+			return response;
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public bool ChangeFriendDisplayName(string friendUsername, string newDisplayName)
+		public Response ChangeFriendDisplayName(string friendUsername, string newDisplayName)
 		{
 			return ChangeFriendDisplayNameAsync(friendUsername, newDisplayName).Result;
 		}
