@@ -83,7 +83,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Pages\MainPage.xaml.cs">
+    <Compile Include="Pages\SignedIn\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\StartPage.xaml.cs">
@@ -97,6 +97,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Icons\appbar.box.layered.png" />
     <Content Include="Assets\Icons\appbar.camera.flash.off.png" />
     <Content Include="Assets\Icons\appbar.camera.flash.png" />
     <Content Include="Assets\Icons\appbar.camera.flip.png" />
@@ -118,7 +119,7 @@
     <Content Include="StoreManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\MainPage.xaml">
+    <Page Include="Pages\SignedIn\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

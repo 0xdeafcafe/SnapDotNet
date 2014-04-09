@@ -7,30 +7,234 @@
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
 	RequestedTheme="Dark">
+	<Page.Resources>
+		<Style x:Key="WpSmallRoundButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
+			<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+			<Setter Property="BorderThickness" Value="2.5"/>
+			<Setter Property="FontFamily" Value="Segoe WP"/>
+			<Setter Property="FontWeight" Value="Semibold"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Margin" Value="-15,0"/>
+			<Setter Property="Height" Value="40"/>
+			<Setter Property="Width" Value="40"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Grid x:Name="Grid" Background="Transparent" VerticalAlignment="{TemplateBinding VerticalAlignment}" 
+							  HorizontalAlignment="{TemplateBinding HorizontalAlignment}" Margin="{TemplateBinding Margin}">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualStateGroup.Transitions>
+										<VisualTransition From="Pressed" To="PointerOver">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="PointerOver" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="Pressed" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Normal"/>
+									<VisualState x:Name="PointerOver"/>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedForegroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedBackgroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Disabled">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBackgroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+							<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+									Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+									BorderThickness="{TemplateBinding BorderThickness}" 
+									Background="{TemplateBinding Background}" Margin="0"
+									CornerRadius="1000">
+								
+								<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" 
+												  Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+												  ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" 
+												  Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}" 
+												  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+												  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							</Border>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		
+		<Style x:Key="WpLargeRoundButtonStyle" TargetType="Button" BasedOn="{StaticResource WpSmallRoundButtonStyle}">
+			<Setter Property="BorderThickness" Value="4"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Margin" Value="10,0"/>
+			<Setter Property="Height" Value="80"/>
+			<Setter Property="Width" Value="80"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Grid x:Name="Grid" Background="Transparent" VerticalAlignment="{TemplateBinding VerticalAlignment}" 
+							  HorizontalAlignment="{TemplateBinding HorizontalAlignment}" Margin="{TemplateBinding Margin}">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualStateGroup.Transitions>
+										<VisualTransition From="Pressed" To="PointerOver">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="PointerOver" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="Pressed" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Normal"/>
+									<VisualState x:Name="PointerOver"/>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedForegroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedBackgroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Disabled">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBackgroundThemeBrush}"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+							<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" 
+									Height="{TemplateBinding Height}" Width="{TemplateBinding Width}"
+									BorderThickness="{TemplateBinding BorderThickness}" 
+									Background="{TemplateBinding Background}" Margin="0"
+									CornerRadius="1000">
+
+								<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" 
+												  Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+												  ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" 
+												  Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding Padding}" 
+												  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+												  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							</Border>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Page.Resources>
 
 	<Grid>
-		<Grid.ColumnDefinitions>
-			<!-- temp, will do proper UI later !-->
-			<ColumnDefinition Width="10"/>
-			<ColumnDefinition Width="1*"/>
-			<ColumnDefinition Width="10"/>
-		</Grid.ColumnDefinitions>
-		
 		<Grid.RowDefinitions>
-			<RowDefinition Height="10"/>
+			<RowDefinition Height="80"/>
 			<RowDefinition Height="1*"/>
-			<RowDefinition Height="10"/>
+			<RowDefinition Height="100"/>
+			<RowDefinition Height="25"/>
 		</Grid.RowDefinitions>
 
-		<Canvas
-			Grid.Column="1" Grid.Row="1">
-			<CaptureElement x:Name="CameraPreview" Width="320" Height="240"/>
-		</Canvas>
+		<!--<Canvas Grid.Row="0" Grid.RowSpan="3">
+			<CaptureElement x:Name="CameraPreview" Height="399.998" Width="614.998" 
+							RenderTransformOrigin="0.5,0.5" Canvas.Left="-107.499" 
+							Canvas.Top="107.501" UseLayoutRounding="False" d:LayoutRounding="Auto">
+				<CaptureElement.RenderTransform>
+					<CompositeTransform Rotation="90"/>
+				</CaptureElement.RenderTransform>
+			</CaptureElement>
+		</Canvas>-->
+		<Image Grid.Row="0" Grid.RowSpan="3" Source="http://i.imgur.com/WLYZhR4.jpg" Stretch="UniformToFill" />
+
+		<TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+				   Text="0s" Opacity="0.4" Margin="10,0,0,10" FontSize="100"/>
+		
+		<Grid Grid.Row="0" Background="#66000000">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="25" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			
+			<StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+				<Button Style="{StaticResource WpSmallRoundButtonStyle}">
+					<Image Source="ms-appx:///Assets/Icons/appbar.box.layered.png" Margin="5" />
+				</Button>
+				<Button Style="{StaticResource WpSmallRoundButtonStyle}">
+					<Image Source="ms-appx:///Assets/Icons/appbar.camera.flip.png" Margin="5" />
+				</Button>
+				<Button Style="{StaticResource WpSmallRoundButtonStyle}">
+					<Image Source="ms-appx:///Assets/Icons/appbar.camera.flash.png" Margin="5" />
+				</Button>
+				<Button Style="{StaticResource WpSmallRoundButtonStyle}">
+					<Image Source="ms-appx:///Assets/Icons/appbar.group.png" Margin="5" />
+				</Button>
+			</StackPanel>
+		</Grid>
+
+		<Grid Grid.Row="2">
+			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,10">
+				<Button Style="{StaticResource WpLargeRoundButtonStyle}">
+					<Ellipse Fill="Red" StrokeThickness="0" Width="25" Height="25">
+						
+					</Ellipse>
+				</Button>
+				<Button Style="{StaticResource WpLargeRoundButtonStyle}">
+					<Canvas Width="76" Height="76">
+						<Path Width="34.8333" Height="28.5" Canvas.Left="20.5833" Canvas.Top="22.1667" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 52.25,26.9167C 53.9989,26.9167 55.4167,28.3344 55.4167,30.0833L 55.4167,47.5C 55.4167,49.2489 53.9989,50.6667 52.25,50.6667L 23.75,50.6667C 22.0011,50.6667 20.5833,49.2489 20.5833,47.5L 20.5833,30.0833C 20.5833,28.3344 22.0011,26.9167 23.75,26.9167L 30.0833,26.9167C 30.0833,24.2933 32.21,22.1667 34.8333,22.1667L 41.1667,22.1667C 43.79,22.1667 45.9167,24.2933 45.9167,26.9167L 52.25,26.9167 Z M 38,33.25C 34.5022,33.25 31.6667,36.0855 31.6667,39.5834C 31.6667,43.0812 34.5022,45.9167 38,45.9167C 41.4978,45.9167 44.3333,43.0812 44.3333,39.5834C 44.3333,36.0855 41.4978,33.25 38,33.25 Z M 38,34.8334C 40.6233,34.8334 42.75,36.96 42.75,39.5834C 42.75,42.2067 40.6233,44.3333 38,44.3333C 35.3766,44.3333 33.25,42.2067 33.25,39.5834C 33.25,36.96 35.3766,34.8334 38,34.8334 Z M 26.9167,33.25L 26.9167,30.4792L 24.1458,30.4792L 24.1458,33.25L 26.9167,33.25 Z "/>
+					</Canvas>
+				</Button>
+			</StackPanel>
+		</Grid>
 	</Grid>
 
 	<Page.BottomAppBar>
-		<CommandBar ClosedDisplayMode="Minimal">
-			
+		<CommandBar ClosedDisplayMode="Minimal" Opacity="0.4">
 		</CommandBar>
 	</Page.BottomAppBar>
 </Page>
