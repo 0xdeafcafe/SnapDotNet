@@ -15,9 +15,9 @@ namespace SnapDotNet.Azure.MobileService.Controllers
 			var context = new Context(Services.Settings.Schema);
 			DomainManager = new EntityDomainManager<User>(context, Request, Services);
 		}
-		
-		// POST tables/TodoItem/48D68C86-6EA6-4C25-AA33-223FC9A27959
-		public async Task<IHttpActionResult> PostTodoItem(User user)
+
+		// POST tables/User/48D68C86-6EA6-4C25-AA33-223FC9A27959
+		public async Task<IHttpActionResult> PostUser(User user)
 		{
 			var current = await InsertAsync(user);
 
@@ -25,7 +25,8 @@ namespace SnapDotNet.Azure.MobileService.Controllers
 			{
 				XmlPayload = @"<?xml version=""1.0"" encoding=""utf-8""?>" +
 							 @"<toast><visual><binding template=""ToastText01"">" +
-							 @"<text id=""1"">Your have been provisioned, " + user.SnapchatUsername + @". Awesome.</text>" +
+							 @"<text id=""2"">Snapchat!</text>" +
+							 @"<text id=""1"">You will now get push notifications!</text>" +
 							 @"</binding></visual></toast>"
 			};
 			try
@@ -37,7 +38,6 @@ namespace SnapDotNet.Azure.MobileService.Controllers
 			{
 				Services.Log.Error(ex.Message);
 			}
-
 
 			return CreatedAtRoute("Tables", new { id = current.Id }, current);
 		}
