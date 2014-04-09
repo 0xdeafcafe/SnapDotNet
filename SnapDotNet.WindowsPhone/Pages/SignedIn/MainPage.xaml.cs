@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Media.MediaProperties;
+using Windows.Phone.UI.Input;
 using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Input;
@@ -29,9 +30,14 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private DeviceInformationCollection _microphoneInfoCollection;
 		private int _currentSelectedAudioDevice;
 
+		private DispatcherTimer videoRecordTimer = new DispatcherTimer();
+		private Stopwatch videoRecordStopwatch = new Stopwatch();
+
 		public MainPage()
 		{
 			InitializeComponent();
+
+			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 
 			DataContext = ViewModel = new MainViewModel();
 		}
@@ -43,10 +49,18 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				while (App.CurrentFrame.CanGoBack)
 					App.CurrentFrame.BackStack.RemoveAt(0);
 			
+			videoRecordTimer.Interval = new TimeSpan(0, 0, 0, 1);
+			videoRecordTimer.Tick += videoRecordTimer_Tick;
+
 			CameraInitialStartupSequencer();
 
 			StatusBar.GetForCurrentView().BackgroundColor = new Color {A = 0x00, R = 0x00, G = 0x00, B = 0x00,};
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+		}
+
+		void videoRecordTimer_Tick(object sender, object e)
+		{
+			VideoTimerBlock.Text = String.Format("{0}s", videoRecordStopwatch.Elapsed.Seconds);
 		}
 
 		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -114,7 +128,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		}
 
 		private async void CapturePhoto()
-			//Also trigger off shutter key? IDK how in 8.1, no more CameraButtons.ShutterKeyPressed etc.
 		{
 			var stream = new InMemoryRandomAccessStream();
 			var imageProperties = ImageEncodingProperties.CreateJpeg();
@@ -131,25 +144,31 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			CapturePhoto();
 		}
-		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e)
+		void HardwareButtons_CameraPressed(object sender, CameraEventArgs e)
 		{
+			CapturePhoto();
+		}
+		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e) //todo broken, final video stream is of size 0....?
+		{
+			var stream = new InMemoryRandomAccessStream();
 			if (e.HoldingState == HoldingState.Started)
 			{
-				var stream = new InMemoryRandomAccessStream();
-				var videoProperties = new MediaEncodingProfile();
+				videoRecordStopwatch.Reset();
+				videoRecordStopwatch.Start();
+				videoRecordTimer.Start();
+				
+				var videoProperties = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Auto); //todo do proper settings, mp4 will do for now
 
 				Debug.WriteLine("Capping Video");
-				//await _mediaCapture.StartRecordToStreamAsync(videoProperties, stream);
-				if (stream.Size > 0)
-				{
-					Debug.WriteLine("Capping Video: OK, stream size " + stream.Size);
-				}
+				await _mediaCapture.StartRecordToStreamAsync(videoProperties, stream);
 			}
 			else
 			{
+				videoRecordTimer.Stop();
+				videoRecordStopwatch.Stop();
 				Debug.WriteLine("Stopping Video");
-				//await _mediaCapture.StopRecordAsync();
-				Debug.WriteLine("Stopping Video: OK");
+				await _mediaCapture.StopRecordAsync();
+				Debug.WriteLine("Stopping Video: OK, stream size " + stream.Size);
 			}
 			
 		}
