@@ -52,6 +52,10 @@
     <Compile Include="WebConnect.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SnapDotNet.Core.Miscellaneous.Helpers\SnapDotNet.Core.Miscellaneous.Helpers.csproj">
+      <Project>{cf24d2b2-25e7-4faa-9a3f-b3b90818099d}</Project>
+      <Name>SnapDotNet.Core.Miscellaneous.Helpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Helpers\SnapDotNet.Core.Snapchat.Helpers.csproj">
       <Project>{1ac5610b-f69c-4450-8a43-e4fd4733bb5d}</Project>
       <Name>SnapDotNet.Core.Snapchat.Helpers</Name>
