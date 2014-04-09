@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
+using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Models;
-using SnapDotNet.Core.SnapchatApi.Common;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {

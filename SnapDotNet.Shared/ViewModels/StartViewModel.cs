@@ -3,11 +3,9 @@ using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using System;
+using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using Windows.UI.Popups;
-using System.Threading.Tasks;
-using SnapDotNet.Core.Atlas;
-
 namespace SnapDotNet.Apps.ViewModels
 {
 	public sealed class StartViewModel
