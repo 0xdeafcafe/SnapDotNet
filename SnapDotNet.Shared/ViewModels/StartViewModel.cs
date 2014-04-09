@@ -17,7 +17,7 @@ namespace SnapDotNet.Apps.ViewModels
 		{
 			IsStartPageVisible = true;
 
-			#region Register Commands
+			#region Commands
 
 			OpenSignInPageCommand = new RelayCommand(
 				() =>
@@ -181,12 +181,12 @@ namespace SnapDotNet.Apps.ViewModels
 		/// <summary>
 		/// Gets or sets the current birthday.
 		/// </summary>
-		public DateTime CurrentBirthday
+		public DateTimeOffset CurrentBirthday
 		{
 			get { return _currentBirthday; }
 			set { SetField(ref _currentBirthday, value); }
 		}
-		private DateTime _currentBirthday;
+		private DateTimeOffset _currentBirthday;
 
 
 		/// <summary>
@@ -194,6 +194,13 @@ namespace SnapDotNet.Apps.ViewModels
 		/// </summary>
 		private async void SignIn(Page nextPage)
 		{
+			// Do nothing if username or password isn't filled in.
+			// Maybe show dialog instead?
+			if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
+				return;
+
+			ProgressModalVisibility = Visibility.Visible;
+
 			try
 			{
 				// Try and log into SnapChat
@@ -225,6 +232,10 @@ namespace SnapDotNet.Apps.ViewModels
 					new MessageDialog(String.Format("Unable to connect to snapchat. The server responded: \n {0}.", exception.Message),
 						"Unable to connect to Snapchat");
 				var showDialogTask = dialog.ShowAsync();
+			}
+			finally
+			{
+				ProgressModalVisibility = Visibility.Collapsed;
 			}
 
 			if (nextPage != null)

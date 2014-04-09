@@ -160,6 +160,10 @@
       <Project>{3c6638cf-75e9-494d-af5a-6f64bc5c4f9e}</Project>
       <Name>SnapDotNet.Core.Snapchat.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SnapDotNet.Miscellaneous.Models\SnapDotNet.Miscellaneous.Models.csproj">
+      <Project>{aadfdacf-81a3-4de7-acdd-aed7f328f26c}</Project>
+      <Name>SnapDotNet.Miscellaneous.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

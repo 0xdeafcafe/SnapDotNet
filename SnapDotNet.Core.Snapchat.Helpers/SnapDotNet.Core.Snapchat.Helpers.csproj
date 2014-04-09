@@ -39,6 +39,10 @@
       <Project>{5cf607ae-b304-416a-93ef-2e0218306abb}</Project>
       <Name>SnapDotNet.Miscellaneous.Crypto</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SnapDotNet.Miscellaneous.Models\SnapDotNet.Miscellaneous.Models.csproj">
+      <Project>{aadfdacf-81a3-4de7-acdd-aed7f328f26c}</Project>
+      <Name>SnapDotNet.Miscellaneous.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />

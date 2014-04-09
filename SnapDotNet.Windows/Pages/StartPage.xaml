@@ -145,7 +145,7 @@
                          x:Uid="SignInUsername"
                          VerticalAlignment="Bottom"
                          Header="Username or email"
-                         Text="{Binding CurrentUsername}">
+                         Text="{Binding CurrentUsername, Mode=TwoWay}">
                     <TextBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
@@ -157,7 +157,7 @@
                              Grid.Row="1"
                              x:Uid="PasswordBox"
                              Header="Password"
-                             Password="{Binding CurrentPassword}">
+                             Password="{Binding CurrentPassword, Mode=TwoWay}">
                     <PasswordBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
@@ -210,7 +210,7 @@
                          x:Uid="Email"
                          VerticalAlignment="Bottom"
                          Header="Email"
-                         Text="{Binding CurrentEmail}">
+                         Text="{Binding CurrentEmail, Mode=TwoWay}">
                     <TextBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
@@ -222,7 +222,7 @@
                              Grid.Row="1"
                              x:Uid="PasswordBox"
                              Header="Password"
-                             Password="{Binding DesiredPassword}">
+                             Password="{Binding DesiredPassword, Mode=TwoWay}">
                     <PasswordBox.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
@@ -233,7 +233,8 @@
                 <DatePicker Header="Birthday"
                             Grid.Row="2"
                             Margin="0,5,0,0"
-                            x:Uid="Birthday">
+                            x:Uid="Birthday"
+                            Date="{Binding CurrentBirthday, Mode=TwoWay}">
                     <DatePicker.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>

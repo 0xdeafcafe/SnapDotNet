@@ -76,7 +76,7 @@ namespace SnapDotNet.Apps.Pages
 
 		private async void SignInButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			ViewModel.ProgressModalVisibility = Visibility.Visible;
+			
 
 			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
 			await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
@@ -89,7 +89,6 @@ namespace SnapDotNet.Apps.Pages
 			{
 				StatusBar.GetForCurrentView().ProgressIndicator.Text = "";
 				var hideTask = StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
-				ViewModel.ProgressModalVisibility = Visibility.Collapsed;
 			}
 
 			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
