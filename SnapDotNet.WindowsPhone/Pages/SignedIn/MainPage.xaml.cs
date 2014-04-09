@@ -43,7 +43,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
 		{
-			//_mediaCapture.StopPreviewAsync();
+			_mediaCapture.StopPreviewAsync();
 		}
 
 		private async void CameraInitialStartupSequencer()
@@ -63,7 +63,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
 			_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
 
-			await SetUICameraXAMLElements();
+			SetUiCameraXamlElements();
 			await InitialiseCameraDevice();
 			ButtonCamera.IsEnabled = true;
 			ButtonRecord.IsEnabled = true; //not implemented
@@ -87,14 +87,14 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			Debug.WriteLine("Initialising Camera: OK");
 
 			Debug.WriteLine("Starting Camera Preview");
-			capturePreview.Source = _mediaCapture;
+			CapturePreview.Source = _mediaCapture;
 			await _mediaCapture.StartPreviewAsync();
 			Debug.WriteLine("Starting Camera Preview: OK");
 
 			ButtonCamera.IsEnabled = true;
 			ButtonRecord.IsEnabled = true;
 		}
-		private async Task SetUICameraXAMLElements()
+		private void SetUiCameraXamlElements()
 		{
 			if (_cameraInfoCollection.Count < 2)
 			{
@@ -122,7 +122,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			throw new NotImplementedException();
 		}
 
-		private async void ButtonFrontFacing_onClick(object sender, RoutedEventArgs e)
+		private async void ButtonFrontFacing_OnClick(object sender, RoutedEventArgs e)
 		{
 			//cycle through video devices
 			_currentSelectedCameraDevice = _currentSelectedCameraDevice + 1;
@@ -137,25 +137,20 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			await InitialiseCameraDevice();
 		}
 
-		private void ButtonLayers_onClick(object sender, RoutedEventArgs e)
+		private void ButtonMessages_OnClick(object sender, RoutedEventArgs e)
 		{
 			throw new NotImplementedException();
 		}
 
-		private void ButtonFlash_onClick(object sender, RoutedEventArgs e)
+		private void ButtonFlash_OnClick(object sender, RoutedEventArgs e)
 		{
-			if (_mediaCapture.VideoDeviceController.FlashControl.Enabled == true)
-			{
-				_mediaCapture.VideoDeviceController.FlashControl.Enabled = false;
-			}
-			else
-			{
-				_mediaCapture.VideoDeviceController.FlashControl.Enabled = true;
-			}
+			_mediaCapture.VideoDeviceController.FlashControl.Enabled =
+				_mediaCapture.VideoDeviceController.FlashControl.Enabled != true;
+
 			Debug.WriteLine("FlashControl.Enabled set to: " + _mediaCapture.VideoDeviceController.FlashControl.Enabled);
 		}
 
-		private void Button4_onClick(object sender, RoutedEventArgs e)
+		private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
 		{
 			throw new NotImplementedException();
 			//todo IDK what this is for? Alex?

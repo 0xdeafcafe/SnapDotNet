@@ -97,7 +97,6 @@
 		
 		<Style x:Key="WpLargeRoundButtonStyle" TargetType="Button" BasedOn="{StaticResource WpSmallRoundButtonStyle}">
 			<Setter Property="BorderThickness" Value="4"/>
-			<Setter Property="Padding" Value="0"/>
 			<Setter Property="Margin" Value="10,0"/>
 			<Setter Property="Height" Value="80"/>
 			<Setter Property="Width" Value="80"/>
@@ -181,17 +180,8 @@
 			<RowDefinition Height="25"/>
 		</Grid.RowDefinitions>
 
-		<!--<Canvas Grid.Row="0" Grid.RowSpan="3">
-			<CaptureElement x:Name="CameraPreview" Height="399.998" Width="614.998" 
-							RenderTransformOrigin="0.5,0.5" Canvas.Left="-107.499" 
-							Canvas.Top="107.501" UseLayoutRounding="False" d:LayoutRounding="Auto">
-				<CaptureElement.RenderTransform>
-					<CompositeTransform Rotation="90"/>
-				</CaptureElement.RenderTransform>
-			</CaptureElement>
-		</Canvas>-->
 		<!--Image Grid.Row="0" Grid.RowSpan="3" Source="http://i.imgur.com/WLYZhR4.jpg" Stretch="UniformToFill"/-->
-		<CaptureElement x:Name="capturePreview" 
+		<CaptureElement x:Name="CapturePreview" 
 						Grid.Row="0" Grid.RowSpan="3" Stretch="UniformToFill" 
 						/>
 
@@ -206,20 +196,20 @@
 			
 			<StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
 				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
-						Click="ButtonLayers_onClick">
+						Click="ButtonMessages_OnClick">
 					<Image Source="ms-appx:///Assets/Icons/appbar.box.layered.png" Margin="5" />
 				</Button>
 				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
 						x:Name="ButtonFrontFacing"
-						Click="ButtonFrontFacing_onClick">
+						Click="ButtonFrontFacing_OnClick">
 					<Image Source="ms-appx:///Assets/Icons/appbar.camera.flip.png" Margin="5"/>
 				</Button>
 				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
-						Click="ButtonFlash_onClick">
+						Click="ButtonFlash_OnClick">
 					<Image Source="ms-appx:///Assets/Icons/appbar.camera.flash.png" Margin="5" />
 				</Button>
 				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
-						Click="Button4_onClick">
+						Click="ButtonFriends_OnClick">
 					<Image Source="ms-appx:///Assets/Icons/appbar.group.png" Margin="5" />
 				</Button>
 			</StackPanel>

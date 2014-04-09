@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.Pages;
 using System;
