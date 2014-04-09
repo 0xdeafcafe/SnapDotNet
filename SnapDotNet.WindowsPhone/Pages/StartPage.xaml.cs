@@ -122,12 +122,7 @@ namespace SnapDotNet.Apps.Pages
 			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
 				return;
 
-			Frame.Navigate(typeof(MainPage));
-		}
-
-		private void OverrideButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-		{
-			Frame.Navigate(typeof(MainPage));
+			Frame.Navigate(typeof(MainPage), "removeBackStack");
 		}
 	}
 }

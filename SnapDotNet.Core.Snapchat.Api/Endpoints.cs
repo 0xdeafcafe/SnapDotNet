@@ -98,6 +98,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 				throw new InvalidCredentialsException();
 
 			_snapchatManager.UpdateAccount(account);
+			_snapchatManager.UpdateAuthToken(account.AuthToken);
 			_snapchatManager.UpdateUsername(account.Username);
 			_snapchatManager.Save();
 

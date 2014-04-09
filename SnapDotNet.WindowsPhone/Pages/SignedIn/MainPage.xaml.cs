@@ -38,6 +38,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
+			// Check backstack
+			if (e.Parameter is String && ((string) e.Parameter) == "removeBackStack")
+				while (App.CurrentFrame.CanGoBack)
+					App.CurrentFrame.BackStack.RemoveAt(0);
+			
 			CameraInitialStartupSequencer();
 
 			StatusBar.GetForCurrentView().BackgroundColor = new Color {A = 0x00, R = 0x00, G = 0x00, B = 0x00,};

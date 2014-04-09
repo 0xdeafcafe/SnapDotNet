@@ -14,6 +14,20 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 				await writer.WriteAsync(content);
 		}
 
+
+		public static string ReadFile(string fileName)
+		{
+			try
+			{
+				var file = ApplicationData.Current.LocalFolder.GetFileAsync(fileName).AsTask().Result;
+				return file == null ? null : FileIO.ReadTextAsync(file).AsTask().Result;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
 		public static void WriteSetting(string containerName, string name, string value)
 		{
 			var container = !ApplicationData.Current.RoamingSettings.Containers.ContainsKey(containerName)

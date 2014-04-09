@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
@@ -88,16 +89,35 @@ namespace SnapDotNet.Core.Snapchat.Api
 			// All done b
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public async void Load()
 		{
-			// Seralize Account model and save as json string in Isolated Storage
-			// TODO: Write the ReadFile function
+			// Deseralize Account model from IsolatedStorage
+			var accountData = IsolatedStorage.ReadFile(AccountDataFileName);
+			if (accountData != null)
+			{
+				var accountDataParsed = JsonConvert.DeserializeObject<Account>(accountData);
+				UpdateAccount(accountDataParsed);
+			}
 
-			// Save AuthToken and Username to Roaming storage
+			// Load AuthToken and Username from Roaming storage
 			UpdateUsername(IsolatedStorage.ReadSetting(RoamingSnapchatDataContainer, "Username"));
 			UpdateAuthToken(IsolatedStorage.ReadSetting(RoamingSnapchatDataContainer, "AuthToken"));
 
-			// All done b
+			if (Account != null || AuthToken == null) return;
+			try
+			{
+				await Endpoints.GetUpdatesAsync();
+			}
+			catch (Exception)
+			{
+				// Sign us out
+				UpdateAccount(null);
+				UpdateAuthToken(null);
+				UpdateUsername(null);
+			}
 		}
 
 		/// <summary>
