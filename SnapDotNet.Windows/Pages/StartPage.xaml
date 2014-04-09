@@ -8,17 +8,39 @@
     xmlns:Converters="using:SnapDotNet.Apps.Converters"
     xmlns:tk="using:WinRTXamlToolkit.Controls"
     xmlns:signedIn="using:SnapDotNet.Apps.Pages.SignedIn"
+    xmlns:interactivity="using:WinRTXamlToolkit.Interactivity"
     x:Class="SnapDotNet.Apps.Pages.StartPage"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+	<Page.Resources>
+		<Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <!-- Width threshold for switching between the default and minimal views -->
-        <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
-    </Page.Resources>
+		<!-- Width threshold for switching between the default and minimal views -->
+		<x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
 
-    <!-- Already specified in the constructor, but placed here too for design time conveinence -->
+		<Storyboard x:Name="BackgroundAmbienceStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
+				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:42" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:44" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage4">
+				<EasingDoubleKeyFrame KeyTime="0:0:14" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:16" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage3">
+				<EasingDoubleKeyFrame KeyTime="0:0:23" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:25" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage2">
+				<EasingDoubleKeyFrame KeyTime="0:0:32" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</Page.Resources>
+	
+	<!-- Already specified in the constructor, but placed here too for design time conveinence -->
     <Page.DataContext>
         <vm:StartViewModel/>
     </Page.DataContext>
@@ -43,9 +65,26 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <Image Stretch="UniformToFill" Source="ms-appx:///Assets/tempBackground.jpg" HorizontalAlignment="Center"/>
 
-        <!-- Default View -->
+		<Grid x:Name="BackgroundAmbienceGrid" Grid.Row="0">
+			<Image
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage2"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage3"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage4"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+			<Image x:Name="BackgroundImage5"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+		</Grid>
+
+		<!-- Default View -->
         <Grid x:Name="defaultView" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#BB1C1C1C">
 
             <Grid.Resources>
