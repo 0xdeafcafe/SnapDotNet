@@ -6,6 +6,17 @@ using SnapDotNet.Core.Miscellaneous.Converters.Json;
 namespace SnapDotNet.Core.Snapchat.Models
 {
 	/// <summary>
+	/// Actions concerning other snapchat users
+	/// </summary>
+	public enum FriendAction
+	{
+		Add,
+		Delete,
+		Block,
+		Unblock
+	}
+
+	/// <summary>
 	/// Indicates the state of a friend request.
 	/// </summary>
 	public enum FriendRequestState

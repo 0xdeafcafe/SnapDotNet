@@ -11,10 +11,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 	{
 		private readonly SnapChatManager _snapchatManager;
 		private readonly WebConnect _webConnect;
-
+		
+		private const string FriendEndpointUrl =		"friend";
 		private const string LoginEndpointUrl =			"login";
-		private const string UpdatesEndpointUrl =		"updates";
 		private const string StoriesEndpointUrl =		"stories";
+		private const string UpdatesEndpointUrl =		"updates";
 
 		/// <summary>
 		/// 
@@ -147,6 +148,81 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public Stories GetStories()
 		{
 			return GetStoriesAsync().Result;
+		}
+
+		#endregion
+
+		#region Friend Actions
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<bool> SendFriendActionAsync(string friendUsername, FriendAction action)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"action", action.ToString().ToLower()},
+				{"friend", friendUsername},
+			};
+
+			var stories =
+				await
+					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (stories == null)
+				throw new InvalidCredentialsException();
+
+			return true;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool SendFriendAction(string friendUsername, FriendAction action)
+		{
+			return SendFriendActionAsync(friendUsername, action).Result;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<bool> ChangeFriendDisplayNameAsync(string friendUsername, string newDisplayName)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"action", "display"},
+				{"friend", friendUsername},
+				{"display", newDisplayName}
+			};
+
+			var stories =
+				await
+					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (stories == null)
+				throw new InvalidCredentialsException();
+
+			return true;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool ChangeFriendDisplayName(string friendUsername, string newDisplayName)
+		{
+			return ChangeFriendDisplayNameAsync(friendUsername, newDisplayName).Result;
 		}
 
 		#endregion
