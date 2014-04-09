@@ -1,5 +1,4 @@
-﻿using SnapDotNet.Apps.Attributes;
-using SnapDotNet.Apps.Common;
+﻿using SnapDotNet.Apps.Common;
 using SnapDotNet.Core.Snapchat.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -15,7 +14,6 @@ namespace SnapDotNet.Apps.ViewModels
 		public const int MaximumRecentSnaps = 10;
 #endif
 
-		[RequiresAuth]
 		public MainViewModel()
 		{
 			RecentSnaps = new ObservableCollection<Snap>();

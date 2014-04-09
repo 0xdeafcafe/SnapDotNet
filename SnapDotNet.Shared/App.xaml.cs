@@ -1,4 +1,7 @@
-﻿using SnapDotNet.Apps.Pages;
+﻿using System.Linq;
+using System.Reflection;
+using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.Pages;
 using System;
 using System.Diagnostics;
 using Windows.ApplicationModel;
@@ -6,6 +9,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -98,6 +102,9 @@ namespace SnapDotNet.Apps
 				Window.Current.Content = rootFrame;
 			}
 
+			// Create events
+			rootFrame.Navigating += RootFrameOnNavigating;
+
 			if (rootFrame.Content == null)
 			{
 #if WINDOWS_PHONE_APP
@@ -118,7 +125,7 @@ namespace SnapDotNet.Apps
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				if (!rootFrame.Navigate(typeof (StartPage), e.Arguments))
+				if (!rootFrame.Navigate(typeof (MainPage), e.Arguments))
 				{
 					throw new Exception("Failed to create initial page");
 				}
@@ -126,9 +133,22 @@ namespace SnapDotNet.Apps
 			
 			// Register for Push Notifications
 			InitNotificationsAsync();
-
+			
 			// Ensure the current window is active
 			Window.Current.Activate();
+		}
+
+		private static void RootFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
+		{
+			// TODO: work out why this isn't working...
+			//var requiresAuthentication =
+			//	navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
+			//		.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
+
+			//if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
+
+			//navigatingCancelEventArgs.Cancel = true;
+			//CurrentFrame.Navigate(typeof (StartPage));
 		}
 
 #if WINDOWS_PHONE_APP

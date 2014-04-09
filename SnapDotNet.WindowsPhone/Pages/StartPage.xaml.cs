@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Apps.ViewModels;
+using SnapDotNet.Core.Atlas;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace SnapDotNet.Apps.Pages
@@ -82,8 +83,20 @@ namespace SnapDotNet.Apps.Pages
 
 			try
 			{
+				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(SignInUsernameTextBlock.Text,
 					SignInPasswordTextBlock.Password);
+
+				// Register device for Push Notifications
+				await
+					App.MobileService.GetTable<User>()
+						.InsertAsync(new User
+						{
+							AuthExpired = false,
+							DeviceIdent = App.DeviceIdent,
+							SnapchatAuthToken = App.SnapChatManager.AuthToken,
+							SnapchatUsername = App.SnapChatManager.Username
+						});
 			}
 			catch (InvalidCredentialsException)
 			{

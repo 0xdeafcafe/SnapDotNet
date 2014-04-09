@@ -5,17 +5,25 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
+using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.ViewModels;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {
+	[RequiresAuthentication]
 	public sealed partial class MainPage
 	{
+		public MainViewModel ViewModel { get; private set; }
+
 		private MediaCapture _mediaCapture;
 		private DeviceInformationCollection _cameraInfoCollection;
 		private DeviceInformationCollection _microphoneInfoCollection;
+
 		public MainPage()
 		{
 			InitializeComponent();
+
+			DataContext = ViewModel = new MainViewModel();
 		}
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{

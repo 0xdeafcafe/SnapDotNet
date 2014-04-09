@@ -7,6 +7,7 @@
     xmlns:vm="using:SnapDotNet.Apps.ViewModels"
     xmlns:Converters="using:SnapDotNet.Apps.Converters"
     xmlns:tk="using:WinRTXamlToolkit.Controls"
+    xmlns:signedIn="using:SnapDotNet.Apps.Pages.SignedIn"
     x:Class="SnapDotNet.Apps.Pages.StartPage"
     mc:Ignorable="d">
 
@@ -168,7 +169,7 @@
                         Command="{Binding SignInCommand}"
                         x:Uid="SignInButton">
                     <Button.CommandParameter>
-                        <local:MainPage/>
+                        <signedIn:MainPage/>
                     </Button.CommandParameter>
                     
                     Sign in
@@ -242,7 +243,7 @@
                         Command="{Binding RegisterCommand}"
                         x:Uid="CreateAccountButton">
                     <Button.CommandParameter>
-                        <local:MainPage/>
+                        <signedIn:MainPage/>
                     </Button.CommandParameter>
                     
                     Create account

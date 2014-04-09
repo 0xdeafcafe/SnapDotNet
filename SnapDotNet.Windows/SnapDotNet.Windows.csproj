@@ -133,7 +133,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\MainPage.xaml.cs">
+    <Compile Include="Pages\SignedIn\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\StartPage.xaml.cs">
@@ -157,7 +157,7 @@
     <None Include="SnapDotNet.Windows_StoreKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\MainPage.xaml">
+    <Page Include="Pages\SignedIn\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

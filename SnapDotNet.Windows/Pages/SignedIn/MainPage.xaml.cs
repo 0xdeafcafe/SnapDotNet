@@ -1,31 +1,24 @@
-﻿using SnapDotNet.Apps.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.ViewModels;
 using WinRTXamlToolkit.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace SnapDotNet.Apps.Pages
+namespace SnapDotNet.Apps.Pages.SignedIn
 {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
+	[RequiresAuthentication]
 	public sealed partial class MainPage : Page
 	{
 		public static DependencyProperty AppTitleContentProperty = DependencyProperty.Register("AppTitleContentppTitleContent", typeof(object), typeof(MainPage), new PropertyMetadata(null));
