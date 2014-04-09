@@ -30,7 +30,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		}
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			//StartCameraDevice();
+			StartCameraDevice();
 
 			StatusBar.GetForCurrentView().BackgroundColor = new Color { A = 0x00, R = 0x00, G = 0x00, B = 0x00, };
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
@@ -60,7 +60,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			Debug.WriteLine("Initialising Camera: OK");
 
 			Debug.WriteLine("Starting Camera Preview");
-			//CameraPreview.Source = _mediaCapture;
+			capturePreview.Source = _mediaCapture;
 			await _mediaCapture.StartPreviewAsync();
 			Debug.WriteLine("Starting Camera Preview: OK");
 		}
