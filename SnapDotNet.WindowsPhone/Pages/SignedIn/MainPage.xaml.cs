@@ -177,6 +177,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			throw new NotImplementedException();
 		}
 
+		private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
+		{
+			App.CurrentFrame.Navigate(typeof (FriendsPage));
+		}
+
 		private async void ButtonFrontFacing_CheckChanged(object sender, RoutedEventArgs e)
 		{
 			_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
@@ -210,12 +215,5 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			Debug.WriteLine("FlashControl.Enabled set to: " + _mediaCapture.VideoDeviceController.FlashControl.Enabled);
 		}
-
-		private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		
 	}
 }

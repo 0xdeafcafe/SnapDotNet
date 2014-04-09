@@ -18,8 +18,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
 using Microsoft.WindowsAzure.MobileServices;
 using Windows.Networking.PushNotifications;
-using SnapDotNet.Core.Atlas;
-using SnapDotnet.Miscellaneous.Crypto;
+using SnapDotNet.Core.Miscellaneous.Crypto;
 using Windows.UI.Xaml.Media.Animation;
 #endif
 
@@ -37,7 +36,6 @@ namespace SnapDotNet.Apps
 		);
 
 		public static String DeviceIdent;
-		public static IMobileServiceTable<User> UserTable;
 		private TransitionCollection _transitions;
 #endif
 
@@ -173,7 +171,6 @@ namespace SnapDotNet.Apps
 		private static async void InitNotificationsAsync()
 		{
 #if WINDOWS_PHONE_APP
-			UserTable = MobileService.GetTable<User>();
 			DeviceIdent = Sha.Sha256(BitConverter.ToString(HardwareIdentification.GetPackageSpecificToken(null).Id.ToArray()));
 			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
 			channel.PushNotificationReceived += (sender, args) =>

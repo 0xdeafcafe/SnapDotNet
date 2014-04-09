@@ -332,6 +332,10 @@
 
 	<Page.BottomAppBar>
 		<CommandBar ClosedDisplayMode="Minimal" Opacity="0.4">
+			<CommandBar.SecondaryCommands>
+				<AppBarButton Label="refresh" />
+				<AppBarButton Label="settings" />
+			</CommandBar.SecondaryCommands>
 		</CommandBar>
 	</Page.BottomAppBar>
 </Page>

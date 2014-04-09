@@ -106,33 +106,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\SnapDotNet.Core.Miscellaneous.Converters\SnapDotNet.Core.Miscellaneous.Converters.csproj">
-      <Project>{1cc5fc95-2ae3-449a-bc3a-afa90a8c3bc2}</Project>
-      <Name>SnapDotNet.Core.Miscellaneous.Converters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Api\SnapDotNet.Core.Snapchat.Api.csproj">
-      <Project>{df095a52-69ba-4344-8d58-bef13a8c2fcb}</Project>
-      <Name>SnapDotNet.Core.Snapchat.Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Helpers\SnapDotNet.Core.Snapchat.Helpers.csproj">
-      <Project>{1ac5610b-f69c-4450-8a43-e4fd4733bb5d}</Project>
-      <Name>SnapDotNet.Core.Snapchat.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SnapDotNet.Core.Snapchat.Models\SnapDotNet.Core.Snapchat.Models.csproj">
-      <Project>{3c6638cf-75e9-494d-af5a-6f64bc5c4f9e}</Project>
-      <Name>SnapDotNet.Core.Snapchat.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SnapDotnet.Miscellaneous.Crypto\SnapDotNet.Miscellaneous.Crypto.csproj">
-      <Project>{5cf607ae-b304-416a-93ef-2e0218306abb}</Project>
-      <Name>SnapDotNet.Miscellaneous.Crypto</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SnapDotNet.Miscellaneous.Models\SnapDotNet.Miscellaneous.Models.csproj">
-      <Project>{aadfdacf-81a3-4de7-acdd-aed7f328f26c}</Project>
-      <Name>SnapDotNet.Miscellaneous.Models</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Pages\SignedIn\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -182,6 +155,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnapDotNet.Core.Miscellaneous\SnapDotNet.Core.Miscellaneous.csproj">
+      <Project>{43f7f39f-37e3-4a7b-8c5e-b9b93a4ace65}</Project>
+      <Name>SnapDotNet.Core.Miscellaneous</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SnapDotNet.Core.Snapchat\SnapDotNet.Core.Snapchat.csproj">
+      <Project>{e53af6a8-4ecb-4e70-8ee9-6e65d3aa6a79}</Project>
+      <Name>SnapDotNet.Core.Snapchat</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

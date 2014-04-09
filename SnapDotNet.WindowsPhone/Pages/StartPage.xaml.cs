@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Apps.ViewModels;
-using SnapDotNet.Core.Atlas;
+using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace SnapDotNet.Apps.Pages

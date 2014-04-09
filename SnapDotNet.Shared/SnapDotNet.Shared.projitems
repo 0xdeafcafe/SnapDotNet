@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToForegroundConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\SnapItemTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
