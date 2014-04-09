@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Apps.ViewModels;
+using SnapDotNet.Core.Atlas;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace SnapDotNet.Apps.Pages
@@ -82,8 +83,20 @@ namespace SnapDotNet.Apps.Pages
 
 			try
 			{
+				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(SignInUsernameTextBlock.Text,
 					SignInPasswordTextBlock.Password);
+
+				// Register device for Push Notifications
+				await
+					App.MobileService.GetTable<User>()
+						.InsertAsync(new User
+						{
+							AuthExpired = false,
+							DeviceIdent = App.DeviceIdent,
+							SnapchatAuthToken = App.SnapChatManager.AuthToken,
+							SnapchatUsername = App.SnapChatManager.Username
+						});
 			}
 			catch (InvalidCredentialsException)
 			{
@@ -104,20 +117,12 @@ namespace SnapDotNet.Apps.Pages
 				StatusBar.GetForCurrentView().ProgressIndicator.Text = "";
 				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 				ViewModel.ProgressModalVisibility = Visibility.Collapsed;
-
-				var storyboard = (Storyboard) Resources["HahaScienceStoryboard"];
-				if (storyboard != null) storyboard.Begin();
 			}
 
 			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
 				return;
 
-			Frame.Navigate(typeof(MainPage));
-		}
-
-		private void OverrideButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-		{
-			Frame.Navigate(typeof(MainPage));
+			Frame.Navigate(typeof(MainPage), "removeBackStack");
 		}
 	}
 }

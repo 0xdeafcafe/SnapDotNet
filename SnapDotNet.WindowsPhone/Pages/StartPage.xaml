@@ -152,11 +152,6 @@
 				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="ShowSignInButton_Click" Content="sign in" Background="#FFDAD104"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}"/>
 
-				<!-- TESTING -->
-				<TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Uid="OverrideButton"
-						   Tapped="OverrideButton_Tapped" >SKIP</TextBlock>
-				<!-- TESTING -->
-
 				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="register" Background="#FF0EA0D6"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}" />
 

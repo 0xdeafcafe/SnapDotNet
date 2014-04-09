@@ -2,7 +2,6 @@
 using SnapDotNet.Core.Snapchat.Models;
 using System;
 using System.Collections.ObjectModel;
-using Windows.UI.Xaml;
 
 namespace SnapDotNet.Apps.ViewModels
 {
@@ -14,21 +13,21 @@ namespace SnapDotNet.Apps.ViewModels
 #else
 		public const int MaximumRecentSnaps = 10;
 #endif
-			
+
 		public MainViewModel()
 		{
 			RecentSnaps = new ObservableCollection<Snap>();
 
 #if DEBUG
-			string[] names = new[]{
+			var names = new[]{
 				"alexerax",
 				"Matt Saville",
 				"collindaginger"
 			};
 			var random = new Random();
-			for (int i = 0; i < MaximumRecentSnaps; i++)
+			for (var i = 0; i < MaximumRecentSnaps; i++)
 			{
-				SnapStatus status = (SnapStatus) random.Next(5);
+				var status = (SnapStatus)random.Next(5);
 
 				RecentSnaps.Add(new Snap
 				{

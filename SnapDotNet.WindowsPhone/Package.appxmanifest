@@ -25,6 +25,7 @@
         <!--Used in XAML Designer. DO NOT REMOVE-->
         <m3:InitialRotationPreference>
           <m3:Rotation Preference="portrait" />
+          <m3:Rotation Preference="landscape" />
         </m3:InitialRotationPreference>
       </m3:VisualElements>
     </Application>

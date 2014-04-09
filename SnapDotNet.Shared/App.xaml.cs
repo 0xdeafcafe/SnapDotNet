@@ -1,4 +1,9 @@
-﻿using SnapDotNet.Apps.Pages;
+﻿using System.Linq;
+using System.Reflection;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Navigation;
+using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.Pages;
 using System;
 using System.Diagnostics;
 using Windows.ApplicationModel;
@@ -6,6 +11,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -15,7 +21,6 @@ using Windows.Networking.PushNotifications;
 using SnapDotNet.Core.Atlas;
 using SnapDotnet.Miscellaneous.Crypto;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 #endif
 
 namespace SnapDotNet.Apps
@@ -97,6 +102,9 @@ namespace SnapDotNet.Apps
 				// Place the frame in the current Window
 				Window.Current.Content = rootFrame;
 			}
+			
+			// Create events
+			CurrentFrame.Navigating += CurrentFrameOnNavigating;
 
 			if (rootFrame.Content == null)
 			{
@@ -118,7 +126,7 @@ namespace SnapDotNet.Apps
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				if (!rootFrame.Navigate(typeof (StartPage), e.Arguments))
+				if (!rootFrame.Navigate(typeof (MainPage), e.Arguments))
 				{
 					throw new Exception("Failed to create initial page");
 				}
@@ -126,9 +134,21 @@ namespace SnapDotNet.Apps
 			
 			// Register for Push Notifications
 			InitNotificationsAsync();
-
+			
 			// Ensure the current window is active
 			Window.Current.Activate();
+		}
+
+		private static void CurrentFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
+		{
+			var requiresAuthentication =
+				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
+					.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
+
+			if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
+
+			CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => CurrentFrame.Navigate(typeof(StartPage)));
 		}
 
 #if WINDOWS_PHONE_APP

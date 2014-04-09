@@ -6,7 +6,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 	/// Represents a response from the Snapchat API.
 	/// </summary>
 	[DataContract]
-	public abstract class Response
+	public class Response
 	{
 		/// <summary>
 		/// Gets or sets whether the user is still logged in after this response.
