@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using Windows.Devices.Enumeration;
+using Windows.Media.MediaProperties;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
 using SnapDotNet.Apps.Attributes;
@@ -49,6 +52,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			settings.VideoDeviceId = cameraInfo.Id;
 			settings.AudioDeviceId = microphoneInfo.Id;
+			settings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
+			settings.StreamingCaptureMode = StreamingCaptureMode.Video;
 
 			Debug.WriteLine("Initialising Camera");
 			await _mediaCapture.InitializeAsync(settings);
@@ -58,6 +63,20 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			//CameraPreview.Source = _mediaCapture;
 			await _mediaCapture.StartPreviewAsync();
 			Debug.WriteLine("Starting Camera Preview: OK");
+		}
+
+		private void ButtonPhoto_OnClick(object sender, RoutedEventArgs e)
+		{
+			CapturePhoto();
+		}
+		private void CapturePhoto() //Also trigger off shutter key? IDK how in 8.1, no more CameraButtons.ShutterKeyPressed etc.
+		{
+			var stream = new InMemoryRandomAccessStream();
+			var imageProperties = ImageEncodingProperties.CreateJpeg();
+
+			Debug.WriteLine("Capping Photo");
+			_mediaCapture.CapturePhotoToStreamAsync(imageProperties, stream);
+			if (stream.Size > 0) { Debug.WriteLine("Capping Photo: OK, stream size " + stream.Size); }
 		}
 	}
 }
