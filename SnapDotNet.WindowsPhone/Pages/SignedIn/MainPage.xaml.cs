@@ -31,6 +31,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private DeviceInformationCollection _microphoneInfoCollection;
 		private int _currentSelectedAudioDevice;
 
+		private DispatcherTimer videoRecordTimer = new DispatcherTimer();
+		private Stopwatch videoRecordStopwatch = new Stopwatch();
+
 		public MainPage()
 		{
 			InitializeComponent();
@@ -40,10 +43,18 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
+			videoRecordTimer.Interval = new TimeSpan(0, 0, 0, 1);
+			videoRecordTimer.Tick += videoRecordTimer_Tick;
+
 			CameraInitialStartupSequencer();
 
 			StatusBar.GetForCurrentView().BackgroundColor = new Color {A = 0x00, R = 0x00, G = 0x00, B = 0x00,};
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+		}
+
+		void videoRecordTimer_Tick(object sender, object e)
+		{
+			VideoTimerBlock.Text = videoRecordStopwatch.Elapsed.Seconds.ToString() + "s";
 		}
 
 		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -131,6 +142,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			if (e.HoldingState == HoldingState.Started)
 			{
+				videoRecordStopwatch.Reset();
+				videoRecordStopwatch.Start();
+				videoRecordTimer.Start();
 				var stream = new InMemoryRandomAccessStream();
 				var videoProperties = new MediaEncodingProfile();
 
@@ -143,6 +157,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}
 			else
 			{
+				videoRecordTimer.Stop();
+				videoRecordStopwatch.Stop();
 				Debug.WriteLine("Stopping Video");
 				//await _mediaCapture.StopRecordAsync();
 				Debug.WriteLine("Stopping Video: OK");

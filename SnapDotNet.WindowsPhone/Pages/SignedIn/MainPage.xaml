@@ -278,7 +278,8 @@
 						Grid.Row="0" Grid.RowSpan="4" Stretch="UniformToFill" />
 
 		<TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"
-				   Text="0s" Opacity="0.4" Margin="10,0,0,10" FontSize="100"/>
+				   Text="0s" Opacity="0.4" Margin="10,0,0,10" FontSize="100"
+				   x:Name="VideoTimerBlock"/>
 		
 		<Grid Grid.Row="0" Background="#66000000">
 			<Grid.RowDefinitions>
