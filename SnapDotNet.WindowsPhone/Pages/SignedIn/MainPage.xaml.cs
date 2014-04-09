@@ -57,6 +57,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_currentSelectedCameraDevice = 0;
 			var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
 			var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
+
 			_mediaCaptureSettings.VideoDeviceId = cameraInfo.Id;
 			_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
 			_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
@@ -73,13 +74,13 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_cameraInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
 			_microphoneInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.AudioCapture);
 		}
-		private async Task InitialiseCameraDevice()
+		private async Task InitialiseCameraDevice() //must manually.stopPreviewAsync Before re-initialising.
 		{
 			ButtonCamera.IsEnabled = false;
 			ButtonRecord.IsEnabled = false;
 
 			_mediaCapture = new MediaCapture();
-
+			s
 			Debug.WriteLine("Initialising Camera");
 			Debug.WriteLine("Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
 			await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
@@ -121,7 +122,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			throw new NotImplementedException();
 		}
 
-		private void ButtonFrontFacing_onClick(object sender, RoutedEventArgs e)
+		private async void ButtonFrontFacing_onClick(object sender, RoutedEventArgs e)
 		{
 			//cycle through video devices
 			_currentSelectedCameraDevice = _currentSelectedCameraDevice + 1;
@@ -132,10 +133,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}
 			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
-			//_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
-			//_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
-
-			InitialiseCameraDevice();
+			await _mediaCapture.StopPreviewAsync();
+			await InitialiseCameraDevice();
 		}
 
 		private void ButtonLayers_onClick(object sender, RoutedEventArgs e)
