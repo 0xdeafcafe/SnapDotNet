@@ -112,7 +112,7 @@
 				<RowDefinition Height="120"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="40"/>
-				<RowDefinition Height="20"/>
+				<RowDefinition Height="5"/>
 			</Grid.RowDefinitions>
 
 			<!-- Branding -->
@@ -149,17 +149,19 @@
 					<ColumnDefinition Width="0.1*" />
 					<ColumnDefinition Width="0.35*" />
 				</Grid.ColumnDefinitions>
-				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="ShowSignInButton_Click" Content="sign in" Background="#FFDAD104"
+				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="ShowSignInButton_Click" Content="sign in" Background="#AADAD104"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}"/>
 
-				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="register" Background="#FF0EA0D6"
+				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="register" Background="#AA0EA0D6"
 					Style="{StaticResource DefaultWindowsPhoneButtonStyle}" />
 
 			</Grid>
 		</Grid>
 
+		<!-- It's just modals past this point, sorry -->
+		
 		<Grid x:Name="SignInModalGrid" Grid.Row="0" 
-			  Background="#7F8F8F8F"> <!--Visibility="Collapsed" Opacity="0"-->
+			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
 
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40" />
@@ -197,8 +199,8 @@
 
 		</Grid>
 
-		<Grid Grid.Row="0" Background="#7F8F8F8F" Visibility="{Binding ProgressModalVisibility}">
-
+		<Grid Grid.Row="0" Background="#338F8F8F" Visibility="{Binding ProgressModalVisibility, FallbackValue=Collapsed}">
+			
 		</Grid>
 	</Grid>
 </Page>
