@@ -193,7 +193,7 @@
 		<!--Image Grid.Row="0" Grid.RowSpan="3" Source="http://i.imgur.com/WLYZhR4.jpg" Stretch="UniformToFill"/-->
 		<CaptureElement x:Name="capturePreview" 
 						Grid.Row="0" Grid.RowSpan="3" 
-						Width="320" Height="240" />
+						/>
 
 		<TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"
 				   Text="0s" Opacity="0.4" Margin="10,0,0,10" FontSize="100"/>

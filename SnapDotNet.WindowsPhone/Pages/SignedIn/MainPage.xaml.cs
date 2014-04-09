@@ -69,13 +69,13 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			CapturePhoto();
 		}
-		private void CapturePhoto() //Also trigger off shutter key? IDK how in 8.1, no more CameraButtons.ShutterKeyPressed etc.
+		private async void CapturePhoto() //Also trigger off shutter key? IDK how in 8.1, no more CameraButtons.ShutterKeyPressed etc.
 		{
 			var stream = new InMemoryRandomAccessStream();
 			var imageProperties = ImageEncodingProperties.CreateJpeg();
 
 			Debug.WriteLine("Capping Photo");
-			_mediaCapture.CapturePhotoToStreamAsync(imageProperties, stream);
+			await _mediaCapture.CapturePhotoToStreamAsync(imageProperties, stream);
 			if (stream.Size > 0) { Debug.WriteLine("Capping Photo: OK, stream size " + stream.Size); }
 		}
 	}
