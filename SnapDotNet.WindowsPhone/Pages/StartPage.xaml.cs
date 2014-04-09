@@ -1,15 +1,10 @@
-﻿using System;
-using Windows.Phone.UI.Input;
+﻿using Windows.Phone.UI.Input;
 using Windows.UI;
-using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Apps.ViewModels;
-using SnapDotNet.Core.Miscellaneous.Models.Atlas;
-using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace SnapDotNet.Apps.Pages
 {
@@ -25,11 +20,6 @@ namespace SnapDotNet.Apps.Pages
 			InitializeComponent();
 
 			DataContext = ViewModel = new StartViewModel();
-
-			// TODO: remove this
-			SignInModalGrid.Opacity = 0.0f;
-			SignInModalGrid.Visibility = Visibility.Collapsed;
-
 			HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 		}
 
@@ -45,16 +35,6 @@ namespace SnapDotNet.Apps.Pages
 			if (storyboard == null) return;
 			storyboard.Begin();
 			ViewModel.OpenSignInPageCommand.Execute(null);
-
-			//var user = new User
-			//{
-			//	DeviceIdent = App.DeviceIdent,
-			//	AuthExpired = false,
-			//	SnapchatAuthToken = new Random().Next(0xaaaaaaa, 0xfffffff).ToString("X8"),
-			//	SnapchatUsername = "alexerax"
-			//};
-
-			//await App.MobileService.GetTable<User>().InsertAsync(user);
 		}
 
 		private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
@@ -76,25 +56,12 @@ namespace SnapDotNet.Apps.Pages
 
 		private async void SignInButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			
+			//StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
+			//await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
 
-			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
-			await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+			ViewModel.SignInCommand.Execute(null);
 
-			try
-			{
-				ViewModel.SignInCommand.Execute(null);
-			}
-			finally
-			{
-				StatusBar.GetForCurrentView().ProgressIndicator.Text = "";
-				var hideTask = StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
-			}
-
-			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
-				return;
-
-			App.CurrentFrame.Navigate(typeof(MainPage), "removeBackStack");
+			//StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 		}
 	}
 }

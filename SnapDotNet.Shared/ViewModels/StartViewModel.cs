@@ -1,8 +1,10 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using System;
+using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using Windows.UI.Popups;
@@ -192,15 +194,22 @@ namespace SnapDotNet.Apps.ViewModels
 		/// </summary>
 		private async void SignIn(Page nextPage)
 		{
-			// Do nothing if username or password isn't filled in.
-			// Maybe show dialog instead?
-			if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
-				return;
-
-			ProgressModalVisibility = Visibility.Visible;
-
 			try
 			{
+				if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
+				{
+					var dialog =
+						new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
+							"Invalid Username/Password");
+					await dialog.ShowAsync();
+					return;
+				}
+
+				// Tell UI we're Signing In
+				StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
+				await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+				ProgressModalVisibility = Visibility.Visible;
+
 				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
 
@@ -222,27 +231,25 @@ namespace SnapDotNet.Apps.ViewModels
 				var dialog =
 					new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
 						"Invalid Username/Password");
-				var showDialogTask = dialog.ShowAsync();
+				dialog.ShowAsync();
 			}
 			catch (InvalidHttpResponseException exception)
 			{
 				var dialog =
 					new MessageDialog(String.Format("Unable to connect to snapchat. The server responded: \n {0}.", exception.Message),
 						"Unable to connect to Snapchat");
-				var showDialogTask = dialog.ShowAsync();
+				dialog.ShowAsync();
 			}
 			finally
 			{
+				// Tell UI we're not Signing In no mo'
+				StatusBar.GetForCurrentView().ProgressIndicator.Text = String.Empty;
+				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 				ProgressModalVisibility = Visibility.Collapsed;
 			}
 
-			if (nextPage != null)
-			{
-				if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
-					return;
-
-				App.CurrentFrame.Navigate(nextPage.GetType());
-			}
+			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged) return;
+			App.CurrentFrame.Navigate(nextPage == null ? typeof(MainPage) : nextPage.GetType(), "removeBackStack");
 		}
 
 		/// <summary>

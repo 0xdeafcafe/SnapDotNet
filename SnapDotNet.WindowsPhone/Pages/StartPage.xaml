@@ -199,7 +199,7 @@
 
 		</Grid>
 
-		<Grid Grid.Row="0" Background="#338F8F8F" Visibility="{Binding ProgressModalVisibility, FallbackValue=Collapsed}">
+		<Grid Grid.Row="0" Background="#668F8F8F" Visibility="{Binding ProgressModalVisibility, FallbackValue=Collapsed}">
 			
 		</Grid>
 	</Grid>
