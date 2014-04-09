@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Media.MediaProperties;
@@ -8,7 +7,6 @@ using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -36,6 +34,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			DataContext = ViewModel = new MainViewModel();
 		}
+
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			CameraInitialStartupSequencer();
@@ -46,7 +45,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
 		{
-			_mediaCapture.StopPreviewAsync();
+			if (_mediaCapture != null)
+				_mediaCapture.StopPreviewAsync();
 		}
 
 		private async void CameraInitialStartupSequencer()
@@ -168,7 +168,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
 		{
 			throw new NotImplementedException();
-			//todo IDK what this is for? Alex?
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.Pages;
@@ -20,7 +21,6 @@ using Windows.Networking.PushNotifications;
 using SnapDotNet.Core.Atlas;
 using SnapDotnet.Miscellaneous.Crypto;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 #endif
 
 namespace SnapDotNet.Apps
@@ -141,15 +141,14 @@ namespace SnapDotNet.Apps
 
 		private static void CurrentFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
 		{
-			// TODO: work out why this isn't working...
 			var requiresAuthentication =
 				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
 					.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
 
 			if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
 
-			//navigatingCancelEventArgs.Cancel = true;
-			CurrentFrame.Navigate(typeof (StartPage));
+			CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => CurrentFrame.Navigate(typeof(StartPage)));
 		}
 
 #if WINDOWS_PHONE_APP

@@ -4,5 +4,9 @@ namespace SnapDotNet.Apps.Attributes
 {
 	public class RequiresAuthentication : Attribute
 	{
+		public RequiresAuthentication()
+		{
+			
+		}
 	}
 }
