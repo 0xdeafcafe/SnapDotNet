@@ -312,7 +312,8 @@
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,10">
 				<Button Style="{StaticResource WpLargeRoundButtonStyle}" IsEnabled="False"
 						x:Name="ButtonRecord"
-						Click="ButtonRecord_OnClick">
+						Holding="ButtonRecord_OnHolding"
+						>
 					<Ellipse Fill="Red" StrokeThickness="0" Width="25" Height="25">
 						
 					</Ellipse>
