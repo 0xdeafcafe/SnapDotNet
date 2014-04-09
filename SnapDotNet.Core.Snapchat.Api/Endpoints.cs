@@ -54,8 +54,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 				throw new InvalidCredentialsException();
 
 			_snapchatManager.UpdateAccount(account);
-			_snapchatManager.UpdateAccessCode(account.AuthToken);
+			_snapchatManager.UpdateAuthToken(account.AuthToken);
 			_snapchatManager.UpdateUsername(account.Username);
+			_snapchatManager.Save();
 
 			return account;
 		}
@@ -98,6 +99,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			_snapchatManager.UpdateAccount(account);
 			_snapchatManager.UpdateUsername(account.Username);
+			_snapchatManager.Save();
 
 			return account;
 		}

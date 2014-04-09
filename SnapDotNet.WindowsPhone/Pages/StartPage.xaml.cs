@@ -104,9 +104,6 @@ namespace SnapDotNet.Apps.Pages
 				StatusBar.GetForCurrentView().ProgressIndicator.Text = "";
 				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 				ViewModel.ProgressModalVisibility = Visibility.Collapsed;
-
-				var storyboard = (Storyboard) Resources["HahaScienceStoryboard"];
-				if (storyboard != null) storyboard.Begin();
 			}
 
 			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged)
