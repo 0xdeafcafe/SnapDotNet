@@ -1,19 +1,13 @@
-﻿using SnapDotNet.Apps.Common;
-using SnapDotNet.Core.Snapchat.Api;
-using SnapDotNet.Core.Snapchat.Models;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
+using SnapDotNet.Core.Snapchat.Models;
 
-namespace SnapDotNet.Apps.ViewModels
+namespace SnapDotNet.Apps.ViewModels.SignedIn
 {
     public sealed class MainViewModel
-		: NotifyPropertyChangedBase
+		: ViewModelBase
 	{
-#if NETFX_CORE
 		public const int MaximumRecentSnaps = 7;
-#else
-		public const int MaximumRecentSnaps = 10;
-#endif
 
 		public MainViewModel()
 		{
@@ -39,11 +33,6 @@ namespace SnapDotNet.Apps.ViewModels
 				});
 			}
 #endif
-		}
-
-		public SnapChatManager Manager
-		{
-			get { return App.SnapChatManager; }
 		}
 
 		/// <summary>

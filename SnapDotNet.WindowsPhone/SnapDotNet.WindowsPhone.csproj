@@ -113,6 +113,7 @@
     <Content Include="Assets\Panoramas\pano-3.jpg" />
     <Content Include="Assets\Panoramas\pano-4.jpg" />
     <Content Include="Assets\Panoramas\pano-5.jpg" />
+    <Content Include="Assets\Placeholders\story-placeholder.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />
     <Content Include="Assets\Square71x71Logo.scale-240.png" />

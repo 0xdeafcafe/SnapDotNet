@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Snapchat.Converters.Json;
@@ -16,10 +16,10 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public MatureContentWarning MatureContentText { get; set; }
 
 		[DataMember(Name = "my_stories")]
-		public List<MyStory> MyStories { get; set; }
+		public ObservableCollection<MyStory> MyStories { get; set; }
 
 		[DataMember(Name = "friend_stories")]
-		public List<FriendStory> FriendStories { get; set; }
+		public ObservableCollection<FriendStory> FriendStories { get; set; }
 
 		[DataContract]
 		public class MatureContentWarning
@@ -44,7 +44,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 			public Story Story { get; set; }
 
 			[DataMember(Name = "story_notes")]
-			public List<StoryNote> StoryNotes { get; set; }
+			public ObservableCollection<StoryNote> StoryNotes { get; set; }
 
 			[DataMember(Name = "story_extras")]
 			public StoryExtraInfo StoryExtras { get; set; }
@@ -91,7 +91,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 			public string Username { get; set; }
 
 			[DataMember(Name = "stories")]
-			public List<ViewableStory> Stories { get; set; }
+			public ObservableCollection<ViewableStory> Stories { get; set; }
 
 			[DataMember(Name = "mature_content")]
 			public bool ContainsMatureContent { get; set; }

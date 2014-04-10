@@ -2,8 +2,7 @@
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-
-// The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+using SnapDotNet.Apps.ViewModels.SignedIn;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {
@@ -12,11 +11,15 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	/// </summary>
 	public sealed partial class FriendsPage
 	{
+		public FriendsViewModel ViewModel { get; private set; }
+
 		private readonly NavigationHelper _navigationHelper;
 
 		public FriendsPage()
 		{
 			InitializeComponent();
+
+			DataContext = ViewModel = new FriendsViewModel();
 
 			_navigationHelper = new NavigationHelper(this);
 			_navigationHelper.LoadState += NavigationHelper_LoadState;

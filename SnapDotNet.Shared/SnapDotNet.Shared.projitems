@@ -21,17 +21,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SuspensionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanColourSelectorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CharacterCasingConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DisplayFriendsOtherNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\GreaterThanZeroToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\RemainingSecondsToDegreeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToFriendlyTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToIconConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToForegroundConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendsListGroupByAlphabetConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\SnapItemTemplateSelector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Themes\Dark.xaml">

@@ -1,9 +1,6 @@
 ﻿using Windows.Phone.UI.Input;
-using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.ViewModels;
 
 namespace SnapDotNet.Apps.Pages
@@ -21,12 +18,6 @@ namespace SnapDotNet.Apps.Pages
 
 			DataContext = ViewModel = new StartViewModel();
 			HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
-		}
-
-		protected override void OnNavigatedTo(NavigationEventArgs e)
-		{
-			StatusBar.GetForCurrentView().BackgroundColor = new Color { A = 0x00, R = 0x00, G = 0x00, B = 0x00,  };
-			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 		}
 
 		private void ShowSignInButton_Click(object sender, RoutedEventArgs e)
@@ -54,14 +45,9 @@ namespace SnapDotNet.Apps.Pages
 			}
 		}
 
-		private async void SignInButton_OnClick(object sender, RoutedEventArgs e)
+		private void SignInButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			//StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
-			//await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
-
 			ViewModel.SignInCommand.Execute(null);
-
-			//StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 		}
 	}
 }

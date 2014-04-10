@@ -11,7 +11,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		: Response
 	{
 		[DataMember(Name = "best_friends")]
-		public Collection<string> BestFriends { get; set; }
+		public ObservableCollection<string> BestFriends { get; set; }
 
 		[DataMember(Name = "score")]
 		public int Score { get; set; }

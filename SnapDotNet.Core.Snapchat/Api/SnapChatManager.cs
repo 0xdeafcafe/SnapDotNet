@@ -93,10 +93,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
-		public async void Load()
+		public void Load()
 		{
 			// Deseralize Account model from IsolatedStorage
-			var accountData = await IsolatedStorage.ReadFileAsync(AccountDataFileName);
+			var accountData = IsolatedStorage.ReadFileAsync(AccountDataFileName).Result;
 			if (accountData != null)
 			{
 				var accountDataParsed = JsonConvert.DeserializeObject<Account>(accountData);
@@ -110,7 +110,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			if (Account != null || AuthToken == null) return;
 			try
 			{
-				await Endpoints.GetUpdatesAsync();
+				Endpoints.GetUpdates();
 			}
 			catch (Exception)
 			{

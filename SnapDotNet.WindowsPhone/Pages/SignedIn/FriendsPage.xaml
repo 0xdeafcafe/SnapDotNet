@@ -7,6 +7,7 @@
 	xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
+	xmlns:converters="using:SnapDotNet.Apps.Converters"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
@@ -30,6 +31,26 @@
 				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
+
+		<converters:FriendsListGroupByAlphabetConverter x:Name="IValueConverterAcceptedFriendsListGroupByAlphabet" 
+														Filter="Accepted" />
+		<converters:FriendsListGroupByAlphabetConverter x:Name="IValueConverterPendingFriendsListGroupByAlphabet" 
+														Filter="Pending" />
+		<converters:FriendsListGroupByAlphabetConverter x:Name="IValueConverterBlockedFriendsListGroupByAlphabet" 
+														Filter="Blocked" />
+		<converters:DisplayFriendsOtherNameConverter x:Name="IValueConverterDisplayFriendsOtherName" />
+
+		<CollectionViewSource x:Name="FriendsViewSource" 
+							  Source="{Binding Path=Account.Friends, Converter={StaticResource IValueConverterAcceptedFriendsListGroupByAlphabet}}" 
+							  IsSourceGrouped="True" />
+
+		<CollectionViewSource x:Name="PendingFriendsViewSource" 
+							  Source="{Binding Path=Account.Friends, Converter={StaticResource IValueConverterPendingFriendsListGroupByAlphabet}}" 
+							  IsSourceGrouped="True" />
+
+		<CollectionViewSource x:Name="BlockedFriendsViewSource" 
+							  Source="{Binding Path=Account.Friends, Converter={StaticResource IValueConverterBlockedFriendsListGroupByAlphabet}}" 
+							  IsSourceGrouped="True" />
 	</Page.Resources>
 	<interactivity:Interaction.Behaviors>
 		<core:EventTriggerBehavior EventName="Loaded">
@@ -38,51 +59,157 @@
 	</interactivity:Interaction.Behaviors>
 	
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-
 		<!-- Backgrounds -->
-		<Grid x:Name="BackgroundAmbienceGrid" Grid.Row="0">
+		<Grid x:Name="BackgroundAmbienceGrid">
 			<Image
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage2"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage3"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage4"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage5"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
 		</Grid>
 
-		<Grid x:Name="ContentGrid" Grid.Row="0" Background="#338F8F8F">
+		<Grid Grid.Row="0" Background="#88686868">
 			<Grid.ChildrenTransitions>
 				<TransitionCollection>
 					<EntranceThemeTransition/>
 				</TransitionCollection>
 			</Grid.ChildrenTransitions>
 
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
+			<Hub Header="social">
+				<HubSection Header="FRIENDS">
+					<DataTemplate>
+						<SemanticZoom>
+							<SemanticZoom.ZoomedInView>
+								<ListView ItemsSource="{Binding Source={StaticResource FriendsViewSource}}">
+									<ListView.ItemTemplate>
+										<DataTemplate>
+											<Grid Margin="0,8" VerticalAlignment="Center">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="55" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
 
-			<!-- Title Pane -->
-			<StackPanel Grid.Row="0">
-				<TextBlock Text="friends" Margin="24,20,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
-			</StackPanel>
+												<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
 
-			<Grid Grid.Row="1" x:Name="ContentRoot">
-				<ListView>
-					
-				</ListView>
-			</Grid>
+												<StackPanel Grid.Column="1" Margin="8,0,0,0">
+													<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
+													<StackPanel Orientation="Horizontal">
+														<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+													</StackPanel>
+												</StackPanel>
+											</Grid>
+										</DataTemplate>
+									</ListView.ItemTemplate>
+									<ListView.GroupStyle>
+										<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
+									</ListView.GroupStyle>
+								</ListView>
+							</SemanticZoom.ZoomedInView>
+							<SemanticZoom.ZoomedOutView>
+								<GridView Background="#88000000" Padding="5,0" 
+										  ItemsSource="{Binding ElementName=FriendsViewSource, Path=View.CollectionGroups}"
+										  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
+								</GridView>
+							</SemanticZoom.ZoomedOutView>
+						</SemanticZoom>
+					</DataTemplate>
+				</HubSection>
+				<HubSection Header="PENDING">
+					<DataTemplate>
+						<SemanticZoom>
+							<SemanticZoom.ZoomedInView>
+								<ListView ItemsSource="{Binding Source={StaticResource PendingFriendsViewSource}}">
+									<ListView.ItemTemplate>
+										<DataTemplate>
+											<Grid Margin="0,8" VerticalAlignment="Center">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="55" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
+
+												<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
+
+												<StackPanel Grid.Column="1" Margin="8,0,0,0">
+													<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
+													<StackPanel Orientation="Horizontal">
+														<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+													</StackPanel>
+												</StackPanel>
+											</Grid>
+										</DataTemplate>
+									</ListView.ItemTemplate>
+									<ListView.GroupStyle>
+										<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
+									</ListView.GroupStyle>
+								</ListView>
+							</SemanticZoom.ZoomedInView>
+							<SemanticZoom.ZoomedOutView>
+								<GridView Background="#88000000" Padding="5,0" 
+										  ItemsSource="{Binding ElementName=FriendsViewSource, Path=View.CollectionGroups}"
+										  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
+								</GridView>
+							</SemanticZoom.ZoomedOutView>
+						</SemanticZoom>
+					</DataTemplate>
+				</HubSection>
+				<HubSection Header="BLOCKED">
+					<DataTemplate>
+						<SemanticZoom>
+							<SemanticZoom.ZoomedInView>
+								<ListView ItemsSource="{Binding Source={StaticResource BlockedFriendsViewSource}}">
+									<ListView.ItemTemplate>
+										<DataTemplate>
+											<Grid Margin="0,8" VerticalAlignment="Center">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="55" />
+													<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
+
+												<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
+
+												<StackPanel Grid.Column="1" Margin="8,0,0,0">
+													<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
+													<StackPanel Orientation="Horizontal">
+														<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+													</StackPanel>
+												</StackPanel>
+											</Grid>
+										</DataTemplate>
+									</ListView.ItemTemplate>
+									<ListView.GroupStyle>
+										<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
+									</ListView.GroupStyle>
+								</ListView>
+							</SemanticZoom.ZoomedInView>
+							<SemanticZoom.ZoomedOutView>
+								<GridView Background="#88000000" Padding="5,0" 
+										  ItemsSource="{Binding ElementName=FriendsViewSource, Path=View.CollectionGroups}"
+										  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
+								</GridView>
+							</SemanticZoom.ZoomedOutView>
+						</SemanticZoom>
+					</DataTemplate>
+				</HubSection>
+			</Hub>
 		</Grid>
 	</Grid>
+	
+	<Page.BottomAppBar>
+		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
+			<CommandBar.SecondaryCommands>
+				<AppBarButton Label="refresh" />
+				<AppBarButton Label="settings" />
+			</CommandBar.SecondaryCommands>
+		</CommandBar>
+	</Page.BottomAppBar>
 </Page>

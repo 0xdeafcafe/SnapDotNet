@@ -5,16 +5,14 @@ using Windows.Devices.Enumeration;
 using Windows.Media.MediaProperties;
 using Windows.Phone.UI.Input;
 using Windows.Storage.Streams;
-using Windows.UI;
 using Windows.UI.Input;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
 using SnapDotNet.Apps.Attributes;
-using SnapDotNet.Apps.ViewModels;
+using SnapDotNet.Apps.ViewModels.SignedIn;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {
@@ -30,8 +28,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private DeviceInformationCollection _microphoneInfoCollection;
 		private int _currentSelectedAudioDevice;
 
-		private DispatcherTimer videoRecordTimer = new DispatcherTimer();
-		private Stopwatch videoRecordStopwatch = new Stopwatch();
+		private readonly DispatcherTimer _videoRecordTimer = new DispatcherTimer();
+		private readonly Stopwatch _videoRecordStopwatch = new Stopwatch();
 
 		public MainPage()
 		{
@@ -49,18 +47,15 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				while (App.CurrentFrame.CanGoBack)
 					App.CurrentFrame.BackStack.RemoveAt(0);
 			
-			videoRecordTimer.Interval = new TimeSpan(0, 0, 0, 1);
-			videoRecordTimer.Tick += videoRecordTimer_Tick;
+			_videoRecordTimer.Interval = new TimeSpan(0, 0, 0, 1);
+			_videoRecordTimer.Tick += videoRecordTimer_Tick;
 
 			CameraInitialStartupSequencer();
-
-			StatusBar.GetForCurrentView().BackgroundColor = new Color {A = 0x00, R = 0x00, G = 0x00, B = 0x00,};
-			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 		}
 
 		void videoRecordTimer_Tick(object sender, object e)
 		{
-			VideoTimerBlock.Text = String.Format("{0}s", videoRecordStopwatch.Elapsed.Seconds);
+			VideoTimerBlock.Text = String.Format("{0}s", _videoRecordStopwatch.Elapsed.Seconds);
 		}
 
 		protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -153,9 +148,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			var stream = new InMemoryRandomAccessStream();
 			if (e.HoldingState == HoldingState.Started)
 			{
-				videoRecordStopwatch.Reset();
-				videoRecordStopwatch.Start();
-				videoRecordTimer.Start();
+				_videoRecordStopwatch.Reset();
+				_videoRecordStopwatch.Start();
+				_videoRecordTimer.Start();
 				
 				var videoProperties = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Auto); //todo do proper settings, mp4 will do for now
 
@@ -164,8 +159,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}
 			else
 			{
-				videoRecordTimer.Stop();
-				videoRecordStopwatch.Stop();
+				_videoRecordTimer.Stop();
+				_videoRecordStopwatch.Stop();
 				Debug.WriteLine("Stopping Video");
 				await _mediaCapture.StopRecordAsync();
 				Debug.WriteLine("Stopping Video: OK, stream size " + stream.Size);

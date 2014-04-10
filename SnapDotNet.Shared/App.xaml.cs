@@ -13,8 +13,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api;
-using System.Threading.Tasks;
-using SnapDotNet.Apps.Common;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
@@ -22,6 +20,7 @@ using Microsoft.WindowsAzure.MobileServices;
 using Windows.Networking.PushNotifications;
 using SnapDotNet.Core.Miscellaneous.Crypto;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.ViewManagement;
 #endif
 
 namespace SnapDotNet.Apps
@@ -135,6 +134,11 @@ namespace SnapDotNet.Apps
 			// Register for Push Notifications
 			InitNotificationsAsync();
 			
+#if WINDOWS_PHONE_APP
+			// Hide StatusBar background for entire application
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+#endif
+
 			// Ensure the current window is active
 			Window.Current.Activate();
 		}
@@ -147,7 +151,7 @@ namespace SnapDotNet.Apps
 
 			if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
 
-			var navigateTask = CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+			CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof(StartPage)));
 		}
 

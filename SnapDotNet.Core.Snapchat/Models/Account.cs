@@ -30,7 +30,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		: Response
 	{
 		[DataMember(Name = "bests")]
-		public Collection<string> BestFriends { get; set; }
+		public ObservableCollection<string> BestFriends { get; set; }
 
 		[DataMember(Name = "is_vip")]
 		public bool IsVip { get; set; }
@@ -42,10 +42,10 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public int Received { get; set; }
 
 		[DataMember(Name = "added_friends")]
-		public Collection<AddedFriend> AddedFriends { get; set; }
+		public ObservableCollection<AddedFriend> AddedFriends { get; set; }
 
 		[DataMember(Name = "requests")]
-		public Collection<string> Requests { get; set; }
+		public ObservableCollection<string> Requests { get; set; }
 
 		[DataMember(Name = "sent")]
 		public int Sent { get; set; }
@@ -57,7 +57,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public string Username { get; set; }
 
 		[DataMember(Name = "friends")]
-		public Collection<Friend> Friends { get; set; }
+		public ObservableCollection<Friend> Friends { get; set; }
 
 		[DataMember(Name = "device_token")]
 		public string DeviceToken { get; set; }
@@ -69,7 +69,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public string MobileVerificationKey { get; set; }
 
 		[DataMember(Name = "recents")]
-		public Collection<string> Recents { get; set; }
+		public ObservableCollection<string> Recents { get; set; }
 
 		[DataMember(Name = "added_friends_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
@@ -103,6 +103,6 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public string Mobile { get; set; }
 
 		[DataMember(Name = "snaps")]
-		public Collection<Snap> Snaps { get; set; }
+		public ObservableCollection<Snap> Snaps { get; set; }
 	}
 }

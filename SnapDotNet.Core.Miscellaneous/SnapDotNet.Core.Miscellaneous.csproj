@@ -46,6 +46,7 @@
     <Compile Include="Helpers\Storage\IsolatedStorage.cs" />
     <Compile Include="Models\Atlas\Snap.cs" />
     <Compile Include="Models\Atlas\User.cs" />
+    <Compile Include="Models\GroupInfoList.cs" />
     <Compile Include="Models\NotifyPropertyChangedBase.cs" />
     <Compile Include="Models\Registrations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

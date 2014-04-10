@@ -8,8 +8,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
-using SnapDotNet.Apps.ViewModels;
-using WinRTXamlToolkit.Controls;
+using SnapDotNet.Apps.ViewModels.SignedIn;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -32,8 +31,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		public MainPage()
 		{
 			DataContext = new MainViewModel();
-			this.InitializeComponent();
-			this.SizeChanged += (object sender, SizeChangedEventArgs e) =>
+			InitializeComponent();
+			SizeChanged += (sender, e) =>
 			{
 				if (e.NewSize.Width <= (int) Resources["MinimalViewMaxWidth"])
 					VisualStateManager.GoToState(this, "MinimalLayout", true);
@@ -129,7 +128,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		private void OnBottomAppBarHintTapped(object sender, TappedRoutedEventArgs e)
 		{
-			this.BottomAppBar.IsOpen = true;
+			BottomAppBar.IsOpen = true;
 		}
 
 		private void OnAccountBoxTapped(object sender, TappedRoutedEventArgs e)

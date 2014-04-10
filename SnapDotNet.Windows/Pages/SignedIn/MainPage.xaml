@@ -2,15 +2,12 @@
       x:Class="SnapDotNet.Apps.Pages.SignedIn.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:local="using:SnapDotNet.Apps.Pages"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:vm="using:SnapDotNet.Apps.ViewModels"
       xmlns:tk="using:WinRTXamlToolkit.Controls"
       xmlns:converters="using:SnapDotNet.Apps.Converters"
-      xmlns:app="using:SnapDotNet.Apps"
-      xmlns:snapchat="using:SnapDotNet.Core.Snapchat.Models"
       xmlns:selectors="using:SnapDotNet.Apps.Selectors"
+      xmlns:signedIn="using:SnapDotNet.Apps.ViewModels.SignedIn"
       mc:Ignorable="d">
 
     <Page.Resources>
@@ -50,7 +47,7 @@
 
     <!-- Already specified in the constructor, but placed here too for design time conveinence -->
     <Page.DataContext>
-        <vm:MainViewModel/>
+        <signedIn:MainViewModel/>
     </Page.DataContext>
 
     <Grid Background="{ThemeResource AppPageBackgroundThemeBrush}">

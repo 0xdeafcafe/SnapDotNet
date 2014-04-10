@@ -1,13 +1,16 @@
-﻿using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using System;
 using SnapDotNet.Apps.Pages.SignedIn;
-using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using Windows.UI.Popups;
+#if WINDOWS_PHONE_APP
+using SnapDotNet.Core.Miscellaneous.Models.Atlas;
+using Windows.UI.ViewManagement;
+#endif
+
 namespace SnapDotNet.Apps.ViewModels
 {
 	public sealed class StartViewModel
@@ -205,9 +208,11 @@ namespace SnapDotNet.Apps.ViewModels
 					return;
 				}
 
+#if WINDOWS_PHONE_APP
 				// Tell UI we're Signing In
 				StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
 				await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+#endif
 				ProgressModalVisibility = Visibility.Visible;
 
 				// Try and log into SnapChat
@@ -243,8 +248,10 @@ namespace SnapDotNet.Apps.ViewModels
 			finally
 			{
 				// Tell UI we're not Signing In no mo'
+#if WINDOWS_PHONE_APP
 				StatusBar.GetForCurrentView().ProgressIndicator.Text = String.Empty;
 				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
+#endif
 				ProgressModalVisibility = Visibility.Collapsed;
 			}
 

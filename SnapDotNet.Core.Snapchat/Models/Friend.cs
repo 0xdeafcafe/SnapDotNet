@@ -27,15 +27,29 @@ namespace SnapDotNet.Core.Snapchat.Models
 	}
 
 	/// <summary>
-	/// The base data that is always used in friend info.
+	/// Represents a friend that was added.
 	/// </summary>
-	public class FriendBase
+	[DataContract]
+	public class AddedFriend
 	{
+		/// <summary>
+		/// Gets or sets the timestamp specifying the date and time the friendship started.
+		/// </summary>
+		[DataMember(Name = "ts")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
+		public DateTime Timestamp { get; set; }
+
 		/// <summary>
 		/// Gets or sets the name of this friend.
 		/// </summary>
 		[DataMember(Name = "name")]
 		public string Name { get; set; }
+
+		/// <summary>
+		/// Gets the friendly name
+		/// </summary>
+		[IgnoreDataMember]
+		public string FriendlyName { get { return DisplayName ?? Name; } }
 
 		/// <summary>
 		/// Gets or sets the display name of this friend.
@@ -51,29 +65,39 @@ namespace SnapDotNet.Core.Snapchat.Models
 	}
 
 	/// <summary>
-	/// Represents a friend that was added.
-	/// </summary>
-	[DataContract]
-	public class AddedFriend : FriendBase
-	{
-		/// <summary>
-		/// Gets or sets the timestamp specifying the date and time the friendship started.
-		/// </summary>
-		[DataMember(Name = "ts")]
-		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime Timestamp { get; set; }
-	}
-
-	/// <summary>
 	/// Represents a friend.
 	/// </summary>
 	[DataContract]
-	public class Friend : FriendBase
+	public class Friend
 	{
 		/// <summary>
 		/// Gets or sets whether this friend allows you to see custom stories.
 		/// </summary>
 		[DataMember(Name = "can_see_custom_stories")]
 		public bool CanSeeCustomStories { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name of this friend.
+		/// </summary>
+		[DataMember(Name = "name")]
+		public string Name { get; set; }
+
+		/// <summary>
+		/// Gets the friendly name
+		/// </summary>
+		[IgnoreDataMember]
+		public string FriendlyName { get { return String.IsNullOrEmpty(DisplayName) ? Name : DisplayName; } }
+
+		/// <summary>
+		/// Gets or sets the display name of this friend.
+		/// </summary>
+		[DataMember(Name = "display")]
+		public string DisplayName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the state of the friend request sent to this person.
+		/// </summary>
+		[DataMember(Name = "type")]
+		public FriendRequestState FriendRequestState { get; set; }
 	}
 }
