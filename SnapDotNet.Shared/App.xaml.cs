@@ -3,6 +3,7 @@ using System.Reflection;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.Helpers;
 using SnapDotNet.Apps.Pages;
 using System;
 using System.Diagnostics;
@@ -238,19 +239,10 @@ namespace SnapDotNet.Apps
 		{
 			if (!SnapChatManager.IsAuthenticated()) return;
 
-#if WINDOWS_PHONE_APP
-			// Tell UI we're Updating
-			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Updating...";
-			await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
-#endif
-
 			// Get Snapchat Updates
+			await ProgressHelper.ShowStatusBar("Updating...");
 			await SnapChatManager.UpdateAllAsync();
-
-#if WINDOWS_PHONE_APP
-			StatusBar.GetForCurrentView().ProgressIndicator.Text = String.Empty;
-			await StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
-#endif
+			await ProgressHelper.HideStatusBar();
 		}
 	}
 }

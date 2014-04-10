@@ -60,7 +60,7 @@
 	
 	<Grid>
 		<!-- Backgrounds -->
-		<Grid x:Name="BackgroundAmbienceGrid">
+		<Grid>
 			<Image
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
@@ -176,7 +176,7 @@
 									<ListView.ItemTemplate>
 										<DataTemplate>
 											<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
-													IsHitTestVisible="True" Holding="BlockedPerson_OnHolding">
+													IsHitTestVisible="True" Holding="FriendPerson_OnHolding">
 												<Grid>
 													<Grid.ColumnDefinitions>
 														<ColumnDefinition Width="55" />
