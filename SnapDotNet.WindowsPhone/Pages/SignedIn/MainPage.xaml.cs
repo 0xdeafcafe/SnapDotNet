@@ -143,11 +143,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			CapturePhoto();
 		}
-		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e) //todo broken, final video stream is of size 0....?
+		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e) //todo broken, final video stream is of size 0....
 		{
 			var stream = new InMemoryRandomAccessStream();
 			if (e.HoldingState == HoldingState.Started)
 			{
+				ButtonCamera.IsEnabled = false;
 				_videoRecordStopwatch.Reset();
 				_videoRecordStopwatch.Start();
 				_videoRecordTimer.Start();
@@ -164,6 +165,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				Debug.WriteLine("Stopping Video");
 				await _mediaCapture.StopRecordAsync();
 				Debug.WriteLine("Stopping Video: OK, stream size " + stream.Size);
+				ButtonCamera.IsEnabled = true;
 			}
 			
 		}
@@ -179,6 +181,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		private async void ButtonFrontFacing_CheckChanged(object sender, RoutedEventArgs e)
 		{
+			ButtonFrontFacing.IsEnabled = false;
 			_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
 			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
@@ -193,10 +196,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
 				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
 			FrontFacingImage.Source = new BitmapImage(imagePath);
+			ButtonFrontFacing.IsEnabled = true;
 		}
 
 		private void FlashButton_CheckChanged(object sender, RoutedEventArgs e)
 		{
+			FlashButton.IsEnabled = false;
 			var toggleButton = sender as ToggleButton;
 			if (toggleButton == null) return;
 			if (toggleButton.IsChecked == null) return;
@@ -209,6 +214,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			FlashImage.Source = new BitmapImage(imagePath);
 
 			Debug.WriteLine("FlashControl.Enabled set to: " + _mediaCapture.VideoDeviceController.FlashControl.Enabled);
+			FlashButton.IsEnabled = true;
 		}
 	}
 }
