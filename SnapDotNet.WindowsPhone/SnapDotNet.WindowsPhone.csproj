@@ -83,6 +83,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Dialogs\ChangeDisplayNameDialog.xaml.cs">
+      <DependentUpon>ChangeDisplayNameDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SignedIn\FriendsPage.xaml.cs">
       <DependentUpon>FriendsPage.xaml</DependentUpon>
     </Compile>
@@ -124,6 +127,10 @@
     <Content Include="StoreManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Dialogs\ChangeDisplayNameDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SignedIn\FriendsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

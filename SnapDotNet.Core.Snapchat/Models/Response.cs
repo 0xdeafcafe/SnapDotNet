@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using SnapDotNet.Core.Miscellaneous.Models;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
@@ -7,6 +8,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 	/// </summary>
 	[DataContract]
 	public class Response
+		: NotifyPropertyChangedBase
 	{
 		/// <summary>
 		/// Gets or sets whether the user is still logged in after this response.

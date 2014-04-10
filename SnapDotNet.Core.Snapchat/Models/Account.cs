@@ -57,7 +57,12 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public string Username { get; set; }
 
 		[DataMember(Name = "friends")]
-		public ObservableCollection<Friend> Friends { get; set; }
+		public ObservableCollection<Friend> Friends
+		{
+			get { return _friends; }
+			set { SetField(ref _friends, value); }
+		}
+		private ObservableCollection<Friend> _friends;
 
 		[DataMember(Name = "device_token")]
 		public string DeviceToken { get; set; }

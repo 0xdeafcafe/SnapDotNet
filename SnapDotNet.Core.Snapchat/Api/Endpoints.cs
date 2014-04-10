@@ -136,8 +136,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 					_webConnect.Post<Stories>(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			if (stories == null)
-				throw new InvalidCredentialsException();
+			_snapchatManager.UpdateStories(stories);
 
 			return stories;
 		}
@@ -175,9 +174,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			if (response == null)
-				throw new InvalidCredentialsException();
-
 			return response;
 		}
 
@@ -210,9 +206,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 				await
 					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
-			
-			if (response == null)
-				throw new InvalidCredentialsException();
 
 			return response;
 		}

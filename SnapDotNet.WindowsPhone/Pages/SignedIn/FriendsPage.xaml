@@ -41,15 +41,15 @@
 		<converters:DisplayFriendsOtherNameConverter x:Name="IValueConverterDisplayFriendsOtherName" />
 
 		<CollectionViewSource x:Name="FriendsViewSource" 
-							  Source="{Binding Path=Account.Friends, Converter={StaticResource IValueConverterAcceptedFriendsListGroupByAlphabet}}" 
+							  Source="{Binding Path=Account.Friends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterAcceptedFriendsListGroupByAlphabet}}" 
 							  IsSourceGrouped="True" />
 
 		<CollectionViewSource x:Name="PendingFriendsViewSource" 
-							  Source="{Binding Path=Account.Friends, Converter={StaticResource IValueConverterPendingFriendsListGroupByAlphabet}}" 
+							  Source="{Binding Path=Account.Friends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterPendingFriendsListGroupByAlphabet}}" 
 							  IsSourceGrouped="True" />
 
 		<CollectionViewSource x:Name="BlockedFriendsViewSource" 
-							  Source="{Binding Path=Account.Friends, Converter={StaticResource IValueConverterBlockedFriendsListGroupByAlphabet}}" 
+							  Source="{Binding Path=Account.Friends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterBlockedFriendsListGroupByAlphabet}}" 
 							  IsSourceGrouped="True" />
 	</Page.Resources>
 	<interactivity:Interaction.Behaviors>
@@ -93,21 +93,24 @@
 								<ListView ItemsSource="{Binding Source={StaticResource FriendsViewSource}}">
 									<ListView.ItemTemplate>
 										<DataTemplate>
-											<Grid Margin="0,8" VerticalAlignment="Center">
-												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="55" />
-													<ColumnDefinition Width="*" />
-												</Grid.ColumnDefinitions>
+											<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
+													IsHitTestVisible="True" Holding="FriendPerson_OnHolding">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="55" />
+														<ColumnDefinition Width="*" />
+													</Grid.ColumnDefinitions>
 
-												<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
+													<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
 
-												<StackPanel Grid.Column="1" Margin="8,0,0,0">
-													<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
-													<StackPanel Orientation="Horizontal">
-														<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+													<StackPanel Grid.Column="1" Margin="8,0,0,0">
+														<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
+														<StackPanel Orientation="Horizontal">
+															<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+														</StackPanel>
 													</StackPanel>
-												</StackPanel>
-											</Grid>
+												</Grid>
+											</Button>
 										</DataTemplate>
 									</ListView.ItemTemplate>
 									<ListView.GroupStyle>
@@ -131,21 +134,24 @@
 								<ListView ItemsSource="{Binding Source={StaticResource PendingFriendsViewSource}}">
 									<ListView.ItemTemplate>
 										<DataTemplate>
-											<Grid Margin="0,8" VerticalAlignment="Center">
-												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="55" />
-													<ColumnDefinition Width="*" />
-												</Grid.ColumnDefinitions>
+											<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
+													IsHitTestVisible="True" Holding="FriendPerson_OnHolding">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="55" />
+														<ColumnDefinition Width="*" />
+													</Grid.ColumnDefinitions>
 
-												<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
+													<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
 
-												<StackPanel Grid.Column="1" Margin="8,0,0,0">
-													<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
-													<StackPanel Orientation="Horizontal">
-														<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+													<StackPanel Grid.Column="1" Margin="8,0,0,0">
+														<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
+														<StackPanel Orientation="Horizontal">
+															<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+														</StackPanel>
 													</StackPanel>
-												</StackPanel>
-											</Grid>
+												</Grid>
+											</Button>
 										</DataTemplate>
 									</ListView.ItemTemplate>
 									<ListView.GroupStyle>
@@ -166,24 +172,27 @@
 					<DataTemplate>
 						<SemanticZoom>
 							<SemanticZoom.ZoomedInView>
-								<ListView ItemsSource="{Binding Source={StaticResource BlockedFriendsViewSource}}">
+								<ListView ItemsSource="{Binding Source={StaticResource BlockedFriendsViewSource}}" IsHoldingEnabled="True">
 									<ListView.ItemTemplate>
 										<DataTemplate>
-											<Grid Margin="0,8" VerticalAlignment="Center">
-												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="55" />
-													<ColumnDefinition Width="*" />
-												</Grid.ColumnDefinitions>
+											<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
+													IsHitTestVisible="True" Holding="BlockedPerson_OnHolding">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="55" />
+														<ColumnDefinition Width="*" />
+													</Grid.ColumnDefinitions>
 
-												<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
+													<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
 
-												<StackPanel Grid.Column="1" Margin="8,0,0,0">
-													<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
-													<StackPanel Orientation="Horizontal">
-														<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+													<StackPanel Grid.Column="1" Margin="8,0,0,0">
+														<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
+														<StackPanel Orientation="Horizontal">
+															<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+														</StackPanel>
 													</StackPanel>
-												</StackPanel>
-											</Grid>
+												</Grid>
+											</Button>
 										</DataTemplate>
 									</ListView.ItemTemplate>
 									<ListView.GroupStyle>

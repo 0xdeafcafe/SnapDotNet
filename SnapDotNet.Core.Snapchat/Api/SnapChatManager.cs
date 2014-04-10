@@ -11,13 +11,47 @@ namespace SnapDotNet.Core.Snapchat.Api
 		: NotifyPropertyChangedBase
 	{
 		private const string AccountDataFileName = "accountData.json";
+		private const string StoriesDataFileName = "storiesData.json";
 		private const string RoamingSnapchatDataContainer = "SnapchatData";
 
-		public String AuthToken { get; private set; }
 
-		public String Username { get; private set; }
+		public String AuthToken
+		{
+			get { return _authToken; }
+			set { SetField(ref _authToken, value); }
+		}
+		private String _authToken;
 
-		public Account Account { get; private set; }
+		public String Username
+		{
+			get { return _username; }
+			set { SetField(ref _username, value); }
+		}
+		private String _username;
+
+		public Account Account
+		{
+			get { return _account; }
+			set { SetField(ref _account, value); }
+		}
+		private Account _account;
+
+		public Stories Stories
+		{
+			get { return _stories; }
+			set { SetField(ref _stories, value); }
+		}
+		private Stories _stories;
+
+		public Endpoints Endpoints
+		{
+			get { return _endpoints; }
+			set { SetField(ref _endpoints, value); }
+		}
+		private Endpoints _endpoints;
+
+
+		#region Constructors
 
 		/// <summary>
 		/// 
@@ -44,7 +78,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 			if (!getUpdates) return;
 
 			Endpoints.GetUpdatesAsync().Wait();
+			Endpoints.GetStoriesAsync().Wait();
 		}
+
+		#endregion
+
 
 		#region Setters
 
@@ -63,7 +101,15 @@ namespace SnapDotNet.Core.Snapchat.Api
 			Username = username;
 		}
 
+		public void UpdateStories(Stories stories)
+		{
+			Stories = stories;
+		}
+
 		#endregion
+
+
+		#region Cool Functions
 
 		/// <summary>
 		/// 
@@ -74,14 +120,18 @@ namespace SnapDotNet.Core.Snapchat.Api
 			return (Account != null && AuthToken != null && Account.AuthToken == AuthToken && Account.Logged);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
+		#endregion
+
+
+		#region Actions
+
 		public async void Save()
 		{
 			// Seralize Account model and save as json string in Isolated Storage
-			var accountData = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account));
-			IsolatedStorage.WriteFileAsync(AccountDataFileName, accountData);
+			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account)));
+
+			// Seralize Stories model and save as json string in Isolated Storage
+			IsolatedStorage.WriteFileAsync(StoriesDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account)));
 
 			// Save AuthToken and Username to Roaming storage
 			IsolatedStorage.WriteSetting(RoamingSnapchatDataContainer, "Username", Username);
@@ -90,9 +140,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 			// All done b
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public void Load()
 		{
 			// Deseralize Account model from IsolatedStorage
@@ -103,27 +150,25 @@ namespace SnapDotNet.Core.Snapchat.Api
 				UpdateAccount(accountDataParsed);
 			}
 
+			// Deseralize Stories model from IsolatedStorage
+			var storiesData = IsolatedStorage.ReadFileAsync(StoriesDataFileName).Result;
+			if (storiesData != null)
+			{
+				var storiesDataParsed = JsonConvert.DeserializeObject<Stories>(storiesData);
+				UpdateStories(storiesDataParsed);
+			}
+
 			// Load AuthToken and Username from Roaming storage
 			UpdateUsername(IsolatedStorage.ReadSetting(RoamingSnapchatDataContainer, "Username"));
 			UpdateAuthToken(IsolatedStorage.ReadSetting(RoamingSnapchatDataContainer, "AuthToken"));
-
-			if (Account != null || AuthToken == null) return;
-			try
-			{
-				Endpoints.GetUpdates();
-			}
-			catch (Exception)
-			{
-				// Sign us out
-				UpdateAccount(null);
-				UpdateAuthToken(null);
-				UpdateUsername(null);
-			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public Endpoints Endpoints { get; private set; }
+		public async Task UpdateAllAsync()
+		{
+			await Endpoints.GetUpdatesAsync();
+			await Endpoints.GetStoriesAsync();
+		}
+
+		#endregion
 	}
 }

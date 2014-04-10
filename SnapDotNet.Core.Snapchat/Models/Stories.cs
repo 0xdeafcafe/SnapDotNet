@@ -36,76 +36,79 @@ namespace SnapDotNet.Core.Snapchat.Models
 			[DataMember(Name = "no_text")]
 			public string NoText { get; set; }
 		}
+	}
 
-		[DataContract]
-		public class MyStory
-		{
-			[DataMember(Name = "story")]
-			public Story Story { get; set; }
+	[DataContract]
+	public class MyStory
+	{
+		[DataMember(Name = "story")]
+		public Story Story { get; set; }
 
-			[DataMember(Name = "story_notes")]
-			public ObservableCollection<StoryNote> StoryNotes { get; set; }
+		[DataMember(Name = "story_notes")]
+		public ObservableCollection<StoryNote> StoryNotes { get; set; }
 
-			[DataMember(Name = "story_extras")]
-			public StoryExtraInfo StoryExtras { get; set; }
+		[DataMember(Name = "story_extras")]
+		public StoryExtraInfo StoryExtras { get; set; }
+	}
 
-			public class StoryNote
-			{
-				[DataMember(Name = "viewer")]
-				public string ViewerUsername { get; set; }
+	[DataContract]
+	public class StoryNote
+	{
+		[DataMember(Name = "viewer")]
+		public string ViewerUsername { get; set; }
 
-				[DataMember(Name = "screenshotted")]
-				public bool Screenshotted { get; set; }
+		[DataMember(Name = "screenshotted")]
+		public bool Screenshotted { get; set; }
 
-				[DataMember(Name = "timestamp")]
-				[JsonConverter(typeof(UnixDateTimeConverter))]
-				public DateTime Timestamp { get; set; }
+		[DataMember(Name = "timestamp")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
+		public DateTime Timestamp { get; set; }
 
-				[DataMember(Name = "storypointer")]
-				public StoryMediaPointer StoryPointer { get; set; }
+		[DataMember(Name = "storypointer")]
+		public StoryMediaPointer StoryPointer { get; set; }
+	}
 
-				public class StoryMediaPointer
-				{
-					[DataMember(Name = "mKey")]
-					public string MediaKey { get; set; }
+	[DataContract]
+	public class StoryMediaPointer
+	{
+		[DataMember(Name = "mKey")]
+		public string MediaKey { get; set; }
 
-					[DataMember(Name = "mField")]
-					public string MediaField { get; set; }
-				}
-			}
+		[DataMember(Name = "mField")]
+		public string MediaField { get; set; }
+	}
 
-			public class StoryExtraInfo
-			{
-				[DataMember(Name = "view_count")]
-				public int ViewCount { get; set; }
+	[DataContract]
+	public class StoryExtraInfo
+	{
+		[DataMember(Name = "view_count")]
+		public int ViewCount { get; set; }
 
-				[DataMember(Name = "screenshot_count")]
-				public int ScreenshotCount { get; set; }
-			}
-		}
+		[DataMember(Name = "screenshot_count")]
+		public int ScreenshotCount { get; set; }
+	}
 
-		[DataContract]
-		public class FriendStory
-		{
-			[DataMember(Name = "username")]
-			public string Username { get; set; }
+	[DataContract]
+	public class FriendStory
+	{
+		[DataMember(Name = "username")]
+		public string Username { get; set; }
 
-			[DataMember(Name = "stories")]
-			public ObservableCollection<ViewableStory> Stories { get; set; }
+		[DataMember(Name = "stories")]
+		public ObservableCollection<ViewableStory> Stories { get; set; }
 
-			[DataMember(Name = "mature_content")]
-			public bool ContainsMatureContent { get; set; }
+		[DataMember(Name = "mature_content")]
+		public bool ContainsMatureContent { get; set; }
+	}
 
-			[DataContract]
-			public class ViewableStory
-			{
-				[DataMember(Name = "story")]
-				public Story Story { get; set; }
+	[DataContract]
+	public class ViewableStory
+	{
+		[DataMember(Name = "story")]
+		public Story Story { get; set; }
 
-				[DataMember(Name = "viewed")]
-				public bool Viewed { get; set; }
-			}
-		}
+		[DataMember(Name = "viewed")]
+		public bool Viewed { get; set; }
 	}
 
 	[DataContract]

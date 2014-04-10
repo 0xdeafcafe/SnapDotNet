@@ -48,11 +48,11 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		/// <summary>
 		/// Gets or sets a collection of recent story updates posted by friends.
 		/// </summary>
-		public ObservableCollection<Stories.FriendStory> RecentFriendStories
+		public ObservableCollection<FriendStory> RecentFriendStories
 		{
 			get { return _recentFriendStories; }
 			set { SetField(ref _recentFriendStories, value); }
 		}
-		private ObservableCollection<Stories.FriendStory> _recentFriendStories;
+		private ObservableCollection<FriendStory> _recentFriendStories;
     }
 }

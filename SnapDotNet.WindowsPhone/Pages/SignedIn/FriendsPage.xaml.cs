@@ -1,4 +1,7 @@
-﻿using SnapDotNet.Apps.Common;
+﻿using Windows.UI.Input;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Input;
+using SnapDotNet.Apps.Common;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -87,5 +90,33 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		}
 
 		#endregion
+
+		private void FriendPerson_OnHolding(object sender, HoldingRoutedEventArgs e)
+		{
+			if (e.HoldingState != HoldingState.Started) return;
+
+			var button = sender as Button;
+			if (button == null) return;
+			var flyout = new MenuFlyout();
+			if (flyout.Items == null) return;
+			flyout.Items.Add(new MenuFlyoutItem { Text = "Remove" });
+			flyout.Items.Add(new MenuFlyoutItem { Text = "Change Display Name", Command = ViewModel.ChangeDisplayNameCommand, CommandParameter = button.DataContext });
+			flyout.Items.Add(new MenuFlyoutItem { Text = "Block" });
+			flyout.ShowAt((FrameworkElement) sender);
+		}
+
+		private void BlockedPerson_OnHolding(object sender, HoldingRoutedEventArgs e)
+		{
+			if (e.HoldingState != HoldingState.Started) return;
+
+			var button = sender as Button;
+			if (button == null) return;
+			var flyout = new MenuFlyout();
+			if (flyout.Items == null) return;
+			flyout.Items.Add(new MenuFlyoutItem { Text = "Remove" });
+			flyout.Items.Add(new MenuFlyoutItem { Text = "Change Display Name", Command = ViewModel.ChangeDisplayNameCommand, CommandParameter = button.DataContext });
+			flyout.Items.Add(new MenuFlyoutItem { Text = "Unblock" });
+			flyout.ShowAt((FrameworkElement)sender);
+		}
 	}
 }

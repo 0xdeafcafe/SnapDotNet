@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
 
 namespace SnapDotNet.Core.Snapchat.Models
@@ -69,6 +70,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 	/// </summary>
 	[DataContract]
 	public class Friend
+		: NotifyPropertyChangedBase
 	{
 		/// <summary>
 		/// Gets or sets whether this friend allows you to see custom stories.
@@ -80,7 +82,17 @@ namespace SnapDotNet.Core.Snapchat.Models
 		/// Gets or sets the name of this friend.
 		/// </summary>
 		[DataMember(Name = "name")]
-		public string Name { get; set; }
+		public string Name
+		{
+			get { return _name; }
+			set
+			{
+				SetField(ref _name, value);
+				NotifyPropertyChanged("FriendlyName");
+				NotifyPropertyChanged("DisplayName");
+			}
+		}
+		private string _name;
 
 		/// <summary>
 		/// Gets the friendly name
@@ -92,7 +104,17 @@ namespace SnapDotNet.Core.Snapchat.Models
 		/// Gets or sets the display name of this friend.
 		/// </summary>
 		[DataMember(Name = "display")]
-		public string DisplayName { get; set; }
+		public string DisplayName
+		{
+			get { return _displayName; }
+			set
+			{
+				SetField(ref _displayName, value);
+				NotifyPropertyChanged("FriendlyName");
+				NotifyPropertyChanged("Name");
+			}
+		}
+		private string _displayName;
 
 		/// <summary>
 		/// Gets or sets the state of the friend request sent to this person.

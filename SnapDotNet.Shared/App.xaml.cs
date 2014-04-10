@@ -58,6 +58,7 @@ namespace SnapDotNet.Apps
 		{
 			InitializeComponent();
 			Suspending += OnSuspending;
+			Resuming += OnResuming;
 		}
 
 		/// <summary>
@@ -133,6 +134,9 @@ namespace SnapDotNet.Apps
 			
 			// Register for Push Notifications
 			InitNotificationsAsync();
+
+			// Get Snapchat Updates
+			UpdateSnapchatData();
 			
 #if WINDOWS_PHONE_APP
 			// Hide StatusBar background for entire application
@@ -223,6 +227,30 @@ namespace SnapDotNet.Apps
 
 			// TODO: Save application state and stop any background activity
 			deferral.Complete();
+		}
+
+		private static void OnResuming(object sender, object o)
+		{
+			UpdateSnapchatData();
+		}
+
+		public static async void UpdateSnapchatData()
+		{
+			if (!SnapChatManager.IsAuthenticated()) return;
+
+#if WINDOWS_PHONE_APP
+			// Tell UI we're Updating
+			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Updating...";
+			await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+#endif
+
+			// Get Snapchat Updates
+			await SnapChatManager.UpdateAllAsync();
+
+#if WINDOWS_PHONE_APP
+			StatusBar.GetForCurrentView().ProgressIndicator.Text = String.Empty;
+			await StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
+#endif
 		}
 	}
 }
