@@ -12,6 +12,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 {
 	public class WebConnect
 	{
+		#region Post
+
 		/// <summary>
 		///     Posts data to the Snapchat API
 		/// </summary>
@@ -23,8 +25,49 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		/// <returns>T</returns>
-		public async Task<T> PostAsync<T>(string endpoint, Dictionary<string, string> postData,
+		public async Task<T> PostToGenericAsync<T>(string endpoint, Dictionary<string, string> postData,
+			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
+		{
+			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+
+			// Http Request Worked
+			var data = await response.Content.ReadAsStringAsync();
+			var deseralizedData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(data));
+			return deseralizedData;
+		}
+
+		/// <summary>
+		///     Posts data to the Snapchat API
+		/// </summary>
+		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="postData">Dictionary of data to post</param>
+		/// <param name="typeToken">
+		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
+		///     Authorized Requests)
+		/// </param>
+		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
+		/// <param name="headers">Optional Bonus Headers</param>
+		public async Task<byte[]> PostToByteArrayAsync(string endpoint, Dictionary<string, string> postData,
+			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
+		{
+			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+
+			// Http Request Worked
+			return await response.Content.ReadAsByteArrayAsync();
+		}
+
+		/// <summary>
+		///     Posts data to the Snapchat API
+		/// </summary>
+		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="postData">Dictionary of data to post</param>
+		/// <param name="typeToken">
+		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
+		///     Authorized Requests)
+		/// </param>
+		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
+		/// <param name="headers">Optional Bonus Headers</param>
+		private static async Task<HttpResponseMessage> PostAsync(string endpoint, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
 			var webClient = new HttpClient();
@@ -48,16 +91,17 @@ namespace SnapDotNet.Core.Snapchat.Api
 			switch (response.StatusCode)
 			{
 				case HttpStatusCode.OK:
-					// Http Request Worked
-					var data = await response.Content.ReadAsStringAsync();
-					var deseralizedData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(data));
-					return deseralizedData;
+					return response;
 
 				default:
 					// Well, fuck
 					throw new InvalidHttpResponseException(response.ReasonPhrase, response);
 			}
 		}
+
+		#endregion
+
+		#region Get
 
 		/// <summary>
 		///     Gets data from the Snapchat API
@@ -101,8 +145,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 		}
 
-
-
 		/// <summary>
 		///     Gets data from the Snapchat API
 		/// </summary>
@@ -131,6 +173,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 				return null;
 			}
 		}
+
+		#endregion
 
 		/// <summary>
 		///     Generates a Post Body Query String from a Dictionary of Post Data Entries

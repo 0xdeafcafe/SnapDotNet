@@ -55,7 +55,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var account =
 				await
-					_webConnect.PostAsync<Account>(LoginEndpointUrl, postData, Settings.StaticToken,
+					_webConnect.PostToGenericAsync<Account>(LoginEndpointUrl, postData, Settings.StaticToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (account == null || !account.Logged)
@@ -100,7 +100,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostAsync<Response>(LogoutEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<Response>(LogoutEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (response == null)
@@ -137,7 +137,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var account =
 				await
-					_webConnect.PostAsync<Account>(UpdatesEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<Account>(UpdatesEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (account == null || !account.Logged)
@@ -198,7 +198,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var data =
 				await
-					_webConnect.PostAsync<byte[]>(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			// To-do: fix this
@@ -261,7 +261,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var stories =
 				await
-					_webConnect.PostAsync<Stories>(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<Stories>(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			_snapchatManager.UpdateStories(stories);
@@ -299,7 +299,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -332,7 +332,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -370,7 +370,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var publicActivities =
 				await
-					_webConnect.PostAsync<ObservableDictionary<string, PublicActivity>>(BestsEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<ObservableDictionary<string, PublicActivity>>(BestsEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			_snapchatManager.UpdatePublicActivities(publicActivities);
