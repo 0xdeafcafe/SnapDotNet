@@ -209,7 +209,7 @@ namespace SnapDotNet.Apps
 			{
 				if (exception.HResult == 0x803E0103) // register request is already in progress
 					return;
-				throw;
+				//throw;
 			}
 #endif
 		}

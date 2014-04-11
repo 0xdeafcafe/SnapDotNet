@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using SnapDotNet.Core.Snapchat.Models;
+using System.Windows.Input;
+using SnapDotNet.Apps.Common;
+using SnapDotNet.Apps.Pages;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace SnapDotNet.Apps.ViewModels.SignedIn
 {
@@ -12,6 +16,28 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		public MainViewModel()
 		{
 			RecentSnaps = new ObservableCollection<Snap>();
+
+			#region Commands
+
+			SignOutCommand = new RelayCommand(async () =>
+			{
+				try
+				{
+					await Manager.Endpoints.LogoutAsync();
+				}
+				catch (InvalidHttpResponseException)
+				{
+					// o well
+				}
+				catch (InvalidCredentialsException)
+				{
+					// o well too
+				}
+
+				App.CurrentFrame.Navigate(typeof(StartPage));
+			});
+
+			#endregion
 
 #if DEBUG
 			var names = new[]{
@@ -54,5 +80,15 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			set { SetField(ref _recentFriendStories, value); }
 		}
 		private ObservableCollection<FriendStory> _recentFriendStories;
+
+		/// <summary>
+		/// Gets the command for signing out.
+		/// </summary>
+		public ICommand SignOutCommand
+		{
+			get { return _signOutCommand; }
+			private set { SetField(ref _signOutCommand, value); }
+		}
+		private ICommand _signOutCommand;
     }
 }
