@@ -9,7 +9,13 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
 	<Grid>
-		<Image x:Name="ImageReview" />
+		<Grid x:Name="ImageGrid">
+			<Image x:Name="ImageReview" />
+		</Grid>
+	
+		<Grid x:Name="VideoGrid">
+			<MediaElement x:Name="VideoReview" />
+		</Grid>
 	</Grid>
 
 	<Page.BottomAppBar>

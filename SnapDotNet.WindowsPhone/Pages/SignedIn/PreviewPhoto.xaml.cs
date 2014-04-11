@@ -39,13 +39,19 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		/// This parameter is typically used to configure the page.</param>
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			var stream = e.Parameter as InMemoryRandomAccessStream;
+			dynamic d = e.Parameter;
+			InMemoryRandomAccessStream stream = d.Stream;
+			bool isPhoto = d.IsPhoto;
+
 			Debug.WriteLine("Navigated to PhotoPreview, caught stream of size {0}", stream.Size);
 
-			var bmpimg = new BitmapImage();
-			bmpimg.ImageFailed += bmpimg_ImageFailed;
-			bmpimg.SetSource(stream);
-			ImageReview.Source = bmpimg;
+			//if IsPhoto = x put stream into and show relevant control, etc
+			// <-implement->
+
+			//var bmpimg = new BitmapImage();
+			//bmpimg.ImageFailed += bmpimg_ImageFailed;
+			//bmpimg.SetSource(stream);
+			//ImageReview.Source = bmpimg;
 		}
 
 		void bmpimg_ImageFailed(object sender, ExceptionRoutedEventArgs e)
