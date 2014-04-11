@@ -15,7 +15,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		Delivered,
 		Opened,
 		Screenshotted,
-		Downloading,
+		Downloading = 0xDEAD,
 	}
 
 	/// <summary>

@@ -16,6 +16,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string LoginEndpointUrl =			"login";
 		private const string LogoutEndpointUrl =		"logout";
 		private const string StoriesEndpointUrl =		"stories";
+		private const string SnapBlobEndpointUrl =		"blob";
 		private const string UpdatesEndpointUrl =		"updates";
 
 		/// <summary>
@@ -151,6 +152,68 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public Account GetUpdates()
 		{
 			return GetUpdatesAsync().Result;
+		}
+
+		#endregion
+
+		#region Snap
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<byte[]> GetSnapBlobAsync(Snap snap)
+		{
+			return await GetSnapBlobAsync(snap.Id);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public byte[] GetSnapBlob(Snap snap)
+		{
+			return GetSnapBlobAsync(snap).Result;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<byte[]> GetSnapBlobAsync(string snapId)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"id", snapId}
+			};
+
+			var data =
+				await
+					_webConnect.PostBytes(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			// To-do: fix this
+			if (Blob.ValidateMediaBlob(data))
+				return data;
+
+			var decryptedBlob = Blob.DecryptBlob(data);
+			if (Blob.ValidateMediaBlob(decryptedBlob))
+				return decryptedBlob;
+
+			return data;
+			//throw new InvalidBlobDataException();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public byte[] GetSnapBlob(string snapId)
+		{
+			return GetSnapBlobAsync(snapId).Result;
 		}
 
 		#endregion
