@@ -133,6 +133,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			{
 				Debug.WriteLine("Capping Photo: OK, stream size " + stream.Size);
 			}
+			App.CurrentFrame.Navigate(typeof(PreviewPhoto), stream);
 		}
 
 		private void ButtonPhoto_OnClick(object sender, RoutedEventArgs e)
@@ -166,8 +167,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				await _mediaCapture.StopRecordAsync();
 				Debug.WriteLine("Stopping Video: OK, stream size " + stream.Size);
 				ButtonCamera.IsEnabled = true;
+
+				App.CurrentFrame.Navigate(typeof(PreviewVideo), stream);
 			}
-			
 		}
 		private void ButtonMessages_OnClick(object sender, RoutedEventArgs e)
 		{

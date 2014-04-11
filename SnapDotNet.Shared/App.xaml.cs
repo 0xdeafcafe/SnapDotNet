@@ -240,9 +240,11 @@ namespace SnapDotNet.Apps
 			if (!SnapChatManager.IsAuthenticated()) return;
 
 			// Get Snapchat Updates
-			await ProgressHelper.ShowStatusBar("Updating...");
-			await SnapChatManager.UpdateAllAsync();
-			await ProgressHelper.HideStatusBar();
+			//await ProgressHelper.ShowStatusBar("Updating...");
+			//await SnapChatManager.UpdateAllAsync();
+			//await ProgressHelper.HideStatusBar();
+
+			//todo Shit's broken yo'
 		}
 	}
 }
