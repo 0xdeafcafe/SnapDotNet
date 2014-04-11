@@ -1,4 +1,5 @@
-﻿using SnapDotNet.Core.Miscellaneous.Crypto;
+﻿using System;
+using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Snapchat.Api;
 
 namespace SnapDotNet.Core.Snapchat.Helpers
@@ -29,7 +30,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		{
 			try
 			{
-				data = Aes.DecryptData(data, Settings.BlobEncryptionKey);
+				data = Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
 				return ValidateMediaBlob(data) ? data : null;
 			}
 			catch
