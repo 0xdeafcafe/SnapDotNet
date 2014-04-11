@@ -90,6 +90,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public async Task<Response> LogoutAsync()
 		{
+			await _snapchatManager.DeleteAsync();
+
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{

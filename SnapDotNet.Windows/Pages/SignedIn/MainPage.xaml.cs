@@ -91,8 +91,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			args.Request.ApplicationCommands.Add(new SettingsCommand("sign_out", "Sign out", delegate
 			{
-				// TODO: Sign out
-				App.CurrentFrame.Navigate(typeof(StartPage));
+				(DataContext as MainViewModel).SignOutCommand.Execute(null);
 			}));
 
 			args.Request.ApplicationCommands.Add(new SettingsCommand("privacy_policy", "Privacy policy", delegate

@@ -9,7 +9,7 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 	{
 		public static async void WriteFileAsync(string fileName, string content)
 		{
-			var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+			var file = await ApplicationData.Current.RoamingFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
 			using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
 				await writer.WriteAsync(content);
 		}
@@ -19,13 +19,20 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
+				var file = await ApplicationData.Current.RoamingFolder.GetFileAsync(fileName);
 				return file == null ? null : await FileIO.ReadTextAsync(file);
 			}
 			catch (Exception)
 			{
 				return null;
 			}
+		}
+
+		public static async Task DeleteFileAsync(string filename)
+		{
+			var file = await ApplicationData.Current.RoamingFolder.GetFileAsync(filename);
+			if (file != null)
+				await file.DeleteAsync();
 		}
 
 		public static void WriteSetting(string containerName, string name, string value)
@@ -50,6 +57,16 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 				return (string) container.Values[name];
 			
 			return null;
+		}
+
+		public static void DeleteSetting(string containerName, string name)
+		{
+			if (ApplicationData.Current.RoamingSettings.Containers.ContainsKey(containerName))
+			{
+				var container = ApplicationData.Current.RoamingSettings.Containers[containerName];
+				if (container.Values.ContainsKey(name))
+					container.DeleteContainer(name);
+			}
 		}
 	}
 }
