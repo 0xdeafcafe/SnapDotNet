@@ -92,8 +92,11 @@
     <Compile Include="Pages\SignedIn\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SignedIn\PreviewPage.xaml.cs">
-      <DependentUpon>PreviewPage.xaml</DependentUpon>
+    <Compile Include="Pages\SignedIn\PreviewVideo.xaml.cs">
+      <DependentUpon>PreviewVideo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SignedIn\PreviewPhoto.xaml.cs">
+      <DependentUpon>PreviewPhoto.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
@@ -142,7 +145,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SignedIn\PreviewPage.xaml">
+    <Page Include="Pages\SignedIn\PreviewVideo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SignedIn\PreviewPhoto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
