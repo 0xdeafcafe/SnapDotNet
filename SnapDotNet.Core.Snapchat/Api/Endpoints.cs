@@ -14,6 +14,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		
 		private const string FriendEndpointUrl =		"friend";
 		private const string LoginEndpointUrl =			"login";
+		private const string LogoutEndpointUrl =		"logout";
 		private const string StoriesEndpointUrl =		"stories";
 		private const string UpdatesEndpointUrl =		"updates";
 
@@ -70,6 +71,44 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public Account Authenticate(string username, string password)
 		{
 			return AuthenticateAsync(username, password).Result;
+		}
+
+		#endregion
+
+		#region Logout
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<Response> LogoutAsync()
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"json", "{}"}
+			};
+
+			var response =
+				await
+					_webConnect.Post<Response>(LogoutEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (response == null)
+				throw new InvalidCredentialsException();
+
+			return response;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Response Logout()
+		{
+			return LogoutAsync().Result;
 		}
 
 		#endregion
