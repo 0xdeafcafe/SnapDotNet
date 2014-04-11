@@ -33,7 +33,13 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public ObservableCollection<string> BestFriends { get; set; }
 
 		[DataMember(Name = "is_vip")]
-		public bool IsVip { get; set; }
+		public bool IsVip
+		{
+			get { return _isVip; }
+			set { SetField(ref _isVip, value); }
+		}
+
+		private bool _isVip;
 
 		[DataMember(Name = "score")]
 		public int Score { get; set; }
