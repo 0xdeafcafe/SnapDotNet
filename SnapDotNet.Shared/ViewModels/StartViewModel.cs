@@ -236,21 +236,21 @@ namespace SnapDotNet.Apps.ViewModels
 				var dialog =
 					new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
 						"Invalid Username/Password");
-				var showDialogTask = dialog.ShowAsync();
+				dialog.ShowAsync();
 			}
 			catch (InvalidHttpResponseException exception)
 			{
 				var dialog =
 					new MessageDialog(String.Format("Unable to connect to snapchat. The server responded: \n {0}.", exception.Message),
 						"Unable to connect to Snapchat");
-				var showDialogTask = dialog.ShowAsync();
+				dialog.ShowAsync();
 			}
 			finally
 			{
 				// Tell UI we're not Signing In no mo'
 #if WINDOWS_PHONE_APP
 				StatusBar.GetForCurrentView().ProgressIndicator.Text = String.Empty;
-				var hideProgressTask = StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
+				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 #endif
 				ProgressModalVisibility = Visibility.Collapsed;
 			}

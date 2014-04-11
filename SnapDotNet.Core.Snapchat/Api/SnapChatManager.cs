@@ -162,6 +162,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			await IsolatedStorage.DeleteFileAsync(AccountDataFileName);
 			await IsolatedStorage.DeleteFileAsync(StoriesDataFileName);
+			await IsolatedStorage.DeleteFileAsync(PublicActivityDataFileName);
 			IsolatedStorage.DeleteSetting(RoamingSnapchatDataContainer, "Username");
 			IsolatedStorage.DeleteSetting(RoamingSnapchatDataContainer, "AuthToken");
 		}
