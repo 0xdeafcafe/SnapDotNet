@@ -33,7 +33,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 				data = Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
 				return ValidateMediaBlob(data) ? data : null;
 			}
-			catch
+			catch (Exception ex)
 			{
 				return null;
 			}
