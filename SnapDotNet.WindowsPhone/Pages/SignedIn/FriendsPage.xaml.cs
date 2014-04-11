@@ -74,5 +74,16 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			// TODO: Refresh CollectionViewSource's after these commands have been executed... Not sure how though. Matt?
 		}
+
+		private void FriendPerson_OnClick(object sender, RoutedEventArgs e)
+		{
+			var button = sender as Button;
+			if (button == null) return;
+
+			var friend = button.DataContext as Friend;
+			if (friend == null) return;
+
+			ViewModel.GoToFriendCommand.Execute(friend);
+		}
 	}
 }

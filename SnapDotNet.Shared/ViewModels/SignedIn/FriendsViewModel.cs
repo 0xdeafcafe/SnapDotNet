@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Windows.Input;
+using Windows.System;
 using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using SnapDotNet.Apps.Common;
-using SnapDotNet.Apps.Dialogs;
 using SnapDotNet.Apps.Helpers;
+using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Models;
+#if WINDOWS_PHONE_APP
+using SnapDotNet.Apps.Dialogs;
+using Windows.UI.Xaml.Controls;
+#endif
 
 namespace SnapDotNet.Apps.ViewModels.SignedIn
 {
@@ -20,6 +24,8 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			BlockFriendCommand = new RelayCommand<Friend>(BlockFriend);
 			UnBlockFriendCommand = new RelayCommand<Friend>(UnblockFriend);
 			RemoveFriendCommand = new RelayCommand<Friend>(RemoveFriend);
+			GetFriendsCommand = new RelayCommand(GetFriends);
+			GoToFriendCommand = new RelayCommand<Friend>(GoToFriend);
 
 			// Set up Collection View Sources
 			FriendsViewSource = friends;
@@ -75,6 +81,20 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			set { SetField(ref _removeFriendCommand, value); }
 		}
 		private ICommand _removeFriendCommand;
+
+		public ICommand GetFriendsCommand
+		{
+			get { return _getFriendsCommand; }
+			set { SetField(ref _getFriendsCommand, value); }
+		}
+		private ICommand _getFriendsCommand;
+
+		public ICommand GoToFriendCommand
+		{
+			get { return _goToFriendCommand; }
+			set { SetField(ref _goToFriendCommand, value); }
+		}
+		private ICommand _goToFriendCommand;
 
 		private static async void ChangeDisplayName(Friend friend)
 		{
@@ -146,6 +166,19 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			friend.NotifyPropertyChanged("FriendRequestState");
 			await ProgressHelper.HideStatusBar();
 			App.UpdateSnapchatData();
+		}
+
+		private static async void GetFriends()
+		{
+			if (App.SnapChatManager.Account.CanViewMatureContent)
+				await Launcher.LaunchUriAsync(new Uri("http://www.reddit.com/r/DirtySnapchat"));
+			else
+				await Launcher.LaunchUriAsync(new Uri("http://www.reddit.com/r/Snapchat"));
+		}
+
+		private static void GoToFriend(Friend friend)
+		{
+			App.CurrentFrame.Navigate(typeof (FriendPage), friend);
 		}
 	}
 }

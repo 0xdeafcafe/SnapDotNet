@@ -2,7 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using SnapDotNet.Core.Snapchat.Converters.Json;
+using SnapDotNet.Core.Miscellaneous.Converters.Json;
+using UnixDateTimeConverter = SnapDotNet.Core.Snapchat.Converters.Json.UnixDateTimeConverter;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
@@ -153,8 +154,8 @@ namespace SnapDotNet.Core.Snapchat.Models
 
 		// Needs to be some sort of timespan
 		[DataMember(Name = "time_left")]
-		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime TimeLeft { get; set; }
+		[JsonConverter(typeof(MillisecondTimeSpanConverter))]
+		public TimeSpan TimeLeft { get; set; }
 
 		[DataMember(Name = "media_url")]
 		public string MediaUrl { get; set; }

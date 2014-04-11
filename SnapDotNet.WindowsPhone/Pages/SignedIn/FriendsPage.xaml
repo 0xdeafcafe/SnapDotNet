@@ -8,6 +8,7 @@
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
 	xmlns:converters="using:SnapDotNet.Apps.Converters"
+	xmlns:controls="using:WinRTXamlToolkit.Controls"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
@@ -38,26 +39,64 @@
 														Filter="Pending" />
 		<converters:FriendsListGroupByAlphabetConverter x:Name="IValueConverterBlockedFriendsListGroupByAlphabet" 
 														Filter="Blocked" />
-		<converters:DisplayFriendsOtherNameConverter x:Name="IValueConverterDisplayFriendsOtherName" />
 
+		<converters:FriendCountToVisibilityConverter x:Name="IValueConverterAcceptedFriendsCountToVisibility"
+													 Filter="Accepted" />
+		<converters:FriendCountToVisibilityConverter x:Name="IValueConverterPendingFriendsCountToVisibility"
+													 Filter="Pending" />
+		<converters:FriendCountToVisibilityConverter x:Name="IValueConverterBlockedFriendsCountToVisibility"
+													 Filter="Blocked" />
+		
 		<CollectionViewSource x:Name="FriendsViewSource" 
 							  Source="{Binding Path=Account.Friends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterAcceptedFriendsListGroupByAlphabet}}" 
 							  IsSourceGrouped="True" />
-
 		<CollectionViewSource x:Name="PendingFriendsViewSource" 
 							  Source="{Binding Path=Account.Friends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterPendingFriendsListGroupByAlphabet}}" 
 							  IsSourceGrouped="True" />
-
 		<CollectionViewSource x:Name="BlockedFriendsViewSource" 
 							  Source="{Binding Path=Account.Friends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterBlockedFriendsListGroupByAlphabet}}" 
 							  IsSourceGrouped="True" />
+		
+		<DataTemplate x:Key="FriendDataTemplate">
+			<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
+					IsHitTestVisible="True" Holding="FriendPerson_OnHolding" HorizontalAlignment="Stretch"
+					Click="FriendPerson_OnClick"
+					Command="{Binding GoToFriendCommand}" CommandParameter="{Binding}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+
+					<controls:PieSlice Radius="28" StartAngle="0" EndAngle="{Binding Converter={StaticResource IValueConverterStoryExpireToAngle}}" 
+									   Margin="0,0,8,0" StrokeThickness="0" RenderTransformOrigin="0.5,0.5"
+									   Visibility="{Binding Converter={StaticResource IValueConverterFriendHasStoryToVisibility}}">
+						<controls:PieSlice.RenderTransform>
+							<CompositeTransform ScaleX="-1"/>
+						</controls:PieSlice.RenderTransform>
+						<controls:PieSlice.Fill>
+							<ImageBrush Stretch="UniformToFill" 
+										ImageSource="{Binding Converter={StaticResource IValueConverterFriendToStoryThumbnail}}">
+							</ImageBrush>
+						</controls:PieSlice.Fill>
+					</controls:PieSlice>
+
+					<StackPanel Grid.Column="1">
+						<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
+						<StackPanel Orientation="Horizontal">
+							<TextBlock FontSize="16" Foreground="{StaticResource SecondaryFontColourBrush}" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+			</Button>
+		</DataTemplate>
 	</Page.Resources>
 	<interactivity:Interaction.Behaviors>
 		<core:EventTriggerBehavior EventName="Loaded">
 			<media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbienceStoryboard}"/>
 		</core:EventTriggerBehavior>
 	</interactivity:Interaction.Behaviors>
-	
+
 	<Grid>
 		<!-- Backgrounds -->
 		<Grid>
@@ -88,131 +127,104 @@
 			<Hub Header="social">
 				<HubSection Header="FRIENDS">
 					<DataTemplate>
-						<SemanticZoom>
-							<SemanticZoom.ZoomedInView>
-								<ListView ItemsSource="{Binding Source={StaticResource FriendsViewSource}}">
-									<ListView.ItemTemplate>
-										<DataTemplate>
-											<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
-													IsHitTestVisible="True" Holding="FriendPerson_OnHolding">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="55" />
-														<ColumnDefinition Width="*" />
-													</Grid.ColumnDefinitions>
-
-													<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
-
-													<StackPanel Grid.Column="1" Margin="8,0,0,0">
-														<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
-														<StackPanel Orientation="Horizontal">
-															<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
-														</StackPanel>
-													</StackPanel>
-												</Grid>
-											</Button>
-										</DataTemplate>
-									</ListView.ItemTemplate>
-									<ListView.GroupStyle>
-										<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
-									</ListView.GroupStyle>
-								</ListView>
-							</SemanticZoom.ZoomedInView>
-							<SemanticZoom.ZoomedOutView>
-								<GridView Background="#88000000" Padding="5,0" 
-										  ItemsSource="{Binding ElementName=FriendsViewSource, Path=View.CollectionGroups}"
-										  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
-								</GridView>
-							</SemanticZoom.ZoomedOutView>
-						</SemanticZoom>
+						<Grid>
+							<Button VerticalAlignment="Top" Margin="0,10" Command="{Binding Path=GetFriendsCommand}">
+								<Button.Template>
+									<ControlTemplate TargetType="Button">
+										<ContentPresenter />
+									</ControlTemplate>
+								</Button.Template>
+								<TextBlock x:Uid="NoAcceptedFriendsMessage" FontSize="24" Text="You have no friends.. Need a hand?" 
+										   FontFamily="Segoe WP" FontWeight="Light" Foreground="{StaticResource SecondaryFontColourBrush}" TextWrapping="WrapWholeWords"
+										   Visibility="{Binding Converter={StaticResource IValueConverterAcceptedFriendsCountToVisibility}}"/>
+							</Button>
+							<SemanticZoom>
+								<SemanticZoom.ZoomedInView>
+									<ListView ItemsSource="{Binding Source={StaticResource FriendsViewSource}}"
+											  ItemTemplate="{StaticResource FriendDataTemplate}">
+										<ListView.GroupStyle>
+											<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
+										</ListView.GroupStyle>
+									</ListView>
+								</SemanticZoom.ZoomedInView>
+								<SemanticZoom.ZoomedOutView>
+									<GridView Background="#88000000" Padding="5,0" 
+											  ItemsSource="{Binding ElementName=FriendsViewSource, Path=View.CollectionGroups}"
+											  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
+									</GridView>
+								</SemanticZoom.ZoomedOutView>
+							</SemanticZoom>
+						</Grid>
 					</DataTemplate>
 				</HubSection>
 				<HubSection Header="PENDING">
 					<DataTemplate>
-						<SemanticZoom>
-							<SemanticZoom.ZoomedInView>
-								<ListView ItemsSource="{Binding Source={StaticResource PendingFriendsViewSource}}">
-									<ListView.ItemTemplate>
-										<DataTemplate>
-											<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
-													IsHitTestVisible="True" Holding="FriendPerson_OnHolding">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="55" />
-														<ColumnDefinition Width="*" />
-													</Grid.ColumnDefinitions>
-
-													<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
-
-													<StackPanel Grid.Column="1" Margin="8,0,0,0">
-														<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
-														<StackPanel Orientation="Horizontal">
-															<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
-														</StackPanel>
-													</StackPanel>
-												</Grid>
-											</Button>
-										</DataTemplate>
-									</ListView.ItemTemplate>
-									<ListView.GroupStyle>
-										<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
-									</ListView.GroupStyle>
-								</ListView>
-							</SemanticZoom.ZoomedInView>
-							<SemanticZoom.ZoomedOutView>
-								<GridView Background="#88000000" Padding="5,0" 
-										  ItemsSource="{Binding ElementName=FriendsViewSource, Path=View.CollectionGroups}"
-										  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
-								</GridView>
-							</SemanticZoom.ZoomedOutView>
-						</SemanticZoom>
+						<Grid>
+							<Button VerticalAlignment="Top" Margin="0,10">
+								<Button.Template>
+									<ControlTemplate TargetType="Button">
+										<ContentPresenter />
+									</ControlTemplate>
+								</Button.Template>
+								<TextBlock x:Uid="NoPendingFriendsMessage" FontSize="24" Text="You have no pending friends.." 
+										   FontFamily="Segoe WP" FontWeight="Light" Foreground="{StaticResource SecondaryFontColourBrush}" TextWrapping="WrapWholeWords"
+										   Visibility="{Binding Converter={StaticResource IValueConverterPendingFriendsCountToVisibility}}"/>
+							</Button>
+							<SemanticZoom>
+								<SemanticZoom.ZoomedInView>
+									<ListView ItemsSource="{Binding Source={StaticResource PendingFriendsViewSource}}"
+												ItemTemplate="{StaticResource FriendDataTemplate}">
+										<ListView.GroupStyle>
+											<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
+										</ListView.GroupStyle>
+									</ListView>
+								</SemanticZoom.ZoomedInView>
+								<SemanticZoom.ZoomedOutView>
+									<GridView Background="#88000000" Padding="5,0" 
+												ItemsSource="{Binding ElementName=PendingFriendsViewSource, Path=View.CollectionGroups}"
+												ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
+									</GridView>
+								</SemanticZoom.ZoomedOutView>
+							</SemanticZoom>
+						</Grid>
 					</DataTemplate>
 				</HubSection>
 				<HubSection Header="BLOCKED">
 					<DataTemplate>
-						<SemanticZoom>
-							<SemanticZoom.ZoomedInView>
-								<ListView ItemsSource="{Binding Source={StaticResource BlockedFriendsViewSource}}" IsHoldingEnabled="True">
-									<ListView.ItemTemplate>
-										<DataTemplate>
-											<Button Style="{StaticResource WpCleanButtonStyle}" Margin="0,8" IsHoldingEnabled="True" 
-													IsHitTestVisible="True" Holding="FriendPerson_OnHolding">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="55" />
-														<ColumnDefinition Width="*" />
-													</Grid.ColumnDefinitions>
-
-													<Image Stretch="UniformToFill" Width="55" Height="55" Source="ms-appx:///Assets/Placeholders/story-placeholder.png" />
-
-													<StackPanel Grid.Column="1" Margin="8,0,0,0">
-														<TextBlock FontSize="21" Foreground="White" Text="{Binding Path=FriendlyName}" />
-														<StackPanel Orientation="Horizontal">
-															<TextBlock FontSize="16" Foreground="#FFDADADA" Text="{Binding Converter={StaticResource IValueConverterDisplayFriendsOtherName}}" />
-														</StackPanel>
-													</StackPanel>
-												</Grid>
-											</Button>
-										</DataTemplate>
-									</ListView.ItemTemplate>
-									<ListView.GroupStyle>
-										<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
-									</ListView.GroupStyle>
-								</ListView>
-							</SemanticZoom.ZoomedInView>
-							<SemanticZoom.ZoomedOutView>
-								<GridView Background="#88000000" Padding="5,0" 
-										  ItemsSource="{Binding ElementName=FriendsViewSource, Path=View.CollectionGroups}"
-										  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
-								</GridView>
-							</SemanticZoom.ZoomedOutView>
-						</SemanticZoom>
+						<Grid>
+							<Button VerticalAlignment="Top" Margin="0,10">
+								<Button.Template>
+									<ControlTemplate TargetType="Button">
+										<ContentPresenter />
+									</ControlTemplate>
+								</Button.Template>
+								<TextBlock x:Uid="NoBlockedFriendsMessage" FontSize="24" Text="You have no blocked friends.. Great job!" 
+										   FontFamily="Segoe WP" FontWeight="Light" Foreground="{StaticResource SecondaryFontColourBrush}" TextWrapping="WrapWholeWords"
+										   Visibility="{Binding Converter={StaticResource IValueConverterBlockedFriendsCountToVisibility}}"/>
+							</Button>
+							<SemanticZoom>
+								<SemanticZoom.ZoomedInView>
+									<ListView ItemsSource="{Binding Source={StaticResource BlockedFriendsViewSource}}" IsHoldingEnabled="True"
+											  ItemTemplate="{StaticResource FriendDataTemplate}">
+										<ListView.GroupStyle>
+											<GroupStyle HeaderTemplate="{StaticResource WpSemanticZoomGroupStyleHeaderTemplate}" />
+										</ListView.GroupStyle>
+									</ListView>
+								</SemanticZoom.ZoomedInView>
+								<SemanticZoom.ZoomedOutView>
+									<GridView Background="#88000000" Padding="5,0" 
+											  ItemsSource="{Binding ElementName=BlockedFriendsViewSource, Path=View.CollectionGroups}"
+											  ItemTemplate="{StaticResource WpSemanticZoomOutTemplate}">
+									</GridView>
+								</SemanticZoom.ZoomedOutView>
+							</SemanticZoom>
+						</Grid>
 					</DataTemplate>
 				</HubSection>
 			</Hub>
 		</Grid>
 	</Grid>
-	
+
 	<Page.BottomAppBar>
 		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
 			<CommandBar.SecondaryCommands>

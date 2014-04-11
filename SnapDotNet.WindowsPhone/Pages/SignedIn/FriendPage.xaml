@@ -1,0 +1,100 @@
+﻿<Page
+	x:Class="SnapDotNet.Apps.Pages.SignedIn.FriendPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
+	mc:Ignorable="d"
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+	<Page.Resources>
+		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
+				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:42" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:44" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage4">
+				<EasingDoubleKeyFrame KeyTime="0:0:14" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:16" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage3">
+				<EasingDoubleKeyFrame KeyTime="0:0:23" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:25" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage2">
+				<EasingDoubleKeyFrame KeyTime="0:0:32" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<DataTemplate x:Key="HeaderDataTemplate">
+			<Grid>
+				<StackPanel Margin="0,0,0,20">
+					<TextBlock Text="{Binding Path=SelectedFriend.FriendlyName, Converter={StaticResource IValueConverterStringToLowerCase}, FallbackValue='loading...'}" />
+					<TextBlock Text="{Binding Path=SelectedFriend, Converter={StaticResource IValueConverterDisplayFriendsOtherName}, FallbackValue='LOADING'}" 
+							   Foreground="{StaticResource SecondaryFontColourBrush}" FontSize="18" 
+							   FontFamily="Segoe WP" FontWeight="SemiBold" />
+				</StackPanel>
+			</Grid>
+		</DataTemplate>
+	</Page.Resources>
+	<interactivity:Interaction.Behaviors>
+		<core:EventTriggerBehavior EventName="Loaded">
+			<media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbienceStoryboard}"/>
+		</core:EventTriggerBehavior>
+	</interactivity:Interaction.Behaviors>
+
+	<Grid>
+		<!-- Backgrounds -->
+		<Grid>
+			<Image
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage2"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage3"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage4"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage5"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
+		</Grid>
+
+		<Grid Grid.Row="0" Background="#88686868">
+			<Grid.ChildrenTransitions>
+				<TransitionCollection>
+					<EntranceThemeTransition/>
+				</TransitionCollection>
+			</Grid.ChildrenTransitions>
+
+			<Hub HeaderTemplate="{StaticResource HeaderDataTemplate}">
+				<HubSection Header="INFO">
+					<DataTemplate>
+						
+					</DataTemplate>
+				</HubSection>
+				<HubSection Header="STORY">
+					<DataTemplate>
+
+					</DataTemplate>
+				</HubSection>
+			</Hub>
+		</Grid>
+	</Grid>
+
+	<Page.BottomAppBar>
+		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
+			<CommandBar.SecondaryCommands>
+				<AppBarButton Label="refresh" />
+				<AppBarButton Label="settings" />
+			</CommandBar.SecondaryCommands>
+		</CommandBar>
+	</Page.BottomAppBar>
+</Page>

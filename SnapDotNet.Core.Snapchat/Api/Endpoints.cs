@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Crypto;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
@@ -18,6 +23,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string StoriesEndpointUrl =		"stories";
 		private const string SnapBlobEndpointUrl =		"blob";
 		private const string UpdatesEndpointUrl =		"updates";
+		private const string BestsEndpointUrl =			"bests";
 
 		/// <summary>
 		/// 
@@ -49,7 +55,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var account =
 				await
-					_webConnect.Post<Account>(LoginEndpointUrl, postData, Settings.StaticToken,
+					_webConnect.PostAsync<Account>(LoginEndpointUrl, postData, Settings.StaticToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (account == null || !account.Logged)
@@ -94,7 +100,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.Post<Response>(LogoutEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostAsync<Response>(LogoutEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (response == null)
@@ -131,7 +137,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var account =
 				await
-					_webConnect.Post<Account>(UpdatesEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostAsync<Account>(UpdatesEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (account == null || !account.Logged)
@@ -192,7 +198,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var data =
 				await
-					_webConnect.PostBytes(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostAsync<byte[]>(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			// To-do: fix this
@@ -204,7 +210,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 				return decryptedBlob;
 
 			return data;
-			//throw new InvalidBlobDataException();
 		}
 
 		/// <summary>
@@ -214,6 +219,27 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public byte[] GetSnapBlob(string snapId)
 		{
 			return GetSnapBlobAsync(snapId).Result;
+		}
+
+		#endregion
+
+		#region Blob
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="blobPath"></param>
+		/// <param name="key"></param>
+		/// <param name="iv"></param>
+		/// <param name="zipped"></param>
+		/// <returns></returns>
+		public byte[] GetStoryBlob(Uri blobPath, string key, string iv, bool zipped = false)
+		{
+			var data = _webConnect.GetBytes(blobPath);
+			if (data == null) return null;
+
+			var decryptedData = Aes.DecryptDataWithIv(data, Convert.FromBase64String(key), Convert.FromBase64String(iv));
+			return decryptedData;
 		}
 
 		#endregion
@@ -235,7 +261,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var stories =
 				await
-					_webConnect.Post<Stories>(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostAsync<Stories>(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			_snapchatManager.UpdateStories(stories);
@@ -273,7 +299,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -306,7 +332,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.Post<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -319,6 +345,38 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public Response ChangeFriendDisplayName(string friendUsername, string newDisplayName)
 		{
 			return ChangeFriendDisplayNameAsync(friendUsername, newDisplayName).Result;
+		}
+
+		#endregion
+
+		#region Public Activity
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<ObservableDictionary<string, PublicActivity>> GetPublicActivityAsync(string[] requestedUsernames = null)
+		{
+			if (requestedUsernames == null)
+				requestedUsernames = _snapchatManager.Account.Friends.Select(friend => friend.Name).ToArray();
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"friend_usernames", JsonConvert.SerializeObject(requestedUsernames)},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			var publicActivities =
+				await
+					_webConnect.PostAsync<ObservableDictionary<string, PublicActivity>>(BestsEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			_snapchatManager.UpdatePublicActivities(publicActivities);
+			_snapchatManager.Save();
+
+			return publicActivities;
 		}
 
 		#endregion

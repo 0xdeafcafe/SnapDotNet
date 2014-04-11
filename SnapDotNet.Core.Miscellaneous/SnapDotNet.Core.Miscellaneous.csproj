@@ -40,12 +40,18 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\Json\MillisecondTimeSpanConverter.cs" />
     <Compile Include="Converters\Json\UnixDateTimeConverter.cs" />
     <Compile Include="Crypto\Aes.cs" />
     <Compile Include="Crypto\Sha.cs" />
+    <Compile Include="CustomTypes\ObservableDictionary.cs" />
+    <Compile Include="Extensions\ByteArrayExtensions.cs" />
+    <Compile Include="Helpers\Async\TaskCompletionNotifier.cs" />
     <Compile Include="Helpers\Storage\IsolatedStorage.cs" />
+    <Compile Include="Helpers\VariousHelpers.cs" />
     <Compile Include="Models\Atlas\Snap.cs" />
     <Compile Include="Models\Atlas\User.cs" />
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\GroupInfoList.cs" />
     <Compile Include="Models\NotifyPropertyChangedBase.cs" />
     <Compile Include="Models\Registrations.cs" />

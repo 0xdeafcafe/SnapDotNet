@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Models;
@@ -12,6 +14,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 	{
 		private const string AccountDataFileName = "accountData.json";
 		private const string StoriesDataFileName = "storiesData.json";
+		private const string PublicActivityDataFileName = "publicActivityData.json";
 		private const string RoamingSnapchatDataContainer = "SnapchatData";
 
 
@@ -35,6 +38,13 @@ namespace SnapDotNet.Core.Snapchat.Api
 			set { SetField(ref _account, value); }
 		}
 		private Account _account;
+
+		public ObservableDictionary<string, PublicActivity> PublicActivities
+		{
+			get { return _publicActivities; }
+			set { SetField(ref _publicActivities, value); }
+		}
+		private ObservableDictionary<string, PublicActivity> _publicActivities;
 
 		public Stories Stories
 		{
@@ -106,6 +116,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 			Stories = stories;
 		}
 
+		public void UpdatePublicActivities(ObservableDictionary<string, PublicActivity> publicActivities)
+		{
+			PublicActivities = publicActivities;
+		}
+
 		#endregion
 
 
@@ -127,11 +142,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public async void Save()
 		{
-			// Seralize Account model and save as json string in Isolated Storage
+			// Seralize the Account model and save as json string in Isolated Storage
 			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account)));
 
-			// Seralize Stories model and save as json string in Isolated Storage
-			IsolatedStorage.WriteFileAsync(StoriesDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account)));
+			// Seralize the Stories model and save as json string in Isolated Storage
+			IsolatedStorage.WriteFileAsync(StoriesDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Stories)));
+
+			// Seralize the PublicActivies model and save as json string in Isolated Storage
+			IsolatedStorage.WriteFileAsync(PublicActivityDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(PublicActivities)));
 
 			// Save AuthToken and Username to Roaming storage
 			IsolatedStorage.WriteSetting(RoamingSnapchatDataContainer, "Username", Username);
@@ -142,20 +160,50 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public void Load()
 		{
-			// Deseralize Account model from IsolatedStorage
+			// Deseralize the Account model from IsolatedStorage
 			var accountData = IsolatedStorage.ReadFileAsync(AccountDataFileName).Result;
-			if (accountData != null)
+			if (accountData != null && accountData != "null")
 			{
-				var accountDataParsed = JsonConvert.DeserializeObject<Account>(accountData);
-				UpdateAccount(accountDataParsed);
+				try
+				{
+					var accountDataParsed = JsonConvert.DeserializeObject<Account>(accountData);
+					UpdateAccount(accountDataParsed);
+				}
+				catch (Exception exception)
+				{
+					Debug.WriteLine(exception.ToString());
+				}
 			}
 
-			// Deseralize Stories model from IsolatedStorage
+			// Deseralize the Stories model from IsolatedStorage
 			var storiesData = IsolatedStorage.ReadFileAsync(StoriesDataFileName).Result;
-			if (storiesData != null)
+			if (storiesData != null && storiesData != "null")
 			{
-				var storiesDataParsed = JsonConvert.DeserializeObject<Stories>(storiesData);
-				UpdateStories(storiesDataParsed);
+				try 
+				{
+					var storiesDataParsed = JsonConvert.DeserializeObject<Stories>(storiesData);
+					UpdateStories(storiesDataParsed);
+				}
+				catch (Exception exception)
+				{
+					Debug.WriteLine(exception.ToString());
+				}
+			}
+
+			// Deseralize the PublicActivity model from IsolatedStorage
+			var publicActiviesData = IsolatedStorage.ReadFileAsync(PublicActivityDataFileName).Result;
+			if (publicActiviesData != null && publicActiviesData != "null")
+			{
+				try
+				{
+					var publicActiviesDataParsed =
+						JsonConvert.DeserializeObject<ObservableDictionary<string, PublicActivity>>(storiesData);
+					UpdatePublicActivities(publicActiviesDataParsed);
+				}
+				catch (Exception exception)
+				{
+					Debug.WriteLine(exception.ToString());
+				}
 			}
 
 			// Load AuthToken and Username from Roaming storage
@@ -167,6 +215,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			await Endpoints.GetUpdatesAsync();
 			await Endpoints.GetStoriesAsync();
+			await Endpoints.GetPublicActivityAsync();
 		}
 
 		#endregion
