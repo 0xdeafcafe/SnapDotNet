@@ -192,15 +192,18 @@ namespace SnapDotNet.Core.Snapchat.Api
 				foreach (var header in headers)
 					webClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
 
-			try
+			var response = await webClient.GetAsync(uri);
+
+			switch (response.StatusCode)
 			{
-				return
-					await
-						webClient.GetByteArrayAsync(uri);
-			}
-			catch (Exception)
-			{
-				return null;
+				case HttpStatusCode.OK:
+					return response.Content.Headers.ContentEncoding.Contains("gzip")
+						? Gzip.Decompress(await response.Content.ReadAsByteArrayAsync())
+						: await response.Content.ReadAsByteArrayAsync();
+
+				default:
+					// Well, fuck
+					throw new InvalidHttpResponseException(response.ReasonPhrase, response);
 			}
 		}
 
@@ -223,13 +226,18 @@ namespace SnapDotNet.Core.Snapchat.Api
 				foreach (var header in headers)
 					webClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
 
-			try
+			var response = webClient.GetAsync(uri).Result;
+			
+			switch (response.StatusCode)
 			{
-				return webClient.GetByteArrayAsync(uri).Result;
-			}
-			catch (Exception)
-			{
-				return null;
+				case HttpStatusCode.OK:
+					return response.Content.Headers.ContentEncoding.Contains("gzip")
+						? Gzip.Decompress(response.Content.ReadAsByteArrayAsync().Result)
+						: response.Content.ReadAsByteArrayAsync().Result;
+
+				default:
+					// Well, fuck
+					throw new InvalidHttpResponseException(response.ReasonPhrase, response);
 			}
 		}
 
