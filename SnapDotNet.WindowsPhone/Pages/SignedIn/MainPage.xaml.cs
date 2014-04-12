@@ -145,7 +145,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			CapturePhoto();
 		}
-		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e) //todo broken, final video stream is of size 0....
+		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e) // TODO: broken, final video stream is of size 0....
 		{
 			var stream = new InMemoryRandomAccessStream();
 			if (e.HoldingState == HoldingState.Started)
@@ -155,7 +155,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				_videoRecordStopwatch.Start();
 				_videoRecordTimer.Start();
 				
-				var videoProperties = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Auto); //todo do proper settings, mp4 will do for now
+				var videoProperties = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Auto); // TODO: do proper settings, mp4 will do for now
 
 				Debug.WriteLine("Capping Video");
 				await _mediaCapture.StartRecordToStreamAsync(videoProperties, stream);
