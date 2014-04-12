@@ -54,6 +54,7 @@
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\PublicActivity.cs" />
+    <Compile Include="Models\RegistrationResponse.cs" />
     <Compile Include="Models\Response.cs" />
     <Compile Include="Models\Snap.cs" />
     <Compile Include="Models\Stories.cs" />
