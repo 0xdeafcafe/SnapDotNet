@@ -9,17 +9,16 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 	{
 		public static async void WriteFileAsync(string fileName, string content)
 		{
-			var file = await ApplicationData.Current.RoamingFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+			var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
 			using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
 				await writer.WriteAsync(content);
 		}
-
 
 		public static async Task<string> ReadFileAsync(string fileName)
 		{
 			try
 			{
-				var file = await ApplicationData.Current.RoamingFolder.GetFileAsync(fileName);
+				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
 				return file == null ? null : await FileIO.ReadTextAsync(file);
 			}
 			catch (Exception)
@@ -30,10 +29,11 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 
 		public static async Task DeleteFileAsync(string filename)
 		{
-			var file = await ApplicationData.Current.RoamingFolder.GetFileAsync(filename);
+			var file = await ApplicationData.Current.LocalFolder.GetFileAsync(filename);
 			if (file != null)
 				await file.DeleteAsync();
 		}
+
 
 		public static void WriteSetting(string containerName, string name, string value)
 		{
@@ -61,12 +61,12 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 
 		public static void DeleteSetting(string containerName, string name)
 		{
-			if (ApplicationData.Current.RoamingSettings.Containers.ContainsKey(containerName))
-			{
-				var container = ApplicationData.Current.RoamingSettings.Containers[containerName];
-				if (container.Values.ContainsKey(name))
-					container.DeleteContainer(name);
-			}
+			if (!ApplicationData.Current.RoamingSettings.Containers.ContainsKey(containerName)) 
+				return;
+
+			var container = ApplicationData.Current.RoamingSettings.Containers[containerName];
+			if (container.Values.ContainsKey(name))
+				container.DeleteContainer(name);
 		}
 	}
 }

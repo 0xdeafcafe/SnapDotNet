@@ -164,9 +164,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 					_webConnect.PostToGenericAsync<Response>(LogoutEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			if (response == null)
-				throw new InvalidCredentialsException();
-
 			return response;
 		}
 

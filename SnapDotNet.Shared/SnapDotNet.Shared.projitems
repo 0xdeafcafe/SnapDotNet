@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DisplayFriendsOtherNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendCountToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendHasStoryToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryToThumbnailConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryExpireToAngleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendToStoryThumbnailConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\GreaterThanZeroToVisibilityConverter.cs" />

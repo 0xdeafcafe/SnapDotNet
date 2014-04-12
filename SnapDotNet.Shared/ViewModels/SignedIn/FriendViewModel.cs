@@ -1,4 +1,6 @@
-﻿using SnapDotNet.Core.Snapchat.Models;
+﻿using System;
+using System.Linq;
+using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Apps.ViewModels.SignedIn
 {
@@ -8,7 +10,13 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		public Friend SelectedFriend
 		{
 			get { return _selectedFriend; }
-			set { SetField(ref _selectedFriend, value); }
+			set
+			{
+				SetField(ref _selectedFriend, value);
+
+				NotifyPropertyChanged("SelectedActivity");
+				NotifyPropertyChanged("SelectedStory");
+			}
 		}
 		private Friend _selectedFriend;
 
@@ -16,9 +24,25 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		{
 			get
 			{
-				PublicActivity publicActivity;
-				App.SnapChatManager.PublicActivities.TryGetValue(SelectedFriend.Name, out publicActivity);
-				return publicActivity;
+				try
+				{
+					PublicActivity output;
+					App.SnapChatManager.PublicActivities.TryGetValue(SelectedFriend.Name, out output);
+					return output;
+				}
+				catch (Exception)
+				{
+					return null;
+				}
+			}
+		}
+
+		public FriendStory SelectedStory
+		{
+			get
+			{
+				var friendStory = App.SnapChatManager.Stories.FriendStories.FirstOrDefault(f => f.Username == SelectedFriend.Name);
+				return friendStory;
 			}
 		}
 	}

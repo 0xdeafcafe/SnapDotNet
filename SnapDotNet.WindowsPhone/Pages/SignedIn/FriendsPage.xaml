@@ -68,7 +68,7 @@
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
 
-					<controls:PieSlice Radius="28" StartAngle="0" EndAngle="{Binding Converter={StaticResource IValueConverterStoryExpireToAngle}}" 
+					<controls:PieSlice Radius="28" StartAngle="0" EndAngle="{Binding Converter={StaticResource IValueConverterFriendStoryExpireToAngle}}" 
 									   Margin="0,0,8,0" StrokeThickness="0" RenderTransformOrigin="0.5,0.5"
 									   Visibility="{Binding Converter={StaticResource IValueConverterFriendHasStoryToVisibility}}">
 						<controls:PieSlice.RenderTransform>
