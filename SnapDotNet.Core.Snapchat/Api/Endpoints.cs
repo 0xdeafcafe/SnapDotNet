@@ -291,8 +291,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			var data = _webConnect.GetBytes(blobPath);
 			if (data == null) return null;
+			var decompressedData = zipped ? Gzip.Decompress(data) : data;
 
-			var decryptedData = Aes.DecryptDataWithIv(data, Convert.FromBase64String(key), Convert.FromBase64String(iv));
+			var decryptedData = Aes.DecryptDataWithIv(decompressedData, Convert.FromBase64String(key),
+				Convert.FromBase64String(iv));
+
 			return decryptedData;
 		}
 
