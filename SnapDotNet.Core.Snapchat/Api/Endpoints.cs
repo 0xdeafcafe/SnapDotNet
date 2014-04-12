@@ -26,7 +26,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
 		private const string RegisterEndpointUrl =			"register";
-		private const string RegisterUsernameEndpointUrl =	"registeru";
+		private const string GetCaptchaEndpointUrl =		"get_captcha";
+		private const string SolveCaptchaEndpointUrl =		"solve_captcha";
+		private const string RegisterUsernameEndpointUrl =	"register_username";
 
 		/// <summary>
 		/// 
@@ -38,7 +40,17 @@ namespace SnapDotNet.Core.Snapchat.Api
 			_webConnect = new WebConnect();
 		}
 
-		#region Register
+		#region Registration
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<byte[]> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
+		{
+			var registration = await RegisterAsync(age, birthday, email, password);
+			return await GetCaptchaAsync(registration.Email, registration.AuthToken);
+		}
 
 		/// <summary>
 		/// 
@@ -90,6 +102,36 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public RegistrationResponse Register(int age, string birthday, string email, string password)
 		{
 			return RegisterAsync(age, birthday, email, password).Result;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<byte[]> GetCaptchaAsync(string email, string authToken)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", email},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			var response =
+				await
+					_webConnect.PostToByteArrayAsync(GetCaptchaEndpointUrl, postData, authToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return response;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public byte[] GetCaptcha(string email, string authToken)
+		{
+			return GetCaptchaAsync(email, authToken).Result;
 		}
 
 		#endregion
