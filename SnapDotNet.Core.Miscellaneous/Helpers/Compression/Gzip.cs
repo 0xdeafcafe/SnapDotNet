@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Text;
 
@@ -6,29 +7,41 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Compression
 {
 	public static class Gzip
 	{
-		public static byte[] Compress(string text, Encoding encoding = null)
+		public static byte[] Compress(byte[] decompressedData)
 		{
-			if (text == null) return null;
-			encoding = encoding ?? Encoding.UTF8;
-			var textBytes = encoding.GetBytes(text);
+			if (decompressedData == null) return null;
 			var textStream = new MemoryStream();
 			var zip = new GZipStream(textStream, CompressionMode.Compress);
-			zip.Write(textBytes, 0, textBytes.Length);
+			zip.Write(decompressedData, 0, decompressedData.Length);
 			return textStream.ToArray();
 		}
 
-		public static string Decompress(byte[] encrypedBytes, Encoding encoding = null)
+		public static byte[] CompressToString(string decompressedData, Encoding encoding = null)
 		{
-			if (encrypedBytes == null) return null;
 			encoding = encoding ?? Encoding.UTF8;
-			var inputStream = new MemoryStream(encrypedBytes);
+			var textBytes = encoding.GetBytes(decompressedData);
+			return Compress(textBytes);
+		}
+
+
+		public static byte[] Decompress(byte[] compressedData)
+		{
+			if (compressedData == null) return null;
+			var inputStream = new MemoryStream(compressedData);
 			var outputStream = new MemoryStream();
 			var zip = new GZipStream(inputStream, CompressionMode.Decompress);
 			var bytes = new byte[4096];
 			int n;
 			while ((n = zip.Read(bytes, 0, bytes.Length)) != 0)
 				outputStream.Write(bytes, 0, n);
-			return encoding.GetString(outputStream.ToArray(), 0, (int)outputStream.Length);
+			return outputStream.ToArray();
+		}
+
+		public static string DecompressToString(byte[] compressedData, Encoding encoding = null)
+		{
+			encoding = encoding ?? Encoding.UTF8;
+			var decompressedData = Decompress(compressedData);
+			return encoding.GetString(decompressedData, 0, decompressedData.Length);
 		}
 	}
 }

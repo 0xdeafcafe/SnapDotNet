@@ -76,7 +76,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			// Decompress the gzipped data and deserialize it as normal.
-			var jsonData = Gzip.Decompress(gzippedData);
+			var jsonData = Gzip.DecompressToString(gzippedData);
 			var deseralizedData =
 				await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RegistrationResponse>(jsonData));
 
