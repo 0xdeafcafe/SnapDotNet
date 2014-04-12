@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Imaging;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
@@ -46,10 +52,19 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<byte[]> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
+		public async Task<List<byte[]>> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
 		{
 			var registration = await RegisterAsync(age, birthday, email, password);
-			return await GetCaptchaAsync(registration.Email, registration.AuthToken);
+			return await GetCaptchaImagesAsync(registration.Email, registration.AuthToken);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public List<byte[]> RegisterAndGetCaptcha(int age, string birthday, string email, string password)
+		{
+			return RegisterAndGetCaptchaAsync(age, birthday, email, password).Result;
 		}
 
 		/// <summary>
@@ -108,7 +123,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<byte[]> GetCaptchaAsync(string email, string authToken)
+		public async Task<List<byte[]>> GetCaptchaImagesAsync(string email, string authToken)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
@@ -122,16 +137,19 @@ namespace SnapDotNet.Core.Snapchat.Api
 					_webConnect.PostToByteArrayAsync(GetCaptchaEndpointUrl, postData, authToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			return response;
+			var images = new List<BitmapImage>();
+			var files = await Zip.ExtractAllFilesAsync(response);
+
+			return files;
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public byte[] GetCaptcha(string email, string authToken)
+		public List<byte[]> GetCaptchaImages(string email, string authToken)
 		{
-			return GetCaptchaAsync(email, authToken).Result;
+			return GetCaptchaImagesAsync(email, authToken).Result;
 		}
 
 		#endregion
