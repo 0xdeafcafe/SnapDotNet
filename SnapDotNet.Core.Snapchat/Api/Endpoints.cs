@@ -287,7 +287,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="iv"></param>
 		/// <param name="zipped"></param>
 		/// <returns></returns>
-		public byte[] GetStoryBlob(Uri blobPath, string key, string iv, bool zipped = false)
+		public byte[] GetStoryBlob(Uri blobPath, string key, string iv, bool zipped)
 		{
 			var data = _webConnect.GetBytes(blobPath);
 			if (data == null) return null;
