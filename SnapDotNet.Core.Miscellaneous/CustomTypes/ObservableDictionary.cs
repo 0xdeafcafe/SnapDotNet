@@ -79,7 +79,7 @@ namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 		{
 			value = default(TValue);
 			var r = GetKvpByTheKey(key);
-			if (!Equals(r, default(ObservableKeyValuePair<TKey, TValue>)))
+			if (Equals(r, default(ObservableKeyValuePair<TKey, TValue>)))
 			{
 				return false;
 			}

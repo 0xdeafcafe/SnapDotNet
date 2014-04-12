@@ -38,7 +38,6 @@ namespace SnapDotNet.Core.Snapchat.Models
 			get { return _isVip; }
 			set { SetField(ref _isVip, value); }
 		}
-
 		private bool _isVip;
 
 		[DataMember(Name = "score")]

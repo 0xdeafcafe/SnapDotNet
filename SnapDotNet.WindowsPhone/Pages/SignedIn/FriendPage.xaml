@@ -7,6 +7,7 @@
 	xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
+	xmlns:controls="using:WinRTXamlToolkit.Controls"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
@@ -77,12 +78,107 @@
 			<Hub HeaderTemplate="{StaticResource HeaderDataTemplate}">
 				<HubSection Header="INFO">
 					<DataTemplate>
-						
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="110" />
+								<RowDefinition Height="*" />
+							</Grid.RowDefinitions>
+
+							<TextBlock Grid.Row="0">
+								<Run Text="snapchat score:" FontSize="20" />
+								<LineBreak />
+								<Run Text="{Binding Path=SelectedActivity.Score, FallbackValue='1,337'}" 
+									 Foreground="{StaticResource SystemColorControlAccentBrush}" 
+									 FontSize="45" FontFamily="Segoe WP Light"/>
+							</TextBlock>
+
+							<TextBlock Grid.Row="1">
+								<Run Text="best friends:" FontSize="20" />
+							</TextBlock>
+							<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+								<ItemsControl Margin="0,30,0,0" ItemsSource="{Binding Path=SelectedActivity.BestFriends}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<StackPanel Orientation="Horizontal" Margin="0,5">
+												<Path Width="25.337" Height="23.438" 
+													  Stretch="Fill" Fill="{StaticResource SystemColorControlAccentBrush}"
+													  Data="F1 M 18.2084,32.5903C 16.3611,25.7292 21.6389,20.4514 26.125,19.6597C 30.6111,18.8681 34.3056,22.5625 38,26.2569C 41.6945,22.5625 45.3889,18.8681 49.875,19.6597C 54.3611,20.4514 59.6389,25.7292 57.7916,32.5903C 55.9444,39.4514 46.9722,47.8958 38.0001,56.3402C 29.0278,47.8958 20.0556,39.4514 18.2084,32.5903 Z " UseLayoutRounding="False"/>
+												<TextBlock Margin="20,-8,0,0" VerticalAlignment="Center" 
+														   Foreground="{StaticResource SecondaryFontColourBrush}" 
+														   Text="{Binding FallbackValue='alexerax - top lad'}" 
+														   FontSize="20" FontFamily="Segoe WP" />
+											</StackPanel>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<VirtualizingStackPanel Orientation="Vertical" />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+								</ItemsControl>
+							</ScrollViewer>
+						</Grid>
 					</DataTemplate>
 				</HubSection>
-				<HubSection Header="STORY">
+				<HubSection Header="STORY" Visibility="{Binding Source=SelectedFriend, Converter={StaticResource IValueConverterFriendHasStoryToVisibility}}">
 					<DataTemplate>
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="130" />
+								<RowDefinition Height="*" />
+							</Grid.RowDefinitions>
 
+							<TextBlock Grid.Row="0">
+								<Run Text="full story:" FontSize="20" />
+							</TextBlock>
+							<controls:PieSlice Radius="40" Grid.Row="0"
+											   StartAngle="0" 
+											   VerticalAlignment="Top" HorizontalAlignment="Center"
+											   EndAngle="300" 
+											   Margin="0,34,0,0" StrokeThickness="0" RenderTransformOrigin="0.5,0.5"
+											   Visibility="Visible">
+								<controls:PieSlice.RenderTransform>
+									<CompositeTransform ScaleX="-1"/>
+								</controls:PieSlice.RenderTransform>
+								<controls:PieSlice.Fill>
+									<ImageBrush Stretch="UniformToFill" 
+										ImageSource="{Binding Path=SelectedFriend, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterFriendToStoryThumbnail}}">
+									</ImageBrush>
+								</controls:PieSlice.Fill>
+							</controls:PieSlice>
+
+							<TextBlock Grid.Row="1" Margin="0,0,0,14">
+								<Run Text="all stories:" FontSize="20"/>
+							</TextBlock>
+							<ScrollViewer Grid.Row="1" Margin="0,34,0,0" VerticalScrollBarVisibility="Auto">
+								<ItemsControl ItemsSource="{Binding Path=SelectedStory.Stories}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<controls:PieSlice Radius="38"
+												   StartAngle="0" 
+												   VerticalAlignment="Top" HorizontalAlignment="Left"
+												   EndAngle="300" 
+												   Margin="0,30,35,0" StrokeThickness="0" RenderTransformOrigin="0.5,0.5"
+												   Visibility="Visible">
+												<controls:PieSlice.RenderTransform>
+													<CompositeTransform ScaleX="-1"/>
+												</controls:PieSlice.RenderTransform>
+												<controls:PieSlice.Fill>
+													<ImageBrush Stretch="UniformToFill" 
+																	ImageSource="{Binding Path=Story, Converter={StaticResource IValueConverterStoryToThumbnail}}">
+													</ImageBrush>
+												</controls:PieSlice.Fill>
+											</controls:PieSlice>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<controls:WrapPanel />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+								</ItemsControl>
+							</ScrollViewer>
+						</Grid>
 					</DataTemplate>
 				</HubSection>
 			</Hub>

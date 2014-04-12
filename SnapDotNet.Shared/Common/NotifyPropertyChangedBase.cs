@@ -8,7 +8,7 @@ namespace SnapDotNet.Apps.Common
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+		protected void NotifyPropertyChanged(string propertyName = "")
 		{
 			if (PropertyChanged != null)
 				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));

@@ -5,7 +5,7 @@ using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Apps.Converters
 {
-    public class StoryExpireToAngleConverter : IValueConverter
+    public class FriendStoryExpireToAngleConverter : IValueConverter
     {
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{

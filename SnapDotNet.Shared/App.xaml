@@ -22,12 +22,16 @@
 					
 					<converters:BooleanToVisibilityConverter x:Name="IValueBooleanToVisibility" />
 					<converters:BooleanColourSelectorConverter x:Name="IValueConverterWpBooleanColourSelectorSemanticZoom" TrueBrush="#FFFFA500" FalseBrush="#FF1f1f1f" />
+					
 					<converters:FriendToStoryThumbnailConverter x:Name="IValueConverterFriendToStoryThumbnail" />
 					<converters:FriendHasStoryToVisibilityConverter x:Name="IValueConverterFriendHasStoryToVisibility" />
-					<converters:StoryExpireToAngleConverter x:Name="IValueConverterStoryExpireToAngle" />
+					<converters:FriendStoryExpireToAngleConverter x:Name="IValueConverterFriendStoryExpireToAngle" />
+					<converters:StoryToThumbnailConverter x:Name="IValueConverterStoryToThumbnail" />
+					
 					<converters:DisplayFriendsOtherNameConverter x:Name="IValueConverterDisplayFriendsOtherName" />
 					<converters:StringCaseConverter x:Name="IValueConverterStringToUpperCase" StringCase="Uppercase" />
 					<converters:StringCaseConverter x:Name="IValueConverterStringToLowerCase" StringCase="Lowercase" />
+					
 					
 					<Style x:Key="WpCleanButtonStyle" TargetType="Button">
 						<Setter Property="HorizontalContentAlignment" Value="Stretch" />
