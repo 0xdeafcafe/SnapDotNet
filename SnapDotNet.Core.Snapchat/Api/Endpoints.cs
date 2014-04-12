@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Imaging;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
@@ -26,7 +32,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
 		private const string RegisterEndpointUrl =			"register";
-		private const string RegisterUsernameEndpointUrl =	"registeru";
+		private const string GetCaptchaEndpointUrl =		"get_captcha";
+		private const string SolveCaptchaEndpointUrl =		"solve_captcha";
+		private const string RegisterUsernameEndpointUrl =	"register_username";
 
 		/// <summary>
 		/// 
@@ -38,7 +46,26 @@ namespace SnapDotNet.Core.Snapchat.Api
 			_webConnect = new WebConnect();
 		}
 
-		#region Register
+		#region Registration
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<List<byte[]>> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
+		{
+			var registration = await RegisterAsync(age, birthday, email, password);
+			return await GetCaptchaImagesAsync(registration.Email, registration.AuthToken);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public List<byte[]> RegisterAndGetCaptcha(int age, string birthday, string email, string password)
+		{
+			return RegisterAndGetCaptchaAsync(age, birthday, email, password).Result;
+		}
 
 		/// <summary>
 		/// 
@@ -90,6 +117,39 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public RegistrationResponse Register(int age, string birthday, string email, string password)
 		{
 			return RegisterAsync(age, birthday, email, password).Result;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<List<byte[]>> GetCaptchaImagesAsync(string email, string authToken)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", email},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			var response =
+				await
+					_webConnect.PostToByteArrayAsync(GetCaptchaEndpointUrl, postData, authToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			var images = new List<BitmapImage>();
+			var files = await Zip.ExtractAllFilesAsync(response);
+
+			return files;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public List<byte[]> GetCaptchaImages(string email, string authToken)
+		{
+			return GetCaptchaImagesAsync(email, authToken).Result;
 		}
 
 		#endregion
@@ -259,11 +319,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			var decryptedData = Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
-			if (Blob.ValidateMediaBlob(decryptedData))
-				return decryptedData;
+			if (Blob.ValidateMediaBlob(data))
+				return data;
 
-			return data;
+			return Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
 		}
 
 		/// <summary>

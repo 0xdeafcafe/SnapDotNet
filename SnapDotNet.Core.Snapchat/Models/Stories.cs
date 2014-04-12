@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Converters.Json;
-using UnixDateTimeConverter = SnapDotNet.Core.Snapchat.Converters.Json.UnixDateTimeConverter;
+using SnapDotNet.Core.Miscellaneous.Models;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
@@ -14,153 +14,342 @@ namespace SnapDotNet.Core.Snapchat.Models
 	public class Stories : Response
 	{
 		[DataMember(Name = "mature_content_text")]
-		public MatureContentWarning MatureContentText { get; set; }
+		public MatureContentWarning MatureContentText
+		{
+			get { return _matureContentText; }
+			set { SetField(ref _matureContentText, value); }
+		}
+		private MatureContentWarning _matureContentText;
 
 		[DataMember(Name = "my_stories")]
-		public ObservableCollection<MyStory> MyStories { get; set; }
+		public ObservableCollection<MyStory> MyStories
+		{
+			get { return _myStories; }
+			set { SetField(ref _myStories, value); }
+		}
+		private ObservableCollection<MyStory> _myStories;
 
 		[DataMember(Name = "friend_stories")]
-		public ObservableCollection<FriendStory> FriendStories { get; set; }
+		public ObservableCollection<FriendStory> FriendStories
+		{
+			get { return _friendStories; }
+			set { SetField(ref _friendStories, value); }
+		}
+		private ObservableCollection<FriendStory> _friendStories;
 
 		[DataContract]
-		public class MatureContentWarning
+		public class MatureContentWarning : NotifyPropertyChangedBase
 		{
 			[DataMember(Name = "title")]
-			public string Title { get; set; }
+			public string Title
+			{
+				get { return _title; }
+				set { SetField(ref _title, value); }
+			}
+			private string _title;
 
 			[DataMember(Name = "message")]
-			public string Message { get; set; }
+			public string Message
+			{
+				get { return _message; }
+				set { SetField(ref _message, value); }
+			}
+			private string _message;
 
 			[DataMember(Name = "yes_text")]
-			public string YesText { get; set; }
+			public string YesText
+			{
+				get { return _yesText; }
+				set { SetField(ref _yesText, value); }
+			}
+			private string _yesText;
 
 			[DataMember(Name = "no_text")]
-			public string NoText { get; set; }
+			public string NoText
+			{
+				get { return _noText; }
+				set { SetField(ref _noText, value); }
+			}
+			private string _noText;
 		}
 	}
 
 	[DataContract]
-	public class MyStory
+	public class MyStory : NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "story")]
-		public Story Story { get; set; }
+		public Story Story
+		{
+			get { return _story; }
+			set { SetField(ref _story, value); }
+		}
+		private Story _story;
 
 		[DataMember(Name = "story_notes")]
-		public ObservableCollection<StoryNote> StoryNotes { get; set; }
+		public ObservableCollection<StoryNote> StoryNotes
+		{
+			get { return _storyNotes; }
+			set { SetField(ref _storyNotes, value); }
+		}
+		private ObservableCollection<StoryNote> _storyNotes;
 
 		[DataMember(Name = "story_extras")]
-		public StoryExtraInfo StoryExtras { get; set; }
+		public StoryExtraInfo StoryExtras
+		{
+			get { return _storyExtras; }
+			set { SetField(ref _storyExtras, value); }
+		}
+		private StoryExtraInfo _storyExtras;
 	}
 
 	[DataContract]
-	public class StoryNote
+	public class StoryNote : NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "viewer")]
-		public string ViewerUsername { get; set; }
+		public string ViewerUsername
+		{
+			get { return _viewerUsername; }
+			set { SetField(ref _viewerUsername, value); }
+		}
+		private string _viewerUsername;
 
 		[DataMember(Name = "screenshotted")]
-		public bool Screenshotted { get; set; }
+		public bool Screenshotted
+		{
+			get { return _screenshotted; }
+			set { SetField(ref _screenshotted, value); }
+		}
+		private bool _screenshotted;
 
 		[DataMember(Name = "timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime Timestamp { get; set; }
+		public DateTime Timestamp
+		{
+			get { return _timestamp; }
+			set { SetField(ref _timestamp, value); }
+		}
+		private DateTime _timestamp;
 
 		[DataMember(Name = "storypointer")]
-		public StoryMediaPointer StoryPointer { get; set; }
+		public StoryMediaPointer StoryPointer
+		{
+			get { return _storyPointer; }
+			set { SetField(ref _storyPointer, value); }
+		}
+		private StoryMediaPointer _storyPointer;
 	}
 
 	[DataContract]
-	public class StoryMediaPointer
+	public class StoryMediaPointer : NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "mKey")]
-		public string MediaKey { get; set; }
+		public string MediaKey
+		{
+			get { return _mediaKey; }
+			set { SetField(ref _mediaKey, value); }
+		}
+		private string _mediaKey;
 
 		[DataMember(Name = "mField")]
-		public string MediaField { get; set; }
+		public string MediaField
+		{
+			get { return _mediaField; }
+			set { SetField(ref _mediaField, value); }
+		}
+		private string _mediaField;
 	}
 
 	[DataContract]
-	public class StoryExtraInfo
+	public class StoryExtraInfo : NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "view_count")]
-		public int ViewCount { get; set; }
+		public int ViewCount
+		{
+			get { return _viewCount; }
+			set { SetField(ref _viewCount, value); }
+		}
+		private int _viewCount;
 
 		[DataMember(Name = "screenshot_count")]
-		public int ScreenshotCount { get; set; }
+		public int ScreenshotCount
+		{
+			get { return _screenshotCount; }
+			set { SetField(ref _screenshotCount, value); }
+		}
+		private int _screenshotCount;
 	}
 
 	[DataContract]
-	public class FriendStory
+	public class FriendStory : NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "username")]
-		public string Username { get; set; }
+		public string Username
+		{
+			get { return _username; }
+			set { SetField(ref _username, value); }
+		}
+		private string _username;
 
 		[DataMember(Name = "stories")]
-		public ObservableCollection<ViewableStory> Stories { get; set; }
+		public ObservableCollection<ViewableStory> Stories
+		{
+			get { return _stories; }
+			set { SetField(ref _stories, value); }
+		}
+		private ObservableCollection<ViewableStory> _stories;
 
 		[DataMember(Name = "mature_content")]
-		public bool ContainsMatureContent { get; set; }
+		public bool ContainsMatureContent
+		{
+			get { return _containsMatureContent; }
+			set { SetField(ref _containsMatureContent, value); }
+		}
+		private bool _containsMatureContent;
 	}
 
 	[DataContract]
-	public class ViewableStory
+	public class ViewableStory : NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "story")]
-		public Story Story { get; set; }
+		public Story Story
+		{
+			get { return _story; }
+			set { SetField(ref _story, value); }
+		}
+		private Story _story;
 
 		[DataMember(Name = "viewed")]
-		public bool Viewed { get; set; }
+		public bool Viewed
+		{
+			get { return _viewed; }
+			set { SetField(ref _viewed, value); }
+		}
+		private bool _viewed;
 	}
 
 	[DataContract]
-	public class Story
+	public class Story : NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "id")]
-		public string Id { get; set; }
+		public string Id
+		{
+			get { return _id; }
+			set { SetField(ref _id, value); }
+		}
+		private string _id;
 
 		[DataMember(Name = "username")]
-		public string Username { get; set; }
+		public string Username
+		{
+			get { return _username; }
+			set { SetField(ref _username, value); }
+		}
+		private string _username;
 
 		[DataMember(Name = "mature_content")]
-		public bool ContainsMatureContent { get; set; }
+		public bool ContainsMatureContent
+		{
+			get { return _containsMatureContent; }
+			set { SetField(ref _containsMatureContent, value); }
+		}
+		private bool _containsMatureContent;
 
 		[DataMember(Name = "client_id")]
-		public string ClientId { get; set; }
+		public string ClientId
+		{
+			get { return _clientId; }
+			set { SetField(ref _clientId, value); }
+		}
+		private string _clientId;
 
 		[DataMember(Name = "timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime Timestamp { get; set; }
+		public DateTime Timestamp
+		{
+			get { return _timestamp; }
+			set { SetField(ref _timestamp, value); }
+		}
+		private DateTime _timestamp;
 
 		[DataMember(Name = "media_id")]
-		public string MediaId { get; set; }
+		public string MediaId
+		{
+			get { return _mediaId; }
+			set { SetField(ref _mediaId, value); }
+		}
+		private string _mediaId;
 
 		[DataMember(Name = "media_key")]
-		public string MediaKey { get; set; }
+		public string MediaKey
+		{
+			get { return _mediaKey; }
+			set { SetField(ref _mediaKey, value); }
+		}
+		private string _mediaKey;
 
 		[DataMember(Name = "media_iv")]
-		public string MediaIv { get; set; }
+		public string MediaIv
+		{
+			get { return _mediaIv; }
+			set { SetField(ref _mediaIv, value); }
+		}
+		private string _mediaIv;
 
 		[DataMember(Name = "thumbnail_iv")]
-		public string ThumbnailIv { get; set; }
+		public string ThumbnailIv
+		{
+			get { return _thumbnailIv; }
+			set { SetField(ref _thumbnailIv, value); }
+		}
+		private string _thumbnailIv;
 
 		[DataMember(Name = "media_type")]
-		public MediaType MediaType { get; set; }
+		public MediaType MediaType
+		{
+			get { return _mediaType; }
+			set { SetField(ref _mediaType, value); }
+		}
+		private MediaType _mediaType;
 
 		[DataMember(Name = "time")]
-		public float Time { get; set; }
+		public float Time
+		{
+			get { return _time; }
+			set { SetField(ref _time, value); }
+		}
+		private float _time;
 
 		[DataMember(Name = "zipped")]
-		public bool Zipped { get; set; }
+		public bool Zipped
+		{
+			get { return _zipped; }
+			set { SetField(ref _zipped, value); }
+		}
+		private bool _zipped;
 
-		// Needs to be some sort of timespan
 		[DataMember(Name = "time_left")]
 		[JsonConverter(typeof(MillisecondTimeSpanConverter))]
-		public TimeSpan TimeLeft { get; set; }
+		public TimeSpan TimeLeft
+		{
+			get { return _timeLeft; }
+			set { SetField(ref _timeLeft, value); }
+		}
+		private TimeSpan _timeLeft;
 
 		[DataMember(Name = "media_url")]
-		public string MediaUrl { get; set; }
+		public string MediaUrl
+		{
+			get { return _mediaUrl; }
+			set { SetField(ref _mediaUrl, value); }
+		}
+		private string _mediaUrl;
 
 		[DataMember(Name = "thumbnail_url")]
-		public string ThumbnailUrl { get; set; }
+		public string ThumbnailUrl
+		{
+			get { return _thumbnailUrl; }
+			set { SetField(ref _thumbnailUrl, value); }
+		}
+		private string _thumbnailUrl;
 	}
 }
