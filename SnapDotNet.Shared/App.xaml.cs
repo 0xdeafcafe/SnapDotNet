@@ -91,13 +91,13 @@ namespace SnapDotNet.Apps
 				// Create a Frame to act as the navigation context and navigate to the first page
 				rootFrame = new Frame
 				{
-					// TODO: change this value to a cache size that is appropriate for your application
+					// TODO: change this value to a cache size
 					CacheSize = 1
 				};
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{
-					// TODO: Load state from previously suspended application
+					// TODO: Load state from previously suspended instance
 				}
 
 				// Place the frame in the current Window
