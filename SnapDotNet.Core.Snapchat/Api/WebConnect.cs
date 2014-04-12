@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Helpers.Compression;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 
@@ -30,8 +31,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
 
+			// Do GZip
+			string data;
+			if (response.Content.Headers.ContentEncoding.Contains("gzip"))
+				data = Gzip.DecompressToString(await response.Content.ReadAsByteArrayAsync());
+			else
+				data = await response.Content.ReadAsStringAsync();
+
 			// Http Request Worked
-			var data = await response.Content.ReadAsStringAsync();
 			var deseralizedData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(data));
 			return deseralizedData;
 		}
@@ -52,8 +59,15 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
 
+			// Do GZip
+			string data;
+			if (response.Content.Headers.ContentEncoding.Contains("gzip"))
+				data = Gzip.DecompressToString(await response.Content.ReadAsByteArrayAsync());
+			else
+				data = await response.Content.ReadAsStringAsync();
+
 			// Http Request Worked
-			return await response.Content.ReadAsStringAsync();
+			return data;
 		}
 
 		/// <summary>
@@ -89,8 +103,16 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
 
+
+			// Do GZip
+			byte[] data;
+			if (response.Content.Headers.ContentEncoding.Contains("gzip"))
+				data = Gzip.Decompress(await response.Content.ReadAsByteArrayAsync());
+			else
+				data = await response.Content.ReadAsByteArrayAsync();
+
 			// Http Request Worked
-			return await response.Content.ReadAsByteArrayAsync();
+			return data;
 		}
 
 		/// <summary>
