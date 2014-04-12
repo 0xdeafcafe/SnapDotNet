@@ -31,38 +31,62 @@ namespace SnapDotNet.Core.Snapchat.Models
 	/// Represents a friend that was added.
 	/// </summary>
 	[DataContract]
-	public class AddedFriend
+	public class AddedFriend : NotifyPropertyChangedBase
 	{
 		/// <summary>
 		/// Gets or sets the timestamp specifying the date and time the friendship started.
 		/// </summary>
 		[DataMember(Name = "ts")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime Timestamp { get; set; }
+		public DateTime Timestamp
+		{
+			get { return _timestamp; }
+			set { SetField(ref _timestamp, value); }
+		}
+		private DateTime _timestamp;
 
 		/// <summary>
 		/// Gets or sets the name of this friend.
 		/// </summary>
 		[DataMember(Name = "name")]
-		public string Name { get; set; }
+		public string Name
+		{
+			get { return _name; }
+			set { SetField(ref _name, value); }
+		}
+		private string _name;
 
 		/// <summary>
 		/// Gets the friendly name
 		/// </summary>
 		[IgnoreDataMember]
-		public string FriendlyName { get { return DisplayName ?? Name; } }
+		public string FriendlyName
+		{
+			get { return _displayName ?? _name; }
+			set { SetField(ref _displayName, value); }
+		}
 
 		/// <summary>
 		/// Gets or sets the display name of this friend.
 		/// </summary>
 		[DataMember(Name = "display")]
-		public string DisplayName { get; set; }
+		public string DisplayName
+		{
+			get { return _displayName; }
+			set { SetField(ref _displayName, value); }
+		}
+		private string _displayName;
 
 		/// <summary>
 		/// Gets or sets the state of the friend request sent to this person.
 		/// </summary>
 		[DataMember(Name = "type")]
-		public FriendRequestState FriendRequestState { get; set; }
+		public FriendRequestState FriendRequestState
+		{
+			get { return _friendRequestState; }
+			set { SetField(ref _friendRequestState, value); }
+		}
+		private FriendRequestState _friendRequestState;
 	}
 
 	/// <summary>
@@ -76,7 +100,12 @@ namespace SnapDotNet.Core.Snapchat.Models
 		/// Gets or sets whether this friend allows you to see custom stories.
 		/// </summary>
 		[DataMember(Name = "can_see_custom_stories")]
-		public bool CanSeeCustomStories { get; set; }
+		public bool CanSeeCustomStories
+		{
+			get { return _canSeeCustomStories; }
+			set { SetField(ref _canSeeCustomStories, value); }
+		}
+		private bool _canSeeCustomStories;
 
 		/// <summary>
 		/// Gets or sets the name of this friend.
@@ -98,7 +127,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 		/// Gets the friendly name
 		/// </summary>
 		[IgnoreDataMember]
-		public string FriendlyName { get { return String.IsNullOrEmpty(DisplayName) ? Name : DisplayName; } }
+		public string FriendlyName
+		{
+			get { return String.IsNullOrEmpty(DisplayName) ? Name : DisplayName; }
+			set { SetField(ref _displayName, value); }
+		}
 
 		/// <summary>
 		/// Gets or sets the display name of this friend.
@@ -120,6 +153,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 		/// Gets or sets the state of the friend request sent to this person.
 		/// </summary>
 		[DataMember(Name = "type")]
-		public FriendRequestState FriendRequestState { get; set; }
+		public FriendRequestState FriendRequestState
+		{
+			get { return _friendRequestState; }
+			set { SetField(ref _friendRequestState, value); }
+		}
+		private FriendRequestState _friendRequestState;
 	}
 }
