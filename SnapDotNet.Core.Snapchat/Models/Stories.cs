@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Converters.Json;
 using SnapDotNet.Core.Miscellaneous.Models;
+using UnixDateTimeConverter = SnapDotNet.Core.Snapchat.Converters.Json.UnixDateTimeConverter;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
