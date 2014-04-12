@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
+using SnapDotNet.Core.Miscellaneous.Helpers.Compression;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
@@ -17,13 +18,15 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private readonly SnapChatManager _snapchatManager;
 		private readonly WebConnect _webConnect;
 		
-		private const string FriendEndpointUrl =		"friend";
-		private const string LoginEndpointUrl =			"login";
-		private const string LogoutEndpointUrl =		"logout";
-		private const string StoriesEndpointUrl =		"stories";
-		private const string SnapBlobEndpointUrl =		"blob";
-		private const string UpdatesEndpointUrl =		"updates";
-		private const string BestsEndpointUrl =			"bests";
+		private const string BestsEndpointUrl =				"bests";
+		private const string SnapBlobEndpointUrl =			"blob";
+		private const string FriendEndpointUrl =			"friend";
+		private const string LoginEndpointUrl =				"login";
+		private const string LogoutEndpointUrl =			"logout";
+		private const string StoriesEndpointUrl =			"stories";
+		private const string UpdatesEndpointUrl =			"updates";
+		private const string RegisterEndpointUrl =			"register";
+		private const string RegisterUsernameEndpointUrl =	"registeru";
 
 		/// <summary>
 		/// 
@@ -34,6 +37,62 @@ namespace SnapDotNet.Core.Snapchat.Api
 			_snapchatManager = snapchatManager;
 			_webConnect = new WebConnect();
 		}
+
+		#region Register
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<RegistrationResponse> RegisterAsync(int age, string birthday, string email, string password)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"age",age.ToString()},
+				{"birthday", birthday}, // YYYY-MM-DD
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"email", email},
+				{"password", password}
+			};
+
+			var response =
+				await
+					_webConnect.PostToResponseAsync(RegisterEndpointUrl, postData, Settings.StaticToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			// The Response returned a normal response, indicating that the request was not accepted.
+			// A successful request will return gzipped json data.
+			if (!response.Content.Headers.ContentEncoding.Contains("gzip"))
+			{
+				var stringContent = await response.Content.ReadAsStringAsync();
+				return await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RegistrationResponse>(stringContent));
+			}
+
+			// If the response doesn't appear to be json, let's try to decompress it as gzip
+			var gzippedData =
+				await
+					_webConnect.PostToByteArrayAsync(RegisterEndpointUrl, postData, Settings.StaticToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			// Decompress the gzipped data and deserialize it as normal.
+			var jsonData = Gzip.Decompress(gzippedData);
+			var deseralizedData =
+				await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RegistrationResponse>(jsonData));
+
+			return deseralizedData;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public RegistrationResponse Register(int age, string birthday, string email, string password)
+		{
+			return RegisterAsync(age, birthday, email, password).Result;
+		}
+
+		#endregion
 
 		#region Authenticate
 

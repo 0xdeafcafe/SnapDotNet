@@ -47,6 +47,43 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
+		public async Task<string> PostToStringAsync(string endpoint, Dictionary<string, string> postData,
+			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
+		{
+			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+
+			// Http Request Worked
+			return await response.Content.ReadAsStringAsync();
+		}
+
+		/// <summary>
+		///     Posts data to the Snapchat API
+		/// </summary>
+		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="postData">Dictionary of data to post</param>
+		/// <param name="typeToken">
+		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
+		///     Authorized Requests)
+		/// </param>
+		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
+		/// <param name="headers">Optional Bonus Headers</param>
+		public async Task<HttpResponseMessage> PostToResponseAsync(string endpoint, Dictionary<string, string> postData,
+			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
+		{
+			return await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+		}
+
+		/// <summary>
+		///     Posts data to the Snapchat API
+		/// </summary>
+		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="postData">Dictionary of data to post</param>
+		/// <param name="typeToken">
+		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
+		///     Authorized Requests)
+		/// </param>
+		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
+		/// <param name="headers">Optional Bonus Headers</param>
 		public async Task<byte[]> PostToByteArrayAsync(string endpoint, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
@@ -81,7 +118,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 					webClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
 
 			postData["req_token"] = Tokens.GenerateRequestToken(Settings.Secret, Settings.HashingPattern, typeToken, timeStamp);
-			postData["version"] = "5.0.0";
+			postData["version"] = "4.1.07";
 			var postBody = PostBodyParser(postData);
 			var response =
 				await
