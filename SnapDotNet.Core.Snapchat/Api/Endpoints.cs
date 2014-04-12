@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Storage.Streams;
-using Windows.UI.Core;
 using Windows.UI.Xaml.Media.Imaging;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Crypto;
