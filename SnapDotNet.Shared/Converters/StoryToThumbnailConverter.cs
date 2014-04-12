@@ -13,8 +13,7 @@ namespace SnapDotNet.Apps.Converters
 			if (story == null) return null;
 
 			// download thumbnail blob
-			var blob = App.SnapChatManager.Endpoints.GetStoryBlob(new Uri(story.ThumbnailUrl),
-				story.MediaKey, story.ThumbnailIv, story.Zipped);
+			var blob = App.SnapChatManager.Endpoints.GetStoryThumbnailBlob(story);
 
 			return (blob == null) ? null : blob.ToBitmapImageAsync();
 		}

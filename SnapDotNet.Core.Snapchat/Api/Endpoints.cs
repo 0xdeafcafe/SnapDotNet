@@ -336,6 +336,28 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="storyInstance"></param>
+		/// <returns></returns>
+		public byte[] GetStoryThumbnailBlob(Story storyInstance)
+		{
+			return GetStoryBlob(new Uri(storyInstance.ThumbnailUrl), storyInstance.MediaKey, storyInstance.ThumbnailIv, 
+				false);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="storyInstance"></param>
+		/// <returns></returns>
+		public byte[] GetStoryMediaBlob(Story storyInstance)
+		{
+			return GetStoryBlob(new Uri(storyInstance.MediaUrl), storyInstance.MediaKey, storyInstance.MediaIv,
+				storyInstance.Zipped);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="blobPath"></param>
 		/// <param name="key"></param>
 		/// <param name="iv"></param>
