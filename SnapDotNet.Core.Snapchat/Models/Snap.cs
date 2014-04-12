@@ -149,6 +149,15 @@ namespace SnapDotNet.Core.Snapchat.Models
 		}
 		private int? _remainingSeconds;
 
+
+		[IgnoreDataMember]
+		public bool IsDownloading
+		{
+			get { return _isDownloading; }
+			set { SetField(ref _isDownloading, value); }
+		}
+		private bool _isDownloading;
+
 		[IgnoreDataMember]
 		public bool HasMedia
 		{

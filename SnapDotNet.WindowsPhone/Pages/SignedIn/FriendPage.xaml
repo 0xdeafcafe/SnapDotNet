@@ -78,25 +78,47 @@
 			<Hub HeaderTemplate="{StaticResource HeaderDataTemplate}">
 				<HubSection Header="INFO">
 					<DataTemplate>
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="110" />
-								<RowDefinition Height="*" />
-							</Grid.RowDefinitions>
+						<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+							<Grid>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="100" />
+									<RowDefinition Height="30" />
+									<RowDefinition Height="110" />
+									<RowDefinition Height="30" />
+									<RowDefinition Height="*" />
+								</Grid.RowDefinitions>
 
-							<TextBlock Grid.Row="0">
-								<Run Text="snapchat score:" FontSize="20" />
-								<LineBreak />
-								<Run Text="{Binding Path=SelectedActivity.Score, FallbackValue='1,337'}" 
-									 Foreground="{StaticResource SystemColorControlAccentBrush}" 
-									 FontSize="45" FontFamily="Segoe WP Light"/>
-							</TextBlock>
+								<TextBlock Grid.Row="0">
+									<Run Text="snapchat score:" FontSize="20" />
+									<LineBreak />
+									<Run Text="{Binding Path=SelectedActivity.Score, FallbackValue='1,337'}" 
+										 Foreground="{StaticResource SystemColorControlAccentBrush}" 
+										 FontSize="45" FontFamily="Segoe WP Light"/>
+								</TextBlock>
 
-							<TextBlock Grid.Row="1">
-								<Run Text="best friends:" FontSize="20" />
-							</TextBlock>
-							<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-								<ItemsControl Margin="0,30,0,0" ItemsSource="{Binding Path=SelectedActivity.BestFriends}">
+								<TextBlock Grid.Row="1">
+									<Run Text="full story:" FontSize="20" />
+								</TextBlock>
+								<controls:PieSlice Radius="40" Grid.Row="2"
+												   StartAngle="0" 
+												   VerticalAlignment="Top" HorizontalAlignment="Left"
+												   EndAngle="300" 
+												   Margin="0,0,0,0" StrokeThickness="0" RenderTransformOrigin="0.5,0.5"
+												   Visibility="Visible">
+									<controls:PieSlice.RenderTransform>
+										<CompositeTransform ScaleX="-1"/>
+									</controls:PieSlice.RenderTransform>
+									<controls:PieSlice.Fill>
+										<ImageBrush Stretch="UniformToFill" 
+											ImageSource="{Binding Path=SelectedFriend, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterFriendToStoryThumbnail}}">
+										</ImageBrush>
+									</controls:PieSlice.Fill>
+								</controls:PieSlice>
+							
+								<TextBlock Grid.Row="3">
+									<Run Text="best friends:" FontSize="20" />
+								</TextBlock>
+								<ItemsControl Grid.Row="4" ItemsSource="{Binding Path=SelectedActivity.BestFriends}">
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
 											<StackPanel Orientation="Horizontal" Margin="0,5">
@@ -116,69 +138,8 @@
 										</ItemsPanelTemplate>
 									</ItemsControl.ItemsPanel>
 								</ItemsControl>
-							</ScrollViewer>
-						</Grid>
-					</DataTemplate>
-				</HubSection>
-				<HubSection Header="STORY" Visibility="{Binding Source=SelectedFriend, Converter={StaticResource IValueConverterFriendHasStoryToVisibility}}">
-					<DataTemplate>
-						<Grid>
-							<Grid.RowDefinitions>
-								<RowDefinition Height="130" />
-								<RowDefinition Height="*" />
-							</Grid.RowDefinitions>
-
-							<TextBlock Grid.Row="0">
-								<Run Text="full story:" FontSize="20" />
-							</TextBlock>
-							<controls:PieSlice Radius="40" Grid.Row="0"
-											   StartAngle="0" 
-											   VerticalAlignment="Top" HorizontalAlignment="Center"
-											   EndAngle="300" 
-											   Margin="0,34,0,0" StrokeThickness="0" RenderTransformOrigin="0.5,0.5"
-											   Visibility="Visible">
-								<controls:PieSlice.RenderTransform>
-									<CompositeTransform ScaleX="-1"/>
-								</controls:PieSlice.RenderTransform>
-								<controls:PieSlice.Fill>
-									<ImageBrush Stretch="UniformToFill" 
-										ImageSource="{Binding Path=SelectedFriend, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IValueConverterFriendToStoryThumbnail}}">
-									</ImageBrush>
-								</controls:PieSlice.Fill>
-							</controls:PieSlice>
-
-							<TextBlock Grid.Row="1" Margin="0,0,0,14">
-								<Run Text="all stories:" FontSize="20"/>
-							</TextBlock>
-							<ScrollViewer Grid.Row="1" Margin="0,34,0,0" VerticalScrollBarVisibility="Auto">
-								<ItemsControl ItemsSource="{Binding Path=SelectedStory.Stories}">
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<controls:PieSlice Radius="38"
-												   StartAngle="0" 
-												   VerticalAlignment="Top" HorizontalAlignment="Left"
-												   EndAngle="300" 
-												   Margin="0,30,35,0" StrokeThickness="0" RenderTransformOrigin="0.5,0.5"
-												   Visibility="Visible">
-												<controls:PieSlice.RenderTransform>
-													<CompositeTransform ScaleX="-1"/>
-												</controls:PieSlice.RenderTransform>
-												<controls:PieSlice.Fill>
-													<ImageBrush Stretch="UniformToFill" 
-																	ImageSource="{Binding Path=Story, Converter={StaticResource IValueConverterStoryToThumbnail}}">
-													</ImageBrush>
-												</controls:PieSlice.Fill>
-											</controls:PieSlice>
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
-									<ItemsControl.ItemsPanel>
-										<ItemsPanelTemplate>
-											<controls:WrapPanel />
-										</ItemsPanelTemplate>
-									</ItemsControl.ItemsPanel>
-								</ItemsControl>
-							</ScrollViewer>
-						</Grid>
+							</Grid>
+						</ScrollViewer>
 					</DataTemplate>
 				</HubSection>
 			</Hub>

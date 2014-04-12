@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
@@ -103,6 +105,22 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public void UpdateAccount(Account account)
 		{
+			if (Account == null)
+			{
+				Account = account;
+				return;
+			}
+
+			// we got some house keeping to do
+			var downloadingSnaps = Account.Snaps.Where(snap => snap.IsDownloading).ToList();
+
+			foreach (var snap in downloadingSnaps)
+				foreach (var downloadedSnap in downloadingSnaps.Where(downloadedSnap => downloadedSnap.Id == snap.Id))
+				{
+					snap.IsDownloading = true;
+					break;
+				}
+
 			Account = account;
 		}
 
@@ -113,6 +131,30 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public void UpdateStories(Stories stories)
 		{
+			if (Stories == null)
+			{
+				Stories = stories;
+				return;
+			}
+
+			// we got some house keeping to do
+			var downloadingFriendsStories = (from friendStory in Stories.FriendStories from story in friendStory.Stories where story.Story.IsDownloading select story.Story).ToList();
+			var downloadingMyStories = (from story in Stories.MyStories where story.Story.IsDownloading select story.Story).ToList();
+
+			foreach (var story in stories.FriendStories.SelectMany(friendStory => friendStory.Stories))
+				foreach (var downloadingStory in downloadingFriendsStories.Where(downloadingStory => downloadingStory.Id == story.Story.Id))
+				{
+					story.Story.IsDownloading = true;
+					break;
+				}
+
+			foreach (var story in stories.MyStories)
+				foreach (var downloadingStory in downloadingMyStories.Where(downloadingStory => downloadingStory.Id == story.Story.Id))
+				{
+					story.Story.IsDownloading = true;
+					break;
+				}
+
 			Stories = stories;
 		}
 

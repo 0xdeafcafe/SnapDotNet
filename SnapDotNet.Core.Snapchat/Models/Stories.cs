@@ -255,6 +255,14 @@ namespace SnapDotNet.Core.Snapchat.Models
 		}
 		private bool _containsMatureContent;
 
+		[IgnoreDataMember]
+		public bool IsDownloading
+		{
+			get { return _isDownloading; }
+			set { SetField(ref _isDownloading, value); }
+		}
+		private bool _isDownloading;
+
 		[DataMember(Name = "client_id")]
 		public string ClientId
 		{
