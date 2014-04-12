@@ -259,11 +259,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			var decryptedData = Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
-			if (Blob.ValidateMediaBlob(decryptedData))
-				return decryptedData;
+			if (Blob.ValidateMediaBlob(data))
+				return data;
 
-			return data;
+			return Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
 		}
 
 		/// <summary>

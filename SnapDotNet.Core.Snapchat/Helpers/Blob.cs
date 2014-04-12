@@ -1,8 +1,4 @@
-﻿using System;
-using SnapDotNet.Core.Miscellaneous.Crypto;
-using SnapDotNet.Core.Snapchat.Api;
-
-namespace SnapDotNet.Core.Snapchat.Helpers
+﻿namespace SnapDotNet.Core.Snapchat.Helpers
 {
 	public static class Blob
 	{
@@ -20,23 +16,6 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 
 			return (data[0] == 0xFF && data[1] == 0xD8) ||
 				   (data[0] == 0x00 && data[1] == 0x00);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public static byte[] DecryptBlob(byte[] data)
-		{
-			try
-			{
-				data = Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
-				return ValidateMediaBlob(data) ? data : null;
-			}
-			catch (Exception ex)
-			{
-				return null;
-			}
 		}
 	}
 }
