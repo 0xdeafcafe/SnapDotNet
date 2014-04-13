@@ -113,8 +113,8 @@
 				<TextBlock Text="SNAPS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
 			</StackPanel>
 
-			<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-				<ItemsControl ItemsSource="{Binding Path=Manager.Account.Snaps}" HorizontalContentAlignment="Stretch" Padding="0,0,0,20">
+			<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,0,20">
+				<ItemsControl ItemsSource="{Binding Path=Manager.Account.Snaps}" HorizontalContentAlignment="Stretch">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Button x:Name="ButtonSnap" Style="{StaticResource BasicEmptyButtonStyle}" Tag="{Binding}">
@@ -122,7 +122,7 @@
 									 ManipulationCompleted="ButtonSnap_ManipulationCompleted"
 									 ManipulationStarted="ButtonSnap_ManipulationStarted">-->
 
-								<Grid HorizontalAlignment="Stretch" Height="80">
+								<Grid HorizontalAlignment="Stretch" Height="75">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="70" />
 										<ColumnDefinition Width="*" />
