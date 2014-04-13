@@ -16,6 +16,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\RequiresAuthentication.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\ApplicationSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\NavigationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\NotifyPropertyChangedBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableDictionary.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\SettingsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\SnapsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />

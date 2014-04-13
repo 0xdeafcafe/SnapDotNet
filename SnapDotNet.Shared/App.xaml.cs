@@ -3,6 +3,7 @@ using System.Reflection;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.Common;
 using SnapDotNet.Apps.Helpers;
 using SnapDotNet.Apps.Pages;
 using System;
@@ -50,6 +51,11 @@ namespace SnapDotNet.Apps
 		/// 
 		/// </summary>
 		public static readonly SnapChatManager SnapChatManager = new SnapChatManager();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly ApplicationSettings Settings = new ApplicationSettings();
 
 		/// <summary>
 		///     Initializes the singleton application object.  This is the first line of authored code
