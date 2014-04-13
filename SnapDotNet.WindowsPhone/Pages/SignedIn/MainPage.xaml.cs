@@ -173,10 +173,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				App.CurrentFrame.Navigate(typeof(PreviewPage), v);
 			}
 		}
-		private void ButtonMessages_OnClick(object sender, RoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
 
 		private void ButtonFriends_OnClick(object sender, RoutedEventArgs e)
 		{

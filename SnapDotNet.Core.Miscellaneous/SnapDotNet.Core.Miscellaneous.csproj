@@ -50,6 +50,7 @@
     <Compile Include="Helpers\Compression\Gzip.cs" />
     <Compile Include="Helpers\Compression\Zip.cs" />
     <Compile Include="Helpers\Storage\IsolatedStorage.cs" />
+    <Compile Include="Helpers\Time.cs" />
     <Compile Include="Helpers\VariousHelpers.cs" />
     <Compile Include="Models\Atlas\Snap.cs" />
     <Compile Include="Models\Atlas\User.cs" />

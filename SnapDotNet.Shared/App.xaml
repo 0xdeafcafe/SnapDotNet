@@ -12,6 +12,8 @@
 			</ResourceDictionary.ThemeDictionaries>
 
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Assets/Vectors/SnapchatIcons.xaml"/>
+				
 				<ResourceDictionary>
 					<!--
                     <x:String x:Key="GlobalAppTitle">Snapchat</x:String>
@@ -27,6 +29,11 @@
 					<converters:FriendHasStoryToVisibilityConverter x:Name="IValueConverterFriendHasStoryToVisibility" />
 					<converters:FriendStoryExpireToAngleConverter x:Name="IValueConverterFriendStoryExpireToAngle" />
 					<converters:StoryToThumbnailConverter x:Name="IValueConverterStoryToThumbnail" />
+
+					<converters:SnapChatTimestampToFriendlyConverter x:Name="IValueConverterSnapChatTimestampToFriendly" />
+					<converters:SnapToSnapStatusIconConverter x:Name="IValueConverterSnapToSnapStatusIcon" />
+					<converters:SnapToDisplayNameConverter x:Name="IValueConverterSnapToDisplayName" />
+					<converters:SnapColourFromSnapConverter x:Name="IValueConverterSnapColourFromSnap" />
 					
 					<converters:DisplayFriendsOtherNameConverter x:Name="IValueConverterDisplayFriendsOtherName" />
 					<converters:StringCaseConverter x:Name="IValueConverterStringToUpperCase" StringCase="Uppercase" />

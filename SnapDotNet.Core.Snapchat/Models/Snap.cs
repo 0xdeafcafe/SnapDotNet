@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
 
 namespace SnapDotNet.Core.Snapchat.Models
@@ -34,7 +35,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 
 	[DataContract]
 	public class Snap
-		: Response
+		: NotifyPropertyChangedBase
 	{
 		public Snap()
 		{
@@ -58,12 +59,12 @@ namespace SnapDotNet.Core.Snapchat.Models
 		private string _recipientName;
 
 		[DataMember(Name = "sn")]
-		public string ScreenName
+		public string SenderName
 		{
-			get { return _screenName; }
-			set { SetField(ref _screenName, value); }
+			get { return _senderName; }
+			set { SetField(ref _senderName, value); }
 		}
-		private string _screenName;
+		private string _senderName;
 
 		[DataMember(Name = "ts")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]

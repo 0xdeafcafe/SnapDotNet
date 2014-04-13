@@ -30,8 +30,7 @@
 			</Grid.RowDefinitions>
 			
 			<StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Style="{StaticResource WpSmallRoundButtonStyle}"
-						Click="ButtonMessages_OnClick">
+				<Button Style="{StaticResource WpSmallRoundButtonStyle}" Command="{Binding ViewSnapsCommand}">
 					<Image Source="ms-appx:///Assets/Icons/appbar.box.layered.png" Margin="5" />
 				</Button>
 				<ToggleButton Style="{StaticResource WpSmallRoundToggleButtonStyle}"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Models;
 using System.Windows.Input;
 using SnapDotNet.Apps.Common;
@@ -37,6 +38,8 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 				App.CurrentFrame.Navigate(typeof(StartPage));
 			});
 
+			ViewSnapsCommand = new RelayCommand(() => App.CurrentFrame.Navigate(typeof (SnapsPage)));
+
 			#endregion
 
 #if DEBUG
@@ -53,7 +56,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 				RecentSnaps.Add(new Snap
 				{
 					RemainingSeconds = random.Next(9) + 1,
-					ScreenName = names[random.Next(names.Length)],
+					SenderName = names[random.Next(names.Length)],
 					Status = status,
 					Timestamp = DateTime.Now,
 				});
@@ -80,6 +83,13 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			set { SetField(ref _recentFriendStories, value); }
 		}
 		private ObservableCollection<FriendStory> _recentFriendStories;
+
+	    public ICommand ViewSnapsCommand
+	    {
+		    get { return _viewSnapsCommand; }
+			set { SetField(ref _viewSnapsCommand, value); }
+	    }
+	    private ICommand _viewSnapsCommand;
 
 		/// <summary>
 		/// Gets the command for signing out.

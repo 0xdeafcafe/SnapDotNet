@@ -27,6 +27,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DisplayFriendsOtherNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendCountToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendHasStoryToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapChatTimestampToFriendlyConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapColourFromSnapConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToDisplayNameConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToSnapStatusIconConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryToThumbnailConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryExpireToAngleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendToStoryThumbnailConverter.cs" />
@@ -42,10 +46,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\SnapsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Assets\Vectors\SnapchatIcons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Themes\Dark.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -54,8 +63,5 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en\Resources.resw" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Assets\" />
   </ItemGroup>
 </Project>
