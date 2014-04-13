@@ -14,7 +14,8 @@
         <converters:SnapStatusToFriendlyTextConverter x:Key="SnapStatusToFriendlyTextConverter"/>
         <converters:RemainingSecondsToDegreeConverter x:Key="RemainingSecondsToDegreeConverter" MaximumDuration="10"/>
         <converters:SnapStatusToIconConverter x:Key="SnapStatusToIconConverter"
-                                              DeliveredIcon="Stop"
+                                              SentDeliveredIcon="Go"
+                                              ReceivedDeliveredIcon="Stop"
                                               DownloadingIcon="Download"
                                               OpenedIcon="View"
                                               ScreenshottedIcon="Important"
@@ -25,6 +26,8 @@
                                                     OpenedForeground="Orange"
                                                     ScreenshottedForeground="#FFFF3838"
                                                     SentForeground="White"/>
+
+        <converters:SnapToDisplayNameConverter x:Key="SnapToDisplayNameConverter"/>
 
         <!-- Width threshold for switching between the default and minimal views -->
         <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
@@ -38,9 +41,9 @@
                 <AppBarButton Label="Create snap" Icon="Camera"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="View story" Icon="ViewAll"/>
+                <!--<AppBarButton Label="View story" Icon="ViewAll"/>
                 <AppBarButton Label="Delete" Icon="Delete"/>
-                <AppBarButton Label="Block" Icon="BlockContact"/>
+                <AppBarButton Label="Block" Icon="BlockContact"/>-->
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
@@ -189,27 +192,53 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <SearchBox x:Uid="FriendSearchBox" Width="300" PlaceholderText="Search friends" Padding="8"/>
+                            <SearchBox x:Uid="FriendSearchBox" Width="300" PlaceholderText="Search friends" Padding="8" QueryText="{Binding CurrentFriendSearchQuery, Mode=TwoWay}"/>
 
-                            <ListView Grid.Row="1" Margin="0,10,0,0">
-                                <ListView.ItemContainerTransitions>
-                                    <TransitionCollection>
-                                        <AddDeleteThemeTransition/>
-                                    </TransitionCollection>
-                                </ListView.ItemContainerTransitions>
+                            <!-- TODO: Hide this if searchbox query isn't empty -->
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-                                <ListViewItem>alexerax</ListViewItem>
-                                <ListViewItem>collindaginger</ListViewItem>
-                                <ListViewItem>msaville8</ListViewItem>
-                                <ListViewItem>
-                                    <StackPanel Orientation="Horizontal">
-                                        <SymbolIcon Symbol="AddFriend"/>
-                                        <TextBlock VerticalAlignment="Center" Margin="20,0,0,0">Add matt_bigdick</TextBlock>
-                                    </StackPanel>
-                                </ListViewItem>
-                            </ListView>
+                                <ListView Grid.Row="0" Margin="0,10,0,0" ItemsSource="{Binding BestFriends}">
+                                    <ListView.ItemContainerTransitions>
+                                        <TransitionCollection>
+                                            <AddDeleteThemeTransition/>
+                                        </TransitionCollection>
+                                    </ListView.ItemContainerTransitions>
+
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <SymbolIcon Symbol="Favorite" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                                <ListView Grid.Row="1" ItemsSource="{Binding Friends}">
+                                    <ListView.ItemContainerTransitions>
+                                        <TransitionCollection>
+                                            <AddDeleteThemeTransition/>
+                                        </TransitionCollection>
+                                    </ListView.ItemContainerTransitions>
+
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            
+                            <HyperlinkButton Grid.Row="2">
+                                More friends...
+                            </HyperlinkButton>
                         </Grid>
                     </DataTemplate>
                 </HubSection>
@@ -226,7 +255,7 @@
                     </HubSection.HeaderTemplate>
 
                     <DataTemplate>
-                        <GridView ItemsSource="{Binding RecentSnaps}" SelectionChanged="OnSnapSelectionChanged" Margin="0,0,0,50">
+                        <GridView ItemsSource="{Binding RecentSnaps}" SelectionChanged="OnSnapSelectionChanged" Margin="0,0,0,50" MinWidth="360">
                             <GridView.ItemContainerTransitions>
                                 <TransitionCollection>
                                     <AddDeleteThemeTransition/>
@@ -256,7 +285,7 @@
                                                 <!-- Sender name -->
                                                 <TextBlock Grid.Row="0" Grid.Column="1"
                                                    Margin="10,0,0,0"
-                                                   Text="{Binding ScreenName}"
+                                                   Text="{Binding Converter={StaticResource SnapToDisplayNameConverter}, FallbackValue='Loading...'}"
                                                    Style="{StaticResource TitleTextBlockStyle}"
                                                    VerticalAlignment="Center"
                                                    TextWrapping="NoWrap"
@@ -287,10 +316,10 @@
 
                                                 <!-- Icon -->
                                                 <SymbolIcon Grid.RowSpan="2"
-                                                            Symbol="{Binding Status, Converter={StaticResource SnapStatusToIconConverter}}"
+                                                            Symbol="{Binding Converter={StaticResource SnapStatusToIconConverter}}"
                                                             Width="58" Height="58"
                                                             HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                            Foreground="{Binding Status, Converter={StaticResource SnapStatusToForegroundConverter}}"
+                                                            Foreground="{Binding Converter={StaticResource SnapStatusToForegroundConverter}}"
                                                             RenderTransformOrigin="0.5,0.5">
                                                     <SymbolIcon.RenderTransform>
                                                         <CompositeTransform ScaleX="2.5" ScaleY="2.5"/>
@@ -300,7 +329,7 @@
                                                 <!-- Sender name -->
                                                 <TextBlock Grid.Row="0" Grid.Column="1"
                                                    Margin="10,0,0,0"
-                                                   Text="{Binding ScreenName}"
+                                                   Text="{Binding Converter={StaticResource SnapToDisplayNameConverter}, FallbackValue='Loading...'}"
                                                    Style="{StaticResource TitleTextBlockStyle}"
                                                    VerticalAlignment="Center"
                                                    TextWrapping="NoWrap"
