@@ -52,7 +52,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public string Name
 		{
 			get { return _name; }
-			set { SetField(ref _name, value); }
+			set
+			{
+				SetField(ref _name, value);
+				NotifyPropertyChanged("FriendlyName");
+			}
 		}
 		private string _name;
 
@@ -60,11 +64,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 		/// Gets the friendly name
 		/// </summary>
 		[IgnoreDataMember]
-		public string FriendlyName
-		{
-			get { return _displayName ?? _name; }
-			set { SetField(ref _displayName, value); }
-		}
+		public string FriendlyName { get { return _displayName ?? _name; } }
 
 		/// <summary>
 		/// Gets or sets the display name of this friend.
@@ -73,7 +73,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public string DisplayName
 		{
 			get { return _displayName; }
-			set { SetField(ref _displayName, value); }
+			set
+			{
+				SetField(ref _displayName, value);
+				NotifyPropertyChanged("FriendlyName");
+			}
 		}
 		private string _displayName;
 
