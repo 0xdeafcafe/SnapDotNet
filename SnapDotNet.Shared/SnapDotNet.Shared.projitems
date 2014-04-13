@@ -29,7 +29,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendHasStoryToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapChatTimestampToFriendlyConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapColourFromSnapConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToButtonStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToDisplayNameConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToFriendlySnapStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToSnapStatusIconConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryToThumbnailConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryExpireToAngleConverter.cs" />
@@ -42,6 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendsListGroupByAlphabetConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringCaseConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SnazzyDebugger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\SnapItemTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendViewModel.cs" />

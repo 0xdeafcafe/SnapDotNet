@@ -5,4 +5,10 @@
 		Uppercase,
 		Lowercase
 	}
+
+	public enum BlobType
+	{
+		Snap,
+		Story
+	}
 }

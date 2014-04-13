@@ -34,6 +34,8 @@
 					<converters:SnapToSnapStatusIconConverter x:Name="IValueConverterSnapToSnapStatusIcon" />
 					<converters:SnapToDisplayNameConverter x:Name="IValueConverterSnapToDisplayName" />
 					<converters:SnapColourFromSnapConverter x:Name="IValueConverterSnapColourFromSnap" />
+					<converters:SnapToFriendlySnapStatusConverter x:Name="IValueConverterSnapToFriendlySnapStatus" />
+					<converters:SnapStatusToButtonStatusConverter x:Name="IValueConverterSnapStatusToButtonStatus" />
 					
 					<converters:DisplayFriendsOtherNameConverter x:Name="IValueConverterDisplayFriendsOtherName" />
 					<converters:StringCaseConverter x:Name="IValueConverterStringToUpperCase" StringCase="Uppercase" />

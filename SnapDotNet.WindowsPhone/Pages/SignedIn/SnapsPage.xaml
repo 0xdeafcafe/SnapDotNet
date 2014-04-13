@@ -46,21 +46,44 @@
 						<Grid Background="Transparent">
 							<VisualStateManager.VisualStateGroups>
 								<VisualStateGroup x:Name="CommonStates">
-									<VisualState x:Name="Normal" />
-									<VisualState x:Name="MouseOver" />
-									<VisualState x:Name="Pressed" />
+									<VisualStateGroup.Transitions>
+										<VisualTransition From="Pressed" To="PointerOver">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="PointerOver" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="Pressed" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Normal"/>
+									<VisualState x:Name="PointerOver"/>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+										</Storyboard>
+									</VisualState>
 									<VisualState x:Name="Disabled" />
 								</VisualStateGroup>
 							</VisualStateManager.VisualStateGroups>
-							<ContentControl x:Name="ContentContainer"
-							                ContentTemplate="{TemplateBinding ContentTemplate}"
-							                Content="{TemplateBinding Content}"
-							                Foreground="{TemplateBinding Foreground}"
-							                VerticalAlignment="{TemplateBinding VerticalAlignment}"
-							                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-							                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-							                Padding="{TemplateBinding Padding}"
-							                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+							<Grid x:Name="Grid">
+								<ContentControl x:Name="ContentContainer"
+												ContentTemplate="{TemplateBinding ContentTemplate}"
+												Content="{TemplateBinding Content}"
+												Foreground="{TemplateBinding Foreground}"
+												VerticalAlignment="{TemplateBinding VerticalAlignment}"
+												HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+												HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+												Padding="{TemplateBinding Padding}"
+												VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+							</Grid>
 						</Grid>
 					</ControlTemplate>
 				</Setter.Value>
@@ -114,10 +137,13 @@
 			</StackPanel>
 
 			<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,0,20">
-				<ItemsControl ItemsSource="{Binding Path=Manager.Account.Snaps}" HorizontalContentAlignment="Stretch">
+				<ItemsControl x:Name="ItemsControl" ItemsSource="{Binding Path=Manager.Account.Snaps}" HorizontalContentAlignment="Stretch">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Button x:Name="ButtonSnap" Style="{StaticResource BasicEmptyButtonStyle}" Tag="{Binding}">
+							<Button x:Name="ButtonSnap" Style="{StaticResource BasicEmptyButtonStyle}" Tag="{Binding}"
+									IsEnabled="{Binding Converter={StaticResource IValueConverterSnapStatusToButtonStatus}}"
+									Command="{Binding ElementName=ItemsControl, Path=DataContext.TryDownloadMediaCommand}" 
+									CommandParameter="{Binding}">
 								<!-- Click="ButtonSnap_Click"
 									 ManipulationCompleted="ButtonSnap_ManipulationCompleted"
 									 ManipulationStarted="ButtonSnap_ManipulationStarted">-->
@@ -136,21 +162,24 @@
 									<StackPanel Grid.Column="1" VerticalAlignment="Center">
 										<StackPanel Orientation="Vertical">
 											<TextBlock Foreground="White"
-																   Text="{Binding Converter={StaticResource IValueConverterSnapToDisplayName}, FallbackValue='loading...'}"
-																   FontSize="18" />
+													   Text="{Binding Converter={StaticResource IValueConverterSnapToDisplayName}, FallbackValue='loading...'}"
+													   FontSize="18" />
 
 											<TextBlock Foreground="{StaticResource SecondaryFontColourBrush}" FontSize="14" TextTrimming="WordEllipsis">
-															<Run Text="{Binding Path=Timestamp, FallbackValue=18/08/94 - 14:34, Converter={StaticResource IValueConverterSnapChatTimestampToFriendly}}" />
-															<Run Text=" - " />
-															<Run Text="{Binding Path=Status}" />
+												<Run Text="{Binding Path=Timestamp, FallbackValue=18/08/94 - 14:34, Converter={StaticResource IValueConverterSnapChatTimestampToFriendly}}" />
+												<Run Text=" - " />
+												<Run Text="{Binding Path=Id, Converter={StaticResource IValueConverterSnapToFriendlySnapStatus}}" />
 											</TextBlock>
 										</StackPanel>
-										<ProgressBar Width="150" Visibility="{Binding Path=IsDownloading, Converter={StaticResource IValueBooleanToVisibility}}"
-																 HorizontalAlignment="Stretch" IsIndeterminate="True" />
 									</StackPanel>
 
+									<ProgressBar Grid.Column="1" Margin="0,0,0,10"
+												 Visibility="{Binding Path=IsDownloading, Converter={StaticResource IValueBooleanToVisibility}}"
+												 HorizontalAlignment="Stretch" VerticalAlignment="Bottom" 
+												 IsIndeterminate="True"  />
+
 									<Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">
-										<TextBlock Text="{Binding Path=RemaningSeconds}" Foreground="White" />
+										<TextBlock Text="{Binding Path=RemainingSeconds}" Foreground="White" />
 									</Grid>
 								</Grid>
 							</Button>

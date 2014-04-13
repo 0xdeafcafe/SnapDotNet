@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
+using SnapDotNet.Core.Snapchat.Helpers;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
@@ -79,7 +81,13 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public SnapStatus Status
 		{
 			get { return _status; }
-			set { SetField(ref _status, value); }
+			set
+			{
+				SetField(ref _status, value);
+				NotifyPropertyChanged("IsDownloading");
+				NotifyPropertyChanged("HasMedia");
+				NotifyPropertyChanged("Id");
+			}
 		}
 		private SnapStatus _status;
 
@@ -155,16 +163,23 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public bool IsDownloading
 		{
 			get { return _isDownloading; }
-			set { SetField(ref _isDownloading, value); }
+			set
+			{
+				SetField(ref _isDownloading, value);
+				NotifyPropertyChanged("HasMedia");
+				NotifyPropertyChanged("Status");
+				NotifyPropertyChanged("Id");
+			}
 		}
 		private bool _isDownloading;
 
 		[IgnoreDataMember]
 		public bool HasMedia
 		{
-			get { return _hasMedia; }
-			set { SetField(ref _hasMedia, value); }
+			get
+			{
+				return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(Id, BlobType.Snap));
+			}
 		}
-		private bool _hasMedia;
 	}
 }

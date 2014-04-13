@@ -274,63 +274,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		}
 
 		#endregion
-
-		#region Snap
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public async Task<byte[]> GetSnapBlobAsync(Snap snap)
-		{
-			return await GetSnapBlobAsync(snap.Id);
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public byte[] GetSnapBlob(Snap snap)
-		{
-			return GetSnapBlobAsync(snap).Result;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public async Task<byte[]> GetSnapBlobAsync(string snapId)
-		{
-			var timestamp = Timestamps.GenerateRetardedTimestamp();
-			var postData = new Dictionary<string, string>
-			{
-				{"username", GetAuthedUsername()},
-				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
-				{"id", snapId}
-			};
-
-			var data =
-				await
-					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
-						timestamp.ToString(CultureInfo.InvariantCulture));
-
-			if (Blob.ValidateMediaBlob(data))
-				return data;
-
-			return Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public byte[] GetSnapBlob(string snapId)
-		{
-			return GetSnapBlobAsync(snapId).Result;
-		}
-
-		#endregion
-
+		
 		#region Blob
 
 		/// <summary>
@@ -373,6 +317,29 @@ namespace SnapDotNet.Core.Snapchat.Api
 				Convert.FromBase64String(iv));
 
 			return decryptedData;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="snapId"></param>
+		/// <returns></returns>
+		public async Task<byte[]> GetSnapBlobAsync(string snapId)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"id", snapId}
+			};
+
+			var data =
+				await
+					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return Blob.ValidateMediaBlob(data) ? data : Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
 		}
 
 		#endregion

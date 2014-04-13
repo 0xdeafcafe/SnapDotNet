@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using SnapDotNet.Apps.Common;
+using SnapDotNet.Apps.Helpers;
+using SnapDotNet.Core.Miscellaneous.Models;
+using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Apps.ViewModels.SignedIn
@@ -9,6 +14,8 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 	{
 		public SnapsViewModel()
 		{
+			#region Create Spoofed Test Snaps
+
 			SpoofedSnaps = new ObservableCollection<Snap>
 			{
 				// Sent
@@ -63,7 +70,42 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 					MediaType = MediaType.Image
 				}
 			};
+
+			#endregion
+
+			TryDownloadMediaCommand = new RelayCommand<Snap>(async snap =>
+			{
+				if (snap == null || snap.IsDownloading || snap.Status != SnapStatus.Delivered || snap.SenderName == App.SnapChatManager.Account.Username || snap.HasMedia ) return;
+
+				// Set snap to IsDownloading
+				snap.IsDownloading = true;
+				snap.Status = SnapStatus.Downloading;
+
+				// Start the download
+				try
+				{
+					await Blob.DeleteBlobFromStorageAsync(snap.Id, BlobType.Snap);
+
+					var mediaBlob = await App.SnapChatManager.Endpoints.GetSnapBlobAsync(snap.Id);
+					await Blob.SaveBlobToStorageAsync(mediaBlob, snap.Id, BlobType.Snap);
+				}
+				catch (Exception exception)
+				{
+					SnazzyDebug.WriteLine(exception);
+				}
+
+				// Set snap to delivered again, but this time with media
+				snap.IsDownloading = false;
+				snap.Status = SnapStatus.Delivered;
+			});
 		}
+
+		public ICommand TryDownloadMediaCommand
+		{
+			get { return _tryDownloadMediaCommand; }
+			set { SetField(ref _tryDownloadMediaCommand, value); }
+		}
+		private ICommand _tryDownloadMediaCommand;
 
 		public ObservableCollection<Snap> SpoofedSnaps
 		{
