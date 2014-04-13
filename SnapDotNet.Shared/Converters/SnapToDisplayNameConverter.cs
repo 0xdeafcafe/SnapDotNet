@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Windows.UI.Xaml.Data;
 using SnapDotNet.Core.Snapchat.Models;
 
@@ -11,9 +12,14 @@ namespace SnapDotNet.Apps.Converters
 			var snap = value as Snap;
 			if (snap == null) return null;
 
-			return snap.SenderName == App.SnapChatManager.Account.Username 
+			var name =  snap.SenderName == App.SnapChatManager.Account.Username 
 				? snap.RecipientName 
 				: snap.SenderName;
+
+			var output = name;
+			foreach (var friend in App.SnapChatManager.Account.Friends.Where(friend => friend.Name == name))
+				output = friend.FriendlyName;
+			return output;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, string language)
