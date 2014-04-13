@@ -6,6 +6,8 @@ using System.Windows.Input;
 using SnapDotNet.Apps.Common;
 using SnapDotNet.Apps.Pages;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace SnapDotNet.Apps.ViewModels.SignedIn
 {
@@ -13,6 +15,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		: ViewModelBase
 	{
 		public const int MaximumRecentSnaps = 7;
+		public const int MaximumFriendRows = 11;
 
 		public MainViewModel()
 		{
@@ -42,26 +45,24 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 			#endregion
 
-#if DEBUG
-			var names = new[]{
-				"alexerax",
-				"Matt Saville",
-				"collindaginger"
-			};
-			var random = new Random();
-			for (var i = 0; i < MaximumRecentSnaps; i++)
-			{
-				var status = (SnapStatus)random.Next(5);
+			RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+			GetFriends();
 
-				RecentSnaps.Add(new Snap
-				{
-					RemainingSeconds = random.Next(9) + 1,
-					SenderName = names[random.Next(names.Length)],
-					Status = status,
-					Timestamp = DateTime.Now,
-				});
-			}
-#endif
+			App.SnapChatManager.PropertyChanged += delegate
+			{
+				RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+				GetFriends();
+			};
+			App.SnapChatManager.Account.PropertyChanged += delegate
+			{
+				RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+				GetFriends();
+			};
+
+			App.SnapChatManager.Account.Snaps.CollectionChanged += delegate
+			{
+				RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+			};
 		}
 
 		/// <summary>
@@ -84,6 +85,20 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		}
 		private ObservableCollection<FriendStory> _recentFriendStories;
 
+		public ObservableCollection<string> BestFriends
+		{
+			get { return _bestFriends; }
+			set { SetField(ref _bestFriends, value); }
+		}
+		private ObservableCollection<string> _bestFriends;
+
+		public ObservableCollection<string> Friends
+		{
+			get { return _friends; }
+			set { SetField(ref _friends, value); }
+		}
+		private ObservableCollection<string> _friends;
+
 	    public ICommand ViewSnapsCommand
 	    {
 		    get { return _viewSnapsCommand; }
@@ -100,5 +115,41 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			private set { SetField(ref _signOutCommand, value); }
 		}
 		private ICommand _signOutCommand;
+
+		public string CurrentFriendSearchQuery
+		{
+			get { return _friendSearchQuery; }
+			set { SetField(ref _friendSearchQuery, value); }
+		}
+		private string _friendSearchQuery;
+
+		private void GetFriends()
+		{
+			if (string.IsNullOrEmpty(CurrentFriendSearchQuery))
+			{
+				Friends = new ObservableCollection<string>();
+				BestFriends = new ObservableCollection<string>(App.SnapChatManager.Account.BestFriends);
+				while (BestFriends.Count > MaximumFriendRows)
+					BestFriends.RemoveAt(BestFriends.Count - 1);
+
+				// TODO: Display recently interacted friends instead
+
+				SortedSet<string> friends = new SortedSet<string>();
+				foreach (var friend in App.SnapChatManager.Account.Friends)
+				{
+					if (!Friends.Contains(friend.Name) && friends.Count < (MaximumFriendRows - BestFriends.Count))
+					{
+						friends.Add(friend.FriendlyName);
+					}
+				}
+
+				foreach (string name in friends)
+					Friends.Add(name);
+			}
+			else
+			{
+				// search friends
+			}
+		}
     }
 }

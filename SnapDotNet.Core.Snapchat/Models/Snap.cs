@@ -37,7 +37,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 
 	[DataContract]
 	public class Snap
-		: NotifyPropertyChangedBase
+		: NotifyPropertyChangedBase, IComparable, IComparable<Snap>
 	{
 		public Snap()
 		{
@@ -181,5 +181,23 @@ namespace SnapDotNet.Core.Snapchat.Models
 				return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(Id, BlobType.Snap));
 			}
 		}
+
+		#region IComparable<Snap> Members
+
+		public int CompareTo(Snap other)
+		{
+			return Convert.ToInt32((SentTimestamp - other.SentTimestamp).TotalSeconds);
+		}
+
+		#endregion
+
+		#region IComparable Members
+
+		public int CompareTo(object obj)
+		{
+			return Convert.ToInt32((SentTimestamp - (obj as Snap).SentTimestamp).TotalSeconds);
+		}
+
+		#endregion
 	}
 }

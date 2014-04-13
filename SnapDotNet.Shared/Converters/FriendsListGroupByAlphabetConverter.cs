@@ -9,7 +9,7 @@ namespace SnapDotNet.Apps.Converters
 {
 	public class FriendsListGroupByAlphabetConverter : IValueConverter
 	{
-		private const string Alphabet = "#abcdefghijklmnopqrstuzwxyz~";
+		private const string Alphabet = "#abcdefghijklmnopqrstuvwxyz~";
 
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
@@ -19,7 +20,10 @@ namespace SnapDotNet.Apps.Converters
 
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			var snapStatus = (SnapStatus) value;
+			var snap = value as Snap;
+			if (snap == null) return null;
+
+			var snapStatus = (SnapStatus) snap.Status;
 			switch (snapStatus)
 			{
 				case SnapStatus.Delivered:
@@ -38,7 +42,7 @@ namespace SnapDotNet.Apps.Converters
 					return SentForeground;
 
 				default:
-					return null;
+					return new SolidColorBrush(Colors.Red);
 			}
 		}
 
