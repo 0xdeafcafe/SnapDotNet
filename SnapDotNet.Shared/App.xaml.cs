@@ -14,6 +14,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
+using Windows.UI.Popups;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
@@ -240,9 +242,18 @@ namespace SnapDotNet.Apps
 			if (!SnapChatManager.IsAuthenticated()) return;
 
 			// Get Snapchat Updates
-			await ProgressHelper.ShowStatusBar("Updating...");
-			await SnapChatManager.UpdateAllAsync();
-			await ProgressHelper.HideStatusBar();
+			try
+			{
+				await ProgressHelper.ShowStatusBar("Updating...");
+				await SnapChatManager.UpdateAllAsync();
+				await ProgressHelper.HideStatusBar();
+			}
+			catch (InvalidHttpResponseException)
+			{
+				Debug.WriteLine("Attempting to fetch new updates produced an Unauthorized error. Signing out.");
+				var logoutTask = SnapChatManager.Endpoints.LogoutAsync();
+				var changePageTask = CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => CurrentFrame.Navigate(typeof(StartPage)));
+			}
 		}
 	}
 }

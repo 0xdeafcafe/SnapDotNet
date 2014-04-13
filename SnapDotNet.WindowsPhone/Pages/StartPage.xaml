@@ -111,7 +111,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="120"/>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="40"/>
+				<RowDefinition Height="50"/>
 				<RowDefinition Height="5"/>
 			</Grid.RowDefinitions>
 
@@ -143,7 +143,7 @@
 			</Grid>
 
 			<!-- Account Options -->
-			<Grid Grid.Row="2" VerticalAlignment="Bottom" Margin="5,0">
+			<Grid Grid.Row="2" VerticalAlignment="Bottom" Margin="10,5">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="0.35*" />
 					<ColumnDefinition Width="0.1*" />
