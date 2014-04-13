@@ -117,6 +117,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 				foreach (var downloadedSnap in downloadingSnaps.Where(downloadedSnap => downloadedSnap.Id == snap.Id))
 				{
 					snap.IsDownloading = true;
+					snap.Status = downloadedSnap.Status;
+					snap.OpenedAt = downloadedSnap.OpenedAt;
+					snap.RemainingSeconds = downloadedSnap.RemainingSeconds;
 					break;
 				}
 
