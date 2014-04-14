@@ -202,7 +202,7 @@
     <Compile Include="DataObjects\Snap.cs" />
     <Compile Include="DataObjects\User.cs" />
     <Compile Include="Models\Context.cs" />
-    <Compile Include="ScheduledJobs\SampleJob.cs" />
+    <Compile Include="ScheduledJobs\Updates.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
