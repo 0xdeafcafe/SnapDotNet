@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace SnapDotNet.Apps.Helpers
+namespace SnapDotNet.Core.Miscellaneous.Helpers
 {
 	public static class SnazzyDebug
 	{

@@ -14,6 +14,7 @@ using Windows.Media.Capture;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.Helpers;
 using SnapDotNet.Apps.ViewModels.SignedIn;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {

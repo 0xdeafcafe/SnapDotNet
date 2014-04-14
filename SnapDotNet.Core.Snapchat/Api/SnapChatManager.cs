@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Models;
@@ -264,11 +265,30 @@ namespace SnapDotNet.Core.Snapchat.Api
 			UpdateAuthToken(IsolatedStorage.ReadRoamingSetting(RoamingSnapchatDataContainer, "AuthToken"));
 		}
 
-		public async Task UpdateAllAsync()
+		public async Task UpdateAllAsync(Action hidependingUiAction, ApplicationSettings settings)
 		{
 			await Endpoints.GetUpdatesAsync();
 			await Endpoints.GetStoriesAsync();
 			await Endpoints.GetPublicActivityAsync();
+			hidependingUiAction();
+			await DownloadSnaps(settings);
+		}
+
+		private async Task DownloadSnaps(ApplicationSettings settings)
+		{
+			// Never check
+			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Never) return;
+
+			// No Cellular check
+			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Cellular &&
+				!NetworkInformationHelper.OnCellularDataConnection()) return;
+
+			// No Wifi check
+			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Wifi &&
+				!NetworkInformationHelper.OnWifiConnection()) return;
+
+			foreach (var snap in Account.Snaps)
+				await snap.DownloadSnapBlob(this);
 		}
 
 		#endregion

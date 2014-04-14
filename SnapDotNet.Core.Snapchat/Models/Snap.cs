@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Miscellaneous.Models;
+using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Converters.Json;
 using SnapDotNet.Core.Snapchat.Helpers;
 
@@ -182,6 +185,32 @@ namespace SnapDotNet.Core.Snapchat.Models
 			}
 		}
 
+		public async Task DownloadSnapBlob(SnapChatManager manager)
+		{
+			if (IsDownloading || Status != SnapStatus.Delivered || SenderName == manager.Account.Username || HasMedia) return;
+
+			// Set snap to IsDownloading
+			IsDownloading = true;
+			Status = SnapStatus.Downloading;
+
+			// Start the download
+			try
+			{
+				await Blob.DeleteBlobFromStorageAsync(Id, BlobType.Snap);
+
+				var mediaBlob = await manager.Endpoints.GetSnapBlobAsync(Id);
+				await Blob.SaveBlobToStorageAsync(mediaBlob, Id, BlobType.Snap);
+			}
+			catch (Exception exception)
+			{
+				SnazzyDebug.WriteLine(exception);
+			}
+
+			// Set snap to delivered again, but this time with media
+			IsDownloading = false;
+			Status = SnapStatus.Delivered;
+		}
+
 		#region IComparable<Snap> Members
 
 		public int CompareTo(Snap other)
@@ -195,7 +224,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 
 		public int CompareTo(object obj)
 		{
-			return Convert.ToInt32((SentTimestamp - (obj as Snap).SentTimestamp).TotalSeconds);
+			return Convert.ToInt32((SentTimestamp - ((Snap) obj).SentTimestamp).TotalSeconds);
 		}
 
 		#endregion

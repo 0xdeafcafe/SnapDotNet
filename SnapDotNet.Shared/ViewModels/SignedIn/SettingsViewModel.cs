@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SnapDotNet.Apps.Common;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Apps.ViewModels.SignedIn

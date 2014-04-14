@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using SnapDotNet.Apps.Common;
 using SnapDotNet.Apps.Pages.SignedIn;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Models;
 

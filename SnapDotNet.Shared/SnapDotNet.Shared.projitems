@@ -16,7 +16,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\RequiresAuthentication.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Common\ApplicationSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\NavigationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\NotifyPropertyChangedBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableDictionary.cs" />
@@ -45,7 +44,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendsListGroupByAlphabetConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringCaseConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SnazzyDebugger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\SnapItemTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendViewModel.cs" />

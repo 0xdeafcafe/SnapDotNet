@@ -1,7 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
+using SnapDotNet.Core.Miscellaneous.Models;
 
-namespace SnapDotNet.Apps.Common
+namespace SnapDotNet.Core.Miscellaneous.Helpers
 {
 	public class ApplicationSettings 
 		: NotifyPropertyChangedBase

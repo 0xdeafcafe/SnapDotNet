@@ -46,10 +46,12 @@
     <Compile Include="Crypto\Sha.cs" />
     <Compile Include="CustomTypes\ObservableDictionary.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />
+    <Compile Include="Helpers\ApplicationSettings.cs" />
     <Compile Include="Helpers\Async\AsyncHelpers.cs" />
     <Compile Include="Helpers\Async\TaskCompletionNotifier.cs" />
     <Compile Include="Helpers\Compression\Gzip.cs" />
     <Compile Include="Helpers\Compression\Zip.cs" />
+    <Compile Include="Helpers\SnazzyDebugger.cs" />
     <Compile Include="Helpers\Storage\IsolatedStorage.cs" />
     <Compile Include="Helpers\Time.cs" />
     <Compile Include="Helpers\VariousHelpers.cs" />
