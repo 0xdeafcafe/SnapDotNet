@@ -19,6 +19,8 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 		public MainViewModel()
 		{
+			if (App.SnapChatManager.Account == null) return;
+
 			RecentSnaps = new ObservableCollection<Snap>();
 
 			#region Commands
