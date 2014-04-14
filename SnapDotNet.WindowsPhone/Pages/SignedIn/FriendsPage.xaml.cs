@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
+using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.Common;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -12,6 +13,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
+	[RequiresAuthentication]
 	public sealed partial class FriendsPage
 	{
 		public FriendsViewModel ViewModel { get; private set; }

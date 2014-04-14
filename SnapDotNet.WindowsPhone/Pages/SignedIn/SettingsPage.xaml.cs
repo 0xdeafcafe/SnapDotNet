@@ -1,19 +1,7 @@
-﻿using SnapDotNet.Apps.Common;
+﻿using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.Common;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -23,26 +11,29 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class SettingsPage : Page
+	[RequiresAuthentication]
+	public sealed partial class SettingsPage
 	{
-		private NavigationHelper navigationHelper;
-		private ObservableDictionary defaultViewModel = new ObservableDictionary();
+		private readonly NavigationHelper _navigationHelper;
+		private readonly ObservableDictionary _defaultViewModel = new ObservableDictionary();
 
 		public SettingsPage()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 
-			this.navigationHelper = new NavigationHelper(this);
-			this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
-			this.navigationHelper.SaveState += this.NavigationHelper_SaveState;
+			_navigationHelper = new NavigationHelper(this);
+			_navigationHelper.LoadState += NavigationHelper_LoadState;
+			_navigationHelper.SaveState += NavigationHelper_SaveState;
 		}
+		
+		#region NavigationHelper registration
 
 		/// <summary>
 		/// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
 		/// </summary>
 		public NavigationHelper NavigationHelper
 		{
-			get { return this.navigationHelper; }
+			get { return _navigationHelper; }
 		}
 
 		/// <summary>
@@ -51,7 +42,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		/// </summary>
 		public ObservableDictionary DefaultViewModel
 		{
-			get { return this.defaultViewModel; }
+			get { return _defaultViewModel; }
 		}
 
 		/// <summary>
@@ -81,8 +72,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 		}
 
-		#region NavigationHelper registration
-
 		/// <summary>
 		/// The methods provided in this section are simply used to allow
 		/// NavigationHelper to respond to the page's navigation methods.
@@ -98,12 +87,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		/// handlers that cannot cancel the navigation request.</param>
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			this.navigationHelper.OnNavigatedTo(e);
+			_navigationHelper.OnNavigatedTo(e);
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
 		{
-			this.navigationHelper.OnNavigatedFrom(e);
+			_navigationHelper.OnNavigatedFrom(e);
 		}
 
 		#endregion

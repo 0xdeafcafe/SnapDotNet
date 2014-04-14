@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
 using SnapDotNet.Apps.Attributes;
-using SnapDotNet.Apps.Helpers;
 using SnapDotNet.Apps.ViewModels.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 
@@ -91,7 +90,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
 
 			SetUiCameraXamlElements();
-			await InitialiseCameraDevice();
+			//await InitialiseCameraDevice();
 			ButtonCamera.IsEnabled = true;
 			ButtonRecord.IsEnabled = true; //not implemented
 		}
