@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -112,18 +113,28 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 
 			// we got some house keeping to do
-			var downloadingSnaps = Account.Snaps.Where(snap => snap.IsDownloading).ToList();
-
-			foreach (var snap in downloadingSnaps)
-				foreach (var downloadedSnap in downloadingSnaps.Where(downloadedSnap => downloadedSnap.Id == snap.Id))
+			foreach (var newSnap in account.Snaps)
+			{
+				var found = false;
+				foreach (var oldSnap in Account.Snaps.Where(oldSnap => newSnap.Id == oldSnap.Id))
 				{
-					snap.IsDownloading = true;
-					snap.Status = downloadedSnap.Status;
-					snap.OpenedAt = downloadedSnap.OpenedAt;
-					snap.RemainingSeconds = downloadedSnap.RemainingSeconds;
+					found = true;
+					if (newSnap.RecipientName == Account.Username || newSnap.RecipientName == null)
+						break;
+
+					// replace, instead
+					var position = Account.Snaps.IndexOf(oldSnap);
+					if (position == -1) break;
+					Account.Snaps.RemoveAt(position);
+					Account.Snaps.Insert(position, newSnap);
 					break;
 				}
 
+				if (!found)
+					Account.Snaps.Insert(0, newSnap);
+			}
+
+			account.Snaps = Account.Snaps;
 			Account = account;
 		}
 

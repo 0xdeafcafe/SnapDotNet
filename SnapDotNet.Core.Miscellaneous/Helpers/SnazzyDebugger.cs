@@ -9,7 +9,7 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers
 		{
 			Debug.WriteLine(exception.ToString());
 #if DEBUG
-			throw exception;
+			Debugger.Break();
 #endif
 		}
 	}
