@@ -12,7 +12,12 @@ namespace SnapDotNet.Apps.ViewModels
 	{
 		public ViewModelBase()
 		{
-			GoToSettingsCommand = new RelayCommand(() => App.CurrentFrame.Navigate((typeof(SettingsPage))));
+			GoToSettingsCommand = new RelayCommand(() =>
+			{
+#if WINDOWS_PHONE_APP
+				App.CurrentFrame.Navigate((typeof (SettingsPage)));
+#endif
+			});
 			RefreshCommand = new RelayCommand(App.UpdateSnapchatData);
 		}
 
