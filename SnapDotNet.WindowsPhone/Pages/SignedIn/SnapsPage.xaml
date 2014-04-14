@@ -185,6 +185,11 @@
 							</Button>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel HorizontalAlignment="Stretch"></VirtualizingStackPanel>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
 				</ItemsControl>
 			</ScrollViewer>
 		</Grid>

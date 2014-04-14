@@ -12,7 +12,8 @@ namespace SnapDotNet.Apps.Converters
 			var snap = value as Snap;
 			if (snap == null) return null;
 
-			if (snap.SenderName == App.SnapChatManager.Account.Username)
+			if (snap.SenderName == null ||
+				snap.SenderName == App.SnapChatManager.Account.Username)
 			{
 				// You sent this!
 				switch (snap.Status)
@@ -28,7 +29,7 @@ namespace SnapDotNet.Apps.Converters
 				}
 			}
 
-			// You sent this!
+			// You recieved this!
 			switch (snap.Status)
 			{
 				case SnapStatus.Opened:

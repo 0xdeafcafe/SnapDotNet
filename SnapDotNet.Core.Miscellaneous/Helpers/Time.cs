@@ -26,10 +26,10 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers
 				{day*30, "{0} days ago"}
 			};
 
-			var since = (DateTime.Now.Ticks - theDate.Ticks) / 10000000;
+			var since = (DateTime.UtcNow.Ticks - theDate.Ticks) / 10000000;
 			return (from threshold in thresholds.Keys
 					where since < threshold
-					let t = new TimeSpan((DateTime.Now.Ticks - theDate.Ticks))
+					let t = new TimeSpan((DateTime.UtcNow.Ticks - theDate.Ticks))
 					select
 						string.Format(thresholds[threshold],
 							(t.Days > 365

@@ -5,9 +5,9 @@ using Microsoft.WindowsAzure.Mobile.Service;
 namespace SnapDotNet.Azure.MobileService.ScheduledJobs
 {
 	// A simple scheduled job which can be invoked manually by submitting an HTTP
-	// POST request to the path "/jobs/sample".
+	// POST request to the path "/jobs/Updates".
 
-	public class SampleJob : ScheduledJob
+	public class Updates : ScheduledJob
 	{
 		public override Task ExecuteAsync()
 		{

@@ -12,9 +12,7 @@ namespace SnapDotNet.Apps.Converters
 			var snap = value as Snap;
 			if (snap == null) return null;
 
-			var name =  snap.SenderName == App.SnapChatManager.Account.Username 
-				? snap.RecipientName 
-				: snap.SenderName;
+			var name = snap.RecipientName ?? snap.SenderName;
 
 			var output = name;
 			foreach (var friend in App.SnapChatManager.Account.Friends.Where(friend => friend.Name == name))

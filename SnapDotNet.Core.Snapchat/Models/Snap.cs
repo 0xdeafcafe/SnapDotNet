@@ -183,45 +183,46 @@ namespace SnapDotNet.Core.Snapchat.Models
 		{
 			get
 			{
-				return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(Id, BlobType.Snap));
+				return false;
+				//return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(Id, BlobType.Snap));
 			}
 		}
 
 		public async Task DownloadSnapBlob(SnapChatManager manager)
 		{
-			if (IsDownloading || Status != SnapStatus.Delivered || SenderName == manager.Account.Username || HasMedia) return;
+			//if (IsDownloading || Status != SnapStatus.Delivered || SenderName == manager.Account.Username || HasMedia) return;
 
-			// Set snap to IsDownloading
-			IsDownloading = true;
-			Status = SnapStatus.Downloading;
+			//// Set snap to IsDownloading
+			//IsDownloading = true;
+			//Status = SnapStatus.Downloading;
 
-			// Start the download
-			try
-			{
-				await Blob.DeleteBlobFromStorageAsync(Id, BlobType.Snap);
+			//// Start the download
+			//try
+			//{
+			//	await Blob.DeleteBlobFromStorageAsync(Id, BlobType.Snap);
 
-				var mediaBlob = await manager.Endpoints.GetSnapBlobAsync(Id);
-				await Blob.SaveBlobToStorageAsync(mediaBlob, Id, BlobType.Snap);
-			}
-			catch (InvalidHttpResponseException exception)
-			{
-				if (exception.Message == "Gone")
-				{
-					IsDownloading = false;
-					Status = SnapStatus.Opened;
-					return;
-				}
+			//	var mediaBlob = await manager.Endpoints.GetSnapBlobAsync(Id);
+			//	await Blob.SaveBlobToStorageAsync(mediaBlob, Id, BlobType.Snap);
+			//}
+			//catch (InvalidHttpResponseException exception)
+			//{
+			//	if (exception.Message == "Gone")
+			//	{
+			//		IsDownloading = false;
+			//		Status = SnapStatus.Opened;
+			//		return;
+			//	}
 
-				SnazzyDebug.WriteLine(exception);
-			}
-			catch (Exception exception)
-			{
-				SnazzyDebug.WriteLine(exception);
-			}
+			//	SnazzyDebug.WriteLine(exception);
+			//}
+			//catch (Exception exception)
+			//{
+			//	SnazzyDebug.WriteLine(exception);
+			//}
 
-			// Set snap to delivered again, but this time with media
-			IsDownloading = false;
-			Status = SnapStatus.Delivered;
+			//// Set snap to delivered again, but this time with media
+			//IsDownloading = false;
+			//Status = SnapStatus.Delivered;
 		}
 
 		#region IComparable<Snap> Members
