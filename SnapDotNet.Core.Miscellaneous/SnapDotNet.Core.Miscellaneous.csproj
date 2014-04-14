@@ -51,6 +51,7 @@
     <Compile Include="Helpers\Async\TaskCompletionNotifier.cs" />
     <Compile Include="Helpers\Compression\Gzip.cs" />
     <Compile Include="Helpers\Compression\Zip.cs" />
+    <Compile Include="Helpers\NetworkInformationHelper.cs" />
     <Compile Include="Helpers\SnazzyDebugger.cs" />
     <Compile Include="Helpers\Storage\IsolatedStorage.cs" />
     <Compile Include="Helpers\Time.cs" />

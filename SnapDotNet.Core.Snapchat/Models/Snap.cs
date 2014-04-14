@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -6,6 +7,7 @@ using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Api;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Converters.Json;
 using SnapDotNet.Core.Snapchat.Helpers;
 
@@ -200,6 +202,17 @@ namespace SnapDotNet.Core.Snapchat.Models
 
 				var mediaBlob = await manager.Endpoints.GetSnapBlobAsync(Id);
 				await Blob.SaveBlobToStorageAsync(mediaBlob, Id, BlobType.Snap);
+			}
+			catch (InvalidHttpResponseException exception)
+			{
+				if (exception.Message == "Gone")
+				{
+					IsDownloading = false;
+					Status = SnapStatus.Opened;
+					return;
+				}
+
+				SnazzyDebug.WriteLine(exception);
 			}
 			catch (Exception exception)
 			{

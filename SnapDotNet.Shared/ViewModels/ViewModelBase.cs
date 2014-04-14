@@ -13,6 +13,7 @@ namespace SnapDotNet.Apps.ViewModels
 		public ViewModelBase()
 		{
 			GoToSettingsCommand = new RelayCommand(() => App.CurrentFrame.Navigate((typeof(SettingsPage))));
+			RefreshCommand = new RelayCommand(App.UpdateSnapchatData);
 		}
 
 		public SnapChatManager Manager
@@ -29,6 +30,13 @@ namespace SnapDotNet.Apps.ViewModels
 		{
 			get { return App.Settings; }
 		}
+
+		public ICommand RefreshCommand
+		{
+			get { return _refreshCommand; }
+			set { SetField(ref _refreshCommand, value); }
+		}
+		private ICommand _refreshCommand;
 
 		public ICommand GoToSettingsCommand
 		{

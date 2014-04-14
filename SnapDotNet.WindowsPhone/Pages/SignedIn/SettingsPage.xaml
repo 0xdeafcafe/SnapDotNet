@@ -111,17 +111,6 @@
 						</ScrollViewer>
 					</DataTemplate>
 				</HubSection>
-				<HubSection Header="APP SPECIFIC">
-					<DataTemplate>
-						<ScrollViewer>
-							<StackPanel>
-								<ComboBox Header="auto download snaps" 
-										  ItemsSource="{Binding AutoDownloadSnapsTiers}"
-										  SelectedItem="{Binding ApplicationSettings.SnapAutoDownloadMode}"/>
-							</StackPanel>
-						</ScrollViewer>
-					</DataTemplate>
-				</HubSection>
 				<HubSection Header="NOTIFICATIONS">
 					<DataTemplate>
 						<ScrollViewer>
@@ -151,6 +140,17 @@
 								</Grid>
 
 								<Button Content="Request Invite Code" HorizontalAlignment="Stretch" />
+							</StackPanel>
+						</ScrollViewer>
+					</DataTemplate>
+				</HubSection>
+				<HubSection Header="APP SPECIFIC">
+					<DataTemplate>
+						<ScrollViewer>
+							<StackPanel>
+								<ComboBox Header="auto download snaps" 
+										  ItemsSource="{Binding AutoDownloadSnapsTiers}"
+										  SelectedItem="{Binding UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=ApplicationSettings.SnapAutoDownloadMode}"/>
 							</StackPanel>
 						</ScrollViewer>
 					</DataTemplate>

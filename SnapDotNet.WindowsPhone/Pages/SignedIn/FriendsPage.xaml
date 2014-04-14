@@ -228,7 +228,7 @@
 	<Page.BottomAppBar>
 		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
 			<CommandBar.SecondaryCommands>
-				<AppBarButton Label="refresh" />
+				<AppBarButton Label="refresh" Command="{Binding RefreshCommand}" />
 				<AppBarButton Label="settings" Command="{Binding GoToSettingsCommand}" />
 			</CommandBar.SecondaryCommands>
 		</CommandBar>
