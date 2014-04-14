@@ -1,0 +1,169 @@
+﻿<Page
+    x:Class="SnapDotNet.Apps.Pages.SignedIn.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:media="using:Microsoft.Xaml.Interactions.Media"
+    xmlns:signedIn="using:SnapDotNet.Apps.ViewModels.SignedIn"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+	<Page.Resources>
+		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
+				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:42" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:44" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage4">
+				<EasingDoubleKeyFrame KeyTime="0:0:14" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:16" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage3">
+				<EasingDoubleKeyFrame KeyTime="0:0:23" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:25" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage2">
+				<EasingDoubleKeyFrame KeyTime="0:0:32" Value="1"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</Page.Resources>
+	<Page.DataContext>
+		<signedIn:SettingsViewModel/>
+	</Page.DataContext>
+	<interactivity:Interaction.Behaviors>
+		<core:EventTriggerBehavior EventName="Loaded">
+			<media:ControlStoryboardAction Storyboard="{StaticResource BackgroundAmbienceStoryboard}"/>
+		</core:EventTriggerBehavior>
+	</interactivity:Interaction.Behaviors>
+
+	<Grid>
+		<!-- Backgrounds -->
+		<Grid>
+			<Image
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage2"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage3"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage4"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage5"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
+		</Grid>
+
+		<Grid Grid.Row="0" Background="#88686868">
+			<Grid.ChildrenTransitions>
+				<TransitionCollection>
+					<EntranceThemeTransition/>
+				</TransitionCollection>
+			</Grid.ChildrenTransitions>
+
+			<Hub Header="settings">
+				<HubSection Header="PERSONAL">
+					<DataTemplate>
+						<ScrollViewer>
+							<StackPanel>
+								<StackPanel>
+									<TextBlock Text="welcome" FontFamily="Segoe WP" FontSize="18" />
+									<TextBlock Text="{Binding Path=Manager.Account.Username, FallbackValue='alexerax'}"
+											   Foreground="{StaticResource SystemColorControlAccentBrush}" FontFamily="Segoe WP Semilight" 
+											   FontSize="30" />
+								</StackPanel>
+
+								<TextBox Header="email address" Margin="0,10,0,0"
+										 Text="{Binding Path=Email, FallbackValue='test@outlook.com'}" InputScope="EmailSmtpAddress"/>
+
+								<TextBox Header="phone number" 
+										 Text="{Binding Path=PhoneNumber, FallbackValue='+4407738765623'}" InputScope="TelephoneNumber"/>
+
+								<ComboBox Header="number of best friends" IsDropDownOpen="False"
+										  ItemsSource="{Binding Path=BestFriendTiers}"
+										  SelectedItem="{Binding Path=BestFriendCount}">
+								</ComboBox>
+							</StackPanel>
+						</ScrollViewer>
+					</DataTemplate>
+				</HubSection>
+				<HubSection Header="PRIVACY">
+					<DataTemplate>
+						<ScrollViewer>
+							<StackPanel>
+								<ComboBox Header="who can see your story" IsDropDownOpen="False"
+										  ItemsSource="{Binding Path=StoryPrivacyTiers}"
+										  SelectedItem="{Binding Path=StoryPrivacy}">
+								</ComboBox>
+
+								<ComboBox Header="who can send you snaps" IsDropDownOpen="False"
+										  ItemsSource="{Binding Path=SnapPrivacyTiers}"
+										  SelectedItem="{Binding Path=SnapPrivacy}">
+								</ComboBox>
+							</StackPanel>
+						</ScrollViewer>
+					</DataTemplate>
+				</HubSection>
+				<HubSection Header="APP SPECIFIC">
+					<DataTemplate>
+						<ScrollViewer>
+							<StackPanel>
+								<ComboBox Header="auto download snaps" 
+										  ItemsSource="{Binding AutoDownloadSnapsTiers}"
+										  SelectedItem="{Binding ApplicationSettings.SnapAutoDownloadMode}"/>
+							</StackPanel>
+						</ScrollViewer>
+					</DataTemplate>
+				</HubSection>
+				<HubSection Header="NOTIFICATIONS">
+					<DataTemplate>
+						<ScrollViewer>
+							<StackPanel>
+								<TextBlock TextAlignment="Justify" TextWrapping="WrapWholeWords" FontSize="14" FontFamily="Segoe WP">
+									<Run Text="This application has Push Notifications (the little toasts that appear at the top of the screen)" />
+									<Run Text="to let you know you have received a new snap, friend or a bad friend has screenshotted your snap" />
+									<Run Foreground="{StaticResource SystemColorControlAccentBrush}"
+										 Text="(lets face it, you should probally stop talking to them)." />
+									<LineBreak />
+									<LineBreak />
+									<Run Text="This feature is currently invite only as it's in the test phase. So if you have an invite code, enter it below." />
+									<Run Text="Otherwise click the button below to request one." />
+									<LineBreak />
+									<LineBreak />
+									<Run FontSize="12" Foreground="{StaticResource SecondaryFontColourBrush}"
+										 Text="This feature requires that we store your Snapchat Authentiction Token on our secure azure mobile service, to make requests to get updates. If you are not happy with this, please don't use this feature." />
+								</TextBlock>
+
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="140" />
+									</Grid.ColumnDefinitions>
+									<TextBox Header="Invite Code:" Margin="0,10,0,0" />
+									<Button Grid.Column="1" Content="Register" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="10,0,0,-10" />
+								</Grid>
+
+								<Button Content="Request Invite Code" HorizontalAlignment="Stretch" />
+							</StackPanel>
+						</ScrollViewer>
+					</DataTemplate>
+				</HubSection>
+			</Hub>
+		</Grid>
+	</Grid>
+
+	<Page.BottomAppBar>
+		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
+			<CommandBar.PrimaryCommands>
+				<AppBarButton Label="sign out" Icon="Remote" />
+			</CommandBar.PrimaryCommands>
+		</CommandBar>
+	</Page.BottomAppBar>
+</Page>

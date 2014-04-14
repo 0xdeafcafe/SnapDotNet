@@ -23,6 +23,27 @@ namespace SnapDotNet.Core.Snapchat.Models
 	}
 
 	/// <summary>
+	/// Indicates an account's privacy mode.
+	/// </summary>
+	public enum StoryPrivacy
+	{
+		/// <summary>
+		/// Everyone can see the story.
+		/// </summary>
+		Everyone,
+
+		/// <summary>
+		/// Only friends can see the story.
+		/// </summary>
+		Friends,
+
+		/// <summary>
+		/// Only friends can see the story, but the user can block certain friends.
+		/// </summary>
+		Custom
+	}
+
+	/// <summary>
 	/// Represents an account.
 	/// </summary>
 	[DataContract]
@@ -36,6 +57,14 @@ namespace SnapDotNet.Core.Snapchat.Models
 			set { SetField(ref _bestFriends, value); }
 		}
 		private ObservableCollection<string> _bestFriends;
+
+		[DataMember(Name = "number_of_best_friends")]
+		public int NumberOfBestFriends
+		{
+			get { return _numberOfBestFriends; }
+			set { SetField(ref _numberOfBestFriends, value); }
+		}
+		private int _numberOfBestFriends = 3;
 
 		[DataMember(Name = "is_vip")]
 		public bool IsVip
@@ -86,12 +115,12 @@ namespace SnapDotNet.Core.Snapchat.Models
 		private int _sent;
 
 		[DataMember(Name = "story_privacy")]
-		public string StoryPrivacy
+		public StoryPrivacy StoryPrivacy
 		{
 			get { return _storyPrivacy; }
 			set { SetField(ref _storyPrivacy, value); }
 		}
-		private string _storyPrivacy;
+		private StoryPrivacy _storyPrivacy;
 
 		[DataMember(Name = "username")]
 		public string Username

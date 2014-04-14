@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
 using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.Helpers;
 using SnapDotNet.Apps.ViewModels.SignedIn;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
@@ -60,8 +61,15 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e)
 		{
-			if (_mediaCapture != null)
-				await _mediaCapture.StopPreviewAsync();
+			try
+			{
+				if (_mediaCapture != null)
+					await _mediaCapture.StopPreviewAsync();
+			}
+			catch(Exception exception)
+			{
+				SnazzyDebug.WriteLine(exception);
+			}
 		}
 
 		private async void CameraInitialStartupSequencer()

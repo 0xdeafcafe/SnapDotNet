@@ -136,38 +136,93 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 
 		#endregion
 
-		public static void WriteSetting(string containerName, string name, string value)
-		{
-			var container = !ApplicationData.Current.RoamingSettings.Containers.ContainsKey(containerName)
-				? ApplicationData.Current.RoamingSettings.CreateContainer(containerName, ApplicationDataCreateDisposition.Always)
-				: ApplicationData.Current.RoamingSettings.Containers[containerName];
+		#region Roaming Settings
 
-			if (container.Values.ContainsKey(name))
-				container.Values[name] = value;
-			else
-				container.Values.Add(name, value);
+		public static void WriteRoamingSetting(string containerName, string name, string value)
+		{
+			WriteSetting(ApplicationData.Current.RoamingSettings, containerName, name, value);
 		}
 
-		public static string ReadSetting(string containerName, string name)
+		public static string ReadRoamingSetting(string containerName, string name)
 		{
-			if (!ApplicationData.Current.RoamingSettings.Containers.ContainsKey(containerName))
+			return ReadSetting(ApplicationData.Current.RoamingSettings, containerName, name);
+		}
+
+
+
+		public static int ReadRoamingSettingInt(string containerName, string name)
+		{
+			return int.Parse(ReadSetting(ApplicationData.Current.RoamingSettings, containerName, name));
+		}
+
+		public static void DeleteRoamingSetting(string containerName, string name)
+		{
+			DeleteSetting(ApplicationData.Current.RoamingSettings, containerName, name);
+		}
+
+		#endregion
+
+		#region Local Settings
+
+		public static void WriteLocalSetting(string containerName, string name, string value)
+		{
+			WriteSetting(ApplicationData.Current.LocalSettings, containerName, name, value);
+		}
+
+		public static string ReadLocalSettingString(string containerName, string name)
+		{
+			return ReadSetting(ApplicationData.Current.LocalSettings, containerName, name);
+		}
+
+		public static int ReadLocalSettingInt(string containerName, string name, int defualtValue)
+		{
+			var value = ReadSetting(ApplicationData.Current.LocalSettings, containerName, name);
+			return int.Parse(value ?? defualtValue.ToString());
+		}
+
+		public static void DeleteLocalSetting(string containerName, string name)
+		{
+			DeleteSetting(ApplicationData.Current.LocalSettings, containerName, name);
+		}
+
+		#endregion
+
+		#region Settings
+
+		private static void WriteSetting(ApplicationDataContainer container, string containerName, string name, string value)
+		{
+			var selectedcontainer = !container.Containers.ContainsKey(containerName)
+				? container.CreateContainer(containerName, ApplicationDataCreateDisposition.Always)
+				: container.Containers[containerName];
+
+			if (selectedcontainer.Values.ContainsKey(name))
+				selectedcontainer.Values[name] = value;
+			else
+				selectedcontainer.Values.Add(name, value);
+		}
+
+		private static string ReadSetting(ApplicationDataContainer container, string containerName, string name)
+		{
+			if (!container.Containers.ContainsKey(containerName))
 				return null;
 
-			var container = ApplicationData.Current.RoamingSettings.Containers[containerName];
-			if (container.Values.ContainsKey(name))
-				return (string) container.Values[name];
-			
+			var selectedContainer = container.Containers[containerName];
+			if (selectedContainer.Values.ContainsKey(name))
+				return (string)selectedContainer.Values[name];
+
 			return null;
 		}
 
-		public static void DeleteSetting(string containerName, string name)
+		private static void DeleteSetting(ApplicationDataContainer container, string containerName, string name)
 		{
-			if (!ApplicationData.Current.RoamingSettings.Containers.ContainsKey(containerName)) 
+			if (!container.Containers.ContainsKey(containerName))
 				return;
 
-			var container = ApplicationData.Current.RoamingSettings.Containers[containerName];
-			if (container.Values.ContainsKey(name))
-				container.DeleteContainer(name);
+			var selectedContainer = container.Containers[containerName];
+			if (selectedContainer.Values.ContainsKey(name))
+				selectedContainer.DeleteContainer(name);
 		}
+
+		#endregion
 	}
 }

@@ -86,6 +86,9 @@
     <Compile Include="Dialogs\ChangeDisplayNameDialog.xaml.cs">
       <DependentUpon>ChangeDisplayNameDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SignedIn\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SignedIn\SnapsPage.xaml.cs">
       <DependentUpon>SnapsPage.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Dialogs\ChangeDisplayNameDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SignedIn\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

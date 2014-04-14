@@ -196,8 +196,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 			IsolatedStorage.WriteFileAsync(PublicActivityDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(PublicActivities)));
 
 			// Save AuthToken and Username to Roaming storage
-			IsolatedStorage.WriteSetting(RoamingSnapchatDataContainer, "Username", Username);
-			IsolatedStorage.WriteSetting(RoamingSnapchatDataContainer, "AuthToken", AuthToken);
+			IsolatedStorage.WriteRoamingSetting(RoamingSnapchatDataContainer, "Username", Username);
+			IsolatedStorage.WriteRoamingSetting(RoamingSnapchatDataContainer, "AuthToken", AuthToken);
 
 			// All done b
 		}
@@ -207,8 +207,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 			await IsolatedStorage.DeleteFileAsync(AccountDataFileName);
 			await IsolatedStorage.DeleteFileAsync(StoriesDataFileName);
 			await IsolatedStorage.DeleteFileAsync(PublicActivityDataFileName);
-			IsolatedStorage.DeleteSetting(RoamingSnapchatDataContainer, "Username");
-			IsolatedStorage.DeleteSetting(RoamingSnapchatDataContainer, "AuthToken");
+			IsolatedStorage.DeleteRoamingSetting(RoamingSnapchatDataContainer, "Username");
+			IsolatedStorage.DeleteRoamingSetting(RoamingSnapchatDataContainer, "AuthToken");
 		}
 
 		public void Load()
@@ -260,8 +260,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 
 			// Load AuthToken and Username from Roaming storage
-			UpdateUsername(IsolatedStorage.ReadSetting(RoamingSnapchatDataContainer, "Username"));
-			UpdateAuthToken(IsolatedStorage.ReadSetting(RoamingSnapchatDataContainer, "AuthToken"));
+			UpdateUsername(IsolatedStorage.ReadRoamingSetting(RoamingSnapchatDataContainer, "Username"));
+			UpdateAuthToken(IsolatedStorage.ReadRoamingSetting(RoamingSnapchatDataContainer, "AuthToken"));
 		}
 
 		public async Task UpdateAllAsync()

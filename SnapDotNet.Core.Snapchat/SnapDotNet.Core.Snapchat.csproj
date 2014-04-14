@@ -47,6 +47,7 @@
     <Compile Include="Api\Settings.cs" />
     <Compile Include="Api\SnapChatManager.cs" />
     <Compile Include="Api\WebConnect.cs" />
+    <Compile Include="Converters\Json\StoryPrivacyToEnumConverter.cs" />
     <Compile Include="Converters\Json\UnixDateTimeConverter.cs" />
     <Compile Include="Helpers\Blob.cs" />
     <Compile Include="Helpers\Timestamps.cs" />
