@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Media.Imaging;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
@@ -47,9 +47,13 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<List<byte[]>> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
+		public async Task<Tuple<string, List<byte[]>>> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
 		{
 			var registration = await RegisterAsync(age, birthday, email, password);
+
+			if (!registration.Logged)
+				throw  new InvalidRegistrationException(registration.Message);
+
 			return await GetCaptchaImagesAsync(registration.Email, registration.AuthToken);
 		}
 
@@ -57,10 +61,12 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public List<byte[]> RegisterAndGetCaptcha(int age, string birthday, string email, string password)
+		public Tuple<string, List<byte[]>> RegisterAndGetCaptcha(int age, string birthday, string email, string password)
 		{
 			return RegisterAndGetCaptchaAsync(age, birthday, email, password).Result;
 		}
+
+		#region Step 1: Registering
 
 		/// <summary>
 		/// 
@@ -93,12 +99,18 @@ namespace SnapDotNet.Core.Snapchat.Api
 			return RegisterAsync(age, birthday, email, password).Result;
 		}
 
+		#endregion
+
+		#region Step 2: Getting Captchas
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<List<byte[]>> GetCaptchaImagesAsync(string email, string authToken)
+		public async Task<Tuple<string, List<byte[]>>> GetCaptchaImagesAsync(string email, string authToken)
 		{
+			// I know you want to avoid Tuples, Alex, but this has to return the captcha_id (to be used in the next request) as well as the images.
+
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
@@ -108,23 +120,86 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostToByteArrayAsync(GetCaptchaEndpointUrl, postData, authToken,
+					_webConnect.PostToResponseAsync(GetCaptchaEndpointUrl, postData, authToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
-			var images = new List<BitmapImage>();
-			var files = await Zip.ExtractAllFilesAsync(response);
+			var captchaId = response.Content.Headers.ToString();
+			captchaId = captchaId.Substring(captchaId.IndexOf("filename=") + 9);
+			captchaId = captchaId.Substring(0, captchaId.IndexOf(".zip\r\n"));
 
-			return files;
+			var files = await Zip.ExtractAllFilesAsync(await response.Content.ReadAsByteArrayAsync());
+
+			return new Tuple<string, List<byte[]>>(captchaId, files);
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public List<byte[]> GetCaptchaImages(string email, string authToken)
+		public Tuple<string, List<byte[]>> GetCaptchaImages(string email, string authToken)
 		{
 			return GetCaptchaImagesAsync(email, authToken).Result;
 		}
+
+		#endregion
+
+		#region Step 3: Submitting Captcha Solution
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<bool> SolveCaptchaAsync(string email, string captchaId, string authToken, bool[] captchaImagesWithGhosts)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"captcha_solution", captchaImagesWithGhosts.Aggregate("", (current, b) => current + (b ? "1" : "0"))},
+				{"captcha_id", captchaId},
+				{"username", email},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+			};
+
+			try
+			{
+				// Http request went through, meaning the captcha was solved correctly
+				await
+					_webConnect.PostToResponseAsync(SolveCaptchaEndpointUrl, postData, authToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+				return true;
+			}
+
+			catch (InvalidHttpResponseException ex)
+			{
+				switch (ex.HttpResponseMessage.StatusCode)
+				{
+					// This is given when the captcha is solved incorrectly.
+					case HttpStatusCode.Forbidden:
+						return false;
+
+					default:
+						throw;
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public bool SolveCaptcha(string email, string captchaId, string authToken, bool[] captchaImagesWithGhosts)
+		{
+			return SolveCaptchaAsync(email, captchaId, authToken, captchaImagesWithGhosts).Result;
+		}
+
+		#endregion
+
+		#region Step 4: Attaching a Username
+
+		// Almost there
+
+		#endregion
 
 		#endregion
 

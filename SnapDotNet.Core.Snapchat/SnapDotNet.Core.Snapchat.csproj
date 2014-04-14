@@ -43,6 +43,7 @@
     <Compile Include="Api\Endpoints.cs" />
     <Compile Include="Api\Exceptions\InvalidBlobDataException.cs" />
     <Compile Include="Api\Exceptions\InvalidCredentialsException.cs" />
+    <Compile Include="Api\Exceptions\InvalidRegistrationException.cs" />
     <Compile Include="Api\Exceptions\InvalidHttpResponseException.cs" />
     <Compile Include="Api\Settings.cs" />
     <Compile Include="Api\SnapChatManager.cs" />
