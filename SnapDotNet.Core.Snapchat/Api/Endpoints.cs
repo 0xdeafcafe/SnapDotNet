@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -196,7 +197,44 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Step 4: Attaching a Username
 
-		// Almost there
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<Account> RegisterUsernameAsync(string email, string authToken, string requestedUsername)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"selected_username", requestedUsername},
+				{"username", email},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+			};
+
+			var account =
+				await
+					_webConnect.PostToGenericAsync<Account>(RegisterUsernameEndpointUrl, postData, Settings.StaticToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			//if (account == null || !account.Logged)
+			//	throw new InvalidCredentialsException();
+
+			_snapchatManager.UpdateAccount(account);
+			_snapchatManager.UpdateAuthToken(account.AuthToken);
+			_snapchatManager.UpdateUsername(account.Username);
+			_snapchatManager.Save();
+
+			return account;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public Account RegisterUsername(string email, string authToken, string requestedUsername)
+		{
+			return RegisterUsernameAsync(email, authToken, requestedUsername).Result;
+		}
 
 		#endregion
 
