@@ -90,7 +90,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
 
 			SetUiCameraXamlElements();
-			await InitialiseCameraDevice();
+			//await InitialiseCameraDevice();
 			ButtonCamera.IsEnabled = true;
 			ButtonRecord.IsEnabled = true; //not implemented
 		}
