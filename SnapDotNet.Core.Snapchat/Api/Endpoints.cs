@@ -47,7 +47,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<Tuple<string, List<byte[]>>> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
+		public async Task<Captcha> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
 		{
 			var registration = await RegisterAsync(age, birthday, email, password);
 			return await GetCaptchaImagesAsync(registration.Email, registration.AuthToken);
@@ -57,7 +57,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<byte[]>> RegisterAndGetCaptcha(int age, string birthday, string email, string password)
+		public Captcha RegisterAndGetCaptcha(int age, string birthday, string email, string password)
 		{
 			return RegisterAndGetCaptchaAsync(age, birthday, email, password).Result;
 		}
@@ -108,10 +108,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<Tuple<string, List<byte[]>>> GetCaptchaImagesAsync(string email, string authToken)
+		public async Task<Captcha> GetCaptchaImagesAsync(string email, string authToken)
 		{
-			// I know you want to avoid Tuples, Alex, but this has to return the captcha_id (to be used in the next request) as well as the images.
-
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
@@ -130,14 +128,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var files = await Zip.ExtractAllFilesAsync(await response.Content.ReadAsByteArrayAsync());
 
-			return new Tuple<string, List<byte[]>>(captchaId, files);
+			return new Captcha(captchaId, files);
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<byte[]>> GetCaptchaImages(string email, string authToken)
+		public Captcha GetCaptchaImages(string email, string authToken)
 		{
 			return GetCaptchaImagesAsync(email, authToken).Result;
 		}
