@@ -78,31 +78,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 				{"password", password}
 			};
 
-			var response =
+			return 
 				await
-					_webConnect.PostToResponseAsync(RegisterEndpointUrl, postData, Settings.StaticToken,
+					_webConnect.PostToGenericAsync<RegistrationResponse>(RegisterEndpointUrl, postData, Settings.StaticToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
-
-			// The Response returned a normal response, indicating that the request was not accepted.
-			// A successful request will return gzipped json data.
-			if (!response.Content.Headers.ContentEncoding.Contains("gzip"))
-			{
-				var stringContent = await response.Content.ReadAsStringAsync();
-				return await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RegistrationResponse>(stringContent));
-			}
-
-			// If the response doesn't appear to be json, let's try to decompress it as gzip
-			var gzippedData =
-				await
-					_webConnect.PostToByteArrayAsync(RegisterEndpointUrl, postData, Settings.StaticToken,
-						timestamp.ToString(CultureInfo.InvariantCulture));
-
-			// Decompress the gzipped data and deserialize it as normal.
-			var jsonData = Gzip.DecompressToString(gzippedData);
-			var deseralizedData =
-				await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RegistrationResponse>(jsonData));
-
-			return deseralizedData;
 		}
 
 		/// <summary>

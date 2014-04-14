@@ -103,7 +103,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
 
-
 			// Do GZip
 			byte[] data;
 			if (response.Content.Headers.ContentEncoding.Contains("gzip"))
