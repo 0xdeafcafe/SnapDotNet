@@ -50,10 +50,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public async Task<Tuple<string, List<byte[]>>> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
 		{
 			var registration = await RegisterAsync(age, birthday, email, password);
-
-			if (!registration.Logged)
-				throw  new InvalidRegistrationException(registration.Message);
-
 			return await GetCaptchaImagesAsync(registration.Email, registration.AuthToken);
 		}
 
@@ -84,10 +80,15 @@ namespace SnapDotNet.Core.Snapchat.Api
 				{"password", password}
 			};
 
-			return 
+			var response = 
 				await
 					_webConnect.PostToGenericAsync<RegistrationResponse>(RegisterEndpointUrl, postData, Settings.StaticToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (!response.Logged)
+				throw new InvalidRegistrationException(response.Message);
+
+			return response;
 		}
 
 		/// <summary>
