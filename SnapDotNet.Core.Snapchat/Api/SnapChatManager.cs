@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -136,7 +135,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 					Account.Snaps.Insert(0, newSnap);
 			}
 
-			Account.Snaps = new ObservableCollection<Snap>(Account.Snaps.OrderByDescending(s => s.SentTimestamp));
+			Account.Snaps = new ObservableCollection<Snap>(Account.Snaps.OrderByDescending(s => s.SentTimestamp));//.Take(15));
 			account.Snaps = Account.Snaps;
 			Account = account;
 		}
