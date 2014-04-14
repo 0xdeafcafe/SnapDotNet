@@ -72,6 +72,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public SnapChatManager()
 		{
 			Endpoints = new Endpoints(this);
+
 			Load();
 		}
 

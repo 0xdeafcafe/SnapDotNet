@@ -3,7 +3,6 @@ using System.Reflection;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
-using SnapDotNet.Apps.Common;
 using SnapDotNet.Apps.Helpers;
 using SnapDotNet.Apps.Pages;
 using System;
@@ -16,7 +15,6 @@ using Windows.UI.Xaml.Controls;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Api;
-using SnapDotNet.Core.Snapchat.Api.Exceptions;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
@@ -135,7 +133,7 @@ namespace SnapDotNet.Apps
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				if (!rootFrame.Navigate(typeof (MainPage), e.Arguments))
+				if (!rootFrame.Navigate(typeof (StartPage), e.Arguments))
 				{
 					throw new Exception("Failed to create initial page");
 				}
@@ -162,10 +160,19 @@ namespace SnapDotNet.Apps
 				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
 					.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
 
-			if (!requiresAuthentication || SnapChatManager.IsAuthenticated()) return;
+			if (requiresAuthentication && !SnapChatManager.IsAuthenticated())
+			{
+				CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => CurrentFrame.Navigate(typeof (StartPage)));
+				return;
+			}
 
-			CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-					() => CurrentFrame.Navigate(typeof(StartPage)));
+			if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
+			{
+				CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => CurrentFrame.Navigate(typeof(MainPage)));
+				return;
+			}
 		}
 
 #if WINDOWS_PHONE_APP

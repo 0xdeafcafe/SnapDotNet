@@ -4,12 +4,14 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
+using SnapDotNet.Apps.Attributes;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
+	[RequiresAuthentication]
 	public sealed partial class PreviewPage
 	{
 		public PreviewPage()

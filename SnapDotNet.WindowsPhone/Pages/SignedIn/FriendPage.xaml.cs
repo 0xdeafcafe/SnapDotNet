@@ -1,4 +1,5 @@
-﻿using SnapDotNet.Apps.Common;
+﻿using SnapDotNet.Apps.Attributes;
+using SnapDotNet.Apps.Common;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -10,6 +11,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
+	[RequiresAuthentication]
 	public sealed partial class FriendPage
 	{
 		private readonly NavigationHelper _navigationHelper;

@@ -139,7 +139,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 					webClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
 
 			postData["req_token"] = Tokens.GenerateRequestToken(Settings.Secret, Settings.HashingPattern, typeToken, timeStamp);
-			postData["version"] = "4.1.07";
 			var postBody = PostBodyParser(postData);
 			var response =
 				await
