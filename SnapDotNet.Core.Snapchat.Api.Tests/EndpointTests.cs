@@ -35,6 +35,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 		{
 			var sm = new SnapChatManager(Settings.Username, Settings.AuthToken);
 			var pr = await sm.Endpoints.UpdateAccountPrivacyAsync(true);
+			var bd = await sm.Endpoints.UpdateBirthdayAsync(10, 23);
 			var em = await sm.Endpoints.UpdateEmailAsync(sm.Account.Email);
 			var nsfw = await sm.Endpoints.UpdateMaturitySettingsAsync(true);
 			var st = await sm.Endpoints.UpdateStoryPrivacyAsync(true);

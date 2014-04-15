@@ -578,6 +578,26 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Update Settings
 
+		/// <summary>
+		/// </summary>
+		/// <param name="birthMonth"></param>
+		/// <param name="birthDay"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateBirthdayAsync(int birthMonth, int birthDay)
+		{
+			return await UpdateSettingAsync("updateBirthday", new Dictionary<string, string> { { "birthday", string.Format("{0}-{1}", birthMonth, birthDay) } });
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="birthMonth"></param>
+		/// <param name="birthDay"></param>
+		/// <returns></returns>
+		public bool UpdateBirthday(int birthMonth, int birthDay)
+		{
+			return UpdateBirthdayAsync(birthMonth, birthDay).Result;
+		}
+
 		#region Update Email
 
 		/// <summary>
