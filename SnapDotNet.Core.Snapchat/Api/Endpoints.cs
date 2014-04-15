@@ -37,6 +37,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <param name="snapchatManager"></param>
+		/// <returns></returns>
 		public Endpoints(SnapChatManager snapchatManager)
 		{
 			_snapchatManager = snapchatManager;
@@ -48,6 +49,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public async Task<Captcha> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
 		{
@@ -58,6 +63,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public Captcha RegisterAndGetCaptcha(int age, string birthday, string email, string password)
 		{
@@ -69,6 +78,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public async Task<RegistrationResponse> RegisterAsync(int age, string birthday, string email, string password)
 		{
@@ -96,6 +109,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public RegistrationResponse Register(int age, string birthday, string email, string password)
 		{
@@ -109,6 +126,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
 		/// <returns></returns>
 		public async Task<Captcha> GetCaptchaImagesAsync(string email, string authToken)
 		{
@@ -136,6 +155,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
 		/// <returns></returns>
 		public Captcha GetCaptchaImages(string email, string authToken)
 		{
@@ -145,10 +166,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 		#endregion
 
 		#region Step 3: Submitting Captcha Solution
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="captchaId"></param>
+		/// <param name="authToken"></param>
+		/// <param name="captchaImagesWithGhosts"></param>
 		/// <returns></returns>
 		public async Task<bool> SolveCaptchaAsync(string email, string captchaId, string authToken, bool[] captchaImagesWithGhosts)
 		{
@@ -188,6 +213,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="captchaId"></param>
+		/// <param name="authToken"></param>
+		/// <param name="captchaImagesWithGhosts"></param>
 		/// <returns></returns>
 		public bool SolveCaptcha(string email, string captchaId, string authToken, bool[] captchaImagesWithGhosts)
 		{
@@ -201,6 +230,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
+		/// <param name="requestedUsername"></param>
 		/// <returns></returns>
 		public async Task<Account> RegisterUsernameAsync(string email, string authToken, string requestedUsername)
 		{
@@ -231,6 +263,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
+		/// <param name="requestedUsername"></param>
 		/// <returns></returns>
 		public Account RegisterUsername(string email, string authToken, string requestedUsername)
 		{
@@ -703,6 +738,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="requestedUsernames"></param>
 		/// <returns></returns>
 		public async Task<ObservableDictionary<string, PublicActivity>> GetPublicActivityAsync(string[] requestedUsernames = null)
 		{
