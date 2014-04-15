@@ -513,6 +513,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="action"></param>
 		/// <returns></returns>
 		public async Task<Response> SendFriendActionAsync(string friendUsername, FriendAction action)
 		{
@@ -536,6 +538,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="action"></param>
 		/// <returns></returns>
 		public Response SendFriendAction(string friendUsername, FriendAction action)
 		{
@@ -545,6 +549,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="newDisplayName"></param>
 		/// <returns></returns>
 		public async Task<Response> ChangeFriendDisplayNameAsync(string friendUsername, string newDisplayName)
 		{
@@ -569,6 +575,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="newDisplayName"></param>
 		/// <returns></returns>
 		public Response ChangeFriendDisplayName(string friendUsername, string newDisplayName)
 		{
