@@ -28,6 +28,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
 		private const string SettingsEndpointUrl =			"settings";
+		private const string UpdatesFeaturesEndpointUrl =	"update_feature_settings";
 		private const string RegisterEndpointUrl =			"register";
 		private const string GetCaptchaEndpointUrl =		"get_captcha";
 		private const string SolveCaptchaEndpointUrl =		"solve_captcha";
@@ -578,6 +579,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Update Settings
 
+		#region Settings
+
+		#region Update Birthday
+
 		/// <summary>
 		/// </summary>
 		/// <param name="birthMonth"></param>
@@ -597,6 +602,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			return UpdateBirthdayAsync(birthMonth, birthDay).Result;
 		}
+
+		#endregion
 
 		#region Update Email
 
@@ -747,6 +754,51 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public bool UpdateSetting(string actionName, Dictionary<string, string> extraPostData = null)
 		{
 			return UpdateSettingAsync(actionName, extraPostData).Result;
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Feature Settings
+
+		/// <summary>
+		/// </summary>
+		/// <param name="smartFilters"></param>
+		/// <param name="visualFilters"></param>
+		/// <param name="specialText"></param>
+		/// <param name="replaySnaps"></param>
+		/// <param name="frontFacingFlash"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateFeatureSettingsAsync(bool smartFilters = false, bool visualFilters = false, bool specialText = false, bool replaySnaps = false, bool frontFacingFlash = false)
+		{
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"settings", "{" + string.Format("\"smart_filters\": {0}, \"visual_filters\": {1}, \"special_text\": {2}, \"replay_snaps\": {3}, \"front_facing_flash\": {4}", smartFilters, visualFilters, specialText, replaySnaps, frontFacingFlash) + "}"}
+			};
+
+			await
+				_webConnect.PostToGenericAsync<Response>(UpdatesFeaturesEndpointUrl, postData, _snapchatManager.AuthToken,
+					timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return true;
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="smartFilters"></param>
+		/// <param name="visualFilters"></param>
+		/// <param name="specialText"></param>
+		/// <param name="replaySnaps"></param>
+		/// <param name="frontFacingFlash"></param>
+		/// <returns></returns>
+		public bool UpdateFeatureSettings(bool smartFilters = false, bool visualFilters = false, bool specialText = false, bool replaySnaps = false, bool frontFacingFlash = false)
+		{
+			return UpdateFeatureSettingsAsync(smartFilters, visualFilters, specialText, replaySnaps, frontFacingFlash).Result;
 		}
 
 		#endregion

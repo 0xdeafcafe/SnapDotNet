@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Windows.Networking.NetworkOperators;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace SnapDotNet.Core.Snapchat.Api.Tests
@@ -39,6 +40,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 			var em = await sm.Endpoints.UpdateEmailAsync(sm.Account.Email);
 			var nsfw = await sm.Endpoints.UpdateMaturitySettingsAsync(true);
 			var st = await sm.Endpoints.UpdateStoryPrivacyAsync(true);
+			var fs = await sm.Endpoints.UpdateFeatureSettingsAsync(true, true, true, true, true);
 
 			Assert.AreEqual(true, true);
 		}
