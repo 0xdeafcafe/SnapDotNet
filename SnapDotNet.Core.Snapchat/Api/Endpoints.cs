@@ -27,6 +27,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string LogoutEndpointUrl =			"logout";
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
+		private const string SettingsEndpointUrl =			"settings";
 		private const string RegisterEndpointUrl =			"register";
 		private const string GetCaptchaEndpointUrl =		"get_captcha";
 		private const string SolveCaptchaEndpointUrl =		"solve_captcha";
@@ -537,6 +538,163 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			return ChangeFriendDisplayNameAsync(friendUsername, newDisplayName).Result;
 		}
+
+		#endregion
+
+		#region Update Settings
+
+		#region Update Email
+
+		/// <summary>
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateEmailAsync(string email)
+		{
+			return await UpdateSettingAsync("updateEmail", new Dictionary<string, string> {{"email", email}});
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
+		public bool UpdateEmail(string email)
+		{
+			return UpdateEmailAsync(email).Result;
+		}
+
+		#endregion
+
+		#region Update Account Privacy
+
+		/// <summary>
+		/// </summary>
+		/// <param name="isPrivate"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateAccountPrivacyAsync(bool isPrivate)
+		{
+			return await UpdateSettingAsync("updatePrivacy", new Dictionary<string, string> {{"privacySetting", isPrivate ? "1" : "0"}});
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="isPrivate"></param>
+		/// <returns></returns>
+		public bool UpdateAccountPrivacy(bool isPrivate)
+		{
+			return UpdateAccountPrivacyAsync(isPrivate).Result;
+		}
+
+		#endregion
+
+		#region Update Story Privacy
+
+		/// <summary>
+		/// </summary>
+		/// <param name="friendsOnly"></param>
+		/// <param name="friendsToBlock"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateStoryPrivacyAsync(bool friendsOnly, List<string> friendsToBlock = null)
+		{
+			var privacySetting = !friendsOnly ? "EVERYONE" : (friendsToBlock == null) ? "FRIENDS" : "CUSTOM";
+
+			var extraPostData = new Dictionary<string, string> {{"privacySetting", privacySetting}};
+
+			if (friendsToBlock == null)
+				return await UpdateSettingAsync("updateStoryPrivacy", extraPostData);
+
+			var blockedFriendsData = "";
+			foreach (var s in friendsToBlock)
+			{
+				blockedFriendsData += string.Format("'{0}'", s);
+
+				if (friendsToBlock.IndexOf(s) != friendsToBlock.Count - 1)
+					blockedFriendsData += ",";
+			}
+			extraPostData.Add("storyFriendsToBlock", string.Format("[{0}]", blockedFriendsData));
+
+			return await UpdateSettingAsync("updateStoryPrivacy", extraPostData);
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="friendsOnly"></param>
+		/// <param name="friendsToBlock"></param>
+		/// <returns></returns>
+		public bool UpdateStoryPrivacy(bool friendsOnly, List<string> friendsToBlock = null)
+		{
+			return UpdateStoryPrivacyAsync(friendsOnly, friendsToBlock).Result;
+		}
+
+		#endregion
+
+		#region Update Maturity Settings
+
+		/// <summary>
+		/// </summary>
+		/// <param name="canViewMatureContent"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateMaturitySettingsAsync(bool canViewMatureContent)
+		{
+			return await UpdateSettingAsync("updateCanViewMatureContent", new Dictionary<string, string> {{"canViewMatureContent", canViewMatureContent.ToString()}});
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="canViewMatureContent"></param>
+		/// <returns></returns>
+		public bool UpdateMaturitySettings(bool canViewMatureContent)
+		{
+			return UpdateMaturitySettingsAsync(canViewMatureContent).Result;
+		}
+
+		#endregion
+
+		#region Update Base
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionName"></param>
+		/// <param name="extraPostData"></param>
+		/// <returns></returns>
+		private async Task<bool> UpdateSettingAsync(string actionName, Dictionary<string, string> extraPostData = null)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"action", actionName},
+			};
+
+			if (extraPostData != null)
+				foreach (var postDataEntry in extraPostData)
+					postData.Add(postDataEntry.Key, postDataEntry.Value);
+
+			var response =
+				await
+					_webConnect.PostToGenericAsync<Response>(SettingsEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (actionName != "updateCanViewMatureContent" && !response.Logged)
+				throw new InvalidCredentialsException();
+
+			return true;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionName"></param>
+		/// <param name="extraPostData"></param>
+		/// <returns></returns>
+		public bool UpdateSetting(string actionName, Dictionary<string, string> extraPostData = null)
+		{
+			return UpdateSettingAsync(actionName, extraPostData).Result;
+		}
+
+		#endregion
 
 		#endregion
 
