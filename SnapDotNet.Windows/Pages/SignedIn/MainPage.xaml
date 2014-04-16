@@ -52,6 +52,16 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        
+        <Style TargetType="AppBarButton">
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <EntranceThemeTransition/>
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Page.BottomAppBar>
@@ -60,9 +70,10 @@
                 <AppBarButton Label="Create snap" Icon="Camera"/>
             </CommandBar.PrimaryCommands>
             <CommandBar.SecondaryCommands>
-                <!--<AppBarButton Label="View story" Icon="ViewAll"/>
-                <AppBarButton Label="Delete" Icon="Delete"/>
-                <AppBarButton Label="Block" Icon="BlockContact"/>-->
+                <AppBarButton Label="Send snap" Icon="Camera"/>
+                <AppBarButton Label="View profile" Icon="Contact"/>
+                <AppBarButton Label="Mark favorite" Icon="Favorite"/>
+                <AppBarButton Label="Pin to start" Icon="Pin"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
@@ -229,7 +240,7 @@
                             <SearchBox x:Uid="FriendSearchBox" Width="300" PlaceholderText="Search friends" Padding="8" QueryText="{Binding CurrentFriendSearchQuery, Mode=TwoWay}"/>
 
                             <!-- TODO: Hide this if searchbox query isn't empty -->
-                            <ListView Grid.Row="1" ItemsSource="{Binding Friends}" Margin="0,10,0,0">
+                            <ListView Grid.Row="1" ItemsSource="{Binding QuickAccessItems}" Margin="0,10,0,0" SelectionMode="None" IsSwipeEnabled="False">
                                 <ListView.ItemContainerTransitions>
                                     <TransitionCollection>
                                         <AddDeleteThemeTransition/>
@@ -237,22 +248,31 @@
                                 </ListView.ItemContainerTransitions>
                                 
                                 <ListView.ItemTemplateSelector>
-                                    <selectors:FriendOrBestFriendTemplateSelector>
-                                        <selectors:FriendOrBestFriendTemplateSelector.BestFriendTemplate>
+                                    <selectors:QuickAccessFriendTemplateSelector>
+                                        <selectors:QuickAccessFriendTemplateSelector.GroupTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <SymbolIcon Symbol="Favorite"/>
-                                                    <TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                                <StackPanel Orientation="Horizontal" Margin="4">
+                                                    <SymbolIcon Symbol="People"/>
+                                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </StackPanel>
                                             </DataTemplate>
-                                        </selectors:FriendOrBestFriendTemplateSelector.BestFriendTemplate>
-
-                                        <selectors:FriendOrBestFriendTemplateSelector.FriendTemplate>
+                                        </selectors:QuickAccessFriendTemplateSelector.GroupTemplate>
+                                        
+                                        <selectors:QuickAccessFriendTemplateSelector.BestFriendTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                                <StackPanel Orientation="Horizontal" Margin="4">
+                                                    <SymbolIcon Symbol="Favorite"/>
+                                                    <TextBlock Text="{Binding FriendlyName}" VerticalAlignment="Center" Margin="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                </StackPanel>
                                             </DataTemplate>
-                                        </selectors:FriendOrBestFriendTemplateSelector.FriendTemplate>
-                                    </selectors:FriendOrBestFriendTemplateSelector>
+                                        </selectors:QuickAccessFriendTemplateSelector.BestFriendTemplate>
+
+                                        <selectors:QuickAccessFriendTemplateSelector.FriendTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding FriendlyName}" VerticalAlignment="Center" Margin="4" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                            </DataTemplate>
+                                        </selectors:QuickAccessFriendTemplateSelector.FriendTemplate>
+                                    </selectors:QuickAccessFriendTemplateSelector>
                                 </ListView.ItemTemplateSelector>
                             </ListView>
 
@@ -275,7 +295,7 @@
                     </HubSection.HeaderTemplate>
 
                     <DataTemplate>
-                        <GridView ItemsSource="{Binding RecentSnaps}" SelectionChanged="OnSnapSelectionChanged" Margin="0,0,0,50" MinWidth="360">
+                        <GridView ItemsSource="{Binding RecentSnaps}" Margin="0,0,0,50" MinWidth="360" SelectionMode="None">
                             <GridView.ItemContainerTransitions>
                                 <TransitionCollection/>
                             </GridView.ItemContainerTransitions>
@@ -380,7 +400,7 @@
                     </HubSection.HeaderTemplate>
 
                     <DataTemplate>
-                        <GridView>
+                        <GridView SelectionMode="None" IsSwipeEnabled="False">
                             <GridView.ItemContainerTransitions>
                                 <TransitionCollection>
                                     <AddDeleteThemeTransition/>

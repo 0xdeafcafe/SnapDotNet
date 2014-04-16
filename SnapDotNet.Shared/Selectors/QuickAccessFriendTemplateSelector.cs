@@ -7,16 +7,20 @@ using Windows.UI.Xaml.Controls;
 
 namespace SnapDotNet.Apps.Selectors
 {
-	public sealed class FriendOrBestFriendTemplateSelector
+	public sealed class QuickAccessFriendTemplateSelector
 		: DataTemplateSelector
 	{
 		public DataTemplate BestFriendTemplate { get; set; }
 		public DataTemplate FriendTemplate { get; set; }
+		public DataTemplate GroupTemplate { get; set; }
 
 		protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
 		{
-			string friend = item as string;
-			if (friend != null && App.SnapChatManager.Account.BestFriends.Contains(friend))
+			if (item is FriendGroup)
+				return GroupTemplate;
+
+			Friend friend = item as Friend;
+			if (friend != null && App.SnapChatManager.Account.BestFriends.Contains(friend.Name))
 			{
 				return BestFriendTemplate;
 			}

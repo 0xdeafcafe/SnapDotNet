@@ -39,6 +39,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 #if !DEBUG
 			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
 #endif
+
+			BottomAppBar.Closed += delegate
+			{
+				
+			};
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -71,21 +76,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			{
 				// TODO: Open privacy policy
 			}));
-		}
-
-		private void OnSnapSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			// This is annoying as hell
-			/*(if (e.AddedItems.Count > 0)
-			{
-				this.BottomAppBar.IsOpen = true;
-				this.BottomAppBar.IsSticky = true;
-			}
-			else
-			{
-				this.BottomAppBar.IsOpen = false;
-				this.BottomAppBar.IsSticky = false;
-			}*/
 		}
 
 		private void OnBottomAppBarHintEntered(object sender, PointerRoutedEventArgs e)

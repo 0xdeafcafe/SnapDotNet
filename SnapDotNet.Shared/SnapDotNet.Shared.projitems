@@ -44,7 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendsListGroupByAlphabetConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringCaseConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Selectors\FriendOrBestFriendTemplateSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\QuickAccessFriendTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\SnapItemTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignedIn\FriendViewModel.cs" />

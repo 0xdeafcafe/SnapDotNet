@@ -55,6 +55,7 @@
     <Compile Include="Helpers\Tokens.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Friend.cs" />
+    <Compile Include="Models\FriendGroup.cs" />
     <Compile Include="Models\PublicActivity.cs" />
     <Compile Include="Models\Captcha.cs" />
     <Compile Include="Models\RegistrationResponse.cs" />

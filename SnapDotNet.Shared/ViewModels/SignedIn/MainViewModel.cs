@@ -87,12 +87,12 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		}
 		private ObservableCollection<FriendStory> _recentFriendStories;
 
-		public ObservableCollection<string> Friends
+		public ObservableCollection<object> QuickAccessItems
 		{
-			get { return _friends; }
-			set { SetField(ref _friends, value); }
+			get { return _quickAccess; }
+			set { SetField(ref _quickAccess, value); }
 		}
-		private ObservableCollection<string> _friends;
+		private ObservableCollection<object> _quickAccess;
 
 	    public ICommand ViewSnapsCommand
 	    {
@@ -122,42 +122,36 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		{
 			if (string.IsNullOrEmpty(CurrentFriendSearchQuery))
 			{
-				Friends = new ObservableCollection<string>();
-				
-				// TODO: Sort friends by best friend, recently interacted, and then alphabetically
+				QuickAccessItems = new ObservableCollection<object>();
 
-				SortedSet<string> friends = new SortedSet<string>();
+				// Groups first
+				// TODO: Add group support
 
+				// Then best friends
 				foreach (var bestFriend in App.SnapChatManager.Account.BestFriends)
 				{
-					if (friends.Count == MaximumFriendRows)
+					if (QuickAccessItems.Count > MaximumFriendRows)
 						break;
 
-
-				}
-
-				foreach (var friend in App.SnapChatManager.Account.Friends)
-				{
-
-				}
-
-				/*foreach (var friend in App.SnapChatManager.Account.Friends)
-				{
-					if (friends.Count + bestFriends.Count < MaximumFriendRows)
+					foreach (var friend in App.SnapChatManager.Account.Friends)
 					{
-						if (App.SnapChatManager.Account.BestFriends.Contains(friend.Name))
+						if (friend.Name == bestFriend)
 						{
-							bestFriends.Add(friend.FriendlyName);
-						}
-						else
-						{
-							friends.Add(friend.FriendlyName);
+							QuickAccessItems.Add(friend);
+							break;
 						}
 					}
-				}*/
+				}
 
-				foreach (string name in friends)
-					Friends.Add(name);
+				// Then the bottom feeders (TODO: Sort by recent interactions)
+				foreach (var friend in App.SnapChatManager.Account.Friends)
+				{
+					if (QuickAccessItems.Count > MaximumFriendRows)
+						break;
+
+					if (!QuickAccessItems.Contains(friend))
+						QuickAccessItems.Add(friend);
+				}
 			}
 			else
 			{
