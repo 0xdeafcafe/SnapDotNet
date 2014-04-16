@@ -172,8 +172,8 @@
 					</Style>
 					<Style x:Key="WpSmallRoundButtonStyle" TargetType="Button">
 						<Setter Property="Background" Value="Transparent"/>
-						<Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
-						<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+						<Setter Property="BorderBrush" Value="White"/>
+						<Setter Property="Foreground" Value="White"/>
 						<Setter Property="BorderThickness" Value="2.5"/>
 						<Setter Property="FontFamily" Value="Segoe WP"/>
 						<Setter Property="FontWeight" Value="Semibold"/>
@@ -258,8 +258,8 @@
 					</Style>
 					<Style x:Key="WpSmallRoundToggleButtonStyle" TargetType="ToggleButton">
 						<Setter Property="Background" Value="Transparent"/>
-						<Setter Property="BorderBrush" Value="{ThemeResource PhoneForegroundBrush}"/>
-						<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+						<Setter Property="BorderBrush" Value="White"/>
+						<Setter Property="Foreground" Value="White"/>
 						<Setter Property="BorderThickness" Value="2.5"/>
 						<Setter Property="FontFamily" Value="Segoe WP"/>
 						<Setter Property="FontWeight" Value="Semibold"/>
