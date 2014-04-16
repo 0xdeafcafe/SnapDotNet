@@ -12,5 +12,7 @@ namespace SnapDotNet.Azure.MobileService.DataObjects
 		public string SnapchatAuthToken { get; set; }
 
 		public Boolean AuthExpired { get; set; }
+
+		public Boolean NewUser { get; set; }
 	}
 }

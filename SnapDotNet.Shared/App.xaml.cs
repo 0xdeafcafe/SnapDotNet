@@ -206,7 +206,12 @@ namespace SnapDotNet.Apps
 					case PushNotificationType.Toast:
 						if (args.ToastNotification == null) return;
 
-						// TODO: Do logic work
+						// Tell the app to navigate to snaps page
+						args.ToastNotification.Activated += (notification, o) =>
+						{
+							UpdateSnapchatData();
+							CurrentFrame.Navigate(typeof (SnapsPage));
+						};
 						args.ToastNotification.Group = "Dev";
 						break;
 

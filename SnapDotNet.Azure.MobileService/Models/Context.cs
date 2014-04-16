@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using Microsoft.WindowsAzure.Mobile.Service;
 using Microsoft.WindowsAzure.Mobile.Service.Tables;
 using SnapDotNet.Azure.MobileService.DataObjects;
 
@@ -26,14 +27,13 @@ namespace SnapDotNet.Azure.MobileService.Models
 
 		public DbSet<User> Users { get; set; }
 
-		public DbSet<Snap> Snaps { get; set; }
+		public DbSet<DataObjects.Snap> Snaps { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
+			Schema = ServiceSettingsDictionary.GetSchemaName();
 			if (Schema != null)
-			{
 				modelBuilder.HasDefaultSchema(Schema);
-			}
 
 			modelBuilder.Conventions.Add(
 				new AttributeToColumnAnnotationConvention<TableColumnAttribute, string>(

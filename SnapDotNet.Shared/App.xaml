@@ -426,9 +426,9 @@
 					</Style>
 					
 					<DataTemplate x:Key="WpSemanticZoomOutTemplate">
-						<Grid Width="82" Height="82" Background="{Binding Path=Group.KeyIsVisible, Converter={StaticResource IValueConverterWpBooleanColourSelectorSemanticZoom}}" Margin="12,12,0,0">
+						<Grid Width="82" Height="82" Background="{Binding Path=Group.KeyIsVisible, Converter={StaticResource IValueConverterWpBooleanColourSelectorSemanticZoom}}" Margin="10,10,0,0">
 							<TextBlock Text="{Binding Path=Group.Key}" VerticalAlignment="Bottom" HorizontalAlignment="Left" 
-															Margin="8,0,0,0" FontSize="40" Foreground="White" FontFamily="Segoe WP Semibold" />
+									   Margin="8,0,0,0" FontSize="40" Foreground="White" FontFamily="Segoe WP Semibold" />
 						</Grid>
 					</DataTemplate>
 					<DataTemplate x:Key="WpSemanticZoomGroupStyleHeaderTemplate">

@@ -1,17 +1,16 @@
-﻿using System;
-using Microsoft.WindowsAzure.Mobile.Service;
+﻿using Microsoft.WindowsAzure.Mobile.Service;
+using SnapDotNet.Azure.MobileService.Models;
 
 namespace SnapDotNet.Azure.MobileService.DataObjects
 {
 	public class Snap : EntityData
 	{
-		public int UserId { get; set; }
-		public virtual User User { get; set; }
+		public string UserId { get; set; }
 
-		public string SnapId { get; set; }
+		public string RecipientUsername { get; set; }
 
-		public string SnapSenderUsername { get; set; }
+		public string SenderUsername { get; set; }
 
-		public Boolean NotificationSent { get; set; }
+		public SnapStatus Status { get; set; }
 	}
 }

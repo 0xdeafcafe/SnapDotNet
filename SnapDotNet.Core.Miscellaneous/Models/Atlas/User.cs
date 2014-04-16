@@ -13,5 +13,7 @@ namespace SnapDotNet.Core.Miscellaneous.Models.Atlas
 		public string SnapchatAuthToken { get; set; }
 
 		public Boolean AuthExpired { get; set; }
+
+		public Boolean NewUser { get; set; }
 	}
 }
