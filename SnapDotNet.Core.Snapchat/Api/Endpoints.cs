@@ -27,6 +27,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string LogoutEndpointUrl =			"logout";
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
+		private const string SettingsEndpointUrl =			"settings";
+		private const string UpdatesFeaturesEndpointUrl =	"update_feature_settings";
 		private const string RegisterEndpointUrl =			"register";
 		private const string GetCaptchaEndpointUrl =		"get_captcha";
 		private const string SolveCaptchaEndpointUrl =		"solve_captcha";
@@ -36,6 +38,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <param name="snapchatManager"></param>
+		/// <returns></returns>
 		public Endpoints(SnapChatManager snapchatManager)
 		{
 			_snapchatManager = snapchatManager;
@@ -47,6 +50,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public async Task<Captcha> RegisterAndGetCaptchaAsync(int age, string birthday, string email, string password)
 		{
@@ -57,6 +64,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public Captcha RegisterAndGetCaptcha(int age, string birthday, string email, string password)
 		{
@@ -68,6 +79,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public async Task<RegistrationResponse> RegisterAsync(int age, string birthday, string email, string password)
 		{
@@ -95,6 +110,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="age"></param>
+		/// <param name="birthday"></param>
+		/// <param name="email"></param>
+		/// <param name="password"></param>
 		/// <returns></returns>
 		public RegistrationResponse Register(int age, string birthday, string email, string password)
 		{
@@ -108,6 +127,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
 		/// <returns></returns>
 		public async Task<Captcha> GetCaptchaImagesAsync(string email, string authToken)
 		{
@@ -135,6 +156,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
 		/// <returns></returns>
 		public Captcha GetCaptchaImages(string email, string authToken)
 		{
@@ -144,10 +167,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 		#endregion
 
 		#region Step 3: Submitting Captcha Solution
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="captchaId"></param>
+		/// <param name="authToken"></param>
+		/// <param name="captchaImagesWithGhosts"></param>
 		/// <returns></returns>
 		public async Task<bool> SolveCaptchaAsync(string email, string captchaId, string authToken, bool[] captchaImagesWithGhosts)
 		{
@@ -187,6 +214,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="captchaId"></param>
+		/// <param name="authToken"></param>
+		/// <param name="captchaImagesWithGhosts"></param>
 		/// <returns></returns>
 		public bool SolveCaptcha(string email, string captchaId, string authToken, bool[] captchaImagesWithGhosts)
 		{
@@ -200,6 +231,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
+		/// <param name="requestedUsername"></param>
 		/// <returns></returns>
 		public async Task<Account> RegisterUsernameAsync(string email, string authToken, string requestedUsername)
 		{
@@ -230,6 +264,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="authToken"></param>
+		/// <param name="requestedUsername"></param>
 		/// <returns></returns>
 		public Account RegisterUsername(string email, string authToken, string requestedUsername)
 		{
@@ -476,6 +513,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="action"></param>
 		/// <returns></returns>
 		public async Task<Response> SendFriendActionAsync(string friendUsername, FriendAction action)
 		{
@@ -499,6 +538,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="action"></param>
 		/// <returns></returns>
 		public Response SendFriendAction(string friendUsername, FriendAction action)
 		{
@@ -508,6 +549,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="newDisplayName"></param>
 		/// <returns></returns>
 		public async Task<Response> ChangeFriendDisplayNameAsync(string friendUsername, string newDisplayName)
 		{
@@ -532,6 +575,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="newDisplayName"></param>
 		/// <returns></returns>
 		public Response ChangeFriendDisplayName(string friendUsername, string newDisplayName)
 		{
@@ -540,11 +585,240 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#endregion
 
+		#region Update Settings
+
+		#region Settings
+
+		#region Update Birthday
+
+		/// <summary>
+		/// </summary>
+		/// <param name="birthMonth"></param>
+		/// <param name="birthDay"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateBirthdayAsync(int birthMonth, int birthDay)
+		{
+			return await UpdateSettingAsync("updateBirthday", new Dictionary<string, string> { { "birthday", string.Format("{0}-{1}", birthMonth, birthDay) } });
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="birthMonth"></param>
+		/// <param name="birthDay"></param>
+		/// <returns></returns>
+		public bool UpdateBirthday(int birthMonth, int birthDay)
+		{
+			return UpdateBirthdayAsync(birthMonth, birthDay).Result;
+		}
+
+		#endregion
+
+		#region Update Email
+
+		/// <summary>
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateEmailAsync(string email)
+		{
+			return await UpdateSettingAsync("updateEmail", new Dictionary<string, string> {{"email", email}});
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
+		public bool UpdateEmail(string email)
+		{
+			return UpdateEmailAsync(email).Result;
+		}
+
+		#endregion
+
+		#region Update Account Privacy
+
+		/// <summary>
+		/// </summary>
+		/// <param name="isPrivate"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateAccountPrivacyAsync(bool isPrivate)
+		{
+			return await UpdateSettingAsync("updatePrivacy", new Dictionary<string, string> {{"privacySetting", isPrivate ? "1" : "0"}});
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="isPrivate"></param>
+		/// <returns></returns>
+		public bool UpdateAccountPrivacy(bool isPrivate)
+		{
+			return UpdateAccountPrivacyAsync(isPrivate).Result;
+		}
+
+		#endregion
+
+		#region Update Story Privacy
+
+		/// <summary>
+		/// </summary>
+		/// <param name="friendsOnly"></param>
+		/// <param name="friendsToBlock"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateStoryPrivacyAsync(bool friendsOnly, List<string> friendsToBlock = null)
+		{
+			var privacySetting = !friendsOnly ? "EVERYONE" : (friendsToBlock == null) ? "FRIENDS" : "CUSTOM";
+
+			var extraPostData = new Dictionary<string, string> {{"privacySetting", privacySetting}};
+
+			if (friendsToBlock == null)
+				return await UpdateSettingAsync("updateStoryPrivacy", extraPostData);
+
+			var blockedFriendsData = "";
+			foreach (var s in friendsToBlock)
+			{
+				blockedFriendsData += string.Format("'{0}'", s);
+
+				if (friendsToBlock.IndexOf(s) != friendsToBlock.Count - 1)
+					blockedFriendsData += ",";
+			}
+			extraPostData.Add("storyFriendsToBlock", string.Format("[{0}]", blockedFriendsData));
+
+			return await UpdateSettingAsync("updateStoryPrivacy", extraPostData);
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="friendsOnly"></param>
+		/// <param name="friendsToBlock"></param>
+		/// <returns></returns>
+		public bool UpdateStoryPrivacy(bool friendsOnly, List<string> friendsToBlock = null)
+		{
+			return UpdateStoryPrivacyAsync(friendsOnly, friendsToBlock).Result;
+		}
+
+		#endregion
+
+		#region Update Maturity Settings
+
+		/// <summary>
+		/// </summary>
+		/// <param name="canViewMatureContent"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateMaturitySettingsAsync(bool canViewMatureContent)
+		{
+			return await UpdateSettingAsync("updateCanViewMatureContent", new Dictionary<string, string> {{"canViewMatureContent", canViewMatureContent.ToString()}});
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="canViewMatureContent"></param>
+		/// <returns></returns>
+		public bool UpdateMaturitySettings(bool canViewMatureContent)
+		{
+			return UpdateMaturitySettingsAsync(canViewMatureContent).Result;
+		}
+
+		#endregion
+
+		#region Update Base
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionName"></param>
+		/// <param name="extraPostData"></param>
+		/// <returns></returns>
+		private async Task<bool> UpdateSettingAsync(string actionName, Dictionary<string, string> extraPostData = null)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"action", actionName},
+			};
+
+			if (extraPostData != null)
+				foreach (var postDataEntry in extraPostData)
+					postData.Add(postDataEntry.Key, postDataEntry.Value);
+
+			var response =
+				await
+					_webConnect.PostToGenericAsync<Response>(SettingsEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (actionName != "updateCanViewMatureContent" && !response.Logged)
+				throw new InvalidCredentialsException();
+
+			return true;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="actionName"></param>
+		/// <param name="extraPostData"></param>
+		/// <returns></returns>
+		public bool UpdateSetting(string actionName, Dictionary<string, string> extraPostData = null)
+		{
+			return UpdateSettingAsync(actionName, extraPostData).Result;
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Feature Settings
+
+		/// <summary>
+		/// </summary>
+		/// <param name="smartFilters"></param>
+		/// <param name="visualFilters"></param>
+		/// <param name="specialText"></param>
+		/// <param name="replaySnaps"></param>
+		/// <param name="frontFacingFlash"></param>
+		/// <returns></returns>
+		public async Task<bool> UpdateFeatureSettingsAsync(bool smartFilters = false, bool visualFilters = false, bool specialText = false, bool replaySnaps = false, bool frontFacingFlash = false)
+		{
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"settings", "{" + string.Format("\"smart_filters\": {0}, \"visual_filters\": {1}, \"special_text\": {2}, \"replay_snaps\": {3}, \"front_facing_flash\": {4}", smartFilters, visualFilters, specialText, replaySnaps, frontFacingFlash) + "}"}
+			};
+
+			await
+				_webConnect.PostToGenericAsync<Response>(UpdatesFeaturesEndpointUrl, postData, _snapchatManager.AuthToken,
+					timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return true;
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="smartFilters"></param>
+		/// <param name="visualFilters"></param>
+		/// <param name="specialText"></param>
+		/// <param name="replaySnaps"></param>
+		/// <param name="frontFacingFlash"></param>
+		/// <returns></returns>
+		public bool UpdateFeatureSettings(bool smartFilters = false, bool visualFilters = false, bool specialText = false, bool replaySnaps = false, bool frontFacingFlash = false)
+		{
+			return UpdateFeatureSettingsAsync(smartFilters, visualFilters, specialText, replaySnaps, frontFacingFlash).Result;
+		}
+
+		#endregion
+
+		#endregion
+
 		#region Public Activity
 
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="requestedUsernames"></param>
 		/// <returns></returns>
 		public async Task<ObservableDictionary<string, PublicActivity>> GetPublicActivityAsync(string[] requestedUsernames = null)
 		{

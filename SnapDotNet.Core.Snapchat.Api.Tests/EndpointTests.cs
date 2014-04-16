@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Windows.Networking.NetworkOperators;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace SnapDotNet.Core.Snapchat.Api.Tests
@@ -25,6 +27,20 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 
 			var solved = await sm.Endpoints.SolveCaptchaAsync("registration.test@yopmail.com", "registration.test@yopmail.com~1397508216713", "b2fc8ed6-72e5-4c27-aae3-e1968f8e110e", answer);
 			var account = await sm.Endpoints.RegisterUsernameAsync("registration.test@yopmail.com", "b2fc8ed6-72e5-4c27-aae3-e1968f8e110e", "registration_test");
+
+			Assert.AreEqual(true, true);
+		}
+
+		[TestMethod]
+		public async Task SettingsAsyncTest()
+		{
+			var sm = new SnapChatManager(Settings.Username, Settings.AuthToken);
+			var pr = await sm.Endpoints.UpdateAccountPrivacyAsync(true);
+			var bd = await sm.Endpoints.UpdateBirthdayAsync(10, 23);
+			var em = await sm.Endpoints.UpdateEmailAsync(sm.Account.Email);
+			var nsfw = await sm.Endpoints.UpdateMaturitySettingsAsync(true);
+			var st = await sm.Endpoints.UpdateStoryPrivacyAsync(true);
+			var fs = await sm.Endpoints.UpdateFeatureSettingsAsync(true, true, true, true, true);
 
 			Assert.AreEqual(true, true);
 		}
