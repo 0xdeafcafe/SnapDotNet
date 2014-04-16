@@ -17,6 +17,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		public PreviewPage()
 		{
 			InitializeComponent();
+#if !DEBUG
+			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
+#endif
 		}
 
 		/// <summary>

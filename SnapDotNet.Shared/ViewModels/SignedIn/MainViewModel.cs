@@ -87,13 +87,6 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		}
 		private ObservableCollection<FriendStory> _recentFriendStories;
 
-		public ObservableCollection<string> BestFriends
-		{
-			get { return _bestFriends; }
-			set { SetField(ref _bestFriends, value); }
-		}
-		private ObservableCollection<string> _bestFriends;
-
 		public ObservableCollection<string> Friends
 		{
 			get { return _friends; }
@@ -130,20 +123,38 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			if (string.IsNullOrEmpty(CurrentFriendSearchQuery))
 			{
 				Friends = new ObservableCollection<string>();
-				BestFriends = new ObservableCollection<string>(App.SnapChatManager.Account.BestFriends);
-				while (BestFriends.Count > MaximumFriendRows)
-					BestFriends.RemoveAt(BestFriends.Count - 1);
-
-				// TODO: Display recently interacted friends instead
+				
+				// TODO: Sort friends by best friend, recently interacted, and then alphabetically
 
 				SortedSet<string> friends = new SortedSet<string>();
+
+				foreach (var bestFriend in App.SnapChatManager.Account.BestFriends)
+				{
+					if (friends.Count == MaximumFriendRows)
+						break;
+
+
+				}
+
 				foreach (var friend in App.SnapChatManager.Account.Friends)
 				{
-					if (!Friends.Contains(friend.Name) && friends.Count < (MaximumFriendRows - BestFriends.Count))
-					{
-						friends.Add(friend.FriendlyName);
-					}
+
 				}
+
+				/*foreach (var friend in App.SnapChatManager.Account.Friends)
+				{
+					if (friends.Count + bestFriends.Count < MaximumFriendRows)
+					{
+						if (App.SnapChatManager.Account.BestFriends.Contains(friend.Name))
+						{
+							bestFriends.Add(friend.FriendlyName);
+						}
+						else
+						{
+							friends.Add(friend.FriendlyName);
+						}
+					}
+				}*/
 
 				foreach (string name in friends)
 					Friends.Add(name);

@@ -9,6 +9,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.ViewModels.SignedIn;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.ViewManagement;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -20,14 +22,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	[RequiresAuthentication]
 	public sealed partial class MainPage : Page
 	{
-		/*public static DependencyProperty AppTitleContentProperty = DependencyProperty.Register("AppTitleContentppTitleContent", typeof(object), typeof(MainPage), new PropertyMetadata(null));
-
-		public object AppTitleContent
-		{
-			get { return ((base.GetValue(MainPage.AppTitleContentProperty))); }
-			set { base.SetValue(MainPage.AppTitleContentProperty, value); }
-		}*/
-
 		public MainPage()
 		{
 			DataContext = new MainViewModel();
@@ -42,37 +36,16 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					VisualStateManager.GoToState(this, "DefaultLayout", true);
 			};
 
-			// won't work at design time
-			/*var title = new CascadingTextBlock
-			{
-				Text = "snapchat",
-				Foreground = new SolidColorBrush(Colors.White),
-				CascadeInterval = TimeSpan.FromMilliseconds(150),
-				CascadeInDuration = TimeSpan.FromMilliseconds(75),
-				StartDelay = 700,
-			};
-			title.CascadeCompleted += async delegate
-			{
-				if (title.CascadeIn)
-				{
-					title.CascadeIn = false;
-					title.CascadeOut = true;
-					await Task.Delay(10000);
-				}
-				else
-				{
-					title.CascadeOut = false;
-					title.CascadeIn = true;
-				}
-
-				await title.BeginCascadingTransitionAsync();
-			};
-			AppTitleContent = title;*/
+#if !DEBUG
+			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
+#endif
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			SettingsPane.GetForCurrentView().CommandsRequested += OnSettingsCommandsRequested;
+			BackgroundAmbienceStoryboard.RepeatBehavior = new RepeatBehavior { Type = RepeatBehaviorType.Forever };
+			BackgroundAmbienceStoryboard.Begin();
 			base.OnNavigatedTo(e);
 		}
 
@@ -128,11 +101,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private void OnBottomAppBarHintTapped(object sender, TappedRoutedEventArgs e)
 		{
 			BottomAppBar.IsOpen = true;
-		}
-
-		private void OnAccountBoxTapped(object sender, TappedRoutedEventArgs e)
-		{
-			// TODO: Navigate to accounts page
 		}
 	}
 }

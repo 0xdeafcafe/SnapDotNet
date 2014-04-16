@@ -28,6 +28,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_navigationHelper.SaveState += NavigationHelper_SaveState;
 
 			DataContext = ViewModel = new FriendViewModel();
+
+#if !DEBUG
+			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
+#endif
 		}
 
 		#region NavigationHelper registration

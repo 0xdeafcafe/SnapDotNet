@@ -31,8 +31,27 @@
 
         <!-- Width threshold for switching between the default and minimal views -->
         <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
-        
-        
+
+        <Storyboard x:Name="BackgroundAmbienceStoryboard">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
+                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:42" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:44" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage4">
+                <EasingDoubleKeyFrame KeyTime="0:0:14" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:16" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage3">
+                <EasingDoubleKeyFrame KeyTime="0:0:23" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:25" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage2">
+                <EasingDoubleKeyFrame KeyTime="0:0:32" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Page.Resources>
 
     <Page.BottomAppBar>
@@ -48,17 +67,7 @@
         </CommandBar>
     </Page.BottomAppBar>
 
-    <!-- Already specified in the constructor, but placed here too for design time conveinence -->
-    <Page.DataContext>
-        <signedIn:MainViewModel/>
-    </Page.DataContext>
-
-    <Grid Background="{ThemeResource AppPageBackgroundThemeBrush}">
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="15"/>
-        </Grid.RowDefinitions>
+    <Grid>
 
         <!-- Different Layout States -->
         <VisualStateManager.VisualStateGroups>
@@ -95,17 +104,40 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="15"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="BackgroundAmbienceGrid" Grid.RowSpan="2">
+            <Image
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+            <Image x:Name="BackgroundImage2"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
+            <Image x:Name="BackgroundImage3"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
+            <Image x:Name="BackgroundImage4"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
+            <Image x:Name="BackgroundImage5"
+				Stretch="UniformToFill" 
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
+        </Grid>
+
         <!-- Default layout -->
         <Grid x:Name="defaultView">
 
             <!-- Signed-in user box -->
-            <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="65" Tapped="OnAccountBoxTapped">
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="65">
                 <Grid.Transitions>
                     <TransitionCollection>
                         <EntranceThemeTransition/>
                     </TransitionCollection>
                 </Grid.Transitions>
-                
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -114,8 +146,11 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="250"/>
                 </Grid.ColumnDefinitions>
-                
-                <tk:PieSlice EndAngle="280" Radius="40" Grid.RowSpan="2" Margin="0,0,0,3">
+
+                <tk:PieSlice EndAngle="280" Radius="40" Grid.RowSpan="2" Margin="0,0,0,3" RenderTransformOrigin="0.5,0.5">
+                    <tk:PieSlice.RenderTransform>
+                        <CompositeTransform ScaleX="-1"/>
+                    </tk:PieSlice.RenderTransform>
                     <tk:PieSlice.Fill>
                         <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Assets/tempBackground.jpg"/>
                     </tk:PieSlice.Fill>
@@ -126,11 +161,11 @@
                            TextTrimming="CharacterEllipsis"
                            FontSize="20"
                            VerticalAlignment="Bottom"
-                           Grid.Column="1"/>
+                           Grid.Column="1" IsHitTestVisible="False" IsTextSelectionEnabled="True" IsDoubleTapEnabled="False" IsTapEnabled="False" IsHoldingEnabled="False" IsRightTapEnabled="False" ManipulationMode="None"/>
 
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Top" Margin="0,0,0,3"
-                            Grid.Row="1" Grid.Column="1">
+                            Grid.Row="1" Grid.Column="1" IsHitTestVisible="False" IsTapEnabled="False" IsRightTapEnabled="False" IsHoldingEnabled="False" IsDoubleTapEnabled="False" ManipulationMode="None">
                     <SymbolIcon Symbol="Favorite" Foreground="Orange"/>
                     <TextBlock Text="{Binding Manager.Account.Score}" FontSize="14" Foreground="LightGray" VerticalAlignment="Center" Margin="2,2,0,0"/>
                     <TextBlock Text="Points" FontSize="14" Foreground="LightGray" VerticalAlignment="Center" Margin="2,2,0,0"/>
@@ -138,7 +173,7 @@
             </Grid>
 
             <!-- Actual content -->
-            <Hub x:Uid="MainPageHub" Header="Snapchat">
+            <Hub x:Uid="MainPageHub" Header="snapchat">
                 <Hub.Resources>
                     <Style TargetType="HubSection">
                         <Setter Property="Transitions">
@@ -165,11 +200,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <SymbolIcon Margin="20,0,30,0" Symbol="VideoChat" RenderTransformOrigin="0.5,0.5">
-                                <SymbolIcon.RenderTransform>
-                                    <CompositeTransform ScaleX="3" ScaleY="3"/>
-                                </SymbolIcon.RenderTransform>
-                            </SymbolIcon>
+                            <Image Margin="0,0,5,0" Height="60" Width="60" Stretch="UniformToFill" Source="ms-appx:///Assets/app logo.png"/>
 
                             <TextBlock Text="{Binding}" Grid.Column="1"/>
                         </Grid>
@@ -198,45 +229,34 @@
                             <SearchBox x:Uid="FriendSearchBox" Width="300" PlaceholderText="Search friends" Padding="8" QueryText="{Binding CurrentFriendSearchQuery, Mode=TwoWay}"/>
 
                             <!-- TODO: Hide this if searchbox query isn't empty -->
-                            <Grid Grid.Row="1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
+                            <ListView Grid.Row="1" ItemsSource="{Binding Friends}" Margin="0,10,0,0">
+                                <ListView.ItemContainerTransitions>
+                                    <TransitionCollection>
+                                        <AddDeleteThemeTransition/>
+                                    </TransitionCollection>
+                                </ListView.ItemContainerTransitions>
+                                
+                                <ListView.ItemTemplateSelector>
+                                    <selectors:FriendOrBestFriendTemplateSelector>
+                                        <selectors:FriendOrBestFriendTemplateSelector.BestFriendTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <SymbolIcon Symbol="Favorite"/>
+                                                    <TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </selectors:FriendOrBestFriendTemplateSelector.BestFriendTemplate>
 
-                                <ListView Grid.Row="0" Margin="0,10,0,0" ItemsSource="{Binding BestFriends}">
-                                    <ListView.ItemContainerTransitions>
-                                        <TransitionCollection>
-                                            <AddDeleteThemeTransition/>
-                                        </TransitionCollection>
-                                    </ListView.ItemContainerTransitions>
+                                        <selectors:FriendOrBestFriendTemplateSelector.FriendTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </selectors:FriendOrBestFriendTemplateSelector.FriendTemplate>
+                                    </selectors:FriendOrBestFriendTemplateSelector>
+                                </ListView.ItemTemplateSelector>
+                            </ListView>
 
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <SymbolIcon Symbol="Favorite" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-
-                                <ListView Grid.Row="1" ItemsSource="{Binding Friends}">
-                                    <ListView.ItemContainerTransitions>
-                                        <TransitionCollection>
-                                            <AddDeleteThemeTransition/>
-                                        </TransitionCollection>
-                                    </ListView.ItemContainerTransitions>
-
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                            
-                            <HyperlinkButton Grid.Row="2">
+                            <HyperlinkButton Grid.Row="2" Foreground="Orange" x:Uid="MoreFriendsHyperlinkButton" HorizontalAlignment="Right">
                                 More friends...
                             </HyperlinkButton>
                         </Grid>
@@ -257,11 +277,9 @@
                     <DataTemplate>
                         <GridView ItemsSource="{Binding RecentSnaps}" SelectionChanged="OnSnapSelectionChanged" Margin="0,0,0,50" MinWidth="360">
                             <GridView.ItemContainerTransitions>
-                                <TransitionCollection>
-                                    <AddDeleteThemeTransition/>
-                                </TransitionCollection>
+                                <TransitionCollection/>
                             </GridView.ItemContainerTransitions>
-
+                            
                             <GridView.ItemTemplateSelector>
                                 <selectors:SnapItemTemplateSelector>
 
@@ -384,7 +402,10 @@
                                             </tk:PieSlice.RenderTransform>
                                         </tk:PieSlice>
 
-                                        <tk:PieSlice Radius="100" StartAngle="0" EndAngle="280">
+                                        <tk:PieSlice Radius="100" StartAngle="0" EndAngle="280" RenderTransformOrigin="0.5,0.5">
+                                            <tk:PieSlice.RenderTransform>
+                                                <CompositeTransform ScaleX="-1"/>
+                                            </tk:PieSlice.RenderTransform>
                                             <tk:PieSlice.Fill>
                                                 <ImageBrush Stretch="UniformToFill" ImageSource="ms-appx:///Assets/tempBackground.jpg"/>
                                             </tk:PieSlice.Fill>

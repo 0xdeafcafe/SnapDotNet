@@ -126,6 +126,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\app logo.png" />
     <Content Include="Assets\ghost.png" />
     <Content Include="Assets\Panoramas\pano-1.jpg" />
     <Content Include="Assets\Panoramas\pano-2.jpg" />
