@@ -199,8 +199,17 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Converters\Json\UnixDateTimeConverter.cs" />
     <Compile Include="DataObjects\Snap.cs" />
     <Compile Include="DataObjects\User.cs" />
+    <Compile Include="Helpers\Compression\Gzip.cs" />
+    <Compile Include="Helpers\Crypto\Sha.cs" />
+    <Compile Include="Helpers\Endpoints.cs" />
+    <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\Timestamps.cs" />
+    <Compile Include="Helpers\Tokens.cs" />
+    <Compile Include="Helpers\WebConnect.cs" />
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="ScheduledJobs\Updates.cs" />
     <Compile Include="Global.asax.cs">

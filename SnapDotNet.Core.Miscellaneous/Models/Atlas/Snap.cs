@@ -12,6 +12,6 @@ namespace SnapDotNet.Core.Miscellaneous.Models.Atlas
 
 		public string SnapSenderUsername { get; set; }
 
-		public Boolean NotificationSent { get; set; }
+		public int SnapStatus { get; set; }
 	}
 }
