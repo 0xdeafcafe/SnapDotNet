@@ -15,8 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="SnapDotNet.Windows.App">
-      <m2:VisualElements DisplayName="Snapchat for Windows 8.1" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Unofficial Snapchat client for Windows 8.1" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
-        <m2:DefaultTile ShortName="Snapchat">
+      <m2:VisualElements DisplayName="Snapchat for Windows 8.1" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Unofficial Snapchat client for Windows 8.1" ForegroundText="dark" BackgroundColor="#0084ff" ToastCapable="true">
+        <m2:DefaultTile ShortName="Snapchat" Square310x310Logo="Assets\Square310x310Logo.png" Wide310x150Logo="Assets\Wide310x150Logo.png">
         </m2:DefaultTile>
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
         <m2:ApplicationView MinWidth="width320" />
