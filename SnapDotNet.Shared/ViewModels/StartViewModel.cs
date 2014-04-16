@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
@@ -6,6 +7,8 @@ using System;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using Windows.UI.Popups;
+using SnapDotNet.Core.Snapchat.Models;
+using Snap = SnapDotNet.Core.Snapchat.Models.Snap;
 #if WINDOWS_PHONE_APP
 using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using Windows.UI.ViewManagement;
@@ -197,6 +200,36 @@ namespace SnapDotNet.Apps.ViewModels
 		/// </summary>
 		private async void SignIn(Page nextPage)
 		{
+//			Uncomment this to force login with a foreign Auth Token
+//
+//			App.SnapChatManager.Account = new Account
+//			{
+//				Friends = new ObservableCollection<Friend>(),
+//				AddedFriends = new ObservableCollection<AddedFriend>(),
+//				BestFriends = new ObservableCollection<string>(),
+//				Snaps = new ObservableCollection<Snap>(),
+//				AuthToken = "",
+//				Username = "alexerax"
+//			};
+//			App.SnapChatManager.AuthToken = "";
+//			App.SnapChatManager.Username = "alexerax";
+//			await App.SnapChatManager.UpdateAllAsync(() => { }, App.Settings);
+//			App.CurrentFrame.Navigate((typeof (MainPage)));
+//#if WINDOWS_PHONE_APP
+//			await
+//					App.MobileService.GetTable<User>()
+//						.InsertAsync(new User
+//						{
+//							AuthExpired = false,
+//							NewUser = true,
+//							DeviceIdent = App.DeviceIdent,
+//							SnapchatAuthToken = App.SnapChatManager.AuthToken,
+//							SnapchatUsername = App.SnapChatManager.Username
+//						});
+//#endif
+//			return;
+
+
 			try
 			{
 				if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
@@ -217,6 +250,7 @@ namespace SnapDotNet.Apps.ViewModels
 
 				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
+				await App.SnapChatManager.UpdateAllAsync(() => { }, App.Settings);
 
 #if WINDOWS_PHONE_APP
 				// Register device for Push Notifications
@@ -225,6 +259,7 @@ namespace SnapDotNet.Apps.ViewModels
 						.InsertAsync(new User
 						{
 							AuthExpired = false,
+							NewUser = true,
 							DeviceIdent = App.DeviceIdent,
 							SnapchatAuthToken = App.SnapChatManager.AuthToken,
 							SnapchatUsername = App.SnapChatManager.Username
@@ -255,7 +290,10 @@ namespace SnapDotNet.Apps.ViewModels
 				ProgressModalVisibility = Visibility.Collapsed;
 			}
 
-			if (App.SnapChatManager.Account == null || !App.SnapChatManager.Account.Logged) return;
+			if ( App.SnapChatManager.Account == null || 
+				!App.SnapChatManager.Account.Logged ||
+				!App.SnapChatManager.IsAuthenticated()) return;
+
 			App.CurrentFrame.Navigate(nextPage == null ? typeof(MainPage) : nextPage.GetType(), "removeBackStack");
 		}
 

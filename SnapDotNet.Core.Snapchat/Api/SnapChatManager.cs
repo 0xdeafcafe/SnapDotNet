@@ -100,6 +100,28 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Setters
 
+		public async Task<bool> Logout()
+		{
+			try
+			{
+				var response = await Endpoints.LogoutAsync();
+				if (response != null) throw new Exception();
+
+				Account = null;
+				AuthToken = null;
+				Username = null;
+				Stories = null;
+				PublicActivities = null;
+				await DeleteAsync();
+
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		public void UpdateAuthToken(string authToken)
 		{
 			AuthToken = authToken;

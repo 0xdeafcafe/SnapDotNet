@@ -20,25 +20,6 @@ namespace SnapDotNet.Azure.MobileService.Controllers
 		public async Task<IHttpActionResult> PostUser(User user)
 		{
 			var current = await InsertAsync(user);
-
-			var message = new WindowsPushMessage
-			{
-				XmlPayload = @"<?xml version=""1.0"" encoding=""utf-8""?>" +
-							 @"<toast><visual><binding template=""ToastText01"">" +
-							 @"<text id=""2"">Snapchat!</text>" +
-							 @"<text id=""1"">You will now get push notifications!</text>" +
-							 @"</binding></visual></toast>"
-			};
-			try
-			{
-				var result = await Services.Push.SendAsync(message, user.DeviceIdent);
-				Services.Log.Info(result.State.ToString());
-			}
-			catch (System.Exception ex)
-			{
-				Services.Log.Error(ex.Message);
-			}
-
 			return CreatedAtRoute("Tables", new { id = current.Id }, current);
 		}
 	}

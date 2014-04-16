@@ -5,6 +5,7 @@ using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Models;
 
+// ReSharper disable ConvertToLambdaExpression
 namespace SnapDotNet.Apps.ViewModels
 {
 	public class ViewModelBase
@@ -19,6 +20,7 @@ namespace SnapDotNet.Apps.ViewModels
 #endif
 			});
 			RefreshCommand = new RelayCommand(App.UpdateSnapchatData);
+			LogoutCommand = new RelayCommand(async () => await App.LogoutAsync());
 		}
 
 		public SnapChatManager Manager
@@ -49,5 +51,12 @@ namespace SnapDotNet.Apps.ViewModels
 			set { SetField(ref _goToSettingsCommand, value); }
 		}
 		private ICommand _goToSettingsCommand;
+
+		public ICommand LogoutCommand
+		{
+			get { return _logoutCommand; }
+			set { SetField(ref _logoutCommand, value); }
+		}
+		private ICommand _logoutCommand;
 	}
 }

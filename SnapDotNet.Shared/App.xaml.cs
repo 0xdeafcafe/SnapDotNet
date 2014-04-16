@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.Helpers;
@@ -15,6 +17,7 @@ using Windows.UI.Xaml.Controls;
 using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Api;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
@@ -265,12 +268,36 @@ namespace SnapDotNet.Apps
 				await ProgressHelper.ShowStatusBar("Updating...");
 				await SnapChatManager.UpdateAllAsync(async () => { await ProgressHelper.HideStatusBar(); }, Settings);
 			}
+			catch (InvalidCredentialsException exception)
+			{
+				SnazzyDebug.WriteLine(exception);
+				LogoutAsync();
+			}
 			catch (Exception exception)
 			{
 				SnazzyDebug.WriteLine(exception);
-				var logoutTask = SnapChatManager.Endpoints.LogoutAsync();
-				var changePageTask = CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => CurrentFrame.Navigate(typeof(StartPage)));
 			}
+
+			await ProgressHelper.HideStatusBar();
+		}
+
+		public static async Task LogoutAsync()
+		{
+			await ProgressHelper.ShowStatusBar("Logging out...");
+
+			var response = await SnapChatManager.Logout();
+			if (!response)
+			{
+				var dialog =
+					new MessageDialog(
+						"Unable to connect to the Snapchat Servers and log you out. Check your connection and try again.",
+						"Unable to logout");
+				await dialog.ShowAsync();
+			}
+			else
+				CurrentFrame.Navigate(typeof(StartPage));
+
+			await ProgressHelper.HideStatusBar();
 		}
 	}
 }
