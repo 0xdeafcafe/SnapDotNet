@@ -157,7 +157,7 @@ namespace SnapDotNet.Apps
 			Window.Current.Activate();
 		}
 
-		private static void CurrentFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
+		private static async void CurrentFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
 		{
 			var requiresAuthentication =
 				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
@@ -165,14 +165,14 @@ namespace SnapDotNet.Apps
 
 			if (requiresAuthentication && !SnapChatManager.IsAuthenticated())
 			{
-				CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof (StartPage)));
 				return;
 			}
 
 			if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
 			{
-				CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof(MainPage)));
 				return;
 			}
@@ -263,6 +263,9 @@ namespace SnapDotNet.Apps
 			if (!SnapChatManager.IsAuthenticated()) return;
 
 			// Get Snapchat Updates
+
+			bool forceLogout = false;
+
 			try
 			{
 				await ProgressHelper.ShowStatusBar("Updating...");
@@ -271,20 +274,25 @@ namespace SnapDotNet.Apps
 			catch (InvalidCredentialsException exception)
 			{
 				SnazzyDebug.WriteLine(exception);
-				LogoutAsync();
+				forceLogout = true;
 			}
 			catch (InvalidHttpResponseException exception)
 			{
 				if (exception.Message == "Unauthorized")
 				{
 					var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
-					dialog.ShowAsync();
-					LogoutAsync();
+					var showDialogTask = dialog.ShowAsync();
+					forceLogout = true;
 				}
 			}
 			catch (Exception exception)
 			{
 				SnazzyDebug.WriteLine(exception);
+			}
+
+			if (forceLogout)
+			{
+				await LogoutAsync();
 			}
 
 			await ProgressHelper.HideStatusBar();
