@@ -32,6 +32,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_navigationHelper = new NavigationHelper(this);
 			_navigationHelper.LoadState += NavigationHelper_LoadState;
 			_navigationHelper.SaveState += NavigationHelper_SaveState;
+			
+#if !DEBUG
+			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
+#endif
 
 			_holdingTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 0, 0, 200)};
 			//_holdingTimer.Tick += HoldingTimerOnTick;

@@ -39,6 +39,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 
 			DataContext = ViewModel = new MainViewModel();
+#if !DEBUG
+			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
+#endif
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)

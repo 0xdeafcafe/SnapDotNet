@@ -87,19 +87,12 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		}
 		private ObservableCollection<FriendStory> _recentFriendStories;
 
-		public ObservableCollection<string> BestFriends
+		public ObservableCollection<object> QuickAccessItems
 		{
-			get { return _bestFriends; }
-			set { SetField(ref _bestFriends, value); }
+			get { return _quickAccess; }
+			set { SetField(ref _quickAccess, value); }
 		}
-		private ObservableCollection<string> _bestFriends;
-
-		public ObservableCollection<string> Friends
-		{
-			get { return _friends; }
-			set { SetField(ref _friends, value); }
-		}
-		private ObservableCollection<string> _friends;
+		private ObservableCollection<object> _quickAccess;
 
 	    public ICommand ViewSnapsCommand
 	    {
@@ -129,24 +122,36 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		{
 			if (string.IsNullOrEmpty(CurrentFriendSearchQuery))
 			{
-				Friends = new ObservableCollection<string>();
-				BestFriends = new ObservableCollection<string>(App.SnapChatManager.Account.BestFriends);
-				while (BestFriends.Count > MaximumFriendRows)
-					BestFriends.RemoveAt(BestFriends.Count - 1);
+				QuickAccessItems = new ObservableCollection<object>();
 
-				// TODO: Display recently interacted friends instead
+				// Groups first
+				// TODO: Add group support
 
-				SortedSet<string> friends = new SortedSet<string>();
-				foreach (var friend in App.SnapChatManager.Account.Friends)
+				// Then best friends
+				foreach (var bestFriend in App.SnapChatManager.Account.BestFriends)
 				{
-					if (!Friends.Contains(friend.Name) && friends.Count < (MaximumFriendRows - BestFriends.Count))
+					if (QuickAccessItems.Count > MaximumFriendRows)
+						break;
+
+					foreach (var friend in App.SnapChatManager.Account.Friends)
 					{
-						friends.Add(friend.FriendlyName);
+						if (friend.Name == bestFriend)
+						{
+							QuickAccessItems.Add(friend);
+							break;
+						}
 					}
 				}
 
-				foreach (string name in friends)
-					Friends.Add(name);
+				// Then the bottom feeders (TODO: Sort by recent interactions)
+				foreach (var friend in App.SnapChatManager.Account.Friends)
+				{
+					if (QuickAccessItems.Count > MaximumFriendRows)
+						break;
+
+					if (!QuickAccessItems.Contains(friend))
+						QuickAccessItems.Add(friend);
+				}
 			}
 			else
 			{

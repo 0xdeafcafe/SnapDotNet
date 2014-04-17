@@ -126,17 +126,20 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\app logo.png" />
     <Content Include="Assets\ghost.png" />
     <Content Include="Assets\Panoramas\pano-1.jpg" />
     <Content Include="Assets\Panoramas\pano-2.jpg" />
     <Content Include="Assets\Panoramas\pano-3.jpg" />
     <Content Include="Assets\Panoramas\pano-4.jpg" />
     <Content Include="Assets\Panoramas\pano-5.jpg" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
     <Content Include="Assets\tempBackground.jpg" />
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="SnapDotNet.Windows_StoreKey.pfx" />
   </ItemGroup>
