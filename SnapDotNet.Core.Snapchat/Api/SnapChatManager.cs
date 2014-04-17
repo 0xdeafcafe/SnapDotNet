@@ -157,7 +157,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 					Account.Snaps.Insert(0, newSnap);
 			}
 
-			Account.Snaps = new ObservableCollection<Snap>(Account.Snaps.OrderByDescending(s => s.SentTimestamp));//.Take(15));
+			Account.Snaps = new ObservableCollection<Snap>(Account.Snaps.OrderByDescending(s => s.SentTimestamp).Take(50));
 			account.Snaps = Account.Snaps;
 			Account = account;
 		}
@@ -220,10 +220,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Actions
 
+		#region Actions:Save
+
 		public async void Save()
 		{
-			// Seralize the Account model and save as json string in Isolated Storage
-			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account)));
+			SaveAccountData();
 
 			// Seralize the Stories model and save as json string in Isolated Storage
 			IsolatedStorage.WriteFileAsync(StoriesDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Stories)));
@@ -237,6 +238,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			// All done b
 		}
+
+		public async void SaveAccountData()
+		{
+			// Seralize the Account model and save as json string in Isolated Storage
+			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account)));
+		}
+
+		#endregion
 
 		public async Task DeleteAsync()
 		{
@@ -323,7 +332,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 				!NetworkInformationHelper.OnWifiConnection()) return;
 
 			foreach (var snap in Account.Snaps)
-				await snap.DownloadSnapBlob(this);
+				await snap.DownloadSnapBlobAsync(this);
+
+			// yea son
+			SaveAccountData();
 		}
 
 		#endregion

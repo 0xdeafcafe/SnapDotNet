@@ -1,9 +1,14 @@
-﻿using SnapDotNet.Apps.Attributes;
+﻿using System.Diagnostics;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Input;
+using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.Common;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.ViewModels.SignedIn;
+using SnapDotNet.Core.Miscellaneous.Extensions;
+using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {
@@ -27,8 +32,14 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_navigationHelper = new NavigationHelper(this);
 			_navigationHelper.LoadState += NavigationHelper_LoadState;
 			_navigationHelper.SaveState += NavigationHelper_SaveState;
-		}
 
+			_holdingTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 0, 0, 200)};
+			//_holdingTimer.Tick += HoldingTimerOnTick;
+
+			// Make this default later
+			MediaGrid.Visibility = Visibility.Collapsed;
+		}
+		
 		#region NavigationHelper registration
 
 		/// <summary>
@@ -99,5 +110,103 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		}
 
 		#endregion
+		
+		private readonly DispatcherTimer _holdingTimer;
+		private bool _isMediaOpen;
+		private bool _isFingerDown;
+		private double _scrollYIndex;
+		private Snap _relevantSnap;
+
+		private async void ButtonSnap_Holding(object sender, HoldingRoutedEventArgs e)
+		{
+			Debug.WriteLine("le holding");
+
+			if (_isMediaOpen)
+			{
+				// Hide media
+				DisposeMediaTidily();
+				return;
+			}
+
+			var button = sender as Button;
+			if (button == null) return;
+			var snap = button.DataContext as Snap;
+			if (snap == null) return;
+			_relevantSnap = snap;
+
+			// Show Media
+			_isMediaOpen = true;
+			MediaGrid.Visibility = Visibility.Visible;
+			if (BottomAppBar != null) BottomAppBar.Visibility = Visibility.Collapsed;
+			var media = await _relevantSnap.GetSnapBlobAsync();
+
+			if (_relevantSnap.MediaType == MediaType.Image ||
+				_relevantSnap.MediaType == MediaType.FriendRequestImage)
+			{
+				MediaImage.Source = media.ToBitmapImage();
+			}
+		}
+
+		private void DisposeMediaTidily()
+		{
+			_isMediaOpen = false;
+			MediaGrid.Visibility = Visibility.Collapsed;
+			if (BottomAppBar != null) BottomAppBar.Visibility = Visibility.Visible;
+			MediaImage.Source = null;
+		}
+
+		//private void ButtonSnap_OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+		//{
+		//	//var button = sender as Button;
+		//	//if (button == null) return;
+		//	//var snap = button.DataContext as Snap;
+		//	//if (snap == null) return;
+		//	//_relevantSnap = snap;
+
+		//	//_isFingerDown = true;
+		//	//_scrollYIndex = ScrollViewer.VerticalOffset;
+		//	//_holdingTimer.Start();
+		//}
+
+		//private async void HoldingTimerOnTick(object sender, object o)
+		//{
+		//	//_holdingTimer.Stop();
+		//	//if (!_isFingerDown)
+		//	//	return;
+
+		//	//var diff = _scrollYIndex - ScrollViewer.VerticalOffset;
+		//	//if (diff < -10 || diff > 10)
+		//	//	return;
+
+		//	//// Start Media
+		//	//_isMediaOpen = true;
+		//	//MediaGrid.Visibility = Visibility.Visible;
+		//	//if (BottomAppBar != null) BottomAppBar.Visibility = Visibility.Collapsed;
+
+		//	//var media = await _relevantSnap.GetSnapBlobAsync();
+
+		//	//if (_relevantSnap.MediaType == MediaType.Image ||
+		//	//	_relevantSnap.MediaType == MediaType.FriendRequestImage)
+		//	//{
+		//	//	MediaImage.Source = media.ToBitmapImage();
+		//	//}
+		//}
+
+		//private void ButtonSnap_OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+		//{
+		//	_isFingerDown = false;
+		//	if (!_isMediaOpen)
+		//	{
+		//		_isMediaOpen = false;
+		//		return;
+		//	}
+
+		//	DisposeMediaTidily();
+		//}
+		
+		//private void ButtonSnap_OnHolding(object sender, HoldingRoutedEventArgs e)
+		//{
+		//	throw new NotImplementedException();
+		//}
 	}
 }

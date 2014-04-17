@@ -186,7 +186,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 			}
 		}
 
-		public async Task DownloadSnapBlob(SnapChatManager manager)
+		public async Task DownloadSnapBlobAsync(SnapChatManager manager)
 		{
 			if (IsDownloading || Status != SnapStatus.Delivered || SenderName == manager.Account.Username || HasMedia) return;
 
@@ -221,6 +221,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 			// Set snap to delivered again, but this time with media
 			IsDownloading = false;
 			Status = SnapStatus.Delivered;
+		}
+
+		public async Task<byte[]> GetSnapBlobAsync()
+		{
+			return await Blob.ReadBlobFromStorageAsync(Id, BlobType.Snap);
 		}
 
 		#region IComparable<Snap> Members
