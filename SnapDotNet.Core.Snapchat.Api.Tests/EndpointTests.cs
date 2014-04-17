@@ -41,6 +41,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 			var nsfw = await sm.Endpoints.UpdateMaturitySettingsAsync(true);
 			var st = await sm.Endpoints.UpdateStoryPrivacyAsync(true);
 			var fs = await sm.Endpoints.UpdateFeatureSettingsAsync(true, true, true, true, true);
+			var bffs = await sm.Endpoints.SetBestFriendCountAsync(5);
 
 			Assert.AreEqual(true, true);
 		}

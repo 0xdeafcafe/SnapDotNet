@@ -27,6 +27,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string LogoutEndpointUrl =			"logout";
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
+		private const string BestFriendCountEndpointUrl =	"set_num_best_friends";
 		private const string SettingsEndpointUrl =			"settings";
 		private const string UpdatesFeaturesEndpointUrl =	"update_feature_settings";
 		private const string RegisterEndpointUrl =			"register";
@@ -807,6 +808,41 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public bool UpdateFeatureSettings(bool smartFilters = false, bool visualFilters = false, bool specialText = false, bool replaySnaps = false, bool frontFacingFlash = false)
 		{
 			return UpdateFeatureSettingsAsync(smartFilters, visualFilters, specialText, replaySnaps, frontFacingFlash).Result;
+		}
+
+		#endregion
+
+		#region Set Number of BFFs
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="numberOfBestFriends"> Must be 3, 5, or 7.</param>
+		/// <returns></returns>
+		public async Task<BestFriends> SetBestFriendCountAsync(int numberOfBestFriends)
+		{
+			if (numberOfBestFriends != 3 && numberOfBestFriends != 5 && numberOfBestFriends != 7)
+				throw new InvalidParameterException("numberOfBestFriends must be 3, 5, or 7.");
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"num_best_friends", numberOfBestFriends.ToString()},
+			};
+
+			var response =
+				await
+					_webConnect.PostToGenericAsync<BestFriends>(BestFriendCountEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return response;
+		}
+
+		public BestFriends SetBestFriendCount(int numberOfBestFriends)
+		{
+			return SetBestFriendCountAsync(numberOfBestFriends).Result;
 		}
 
 		#endregion

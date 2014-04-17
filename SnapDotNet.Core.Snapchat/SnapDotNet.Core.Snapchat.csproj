@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Endpoints.cs" />
+    <Compile Include="Api\Exceptions\InvalidParameterException.cs" />
     <Compile Include="Api\Exceptions\InvalidBlobDataException.cs" />
     <Compile Include="Api\Exceptions\InvalidCredentialsException.cs" />
     <Compile Include="Api\Exceptions\InvalidRegistrationException.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Helpers\Timestamps.cs" />
     <Compile Include="Helpers\Tokens.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\BestFriends.cs" />
     <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\FriendGroup.cs" />
     <Compile Include="Models\PublicActivity.cs" />
