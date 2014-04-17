@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -22,6 +21,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		
 		private const string BestsEndpointUrl =				"bests";
 		private const string SnapBlobEndpointUrl =			"blob";
+		private const string ClearFeedEndpointUrl =			"clear";
 		private const string FriendEndpointUrl =			"friend";
 		private const string LoginEndpointUrl =				"login";
 		private const string LogoutEndpointUrl =			"logout";
@@ -878,6 +878,40 @@ namespace SnapDotNet.Core.Snapchat.Api
 			_snapchatManager.Save();
 
 			return publicActivities;
+		}
+
+		#endregion
+
+		#region Clear Feed
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<bool> ClearFeedAsync()
+		{
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+			};
+
+			var response =
+				await
+					_webConnect.PostToResponseAsync(ClearFeedEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (response.StatusCode == HttpStatusCode.OK)
+				return true;
+
+			throw new InvalidHttpResponseException(response.ReasonPhrase, response);
+		}
+
+		public bool ClearFeed()
+		{
+			return ClearFeedAsync().Result;
 		}
 
 		#endregion
