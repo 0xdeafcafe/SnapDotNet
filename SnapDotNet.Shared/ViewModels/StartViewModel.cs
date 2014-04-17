@@ -8,6 +8,7 @@ using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using Windows.UI.Popups;
 using SnapDotNet.Core.Snapchat.Models;
+using WinRTXamlToolkit.Controls;
 using Snap = SnapDotNet.Core.Snapchat.Models.Snap;
 #if WINDOWS_PHONE_APP
 using SnapDotNet.Core.Miscellaneous.Models.Atlas;
@@ -250,7 +251,18 @@ namespace SnapDotNet.Apps.ViewModels
 
 				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
-				await App.SnapChatManager.UpdateAllAsync(() => { }, App.Settings);
+				try
+				{
+					await App.SnapChatManager.UpdateAllAsync(() => { }, App.Settings);
+				}
+				catch (InvalidHttpResponseException exception)
+				{
+					if (exception.Message == "Unauthorized")
+					{
+						var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
+						dialog.ShowAsync();
+					}
+				}
 
 #if WINDOWS_PHONE_APP
 				// Register device for Push Notifications

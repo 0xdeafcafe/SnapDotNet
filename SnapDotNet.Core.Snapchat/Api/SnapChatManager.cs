@@ -8,6 +8,7 @@ using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Core.Snapchat.Api
@@ -104,19 +105,16 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			try
 			{
-				var response = await Endpoints.LogoutAsync();
-				if (response != null) throw new Exception();
-
+				await Endpoints.LogoutAsync();
 				Account = null;
 				AuthToken = null;
 				Username = null;
 				Stories = null;
 				PublicActivities = null;
 				await DeleteAsync();
-
 				return true;
 			}
-			catch
+			catch (Exception ex)
 			{
 				return false;
 			}

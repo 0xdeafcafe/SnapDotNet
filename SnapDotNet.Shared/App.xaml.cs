@@ -273,6 +273,15 @@ namespace SnapDotNet.Apps
 				SnazzyDebug.WriteLine(exception);
 				LogoutAsync();
 			}
+			catch (InvalidHttpResponseException exception)
+			{
+				if (exception.Message == "Unauthorized")
+				{
+					var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
+					dialog.ShowAsync();
+					LogoutAsync();
+				}
+			}
 			catch (Exception exception)
 			{
 				SnazzyDebug.WriteLine(exception);
@@ -285,17 +294,8 @@ namespace SnapDotNet.Apps
 		{
 			await ProgressHelper.ShowStatusBar("Logging out...");
 
-			var response = await SnapChatManager.Logout();
-			if (!response)
-			{
-				var dialog =
-					new MessageDialog(
-						"Unable to connect to the Snapchat Servers and log you out. Check your connection and try again.",
-						"Unable to logout");
-				await dialog.ShowAsync();
-			}
-			else
-				CurrentFrame.Navigate(typeof(StartPage));
+			await SnapChatManager.Logout();
+			CurrentFrame.Navigate(typeof(StartPage));
 
 			await ProgressHelper.HideStatusBar();
 		}
