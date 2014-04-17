@@ -400,7 +400,7 @@
                     </HubSection.HeaderTemplate>
 
                     <DataTemplate>
-                        <GridView SelectionMode="None" IsSwipeEnabled="False">
+                        <GridView SelectionMode="None" ItemsSource="{Binding Manager.Stories.FriendStoryFeed}">
                             <GridView.ItemContainerTransitions>
                                 <TransitionCollection>
                                     <AddDeleteThemeTransition/>
@@ -431,25 +431,12 @@
                                             </tk:PieSlice.Fill>
                                         </tk:PieSlice>
 
-                                        <TextBlock Grid.Row="1" FontWeight="SemiBold" HorizontalAlignment="Center">
-                                            alexerax
-                                        </TextBlock>
-
-                                        <TextBlock Grid.Row="2" FontSize="12" Foreground="#FFCCCCCC" HorizontalAlignment="Center">
-                                            2 hours ago
-                                        </TextBlock>
+                                        <TextBlock Grid.Row="1" FontWeight="SemiBold" HorizontalAlignment="Center" Text="{Binding Username}"/>
+                                        <TextBlock Grid.Row="2" FontSize="12" Foreground="#FFCCCCCC" HorizontalAlignment="Center" Text="{Binding TimeLeft}"/>
                                     </Grid>
                                 </DataTemplate>
                             </GridView.ItemTemplate>
-
-                            <Button/>
-                            <Button/>
-                            <Button/>
-                            <Button/>
-                            <Button/>
-                            <Button/>
-                            <Button/>
-                            <Button/>
+                            
                             <Button/>
                             <Button/>
                         </GridView>

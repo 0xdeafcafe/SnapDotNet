@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Converters.Json;
 using SnapDotNet.Core.Miscellaneous.Models;
 using UnixDateTimeConverter = SnapDotNet.Core.Snapchat.Converters.Json.UnixDateTimeConverter;
+using System.Collections.Generic;
 
 namespace SnapDotNet.Core.Snapchat.Models
 {
@@ -14,6 +15,11 @@ namespace SnapDotNet.Core.Snapchat.Models
 	[DataContract]
 	public class Stories : Response
 	{
+		public Stories()
+		{
+			PropertyChanged += Stories_PropertyChanged;
+		}
+
 		[DataMember(Name = "mature_content_text")]
 		public MatureContentWarning MatureContentText
 		{
@@ -37,6 +43,13 @@ namespace SnapDotNet.Core.Snapchat.Models
 			set { SetField(ref _friendStories, value); }
 		}
 		private ObservableCollection<FriendStory> _friendStories;
+
+		private ObservableCollection<Story> FriendStoryFeed
+		{
+			get { return _friendStoryFeed; }
+			set { SetField(ref _friendStoryFeed, value); }
+		}
+		private ObservableCollection<Story> _friendStoryFeed;
 
 		[DataContract]
 		public class MatureContentWarning : NotifyPropertyChangedBase
@@ -72,6 +85,28 @@ namespace SnapDotNet.Core.Snapchat.Models
 				set { SetField(ref _noText, value); }
 			}
 			private string _noText;
+		}
+
+		void Stories_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == "FriendStories" && FriendStories != null)
+			{
+				FriendStories.CollectionChanged += delegate { GenerateStoryFeed(); };
+				GenerateStoryFeed();
+			}
+		}
+
+		void GenerateStoryFeed()
+		{
+			SortedSet<Story> stories = new SortedSet<Story>();
+			foreach (var friendFeed in FriendStories)
+			{
+				foreach (var story in friendFeed.Stories)
+				{
+					stories.Add(story.Story);
+				}
+			}
+			FriendStoryFeed = new ObservableCollection<Story>(stories);
 		}
 	}
 
@@ -229,7 +264,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 	}
 
 	[DataContract]
-	public class Story : NotifyPropertyChangedBase
+	public class Story : NotifyPropertyChangedBase, IComparable, IComparable<Story>
 	{
 		[DataMember(Name = "id")]
 		public string Id
@@ -360,5 +395,23 @@ namespace SnapDotNet.Core.Snapchat.Models
 			set { SetField(ref _thumbnailUrl, value); }
 		}
 		private string _thumbnailUrl;
+
+		#region IComparable Members
+
+		public int CompareTo(object obj)
+		{
+			return Convert.ToInt32((TimeLeft - (obj as Story).TimeLeft).TotalSeconds);
+		}
+
+		#endregion
+
+		#region IComparable<Story> Members
+
+		public int CompareTo(Story other)
+		{
+			return Convert.ToInt32((TimeLeft - other.TimeLeft).TotalSeconds);
+		}
+
+		#endregion
 	}
 }
