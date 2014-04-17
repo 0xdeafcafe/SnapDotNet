@@ -131,19 +131,16 @@
 				<TextBlock Text="{Binding Path=Manager.Account.Username, FallbackValue='loading...'}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
 				<TextBlock Text="SNAPS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
 			</StackPanel>
-
-			<ListView HorizontalContentAlignment="Stretch" Grid.Row="1" 
-					  ItemsSource="{Binding Path=Manager.Account.Snaps}">
+			
+			<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" 
+						ItemsSource="{Binding Path=Manager.Account.Snaps}">
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<Button x:Name="ButtonSnap" Style="{StaticResource BasicEmptyButtonStyle}"
-									IsEnabled="{Binding Converter={StaticResource IValueConverterSnapStatusToButtonStatus}}"
-									Command="{Binding ElementName=ItemsControl, Path=DataContext.TryDownloadMediaCommand}" 
-									CommandParameter="{Binding}">
-							<!-- Click="ButtonSnap_Click"
-									 ManipulationCompleted="ButtonSnap_ManipulationCompleted"
-									 ManipulationStarted="ButtonSnap_ManipulationStarted">-->
-
+								IsEnabled="{Binding Converter={StaticResource IValueConverterSnapStatusToButtonStatus}}"
+								Command="{Binding ElementName=ItemsControl, Path=DataContext.TryDownloadMediaCommand}" 
+								CommandParameter="{Binding}" Holding="ButtonSnap_Holding">
+							
 							<Grid HorizontalAlignment="Stretch" Height="75">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="70" />
@@ -153,26 +150,26 @@
 								</Grid.ColumnDefinitions>
 
 								<ContentControl Grid.Row="0" VerticalAlignment="Center"
-													Template="{Binding Converter={StaticResource IValueConverterSnapToSnapStatusIcon}}" />
+												Template="{Binding Converter={StaticResource IValueConverterSnapToSnapStatusIcon}}" />
 
 								<StackPanel Grid.Column="1" VerticalAlignment="Center">
 									<StackPanel Orientation="Vertical">
 										<TextBlock Foreground="White"
-													   Text="{Binding Converter={StaticResource IValueConverterSnapToDisplayName}, FallbackValue='loading...'}"
-													   FontSize="18" />
+												   Text="{Binding Converter={StaticResource IValueConverterSnapToDisplayName}, FallbackValue='loading...'}"
+												   FontSize="18" />
 
 										<TextBlock Foreground="{StaticResource SecondaryFontColourBrush}" FontSize="14" TextTrimming="WordEllipsis">
-												<Run Text="{Binding Path=Timestamp, FallbackValue=18/08/94 - 14:34, Converter={StaticResource IValueConverterSnapChatTimestampToFriendly}}" />
-												<Run Text=" - " />
-												<Run Text="{Binding Path=Id, Converter={StaticResource IValueConverterSnapToFriendlySnapStatus}}" />
+											<Run Text="{Binding Path=Timestamp, FallbackValue=18/08/94 - 14:34, Converter={StaticResource IValueConverterSnapChatTimestampToFriendly}}" />
+											<Run Text=" - " />
+											<Run Text="{Binding Path=Id, Converter={StaticResource IValueConverterSnapToFriendlySnapStatus}}" />
 										</TextBlock>
 									</StackPanel>
 								</StackPanel>
 
 								<ProgressBar Grid.Column="1" Margin="0,0,0,10"
-												 Visibility="{Binding Path=IsDownloading, Converter={StaticResource IValueBooleanToVisibility}}"
-												 HorizontalAlignment="Stretch" VerticalAlignment="Bottom" 
-												 IsIndeterminate="True"  />
+											 Visibility="{Binding Path=IsDownloading, Converter={StaticResource IValueBooleanToVisibility}}"
+											 HorizontalAlignment="Stretch" VerticalAlignment="Bottom" 
+											 IsIndeterminate="True"  />
 
 								<Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">
 									<TextBlock Text="{Binding Path=RemainingSeconds}" Foreground="White" />
@@ -194,6 +191,15 @@
 					</ControlTemplate>
 				</ListView.Template>
 			</ListView>
+		</Grid>
+
+		<Grid Grid.Row="0" x:Name="MediaGrid" Background="#FF000000">
+			<Image x:Name="MediaImage" />
+			
+			<Grid Width="45" Height="45" Background="#99000000"
+				  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25">
+				<TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="24" />
+			</Grid>
 		</Grid>
 	</Grid>
 

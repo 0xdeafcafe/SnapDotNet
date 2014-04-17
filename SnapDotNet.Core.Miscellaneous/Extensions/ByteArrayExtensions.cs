@@ -5,7 +5,7 @@ namespace SnapDotNet.Core.Miscellaneous.Extensions
 {
 	public static class ByteArrayExtensions
 	{
-		public static BitmapImage ToBitmapImageAsync(this byte[] byteArray)
+		public static BitmapImage ToBitmapImage(this byte[] byteArray)
 		{
 			if (byteArray == null) return null;
 

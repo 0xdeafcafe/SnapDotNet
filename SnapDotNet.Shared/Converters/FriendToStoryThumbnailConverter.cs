@@ -22,7 +22,7 @@ namespace SnapDotNet.Apps.Converters
 			// download thumbnail blob
 			var blob = App.SnapChatManager.Endpoints.GetStoryThumbnailBlob(mostRecentStory.Story);
 
-			return (blob == null) ? null : blob.ToBitmapImageAsync();
+			return (blob == null) ? null : blob.ToBitmapImage();
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, string language)
