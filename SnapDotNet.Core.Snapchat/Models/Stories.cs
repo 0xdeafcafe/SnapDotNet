@@ -44,7 +44,8 @@ namespace SnapDotNet.Core.Snapchat.Models
 		}
 		private ObservableCollection<FriendStory> _friendStories;
 
-		private ObservableCollection<Story> FriendStoryFeed
+		[IgnoreDataMember]
+		public ObservableCollection<Story> FriendStoryFeed
 		{
 			get { return _friendStoryFeed; }
 			set { SetField(ref _friendStoryFeed, value); }
