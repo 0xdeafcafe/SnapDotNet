@@ -1,6 +1,7 @@
 ﻿using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.ViewModels;
 
 namespace SnapDotNet.Apps.Pages
@@ -18,6 +19,11 @@ namespace SnapDotNet.Apps.Pages
 
 			DataContext = ViewModel = new StartViewModel();
 			HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
+		}
+
+		protected override void OnNavigatedTo(NavigationEventArgs e)
+		{
+			
 		}
 
 		private void ShowSignInButton_Click(object sender, RoutedEventArgs e)

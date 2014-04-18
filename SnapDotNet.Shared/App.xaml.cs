@@ -113,64 +113,66 @@ namespace SnapDotNet.Apps
 				Window.Current.Content = rootFrame;
 			}
 			
-			// Create events
-			CurrentFrame.Navigating += CurrentFrameOnNavigating;
+//			// Create events
+//			CurrentFrame.Navigating += CurrentFrameOnNavigating;
 
-			if (rootFrame.Content == null)
-			{
-#if WINDOWS_PHONE_APP
-				// Removes the turnstile navigation for startup.
-				if (rootFrame.ContentTransitions != null)
-				{
-					_transitions = new TransitionCollection();
-					foreach (var c in rootFrame.ContentTransitions)
-					{
-						_transitions.Add(c);
-					}
-				}
+//			if (rootFrame.Content == null)
+//			{
+//#if WINDOWS_PHONE_APP
+//				// Removes the turnstile navigation for startup.
+//				if (rootFrame.ContentTransitions != null)
+//				{
+//					_transitions = new TransitionCollection();
+//					foreach (var c in rootFrame.ContentTransitions)
+//					{
+//						_transitions.Add(c);
+//					}
+//				}
 
-				rootFrame.ContentTransitions = null;
-				rootFrame.Navigated += RootFrame_FirstNavigated;
-#endif
+//				rootFrame.ContentTransitions = null;
+//				rootFrame.Navigated += RootFrame_FirstNavigated;
+//#endif
 
-				// When the navigation stack isn't restored navigate to the first page,
-				// configuring the new page by passing required information as a navigation
-				// parameter
-				if (!rootFrame.Navigate(typeof (StartPage), e.Arguments))
-				{
-					throw new Exception("Failed to create initial page");
-				}
-			}
+//				// When the navigation stack isn't restored navigate to the first page,
+//				// configuring the new page by passing required information as a navigation
+//				// parameter
+//				if (!rootFrame.Navigate(typeof (MainPage), e.Arguments))
+//				{
+//					throw new Exception("Failed to create initial page");
+//				}
+//			}
 			
-			// Register for Push Notifications
-			InitNotificationsAsync();
+//			// Register for Push Notifications
+//			//InitNotificationsAsync();
 
-			// Get Snapchat Updates
-			UpdateSnapchatData();
+//			// Get Snapchat Updates
+//			//UpdateSnapchatData();
 			
-#if WINDOWS_PHONE_APP
-			// Hide StatusBar background for entire application
-			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
-#endif
+//#if WINDOWS_PHONE_APP
+//			// Hide StatusBar background for entire application
+//			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+//#endif
 
+			rootFrame.Navigate(typeof (MainPage));
 			// Ensure the current window is active
 			Window.Current.Activate();
 		}
 
 		private static async void CurrentFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
 		{
-			var requiresAuthentication =
-				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
-					.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
+			//var requiresAuthentication =
+			//	navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
+			//		.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
 
-			if (requiresAuthentication && !SnapChatManager.IsAuthenticated())
-			{
-				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-					() => CurrentFrame.Navigate(typeof (StartPage)));
-				return;
-			}
+			//if (requiresAuthentication && !SnapChatManager.IsAuthenticated())
+			//{
+			//	await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+			//		() => CurrentFrame.Navigate(typeof (StartPage)));
+			//	return;
+			//}
 
-			if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
+			//if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
+			if (true)
 			{
 				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof(MainPage)));
