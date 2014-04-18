@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -22,6 +23,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string BestsEndpointUrl =				"bests";
 		private const string SnapBlobEndpointUrl =			"blob";
 		private const string ClearFeedEndpointUrl =			"clear";
+		private const string FindFriendEndpointUrl =		"find_friends";
 		private const string FriendEndpointUrl =			"friend";
 		private const string LoginEndpointUrl =				"login";
 		private const string LogoutEndpointUrl =			"logout";
@@ -238,6 +240,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public async Task<Account> RegisterUsernameAsync(string email, string authToken, string requestedUsername)
 		{
+			// Currently broken (returns 401)
+
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
@@ -880,6 +884,63 @@ namespace SnapDotNet.Core.Snapchat.Api
 			return publicActivities;
 		}
 
+		public ObservableDictionary<string, PublicActivity> GetPublicActivity(string[] requestedUsernames = null)
+		{
+			return GetPublicActivityAsync(requestedUsernames).Result;
+		}
+
+		#endregion
+
+		#region Find Friends
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="countryCode"></param>
+		/// <param name="numberAndDisplayNameCollection">A collection of Tuples, where the first item is a phone full number
+		/// (without country code), and the second is the Display Name that will be applied to the account with this number.</param>
+		/// <returns></returns>
+		public async Task<FoundFriend> FindFriendsAsync(string countryCode, ObservableCollection<Tuple<string, string>> numberAndDisplayNameCollection)
+		{
+			// Currently broken (returns 400)
+
+			// There has to be a better way...
+			var numberString = "{";
+			foreach (var t in numberAndDisplayNameCollection)
+			{
+				numberString += string.Format("\"{0}\": \"{1}\"", t.Item1, t.Item2);
+				if (numberAndDisplayNameCollection.IndexOf(t) < numberAndDisplayNameCollection.Count - 1)
+					numberString += ",";
+			}
+			numberString += "}";
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"countryCode", countryCode},
+				{"numbers", numberString}
+			};
+
+			return 
+				await
+					_webConnect.PostToGenericAsync<FoundFriend>(FindFriendEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="countryCode"></param>
+		/// <param name="numberAndDisplayNameCollection">A collection of Tuples, where the first item is a phone full number
+		/// (without country code), and the second is the Display Name that will be applied to the account with this number.</param>
+		/// <returns></returns>
+		public FoundFriend FindFriends(string countryCode, ObservableCollection<Tuple<string, string>> numberAndDisplayNameCollection)
+		{
+			return FindFriendsAsync(countryCode, numberAndDisplayNameCollection).Result;
+		}
+
 		#endregion
 
 		#region Clear Feed
@@ -895,7 +956,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			var postData = new Dictionary<string, string>
 			{
 				{"username", GetAuthedUsername()},
-				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
 			};
 
 			var response =

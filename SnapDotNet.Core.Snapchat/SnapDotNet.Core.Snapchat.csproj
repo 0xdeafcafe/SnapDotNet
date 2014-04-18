@@ -58,6 +58,7 @@
     <Compile Include="Models\BestFriends.cs" />
     <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\FriendGroup.cs" />
+    <Compile Include="Models\FoundFriend.cs" />
     <Compile Include="Models\PublicActivity.cs" />
     <Compile Include="Models\Captcha.cs" />
     <Compile Include="Models\RegistrationResponse.cs" />

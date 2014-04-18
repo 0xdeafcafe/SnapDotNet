@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Windows.Networking.NetworkOperators;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace SnapDotNet.Core.Snapchat.Api.Tests
@@ -42,6 +42,18 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 			var st = await sm.Endpoints.UpdateStoryPrivacyAsync(true);
 			var fs = await sm.Endpoints.UpdateFeatureSettingsAsync(true, true, true, true, true);
 			var bffs = await sm.Endpoints.SetBestFriendCountAsync(5);
+
+			Assert.AreEqual(true, true);
+		}
+
+		[TestMethod]
+		public async Task FindFriendAsyncTest()
+		{
+			// There has to be a better way...
+			var tups = new ObservableCollection<Tuple<string, string>> { new Tuple<string, string>("5173037008", "Collin Yoloman") };
+
+			var sm = new SnapChatManager(Settings.Username, Settings.AuthToken);
+			var res = await sm.Endpoints.FindFriendsAsync("US", tups);
 
 			Assert.AreEqual(true, true);
 		}
