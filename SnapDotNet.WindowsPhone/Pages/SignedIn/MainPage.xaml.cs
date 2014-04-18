@@ -17,7 +17,7 @@ using SnapDotNet.Core.Miscellaneous.Helpers;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {
-	[RequiresAuthentication]
+	//[RequiresAuthentication]
 	public sealed partial class MainPage
 	{
 		//public MainViewModel ViewModel { get; private set; }
