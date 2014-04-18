@@ -172,12 +172,11 @@ namespace SnapDotNet.Apps
 			//}
 
 			//if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
-			if (true)
-			{
-				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-					() => CurrentFrame.Navigate(typeof(MainPage)));
-				return;
-			}
+			//{
+			//	await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+			//		() => CurrentFrame.Navigate(typeof(MainPage)));
+			//	return;
+			//}
 		}
 
 #if WINDOWS_PHONE_APP
@@ -215,7 +214,7 @@ namespace SnapDotNet.Apps
 						args.ToastNotification.Activated += (notification, o) =>
 						{
 							UpdateSnapchatData();
-							CurrentFrame.Navigate(typeof (SnapsPage));
+							CurrentFrame.Navigate(typeof(SnapsPage));
 						};
 						args.ToastNotification.Group = "Dev";
 						break;
@@ -257,47 +256,47 @@ namespace SnapDotNet.Apps
 
 		private static void OnResuming(object sender, object o)
 		{
-			UpdateSnapchatData();
+			//UpdateSnapchatData();
 		}
 
 		public static async void UpdateSnapchatData()
 		{
-			if (!SnapChatManager.IsAuthenticated()) return;
+			//if (!SnapChatManager.IsAuthenticated()) return;
 
-			// Get Snapchat Updates
+			//// Get Snapchat Updates
 
-			bool forceLogout = false;
+			//bool forceLogout = false;
 
-			try
-			{
-				await ProgressHelper.ShowStatusBar("Updating...");
-				await SnapChatManager.UpdateAllAsync(async () => { await ProgressHelper.HideStatusBar(); }, Settings);
-			}
-			catch (InvalidCredentialsException exception)
-			{
-				SnazzyDebug.WriteLine(exception);
-				forceLogout = true;
-			}
-			catch (InvalidHttpResponseException exception)
-			{
-				if (exception.Message == "Unauthorized")
-				{
-					var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
-					var showDialogTask = dialog.ShowAsync();
-					forceLogout = true;
-				}
-			}
-			catch (Exception exception)
-			{
-				SnazzyDebug.WriteLine(exception);
-			}
+			//try
+			//{
+			//	await ProgressHelper.ShowStatusBar("Updating...");
+			//	await SnapChatManager.UpdateAllAsync(async () => { await ProgressHelper.HideStatusBar(); }, Settings);
+			//}
+			//catch (InvalidCredentialsException exception)
+			//{
+			//	SnazzyDebug.WriteLine(exception);
+			//	forceLogout = true;
+			//}
+			//catch (InvalidHttpResponseException exception)
+			//{
+			//	if (exception.Message == "Unauthorized")
+			//	{
+			//		var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
+			//		var showDialogTask = dialog.ShowAsync();
+			//		forceLogout = true;
+			//	}
+			//}
+			//catch (Exception exception)
+			//{
+			//	SnazzyDebug.WriteLine(exception);
+			//}
 
-			if (forceLogout)
-			{
-				await LogoutAsync();
-			}
+			//if (forceLogout)
+			//{
+			//	await LogoutAsync();
+			//}
 
-			await ProgressHelper.HideStatusBar();
+			//await ProgressHelper.HideStatusBar();
 		}
 
 		public static async Task LogoutAsync()
