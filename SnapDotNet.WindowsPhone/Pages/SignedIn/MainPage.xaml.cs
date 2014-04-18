@@ -20,7 +20,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	//[RequiresAuthentication]
 	public sealed partial class MainPage
 	{
-		//public MainViewModel ViewModel { get; private set; }
+		public MainViewModel ViewModel { get; private set; }
 
 		private MediaCapture _mediaCapture;
 		private MediaCaptureInitializationSettings _mediaCaptureSettings;
@@ -38,7 +38,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 
-			//DataContext = ViewModel = new MainViewModel();
+			DataContext = ViewModel = new MainViewModel();
 #if !DEBUG
 			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
 #endif
