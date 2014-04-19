@@ -85,15 +85,15 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="getUpdates"></param>
 		public SnapChatManager(string username, string authToken, bool getUpdates = false)
 		{
-			Endpoints = new Endpoints(this);
+		//	Endpoints = new Endpoints(this);
 
-			UpdateUsername(username);
-			UpdateAuthToken(authToken);
+		//	UpdateUsername(username);
+		//	UpdateAuthToken(authToken);
 
-			if (!getUpdates) return;
+		//	if (!getUpdates) return;
 
-			Endpoints.GetUpdatesAsync().Wait();
-			Endpoints.GetStoriesAsync().Wait();
+		//	Endpoints.GetUpdatesAsync().Wait();
+		//	Endpoints.GetStoriesAsync().Wait();
 		}
 
 		#endregion
