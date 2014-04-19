@@ -179,21 +179,21 @@ namespace SnapDotNet.Apps
 			//}
 		}
 
-#if WINDOWS_PHONE_APP
-		/// <summary>
-		///     Restores the content transitions after the app has launched.
-		/// </summary>
-		/// <param name="sender">The object where the handler is attached.</param>
-		/// <param name="e">Details about the navigation event.</param>
-		private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
-		{
-			var rootFrame = sender as Frame;
-			if (rootFrame == null) return;
+//#if WINDOWS_PHONE_APP
+//		/// <summary>
+//		///     Restores the content transitions after the app has launched.
+//		/// </summary>
+//		/// <param name="sender">The object where the handler is attached.</param>
+//		/// <param name="e">Details about the navigation event.</param>
+//		private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
+//		{
+//			var rootFrame = sender as Frame;
+//			if (rootFrame == null) return;
 
-			rootFrame.ContentTransitions = _transitions ?? new TransitionCollection {new NavigationThemeTransition()};
-			rootFrame.Navigated -= RootFrame_FirstNavigated;
-		}
-#endif
+//			rootFrame.ContentTransitions = _transitions ?? new TransitionCollection {new NavigationThemeTransition()};
+//			rootFrame.Navigated -= RootFrame_FirstNavigated;
+//		}
+//#endif
 
 		/// <summary>
 		/// 
