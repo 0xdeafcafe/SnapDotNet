@@ -10,40 +10,40 @@
     xmlns:signedIn="using:SnapDotNet.Apps.Pages.SignedIn"
     xmlns:interactivity="using:WinRTXamlToolkit.Interactivity"
     x:Class="SnapDotNet.Apps.Pages.StartPage"
+    xmlns:ext="using:WinRTXamlToolkit.Controls.Extensions"
     mc:Ignorable="d">
 
-	<Page.Resources>
-		<Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <Page.Resources>
+        <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-		<!-- Width threshold for switching between the default and minimal views -->
-		<x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
+        <!-- Width threshold for switching between the default and minimal views -->
+        <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
 
-		<Storyboard x:Name="BackgroundAmbienceStoryboard">
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
-				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:42" Value="0"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:44" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage4">
-				<EasingDoubleKeyFrame KeyTime="0:0:14" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:16" Value="0"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage3">
-				<EasingDoubleKeyFrame KeyTime="0:0:23" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:25" Value="0"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage2">
-				<EasingDoubleKeyFrame KeyTime="0:0:32" Value="1"/>
-				<EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
-			</DoubleAnimationUsingKeyFrames>
-		</Storyboard>
-	</Page.Resources>
-	
-	<!-- Already specified in the constructor, but placed here too for design time conveinence -->
-    <Page.DataContext>
-        <vm:StartViewModel/>
-    </Page.DataContext>
+        <Storyboard x:Name="BackgroundAmbienceStoryboard">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
+                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:42" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:44" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage4">
+                <EasingDoubleKeyFrame KeyTime="0:0:14" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:16" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage3">
+                <EasingDoubleKeyFrame KeyTime="0:0:23" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:25" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage2">
+                <EasingDoubleKeyFrame KeyTime="0:0:32" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:34" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Style TargetType="Image">
+            <Setter Property="ext:ImageExtensions.FadeInOnLoaded" Value="True"/>
+        </Style>
+    </Page.Resources>
 
     <Grid Background="Black" HorizontalAlignment="Stretch">
 
@@ -69,19 +69,19 @@
 		<Grid x:Name="BackgroundAmbienceGrid" Grid.Row="0">
 			<Image
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" ext:ImageExtensions.FadeInOnLoaded="True"/>
 			<Image x:Name="BackgroundImage2"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
 			<Image x:Name="BackgroundImage3"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
 			<Image x:Name="BackgroundImage4"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
 			<Image x:Name="BackgroundImage5"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Center" Margin="0,0,0,0" Opacity="0"/>
 		</Grid>
 
 		<!-- Default View -->
@@ -299,47 +299,50 @@
         <!-- Minimal View -->
         <Grid x:Name="minimalView" Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-50,0,0" Background="#BB1D1D1D">
 
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Margin" Value="25"/>
-                    <Setter Property="Width" Value="200"/>
-                </Style>
-            </Grid.Resources>
+            <Grid Visibility="{Binding IsStartPageVisible, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                <Grid.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="25"/>
+                        <Setter Property="Width" Value="200"/>
+                    </Style>
+                </Grid.Resources>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="150">
-                <SymbolIcon.RenderTransform>
-                    <CompositeTransform ScaleX="5" ScaleY="5"/>
-                </SymbolIcon.RenderTransform>
-            </SymbolIcon>
+                <SymbolIcon Symbol="WebCam" RenderTransformOrigin="0.5,0.5" Height="150">
+                    <SymbolIcon.RenderTransform>
+                        <CompositeTransform ScaleX="5" ScaleY="5"/>
+                    </SymbolIcon.RenderTransform>
+                </SymbolIcon>
 
-            <TextBlock x:Uid="StartPageTitle"
-				Grid.ColumnSpan="2"
-				Grid.Row="1"
-				HorizontalAlignment="Center"
-				Style="{StaticResource HeaderTextBlockStyle}"
-				FontSize="25">
-				<Run Text="Snapchat for Windows 8.1"/>
-            </TextBlock>
+                <TextBlock x:Uid="StartPageTitle"
+				            Grid.ColumnSpan="2"
+				            Grid.Row="1"
+				            HorizontalAlignment="Center"
+				            Style="{StaticResource HeaderTextBlockStyle}"
+				            FontSize="25">
+				    <Run Text="Snapchat for Windows 8.1"/>
+                </TextBlock>
 
-            <Button Grid.Row="2"
+                <Button Grid.Row="2"
 				    HorizontalAlignment="Center"
 				    Margin="0,30,0,15"
 				    x:Uid="SignInButton"
                     Command="{Binding OpenSignInPageCommand}"
                     Content="sign in"/>
-            <Button Grid.Row="3"
+                <Button Grid.Row="3"
 				    HorizontalAlignment="Center"
 				    Margin="0,0,0,30"
 				    x:Uid="CreateAccountButton"
 				    Command="{Binding OpenRegisterPageCommand}"
                     Content="create account"/>
+            </Grid>
+            
         </Grid>
 
         <!-- Legal disclaimer -->

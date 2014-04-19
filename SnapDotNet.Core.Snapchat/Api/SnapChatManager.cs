@@ -105,13 +105,13 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			try
 			{
-				await Endpoints.LogoutAsync();
 				Account = null;
 				AuthToken = null;
 				Username = null;
 				Stories = null;
 				PublicActivities = null;
 				await DeleteAsync();
+				await Endpoints.LogoutAsync();
 				return true;
 			}
 			catch (Exception ex)

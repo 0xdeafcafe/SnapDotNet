@@ -10,6 +10,7 @@ using Windows.UI.Popups;
 using SnapDotNet.Core.Snapchat.Models;
 using WinRTXamlToolkit.Controls;
 using Snap = SnapDotNet.Core.Snapchat.Models.Snap;
+using SnapDotNet.Apps.Pages;
 #if WINDOWS_PHONE_APP
 using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using Windows.UI.ViewManagement;
@@ -230,7 +231,6 @@ namespace SnapDotNet.Apps.ViewModels
 //#endif
 //			return;
 
-
 			try
 			{
 				if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
@@ -281,14 +281,14 @@ namespace SnapDotNet.Apps.ViewModels
 			catch (InvalidCredentialsException)
 			{
 				var dialog =
-					new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
+					new MessageDialog("The username and password combination you used to sign into Snapchat is not correct.",
 						"Invalid Username/Password");
 				dialog.ShowAsync();
 			}
 			catch (InvalidHttpResponseException exception)
 			{
 				var dialog =
-					new MessageDialog(String.Format("Unable to connect to snapchat. The server responded: \n {0}.", exception.Message),
+					new MessageDialog(String.Format("Unable to connect to Snapchat. The server responded: \n {0}.", exception.Message),
 						"Unable to connect to Snapchat");
 				dialog.ShowAsync();
 			}
@@ -304,7 +304,11 @@ namespace SnapDotNet.Apps.ViewModels
 
 			if ( App.SnapChatManager.Account == null || 
 				!App.SnapChatManager.Account.Logged ||
-				!App.SnapChatManager.IsAuthenticated()) return;
+				!App.SnapChatManager.IsAuthenticated())
+			{
+				App.CurrentFrame.Navigate(typeof(StartPage), "removeBackStack");
+				return;
+			}
 
 			App.CurrentFrame.Navigate(nextPage == null ? typeof(MainPage) : nextPage.GetType(), "removeBackStack");
 		}

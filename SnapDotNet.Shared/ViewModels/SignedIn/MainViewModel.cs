@@ -27,20 +27,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 			SignOutCommand = new RelayCommand(async () =>
 			{
-				try
-				{
-					await Manager.Endpoints.LogoutAsync();
-				}
-				catch (InvalidHttpResponseException)
-				{
-					// o well
-				}
-				catch (InvalidCredentialsException)
-				{
-					// o well too
-				}
-
-				App.CurrentFrame.Navigate(typeof(StartPage));
+				await App.LogoutAsync();
 			});
 
 			ViewSnapsCommand = new RelayCommand(() => App.CurrentFrame.Navigate(typeof (SnapsPage)));
@@ -52,8 +39,11 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 			App.SnapChatManager.PropertyChanged += delegate
 			{
-				RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
-				GetFriends();
+				if (App.SnapChatManager.Account != null)
+				{
+					RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+					GetFriends();
+				}
 			};
 			App.SnapChatManager.Account.PropertyChanged += delegate
 			{

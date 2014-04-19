@@ -22,11 +22,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 		
 		private const string BestsEndpointUrl =				"bests";
 		private const string SnapBlobEndpointUrl =			"blob";
+		private const string ClearFeedEndpointUrl =			"clear";
+		private const string FindFriendEndpointUrl =		"find_friends";
 		private const string FriendEndpointUrl =			"friend";
 		private const string LoginEndpointUrl =				"login";
 		private const string LogoutEndpointUrl =			"logout";
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
+		private const string BestFriendCountEndpointUrl =	"set_num_best_friends";
 		private const string SettingsEndpointUrl =			"settings";
 		private const string UpdatesFeaturesEndpointUrl =	"update_feature_settings";
 		private const string RegisterEndpointUrl =			"register";
@@ -237,6 +240,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public async Task<Account> RegisterUsernameAsync(string email, string authToken, string requestedUsername)
 		{
+			// Currently broken (returns 401)
+
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
@@ -811,6 +816,41 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#endregion
 
+		#region Set Number of BFFs
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="numberOfBestFriends"> Must be 3, 5, or 7.</param>
+		/// <returns></returns>
+		public async Task<BestFriends> SetBestFriendCountAsync(int numberOfBestFriends)
+		{
+			if (numberOfBestFriends != 3 && numberOfBestFriends != 5 && numberOfBestFriends != 7)
+				throw new InvalidParameterException("numberOfBestFriends must be 3, 5, or 7.");
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"num_best_friends", numberOfBestFriends.ToString()},
+			};
+
+			var response =
+				await
+					_webConnect.PostToGenericAsync<BestFriends>(BestFriendCountEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return response;
+		}
+
+		public BestFriends SetBestFriendCount(int numberOfBestFriends)
+		{
+			return SetBestFriendCountAsync(numberOfBestFriends).Result;
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Public Activity
@@ -842,6 +882,97 @@ namespace SnapDotNet.Core.Snapchat.Api
 			_snapchatManager.Save();
 
 			return publicActivities;
+		}
+
+		public ObservableDictionary<string, PublicActivity> GetPublicActivity(string[] requestedUsernames = null)
+		{
+			return GetPublicActivityAsync(requestedUsernames).Result;
+		}
+
+		#endregion
+
+		#region Find Friends
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="countryCode"></param>
+		/// <param name="numberAndDisplayNameCollection">A collection of Tuples, where the first item is a phone full number
+		/// (without country code), and the second is the Display Name that will be applied to the account with this number.</param>
+		/// <returns></returns>
+		public async Task<FoundFriend> FindFriendsAsync(string countryCode, ObservableCollection<Tuple<string, string>> numberAndDisplayNameCollection)
+		{
+			// Currently broken (returns 400)
+
+			// There has to be a better way...
+			var numberString = "{";
+			foreach (var t in numberAndDisplayNameCollection)
+			{
+				numberString += string.Format("\"{0}\": \"{1}\"", t.Item1, t.Item2);
+				if (numberAndDisplayNameCollection.IndexOf(t) < numberAndDisplayNameCollection.Count - 1)
+					numberString += ",";
+			}
+			numberString += "}";
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"countryCode", countryCode},
+				{"numbers", numberString}
+			};
+
+			return 
+				await
+					_webConnect.PostToGenericAsync<FoundFriend>(FindFriendEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="countryCode"></param>
+		/// <param name="numberAndDisplayNameCollection">A collection of Tuples, where the first item is a phone full number
+		/// (without country code), and the second is the Display Name that will be applied to the account with this number.</param>
+		/// <returns></returns>
+		public FoundFriend FindFriends(string countryCode, ObservableCollection<Tuple<string, string>> numberAndDisplayNameCollection)
+		{
+			return FindFriendsAsync(countryCode, numberAndDisplayNameCollection).Result;
+		}
+
+		#endregion
+
+		#region Clear Feed
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<bool> ClearFeedAsync()
+		{
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			var response =
+				await
+					_webConnect.PostToResponseAsync(ClearFeedEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			if (response.StatusCode == HttpStatusCode.OK)
+				return true;
+
+			throw new InvalidHttpResponseException(response.ReasonPhrase, response);
+		}
+
+		public bool ClearFeed()
+		{
+			return ClearFeedAsync().Result;
 		}
 
 		#endregion

@@ -8,6 +8,7 @@
       xmlns:converters="using:SnapDotNet.Apps.Converters"
       xmlns:selectors="using:SnapDotNet.Apps.Selectors"
       xmlns:signedIn="using:SnapDotNet.Apps.ViewModels.SignedIn"
+      xmlns:ext="using:WinRTXamlToolkit.Controls.Extensions"
       mc:Ignorable="d">
 
     <Page.Resources>
@@ -61,6 +62,10 @@
                     </TransitionCollection>
                 </Setter.Value>
             </Setter>
+        </Style>
+        
+        <Style TargetType="Image">
+            <Setter Property="ext:ImageExtensions.FadeInOnLoaded" Value="True"/>
         </Style>
     </Page.Resources>
 
