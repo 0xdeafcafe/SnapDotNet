@@ -112,46 +112,46 @@ namespace SnapDotNet.Apps
 				// Place the frame in the current Window
 				Window.Current.Content = rootFrame;
 			}
-			
-//			// Create events
-//			CurrentFrame.Navigating += CurrentFrameOnNavigating;
 
-//			if (rootFrame.Content == null)
-//			{
-//#if WINDOWS_PHONE_APP
-//				// Removes the turnstile navigation for startup.
-//				if (rootFrame.ContentTransitions != null)
-//				{
-//					_transitions = new TransitionCollection();
-//					foreach (var c in rootFrame.ContentTransitions)
-//					{
-//						_transitions.Add(c);
-//					}
-//				}
+			// Create events
+			CurrentFrame.Navigating += CurrentFrameOnNavigating;
 
-//				rootFrame.ContentTransitions = null;
-//				rootFrame.Navigated += RootFrame_FirstNavigated;
-//#endif
+			if (rootFrame.Content == null)
+			{
+#if WINDOWS_PHONE_APP
+				// Removes the turnstile navigation for startup.
+				if (rootFrame.ContentTransitions != null)
+				{
+					_transitions = new TransitionCollection();
+					foreach (var c in rootFrame.ContentTransitions)
+					{
+						_transitions.Add(c);
+					}
+				}
 
-//				// When the navigation stack isn't restored navigate to the first page,
-//				// configuring the new page by passing required information as a navigation
-//				// parameter
-//				if (!rootFrame.Navigate(typeof (MainPage), e.Arguments))
-//				{
-//					throw new Exception("Failed to create initial page");
-//				}
-//			}
-			
-//			// Register for Push Notifications
-//			//InitNotificationsAsync();
+				rootFrame.ContentTransitions = null;
+				rootFrame.Navigated += RootFrame_FirstNavigated;
+#endif
 
-//			// Get Snapchat Updates
-//			//UpdateSnapchatData();
-			
-//#if WINDOWS_PHONE_APP
-//			// Hide StatusBar background for entire application
-//			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
-//#endif
+				// When the navigation stack isn't restored navigate to the first page,
+				// configuring the new page by passing required information as a navigation
+				// parameter
+				if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+				{
+					throw new Exception("Failed to create initial page");
+				}
+			}
+
+			// Register for Push Notifications
+			//InitNotificationsAsync();
+
+			// Get Snapchat Updates
+			//UpdateSnapchatData();
+
+#if WINDOWS_PHONE_APP
+			// Hide StatusBar background for entire application
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+#endif
 
 			rootFrame.Navigate(typeof (MainPage));
 			// Ensure the current window is active
@@ -160,40 +160,40 @@ namespace SnapDotNet.Apps
 
 		private static async void CurrentFrameOnNavigating(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
 		{
-			//var requiresAuthentication =
-			//	navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
-			//		.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
+			var requiresAuthentication =
+				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
+					.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(RequiresAuthentication)) != null;
 
-			//if (requiresAuthentication && !SnapChatManager.IsAuthenticated())
-			//{
-			//	await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-			//		() => CurrentFrame.Navigate(typeof (StartPage)));
-			//	return;
-			//}
+			if (requiresAuthentication && !SnapChatManager.IsAuthenticated())
+			{
+				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => CurrentFrame.Navigate(typeof(StartPage)));
+				return;
+			}
 
-			//if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
-			//{
-			//	await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-			//		() => CurrentFrame.Navigate(typeof(MainPage)));
-			//	return;
-			//}
+			if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
+			{
+				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => CurrentFrame.Navigate(typeof(MainPage)));
+				return;
+			}
 		}
 
-//#if WINDOWS_PHONE_APP
-//		/// <summary>
-//		///     Restores the content transitions after the app has launched.
-//		/// </summary>
-//		/// <param name="sender">The object where the handler is attached.</param>
-//		/// <param name="e">Details about the navigation event.</param>
-//		private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
-//		{
-//			var rootFrame = sender as Frame;
-//			if (rootFrame == null) return;
+#if WINDOWS_PHONE_APP
+		/// <summary>
+		///     Restores the content transitions after the app has launched.
+		/// </summary>
+		/// <param name="sender">The object where the handler is attached.</param>
+		/// <param name="e">Details about the navigation event.</param>
+		private void RootFrame_FirstNavigated(object sender, NavigationEventArgs e)
+		{
+			var rootFrame = sender as Frame;
+			if (rootFrame == null) return;
 
-//			rootFrame.ContentTransitions = _transitions ?? new TransitionCollection {new NavigationThemeTransition()};
-//			rootFrame.Navigated -= RootFrame_FirstNavigated;
-//		}
-//#endif
+			rootFrame.ContentTransitions = _transitions ?? new TransitionCollection { new NavigationThemeTransition() };
+			rootFrame.Navigated -= RootFrame_FirstNavigated;
+		}
+#endif
 
 		/// <summary>
 		/// 

@@ -20,7 +20,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	//[RequiresAuthentication]
 	public sealed partial class MainPage
 	{
-		//public MainViewModel ViewModel { get; private set; }
+		public MainViewModel ViewModel { get; private set; }
 
 		private MediaCapture _mediaCapture;
 		private MediaCaptureInitializationSettings _mediaCaptureSettings;
@@ -29,32 +29,39 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private DeviceInformationCollection _microphoneInfoCollection;
 		private int _currentSelectedAudioDevice;
 
+		private bool _areWeInitialising;
+		private bool _areWePreppingCamera;
+
 		private readonly DispatcherTimer _videoRecordTimer = new DispatcherTimer();
 		private readonly Stopwatch _videoRecordStopwatch = new Stopwatch();
 
 		public MainPage()
 		{
 			InitializeComponent();
+			CameraStartupPrep();
 
 			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
-
-			//DataContext = ViewModel = new MainViewModel();
+			DataContext = ViewModel = new MainViewModel();
 #if !DEBUG
 			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
 #endif
 		}
 
-		protected override void OnNavigatedTo(NavigationEventArgs e)
+		protected async override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			// Check backstack
-			//if (e.Parameter is String && ((string) e.Parameter) == "removeBackStack")
-			//	while (App.CurrentFrame.CanGoBack)
-			//		App.CurrentFrame.BackStack.RemoveAt(0);
+			Debug.WriteLine("MainPage OnNavigateTo Triggered");
+			//Check backstack
+			if (e.Parameter is String && ((string) e.Parameter) == "removeBackStack")
+				while (App.CurrentFrame.CanGoBack)
+					App.CurrentFrame.BackStack.RemoveAt(0);
 			
 			_videoRecordTimer.Interval = new TimeSpan(0, 0, 0, 1);
 			_videoRecordTimer.Tick += videoRecordTimer_Tick;
 
-			CameraInitialStartupSequencer();
+			SetUiCameraXamlElements();
+			await InitialiseCameraDevice();
+			ButtonCamera.IsEnabled = true;
+			ButtonRecord.IsEnabled = true; //not implemented
 		}
 
 		void videoRecordTimer_Tick(object sender, object e)
@@ -75,27 +82,35 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}
 		}
 
-		private async void CameraInitialStartupSequencer()
+		private async void CameraStartupPrep()
 		{
-			await GetCameraDevices();
+			if (_areWePreppingCamera != true)
+			{
+				_areWePreppingCamera = true;
+				Debug.WriteLine("Camera Startup Prep");
+				
+				await GetCameraDevices();
 
-			_mediaCaptureSettings = new MediaCaptureInitializationSettings();
+				_mediaCaptureSettings = new MediaCaptureInitializationSettings();
 
-			//generate default settings
-			_currentSelectedAudioDevice = 0;
-			_currentSelectedCameraDevice = 0;
-			var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
-			var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
+				//generate default settings
+				_currentSelectedAudioDevice = 0;
+				_currentSelectedCameraDevice = 0;
+				var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
+				var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
 
-			_mediaCaptureSettings.VideoDeviceId = cameraInfo.Id;
-			_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
-			_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
-			_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
+				_mediaCaptureSettings.VideoDeviceId = cameraInfo.Id;
+				_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
+				_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
+				_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
 
-			SetUiCameraXamlElements();
-			await InitialiseCameraDevice();
-			ButtonCamera.IsEnabled = true;
-			ButtonRecord.IsEnabled = true; //not implemented
+				Debug.WriteLine("Camera Startup Prep: OK");
+				_areWePreppingCamera = false;
+			}
+			else
+			{
+				Debug.WriteLine("Camera Startup Prep: FAIL; Already Running");
+			}
 		}
 
 		private async Task GetCameraDevices()
@@ -106,23 +121,34 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		private async Task InitialiseCameraDevice() //must manually.stopPreviewAsync Before re-initialising.
 		{
-			ButtonCamera.IsEnabled = false;
-			ButtonRecord.IsEnabled = false;
+			if (_areWeInitialising != true)
+			{
+				_areWeInitialising = true;
+				Debug.WriteLine("Initialising Camera");
 
-			_mediaCapture = new MediaCapture();
+				ButtonCamera.IsEnabled = false;
+				ButtonRecord.IsEnabled = false;
 
-			Debug.WriteLine("Initialising Camera");
-			Debug.WriteLine("Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
-			await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
-			Debug.WriteLine("Initialising Camera: OK");
+				_mediaCapture = new MediaCapture();
 
-			Debug.WriteLine("Starting Camera Preview");
-			CapturePreview.Source = _mediaCapture;
-			await _mediaCapture.StartPreviewAsync();
-			Debug.WriteLine("Starting Camera Preview: OK");
+				Debug.WriteLine("Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
+				await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
+				Debug.WriteLine("Initialising Camera: OK");
 
-			ButtonCamera.IsEnabled = true;
-			ButtonRecord.IsEnabled = true;
+				Debug.WriteLine("Starting Camera Preview");
+				CapturePreview.Source = _mediaCapture;
+				await _mediaCapture.StartPreviewAsync();
+				Debug.WriteLine("Starting Camera Preview: OK");
+
+				ButtonCamera.IsEnabled = true;
+				ButtonRecord.IsEnabled = true;
+
+				_areWeInitialising = false;
+			}
+			else
+			{
+				Debug.WriteLine("Starting Camera Preview: FAIL; Already Running");
+			}
 		}
 
 		private void SetUiCameraXamlElements()
