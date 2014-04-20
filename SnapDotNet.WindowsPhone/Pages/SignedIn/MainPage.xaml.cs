@@ -126,12 +126,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					_currentSelectedAudioDevice = 0;
 					_currentSelectedCameraDevice = 0;
 					var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
-					var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
+					//var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
 
 					_mediaCaptureSettings.VideoDeviceId = cameraInfo.Id;
-					_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
-					_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
-					_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
+					//_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
+					//_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
+					//_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
 
 					Debug.WriteLine("Camera Startup Prep: DONE");
 					_areWePreppingCamera = false;
