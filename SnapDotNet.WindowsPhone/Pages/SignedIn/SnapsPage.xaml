@@ -198,7 +198,7 @@
 			
 			<Grid Width="45" Height="45" Background="#99000000"
 				  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25">
-				<TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="24" />
+				<TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Semibold" FontSize="24" />
 			</Grid>
 		</Grid>
 	</Grid>
