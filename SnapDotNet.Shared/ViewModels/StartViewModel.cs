@@ -129,6 +129,13 @@ namespace SnapDotNet.Apps.ViewModels
 		}
 		private bool _isRegisterPageVisible;
 
+		public bool ProgressModalIsVisible
+		{
+			get { return _progressModalIsVisible; }
+			set { SetField(ref _progressModalIsVisible, value); }
+		}
+		private bool _progressModalIsVisible;
+
 		public Visibility ProgressModalVisibility
 		{
 			get { return _progressModalVisibility; }
@@ -248,6 +255,7 @@ namespace SnapDotNet.Apps.ViewModels
 				await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
 #endif
 				ProgressModalVisibility = Visibility.Visible;
+				ProgressModalIsVisible = true;
 
 				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
@@ -300,6 +308,7 @@ namespace SnapDotNet.Apps.ViewModels
 				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 #endif
 				ProgressModalVisibility = Visibility.Collapsed;
+				ProgressModalIsVisible = false;
 			}
 
 			if ( App.SnapChatManager.Account == null || 
