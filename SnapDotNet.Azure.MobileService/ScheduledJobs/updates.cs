@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
@@ -14,8 +14,13 @@ using Snap = SnapDotNet.Azure.MobileService.DataObjects.Snap;
 
 namespace SnapDotNet.Azure.MobileService.ScheduledJobs
 {
-	// A simple scheduled job which can be invoked manually by submitting an HTTP
-	// POST request to the path "/jobs/Updates".
+	// A simple scheduled job which can be invoked manually by submitting an HTTP POST
+	// request to the path "https://{azure-instance}.azure-mobile.net/jobs/Updates".
+	//
+	// This is called every 60 seconds by Azure, and ensured clients recieve notifications
+	// on time. This has not been stress tested, so I wouldn't be suprised if it can't
+	// handle extreme load. Only time shall tell.
+	// - yolo
 
 	public class Updates : ScheduledJob
 	{
@@ -45,51 +50,41 @@ namespace SnapDotNet.Azure.MobileService.ScheduledJobs
 							goto alldone;
 						}
 
-						List<Snap> snaps;
-						try
-						{
-							var snapsQuery = context.Snaps.Where(s => s.UserId == safeUser.Id);
-							snaps = await snapsQuery.ToListAsync();
-						}
-						catch (Exception exception)
-						{
-							snaps = new List<Snap>();
-							base.Services.Log.Error(exception);
-						}
 						foreach (var newSnap in updates.Snaps)
 						{
-							var currentSnap = snaps.FirstOrDefault(s => s.Id == newSnap.Id);
+							var safeNewSnap = newSnap;
+							var currentSnap = await context.Snaps.FirstOrDefaultAsync(s => s.Id == safeNewSnap.Id);
 							if (currentSnap == null)
 							{
 								context.Snaps.Add(new Snap
 								{
-									Id = newSnap.Id,
+									Id = safeNewSnap.Id,
 									UserId = safeUser.Id,
-									SenderUsername = newSnap.SenderName,
-									RecipientUsername = newSnap.RecipientName,
-									Status = newSnap.Status
+									SenderUsername = safeNewSnap.SenderName,
+									RecipientUsername = safeNewSnap.RecipientName,
+									Status = safeNewSnap.Status
 								});
 
 								// you have a new snap
-								if (!safeUser.NewUser && newSnap.Status == SnapStatus.Delivered && newSnap.RecipientName == null)
-									await SendWncToastAsync(String.Format("New Snap from {0}", GetFriendlyName(updates, newSnap.SenderName)), "Snapchat", safeUser.DeviceIdent);
+								if (!safeUser.NewUser && safeNewSnap.Status == SnapStatus.Delivered && safeNewSnap.RecipientName == null)
+									await SendWncToastAsync(String.Format("New Snap from {0}", GetFriendlyName(updates, safeNewSnap.SenderName)), "Snapchat", safeUser.DeviceIdent);
 
 								// bastard screenshotted
-								if (!safeUser.NewUser && newSnap.Status == SnapStatus.Screenshotted && newSnap.SenderName == null)
-									await SendWncToastAsync(String.Format("{0} screenshotted your snap", GetFriendlyName(updates, newSnap.RecipientName)), "Snapchat", safeUser.DeviceIdent);
+								if (!safeUser.NewUser && safeNewSnap.Status == SnapStatus.Screenshotted && safeNewSnap.SenderName == null)
+									await SendWncToastAsync(String.Format("{0} screenshotted your snap", GetFriendlyName(updates, safeNewSnap.RecipientName)), "Snapchat", safeUser.DeviceIdent);
 
 								continue;
 							}
 
-							if (newSnap.RecipientName == null)
+							if (safeNewSnap.RecipientName == null)
 								continue;
 
 							// check to see if the snap was screenshotted
-							if (currentSnap.Status == SnapStatus.Screenshotted || newSnap.Status != SnapStatus.Screenshotted)
+							if (currentSnap.Status == SnapStatus.Screenshotted || safeNewSnap.Status != SnapStatus.Screenshotted)
 								continue;
 
-							currentSnap.Status = newSnap.Status;
-							await SendWncToastAsync(String.Format("{0} screenshotted your snap", GetFriendlyName(updates, newSnap.RecipientName)), "Snapchat", safeUser.DeviceIdent);
+							currentSnap.Status = safeNewSnap.Status;
+							await SendWncToastAsync(String.Format("{0} screenshotted your snap", GetFriendlyName(updates, safeNewSnap.RecipientName)), "Snapchat", safeUser.DeviceIdent);
 						}
 
 						user.NewUser = false;
@@ -102,6 +97,14 @@ namespace SnapDotNet.Azure.MobileService.ScheduledJobs
 							await context.SaveChangesAsync();
 						}
 						catch (DbEntityValidationException exception)
+						{
+							Services.Log.Error(exception);
+						}
+						catch (DbUpdateException exception)
+						{
+							Services.Log.Error(exception);
+						}
+						catch (Exception exception)
 						{
 							Services.Log.Error(exception);
 						}
