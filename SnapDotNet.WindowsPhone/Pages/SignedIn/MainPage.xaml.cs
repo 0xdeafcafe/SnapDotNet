@@ -126,12 +126,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					_currentSelectedAudioDevice = 0;
 					_currentSelectedCameraDevice = 0;
 					var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
-					var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
+					//var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
 
 					_mediaCaptureSettings.VideoDeviceId = cameraInfo.Id;
-					_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
-					_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
-					_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
+					//_mediaCaptureSettings.AudioDeviceId = microphoneInfo.Id;
+					//_mediaCaptureSettings.PhotoCaptureSource = PhotoCaptureSource.VideoPreview;
+					//_mediaCaptureSettings.StreamingCaptureMode = StreamingCaptureMode.Video;
 
 					Debug.WriteLine("Camera Startup Prep: DONE");
 					_areWePreppingCamera = false;
@@ -256,21 +256,23 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private async void ButtonFrontFacing_CheckChanged(object sender, RoutedEventArgs e)
 		{
 			ButtonFrontFacing.IsEnabled = false;
-			//_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
-			//_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
-			//await InitialiseCameraDevice();
+			//todo Figure out why I can no longer re-initialize the camera, without it bugging out ON A DEVICE.
+			////_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
+			////_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
-			//var toggleButton = sender as ToggleButton;
-			//if (toggleButton == null) return;
-			//if (toggleButton.IsChecked == null) return;
+			////await InitialiseCameraDevice();
 
-			//var imagePath = (bool)toggleButton.IsChecked
-			//	? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
-			//	: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
-			//FrontFacingImage.Source = new BitmapImage(imagePath);
-			//await TryStartPreviewAsync();
-			//ButtonFrontFacing.IsEnabled = true;
+			////var toggleButton = sender as ToggleButton;
+			////if (toggleButton == null) return;
+			////if (toggleButton.IsChecked == null) return;
+
+			////var imagePath = (bool)toggleButton.IsChecked
+			////	? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
+			////	: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
+			////FrontFacingImage.Source = new BitmapImage(imagePath);
+			////await TryStartPreviewAsync();
+			////ButtonFrontFacing.IsEnabled = true;
 		}
 
 		private void FlashButton_CheckChanged(object sender, RoutedEventArgs e)
