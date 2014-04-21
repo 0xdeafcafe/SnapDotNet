@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppBarRefresh.Label" xml:space="preserve">
+    <value>refresh</value>
+  </data>
+  <data name="AppBarSettings.Label" xml:space="preserve">
+    <value>settings</value>
+  </data>
   <data name="Birthday.Header" xml:space="preserve">
     <value>Birthday</value>
   </data>
@@ -132,8 +138,32 @@
   <data name="Email.Header" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="FriendBestFriends.Text" xml:space="preserve">
+    <value>best friends:</value>
+  </data>
+  <data name="FriendFullStory.Text" xml:space="preserve">
+    <value>full story:</value>
+  </data>
+  <data name="FriendsBlocked.Header" xml:space="preserve">
+    <value>BLOCKED</value>
+  </data>
+  <data name="FriendScore.Text" xml:space="preserve">
+    <value>snapchat score:</value>
+  </data>
   <data name="FriendSearchBox.PlaceholderText" xml:space="preserve">
     <value>Search friends</value>
+  </data>
+  <data name="FriendsFriends.Header" xml:space="preserve">
+    <value>FRIENDS</value>
+  </data>
+  <data name="FriendsPending.Header" xml:space="preserve">
+    <value>PENDING</value>
+  </data>
+  <data name="FriendsSocial.Header" xml:space="preserve">
+    <value>social</value>
+  </data>
+  <data name="InfoHubSection.Header" xml:space="preserve">
+    <value>INFO</value>
   </data>
   <data name="MainPageAppTitle" xml:space="preserve">
     <value>snapchat</value>
@@ -141,8 +171,104 @@
   <data name="MainPageHub.Header" xml:space="preserve">
     <value>Snapchat</value>
   </data>
+  <data name="NoAcceptedFriendsMessage.Text" xml:space="preserve">
+    <value>You have no friends.. Need a hand?</value>
+  </data>
+  <data name="NoBlockedFriendsMessage.Text" xml:space="preserve">
+    <value>You have no blocked friends.. Great job!</value>
+  </data>
+  <data name="NoPendingFriendsMessage.Text" xml:space="preserve">
+    <value>You have no pending friends..</value>
+  </data>
   <data name="PasswordBox.Header" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="PreviewAccept.Label" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="PreviewFilters.Label" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="PreviewReject.Label" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="PreviewTimer.Label" xml:space="preserve">
+    <value>Timer</value>
+  </data>
+  <data name="RegistrationBirthday.Text" xml:space="preserve">
+    <value>birthday</value>
+  </data>
+  <data name="RegistrationContinueButton.Content" xml:space="preserve">
+    <value>continue</value>
+  </data>
+  <data name="RegistrationEmailTitle.Text" xml:space="preserve">
+    <value>email</value>
+  </data>
+  <data name="RegistrationHeader.Text" xml:space="preserve">
+    <value>register for snapchat</value>
+  </data>
+  <data name="RegistrationPassword.Text" xml:space="preserve">
+    <value>password</value>
+  </data>
+  <data name="SettingsAppSpecific.Header" xml:space="preserve">
+    <value>APP SPECIFIC</value>
+  </data>
+  <data name="SettingsAutoDownload.Header" xml:space="preserve">
+    <value>auto download snaps</value>
+  </data>
+  <data name="SettingsBFFCount.Header" xml:space="preserve">
+    <value>number of best friends</value>
+  </data>
+  <data name="SettingsEmail.Header" xml:space="preserve">
+    <value>email address</value>
+  </data>
+  <data name="SettingsHeader.Header" xml:space="preserve">
+    <value>settings</value>
+  </data>
+  <data name="SettingsInviteCode.Header" xml:space="preserve">
+    <value>Invite Code:</value>
+  </data>
+  <data name="SettingsNotifications.Header" xml:space="preserve">
+    <value>NOTIFICATIONS</value>
+  </data>
+  <data name="SettingsNotificationsAuthToken.Text" xml:space="preserve">
+    <value>This feature requires that we store your Snapchat Authentiction Token on our secure azure mobile service, to make requests to get updates. If you are not happy with this, please don't use this feature.</value>
+  </data>
+  <data name="SettingsNotificationsBadFriend.Text" xml:space="preserve">
+    <value>(lets face it, you should probally stop talking to them).</value>
+  </data>
+  <data name="SettingsNotificationsPN.Text" xml:space="preserve">
+    <value>This application has Push Notifications (the little toasts that appear at the top of the screen) to let you know you have received a new snap, friend or a bad friend has screenshotted your snap</value>
+  </data>
+  <data name="SettingsNotificationsPNInviteOnly.Text" xml:space="preserve">
+    <value>This feature is currently invite only as it's in the test phase. So if you have an invite code, enter it below.</value>
+  </data>
+  <data name="SettingsNotificationsPNRequest.Text" xml:space="preserve">
+    <value>Otherwise click the button below to request one.</value>
+  </data>
+  <data name="SettingsPersonal.Header" xml:space="preserve">
+    <value>PERSONAL</value>
+  </data>
+  <data name="SettingsPhone.Header" xml:space="preserve">
+    <value>phone number</value>
+  </data>
+  <data name="SettingsPrivacy.Header" xml:space="preserve">
+    <value>PRIVACY</value>
+  </data>
+  <data name="SettingsRegisterPN.Content" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="SettingsRequestPNCode.Content" xml:space="preserve">
+    <value>Request Invite Code</value>
+  </data>
+  <data name="SettingsSnapPrivacy.Header" xml:space="preserve">
+    <value>who can send you snaps</value>
+  </data>
+  <data name="SettingsStoryPrivacy.Header" xml:space="preserve">
+    <value>who can see your story</value>
+  </data>
+  <data name="SettingsWelcome.Text" xml:space="preserve">
+    <value>welcome</value>
   </data>
   <data name="SignInButton.Content" xml:space="preserve">
     <value>sign in</value>
@@ -158,6 +284,9 @@
   </data>
   <data name="SignInUsernameTitle.Text" xml:space="preserve">
     <value>username or email</value>
+  </data>
+  <data name="Snaps.Text" xml:space="preserve">
+    <value>SNAPS</value>
   </data>
   <data name="SnapStatusDelivered" xml:space="preserve">
     <value>Delivered</value>

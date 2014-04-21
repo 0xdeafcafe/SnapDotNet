@@ -28,6 +28,14 @@ namespace SnapDotNet.Apps.Pages
 			ViewModel.OpenSignInPageCommand.Execute(null);
 		}
 
+		private void CreateAccountButtonButton_Click(object sender, RoutedEventArgs e)
+		{
+			var storyboard = (Storyboard)Resources["RegistrationModalRevealStoryboard"];
+			if (storyboard == null) return;
+			storyboard.Begin();
+			ViewModel.OpenRegisterPageCommand.Execute(null);
+		}
+
 		private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
 		{
 			if (ViewModel.IsSignInPageVisible)
@@ -41,6 +49,10 @@ namespace SnapDotNet.Apps.Pages
 
 			if (ViewModel.IsRegisterPageVisible)
 			{
+				var storyboard = (Storyboard)Resources["RegistrationModalHideStoryboard"];
+				if (storyboard == null) return;
+				storyboard.Begin();
+				ViewModel.GoBackToStartCommand.Execute(null);
 				backPressedEventArgs.Handled = true;
 			}
 		}
@@ -48,6 +60,11 @@ namespace SnapDotNet.Apps.Pages
 		private void SignInButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			ViewModel.SignInCommand.Execute(null);
+		}
+
+		private void ContinueRegistrationButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			ViewModel.RegisterCommand.Execute(null);
 		}
 	}
 }

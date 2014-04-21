@@ -68,25 +68,25 @@
 				</TransitionCollection>
 			</Grid.ChildrenTransitions>
 
-			<Hub Header="settings">
-				<HubSection Header="PERSONAL">
+			<Hub x:Uid="SettingsHeader" Header="settings">
+				<HubSection x:Uid="SettingsPersonal" Header="PERSONAL">
 					<DataTemplate>
 						<ScrollViewer>
 							<StackPanel>
 								<StackPanel>
-									<TextBlock Text="welcome" FontFamily="Segoe WP" FontSize="18" />
+									<TextBlock x:Uid="SettingsWelcome" Text="welcome" FontFamily="Segoe WP" FontSize="18" />
 									<TextBlock Text="{Binding Path=Manager.Account.Username, FallbackValue='alexerax'}"
 											   Foreground="{StaticResource SystemColorControlAccentBrush}" FontFamily="Segoe WP Semilight" 
 											   FontSize="30" />
 								</StackPanel>
 
-								<TextBox Header="email address" Margin="0,10,0,0"
+								<TextBox x:Uid="SettingsEmail" Header="email address" Margin="0,10,0,0"
 										 Text="{Binding Path=Email, FallbackValue='test@outlook.com'}" InputScope="EmailSmtpAddress"/>
 
-								<TextBox Header="phone number" 
+								<TextBox x:Uid="SettingsPhone" Header="phone number" 
 										 Text="{Binding Path=PhoneNumber, FallbackValue='+4407738765623'}" InputScope="TelephoneNumber"/>
 
-								<ComboBox Header="number of best friends" IsDropDownOpen="False"
+								<ComboBox x:Uid="SettingsBFFCount" Header="number of best friends" IsDropDownOpen="False"
 										  ItemsSource="{Binding Path=BestFriendTiers}"
 										  SelectedItem="{Binding Path=BestFriendCount}">
 								</ComboBox>
@@ -94,16 +94,16 @@
 						</ScrollViewer>
 					</DataTemplate>
 				</HubSection>
-				<HubSection Header="PRIVACY">
+				<HubSection x:Uid="SettingsPrivacy" Header="PRIVACY">
 					<DataTemplate>
 						<ScrollViewer>
 							<StackPanel>
-								<ComboBox Header="who can see your story" IsDropDownOpen="False"
+								<ComboBox x:Uid="SettingsStoryPrivacy" Header="who can see your story" IsDropDownOpen="False"
 										  ItemsSource="{Binding Path=StoryPrivacyTiers}"
 										  SelectedItem="{Binding Path=StoryPrivacy}">
 								</ComboBox>
 
-								<ComboBox Header="who can send you snaps" IsDropDownOpen="False"
+								<ComboBox x:Uid="SettingsSnapPrivacy" Header="who can send you snaps" IsDropDownOpen="False"
 										  ItemsSource="{Binding Path=SnapPrivacyTiers}"
 										  SelectedItem="{Binding Path=SnapPrivacy}">
 								</ComboBox>
@@ -111,22 +111,21 @@
 						</ScrollViewer>
 					</DataTemplate>
 				</HubSection>
-				<HubSection Header="NOTIFICATIONS">
+				<HubSection x:Uid="SettingsNotifications" Header="NOTIFICATIONS">
 					<DataTemplate>
 						<ScrollViewer>
 							<StackPanel>
 								<TextBlock TextAlignment="Justify" TextWrapping="WrapWholeWords" FontSize="14" FontFamily="Segoe WP">
-									<Run Text="This application has Push Notifications (the little toasts that appear at the top of the screen)" />
-									<Run Text="to let you know you have received a new snap, friend or a bad friend has screenshotted your snap" />
-									<Run Foreground="{StaticResource SystemColorControlAccentBrush}"
+									<Run x:Uid="SettingsNotificationsPN" Text="This application has Push Notifications (the little toasts that appear at the top of the screen) to let you know you have received a new snap, friend or a bad friend has screenshotted your snap" />
+									<Run x:Uid="SettingsNotificationsBadFriend" Foreground="{StaticResource SystemColorControlAccentBrush}"
 										 Text="(lets face it, you should probally stop talking to them)." />
 									<LineBreak />
 									<LineBreak />
-									<Run Text="This feature is currently invite only as it's in the test phase. So if you have an invite code, enter it below." />
-									<Run Text="Otherwise click the button below to request one." />
+									<Run x:Uid="SettingsNotificationsPNInviteOnly" Text="This feature is currently invite only as it's in the test phase. So if you have an invite code, enter it below." />
+									<Run x:Uid="SettingsNotificationsPNRequest" Text="Otherwise click the button below to request one." />
 									<LineBreak />
 									<LineBreak />
-									<Run FontSize="12" Foreground="{StaticResource SecondaryFontColourBrush}"
+									<Run x:Uid="SettingsNotificationsAuthToken" FontSize="12" Foreground="{StaticResource SecondaryFontColourBrush}"
 										 Text="This feature requires that we store your Snapchat Authentiction Token on our secure azure mobile service, to make requests to get updates. If you are not happy with this, please don't use this feature." />
 								</TextBlock>
 
@@ -135,20 +134,20 @@
 										<ColumnDefinition Width="*" />
 										<ColumnDefinition Width="140" />
 									</Grid.ColumnDefinitions>
-									<TextBox Header="Invite Code:" Margin="0,10,0,0" />
-									<Button Grid.Column="1" Content="Register" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="10,0,0,-10" />
+									<TextBox x:Uid="SettingsInviteCode" Header="Invite Code:" Margin="0,10,0,0" />
+									<Button Grid.Column="1" x:Uid="SettingsRegisterPN" Content="Register" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="10,0,0,-10" />
 								</Grid>
 
-								<Button Content="Request Invite Code" HorizontalAlignment="Stretch" />
+								<Button x:Uid="SettingsRequestPNCode" Content="Request Invite Code" HorizontalAlignment="Stretch" />
 							</StackPanel>
 						</ScrollViewer>
 					</DataTemplate>
 				</HubSection>
-				<HubSection Header="APP SPECIFIC">
+				<HubSection x:Uid="SettingsAppSpecific" Header="APP SPECIFIC">
 					<DataTemplate>
 						<ScrollViewer>
 							<StackPanel>
-								<ComboBox Header="auto download snaps" 
+								<ComboBox x:Uid="SettingsAutoDownload" Header="auto download snaps" 
 										  ItemsSource="{Binding AutoDownloadSnapsTiers}"
 										  SelectedItem="{Binding UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=ApplicationSettings.SnapAutoDownloadMode}"/>
 							</StackPanel>

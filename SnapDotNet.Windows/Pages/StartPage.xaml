@@ -15,6 +15,7 @@
 
     <Page.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Converters:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" IsInversed="True"/>
 
         <!-- Width threshold for switching between the default and minimal views -->
         <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
@@ -208,13 +209,16 @@
                         Margin="25,-13,25,0"
                         HorizontalAlignment="Center"
                         Command="{Binding SignInCommand}"
-                        x:Uid="SignInButton">
+                        x:Uid="SignInButton"
+                        IsEnabled="{Binding ProgressModalIsVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                     <Button.CommandParameter>
                         <signedIn:MainPage/>
                     </Button.CommandParameter>
                     
                     Sign in
                 </Button>
+
+                <ProgressBar IsIndeterminate="True" Visibility="{Binding ProgressModalVisibility}" IsEnabled="True" Grid.Row="2" Foreground="Red" BorderBrush="Red" VerticalAlignment="Bottom"/>
             </Grid>
 
             <!-- Default registration view -->
