@@ -243,15 +243,14 @@ namespace SnapDotNet.Apps.ViewModels
 				if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
 				{
 					var dialog =
-						new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
-							"Invalid Username/Password");
+						new MessageDialog(App.Loader.GetString("InvalidCredentialsBody"), App.Loader.GetString("InvalidCredentialsHeader"));
 					await dialog.ShowAsync();
 					return;
 				}
 
 #if WINDOWS_PHONE_APP
 				// Tell UI we're Signing In
-				StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
+				StatusBar.GetForCurrentView().ProgressIndicator.Text = App.Loader.GetString("SigningIn");
 				await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
 #endif
 				ProgressModalVisibility = Visibility.Visible;
@@ -267,7 +266,7 @@ namespace SnapDotNet.Apps.ViewModels
 				{
 					if (exception.Message == "Unauthorized")
 					{
-						var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
+						var dialog = new MessageDialog(App.Loader.GetString("UnauthorizedBody"), App.Loader.GetString("UnauthorizedHeader"));
 						dialog.ShowAsync();
 					}
 				}
@@ -289,15 +288,14 @@ namespace SnapDotNet.Apps.ViewModels
 			catch (InvalidCredentialsException)
 			{
 				var dialog =
-					new MessageDialog("The username and password combination you used to sign into Snapchat is not correct.",
-						"Invalid Username/Password");
+					new MessageDialog(App.Loader.GetString("InvalidCredentialsBody"), App.Loader.GetString("InvalidCredentialsHeader"));
 				dialog.ShowAsync();
 			}
 			catch (InvalidHttpResponseException exception)
 			{
 				var dialog =
-					new MessageDialog(String.Format("Unable to connect to Snapchat. The server responded: \n {0}.", exception.Message),
-						"Unable to connect to Snapchat");
+					new MessageDialog(String.Format("{0} \n {1}.", App.Loader.GetString("InvalidHttpBody"), exception.Message),
+						App.Loader.GetString("InvalidHttpHeader"));
 				dialog.ShowAsync();
 			}
 			finally

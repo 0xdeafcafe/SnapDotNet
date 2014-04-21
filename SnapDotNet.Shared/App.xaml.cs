@@ -268,7 +268,7 @@ namespace SnapDotNet.Apps
 
 			try
 			{
-				await ProgressHelper.ShowStatusBar("Updating...");
+				await ProgressHelper.ShowStatusBar(Loader.GetString("Updating"));
 				await SnapChatManager.UpdateAllAsync(async () => { await ProgressHelper.HideStatusBar(); }, Settings);
 			}
 			catch (InvalidCredentialsException exception)
@@ -280,7 +280,7 @@ namespace SnapDotNet.Apps
 			{
 				if (exception.Message == "Unauthorized")
 				{
-					var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
+					var dialog = new MessageDialog(Loader.GetString("UnauthorizedBody"), Loader.GetString("UnauthorizedHeader"));
 					var showDialogTask = dialog.ShowAsync();
 					forceLogout = true;
 				}
@@ -300,7 +300,7 @@ namespace SnapDotNet.Apps
 
 		public static async Task LogoutAsync()
 		{
-			await ProgressHelper.ShowStatusBar("Logging out...");
+			await ProgressHelper.ShowStatusBar(Loader.GetString("LoggingOut"));
 
 			await SnapChatManager.Logout();
 			CurrentFrame.Navigate(typeof(StartPage));
