@@ -129,7 +129,7 @@
 			
 			<StackPanel Grid.Row="0" Orientation="Vertical" Margin="20,0,0,0">
 				<TextBlock Text="{Binding Path=Manager.Account.Username, FallbackValue='loading...'}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
-				<TextBlock Text="SNAPS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+				<TextBlock x:Uid="Snaps" Text="SNAPS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
 			</StackPanel>
 			
 			<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" 
@@ -206,8 +206,8 @@
 	<Page.BottomAppBar>
 		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
 			<CommandBar.SecondaryCommands>
-				<AppBarButton Label="refresh" Command="{Binding RefreshCommand}" />
-				<AppBarButton Label="settings" Command="{Binding GoToSettingsCommand}" />
+				<AppBarButton x:Uid="AppBarRefresh" Label="refresh" Command="{Binding RefreshCommand}" />
+				<AppBarButton x:Uid="AppBarSettings" Label="settings" Command="{Binding GoToSettingsCommand}" />
 			</CommandBar.SecondaryCommands>
 		</CommandBar>
 	</Page.BottomAppBar>

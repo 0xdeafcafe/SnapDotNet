@@ -74,8 +74,8 @@
 	<Page.BottomAppBar>
 		<CommandBar ClosedDisplayMode="Minimal" Opacity="0.4">
 			<CommandBar.SecondaryCommands>
-				<AppBarButton Label="refresh" Command="{Binding RefreshCommand}" />
-				<AppBarButton Label="settings" Command="{Binding GoToSettingsCommand}" />
+				<AppBarButton x:Uid="AppBarRefresh" Label="refresh" Command="{Binding RefreshCommand}" />
+				<AppBarButton x:Uid="AppBarSettings" Label="settings" Command="{Binding GoToSettingsCommand}" />
 			</CommandBar.SecondaryCommands>
 		</CommandBar>
 	</Page.BottomAppBar>
