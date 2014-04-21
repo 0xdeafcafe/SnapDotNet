@@ -13,7 +13,9 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		{
 			// Privacy
 			SnapPrivacyTiers = new ObservableCollection<AccountPrivacy>(Enum.GetValues(typeof(AccountPrivacy)).OfType<AccountPrivacy>().ToList());
-			StoryPrivacyTiers = new ObservableCollection<StoryPrivacy>(Enum.GetValues(typeof(StoryPrivacy)).OfType<StoryPrivacy>().ToList());
+			StoryPrivacyTiers = new ObservableCollection<StoryPrivacy>(Enum.GetValues(typeof (StoryPrivacy)).OfType<StoryPrivacy>().ToList());
+			// TODO: set up custom stories (blocking certain friends from them)
+			//StoryPrivacyTiers.Remove(StoryPrivacy.Custom);
 
 			// App Specific
 			AutoDownloadSnapsTiers = new ObservableCollection<SnapAutoDownloadMode>(Enum.GetValues(typeof(SnapAutoDownloadMode)).OfType<SnapAutoDownloadMode>().ToList());

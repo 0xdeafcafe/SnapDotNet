@@ -315,4 +315,7 @@
   <data name="StartPageTitle.Text" xml:space="preserve">
     <value>Snapchat for Windows</value>
   </data>
+  <data name="SettingsSignOut.Label" xml:space="preserve">
+    <value>sign out</value>
+  </data>
 </root>
