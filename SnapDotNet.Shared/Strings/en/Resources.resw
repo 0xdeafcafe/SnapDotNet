@@ -144,6 +144,21 @@
   <data name="PasswordBox.Header" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="RegistrationBirthday.Text" xml:space="preserve">
+    <value>birthday</value>
+  </data>
+  <data name="RegistrationContinueButton.Content" xml:space="preserve">
+    <value>continue</value>
+  </data>
+  <data name="RegistrationEmailTitle.Text" xml:space="preserve">
+    <value>email</value>
+  </data>
+  <data name="RegistrationHeader.Text" xml:space="preserve">
+    <value>register for snapchat</value>
+  </data>
+  <data name="RegistrationPassword.Text" xml:space="preserve">
+    <value>password</value>
+  </data>
   <data name="SignInButton.Content" xml:space="preserve">
     <value>sign in</value>
   </data>
