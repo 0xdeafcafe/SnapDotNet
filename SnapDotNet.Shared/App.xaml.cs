@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
@@ -209,13 +211,30 @@ namespace SnapDotNet.Apps
 					case PushNotificationType.Toast:
 						if (args.ToastNotification == null) return;
 
+						// Update settings count by 1
+						Settings.UnreadSnapCount += 1;
+
+						// Update Live Tile
+						const string xml = 
+							@"<tile>
+								<visual>
+									<binding template=""TileSquareText02""><text id=""1"">1</text><text id=""2"">2</text></binding>
+								</visual>
+							</tile>";
+
+						var xmlDoc = new XmlDocument();
+						xmlDoc.LoadXml(xml);
+						var tn = new TileNotification(xmlDoc);
+						var tu = TileUpdateManager.CreateTileUpdaterForApplication();
+						tu.Update(tn);
+
 						// Tell the app to navigate to snaps page
 						args.ToastNotification.Activated += (notification, o) =>
 						{
 							UpdateSnapchatData();
 							CurrentFrame.Navigate(typeof (SnapsPage));
 						};
-						args.ToastNotification.Group = "Dev";
+						args.ToastNotification.Group = "Snaps";
 						break;
 
 					default:
