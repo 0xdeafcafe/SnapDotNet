@@ -230,8 +230,14 @@ namespace SnapDotNet.Apps
 			}
 			catch (Exception exception)
 			{
-				if (exception.HResult == 0x803E0103) // register request is already in progress
+				if (exception.HResult == 0x803E0103) return; // register request is already in progress
+
+				if (exception.HResult == 0x80131509) // the SDN WNS service is down
+				{
+					SnazzyDebug.WriteLine(exception);
 					return;
+				}
+
 				throw;
 			}
 #endif
