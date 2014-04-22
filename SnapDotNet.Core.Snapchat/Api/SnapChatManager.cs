@@ -8,7 +8,6 @@ using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
-using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Core.Snapchat.Api
@@ -258,7 +257,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			// Deseralize the Account model from IsolatedStorage
 			var accountData = IsolatedStorage.ReadFileAsync(AccountDataFileName).Result;
-			if (accountData != null && accountData != "null")
+			if (accountData != null && !String.IsNullOrEmpty(accountData) && accountData != "null")
 			{
 				try
 				{
@@ -273,7 +272,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			// Deseralize the Stories model from IsolatedStorage
 			var storiesData = IsolatedStorage.ReadFileAsync(StoriesDataFileName).Result;
-			if (storiesData != null && storiesData != "null")
+			if (storiesData != null && !String.IsNullOrEmpty(storiesData) && storiesData != "null")
 			{
 				try 
 				{
@@ -288,7 +287,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			// Deseralize the PublicActivity model from IsolatedStorage
 			var publicActiviesData = IsolatedStorage.ReadFileAsync(PublicActivityDataFileName).Result;
-			if (publicActiviesData != null && publicActiviesData != "null")
+			if (publicActiviesData != null && !String.IsNullOrEmpty(publicActiviesData) && publicActiviesData != "null")
 			{
 				try
 				{
