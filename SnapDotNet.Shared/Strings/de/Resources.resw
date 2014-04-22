@@ -118,49 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppBarRefresh.Label" xml:space="preserve">
-    <value>refresh</value>
+    <value>erfrischen</value>
   </data>
   <data name="AppBarSettings.Label" xml:space="preserve">
-    <value>settings</value>
+    <value>einstellungen</value>
   </data>
   <data name="Birthday.Header" xml:space="preserve">
-    <value>Birthday</value>
+    <value>Geburtstag</value>
   </data>
   <data name="BottomAppBarHint.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Show more commands (Windows logo key+Z, or right-click)</value>
+    <value>[TRANSLATION NEEDED] Show more commands (Windows logo key+Z, or right-click)</value>
   </data>
   <data name="CreateAccountButton.Content" xml:space="preserve">
-    <value>register</value>
+    <value>registrieren</value>
   </data>
   <data name="Disclaimer.Text" xml:space="preserve">
-    <value>This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</value>
+    <value>[TRANSLATION NEEDED] This is a third-party Snapchat client, and is not endorsed by Snapchat, Inc.</value>
   </data>
   <data name="Email.Header" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="FriendBestFriends.Text" xml:space="preserve">
-    <value>best friends:</value>
+    <value>[TRANSLATION NEEDED] best friends:</value>
   </data>
   <data name="FriendFullStory.Text" xml:space="preserve">
-    <value>full story:</value>
+    <value>[TRANSLATION NEEDED] full story:</value>
   </data>
   <data name="FriendsBlocked.Header" xml:space="preserve">
-    <value>BLOCKED</value>
+    <value>BLOCKIERT</value>
   </data>
   <data name="FriendScore.Text" xml:space="preserve">
-    <value>snapchat score:</value>
+    <value>[TRANSLATION NEEDED] snapchat score:</value>
   </data>
   <data name="FriendSearchBox.PlaceholderText" xml:space="preserve">
-    <value>Search friends</value>
+    <value>[TRANSLATION NEEDED] Search friends</value>
   </data>
   <data name="FriendsFriends.Header" xml:space="preserve">
-    <value>FRIENDS</value>
+    <value>FREUNDE</value>
   </data>
   <data name="FriendsPending.Header" xml:space="preserve">
-    <value>PENDING</value>
+    <value>ANSTEHEND</value>
   </data>
   <data name="FriendsSocial.Header" xml:space="preserve">
-    <value>social</value>
+    <value>sozial</value>
   </data>
   <data name="InfoHubSection.Header" xml:space="preserve">
     <value>INFO</value>
@@ -172,243 +172,243 @@
     <value>Snapchat</value>
   </data>
   <data name="NoAcceptedFriendsMessage.Text" xml:space="preserve">
-    <value>You have no friends.. Need a hand?</value>
+    <value>[TRANSLATION NEEDED] You have no friends.. Need a hand?</value>
   </data>
   <data name="NoBlockedFriendsMessage.Text" xml:space="preserve">
-    <value>You have no blocked friends.. Great job!</value>
+    <value>[TRANSLATION NEEDED] You have no blocked friends.. Great job!</value>
   </data>
   <data name="NoPendingFriendsMessage.Text" xml:space="preserve">
-    <value>You have no pending friends..</value>
+    <value>[TRANSLATION NEEDED] You have no pending friends..</value>
   </data>
   <data name="PasswordBox.Header" xml:space="preserve">
-    <value>Password</value>
+    <value>Passwort</value>
   </data>
   <data name="PreviewAccept.Label" xml:space="preserve">
-    <value>Accept</value>
+    <value>Akzeptieren</value>
   </data>
   <data name="PreviewFilters.Label" xml:space="preserve">
-    <value>Filters</value>
+    <value>[TRANSLATION NEEDED] Filters</value>
   </data>
   <data name="PreviewReject.Label" xml:space="preserve">
-    <value>Reject</value>
+    <value>Ablehnen</value>
   </data>
   <data name="PreviewTimer.Label" xml:space="preserve">
     <value>Timer</value>
   </data>
   <data name="RegistrationBirthday.Text" xml:space="preserve">
-    <value>birthday</value>
+    <value>geburtstag</value>
   </data>
   <data name="RegistrationContinueButton.Content" xml:space="preserve">
-    <value>continue</value>
+    <value>weiter</value>
   </data>
   <data name="RegistrationEmailTitle.Text" xml:space="preserve">
-    <value>email</value>
+    <value>e-mail</value>
   </data>
   <data name="RegistrationHeader.Text" xml:space="preserve">
-    <value>register for snapchat</value>
+    <value>[TRANSLATION NEEDED] register for snapchat</value>
   </data>
   <data name="RegistrationPassword.Text" xml:space="preserve">
-    <value>password</value>
+    <value>passwort</value>
   </data>
   <data name="SettingsAppSpecific.Header" xml:space="preserve">
-    <value>APP SPECIFIC</value>
+    <value>[TRANSLATION NEEDED] APP SPECIFIC</value>
   </data>
   <data name="SettingsAutoDownload.Header" xml:space="preserve">
-    <value>auto download snaps</value>
+    <value>[TRANSLATION NEEDED] auto download snaps</value>
   </data>
   <data name="SettingsBFFCount.Header" xml:space="preserve">
-    <value>number of best friends</value>
+    <value>[TRANSLATION NEEDED] number of best friends</value>
   </data>
   <data name="SettingsEmail.Header" xml:space="preserve">
-    <value>email address</value>
+    <value>[TRANSLATION NEEDED] email address</value>
   </data>
   <data name="SettingsHeader.Header" xml:space="preserve">
-    <value>settings</value>
+    <value>einstellungen</value>
   </data>
   <data name="SettingsInviteCode.Header" xml:space="preserve">
-    <value>Invite Code:</value>
+    <value>[TRANSLATION NEEDED] Invite Code:</value>
   </data>
   <data name="SettingsNotifications.Header" xml:space="preserve">
-    <value>NOTIFICATIONS</value>
+    <value>MELDUNGEN</value>
   </data>
   <data name="SettingsNotificationsAuthToken.Text" xml:space="preserve">
-    <value>This feature requires that we store your Snapchat Authentiction Token on our secure azure mobile service, to make requests to get updates. If you are not happy with this, please don't use this feature.</value>
+    <value>[TRANSLATION NEEDED] This feature requires that we store your Snapchat Authentiction Token on our secure azure mobile service, to make requests to get updates. If you are not happy with this, please don't use this feature.</value>
   </data>
   <data name="SettingsNotificationsBadFriend.Text" xml:space="preserve">
-    <value>(lets face it, you should probally stop talking to them).</value>
+    <value>[TRANSLATION NEEDED] (lets face it, you should probally stop talking to them).</value>
   </data>
   <data name="SettingsNotificationsPN.Text" xml:space="preserve">
-    <value>This application has Push Notifications (the little toasts that appear at the top of the screen) to let you know you have received a new snap, friend or a bad friend has screenshotted your snap</value>
+    <value>[TRANSLATION NEEDED] This application has Push Notifications (the little toasts that appear at the top of the screen) to let you know you have received a new snap, friend or a bad friend has screenshotted your snap</value>
   </data>
   <data name="SettingsNotificationsPNInviteOnly.Text" xml:space="preserve">
-    <value>This feature is currently invite only as it's in the test phase. So if you have an invite code, enter it below.</value>
+    <value>[TRANSLATION NEEDED] This feature is currently invite only as it's in the test phase. So if you have an invite code, enter it below.</value>
   </data>
   <data name="SettingsNotificationsPNRequest.Text" xml:space="preserve">
-    <value>Otherwise click the button below to request one.</value>
+    <value>[TRANSLATION NEEDED] Otherwise click the button below to request one.</value>
   </data>
   <data name="SettingsPersonal.Header" xml:space="preserve">
-    <value>PERSONAL</value>
+    <value>PERSÖNLICHEN</value>
   </data>
   <data name="SettingsPhone.Header" xml:space="preserve">
-    <value>phone number</value>
+    <value>handynummer</value>
   </data>
   <data name="SettingsPrivacy.Header" xml:space="preserve">
-    <value>PRIVACY</value>
+    <value>DATENSCHUTZ</value>
   </data>
   <data name="SettingsRegisterPN.Content" xml:space="preserve">
-    <value>Register</value>
+    <value>Registrieren</value>
   </data>
   <data name="SettingsRequestPNCode.Content" xml:space="preserve">
-    <value>Request Invite Code</value>
+    <value>[TRANSLATION NEEDED] Request Invite Code</value>
   </data>
   <data name="SettingsSnapPrivacy.Header" xml:space="preserve">
-    <value>who can send you snaps</value>
+    <value>[TRANSLATION NEEDED] who can send you snaps</value>
   </data>
   <data name="SettingsStoryPrivacy.Header" xml:space="preserve">
-    <value>who can see your story</value>
+    <value>[TRANSLATION NEEDED] who can see your story</value>
   </data>
   <data name="SettingsWelcome.Text" xml:space="preserve">
-    <value>welcome</value>
+    <value>willkommen</value>
   </data>
   <data name="SignInButton.Content" xml:space="preserve">
-    <value>sign in</value>
+    <value>anmelden</value>
   </data>
   <data name="SignInHeader.Text" xml:space="preserve">
-    <value>sign in to snapchat</value>
+    <value>anmelden zu snapchat</value>
   </data>
   <data name="SignInPassword.Text" xml:space="preserve">
-    <value>password</value>
+    <value>passwort</value>
   </data>
   <data name="SignInUsername.Header" xml:space="preserve">
-    <value>username or email</value>
+    <value>benutzername oder e-mail</value>
   </data>
   <data name="SignInUsernameTitle.Text" xml:space="preserve">
-    <value>username or email</value>
+    <value>benutzername oder e-mail</value>
   </data>
   <data name="Snaps.Text" xml:space="preserve">
     <value>SNAPS</value>
   </data>
   <data name="SnapStatusDelivered" xml:space="preserve">
-    <value>Delivered</value>
+    <value>Geliefert</value>
   </data>
   <data name="SnapStatusDownloading" xml:space="preserve">
-    <value>Downloading</value>
+    <value>[TRANSLATION NEEDED] Downloading</value>
   </data>
   <data name="SnapStatusOpened" xml:space="preserve">
-    <value>Opened</value>
+    <value>Angebrochen</value>
   </data>
   <data name="SnapStatusScreenshotted" xml:space="preserve">
     <value>Screenshot!</value>
   </data>
   <data name="SnapStatusSent" xml:space="preserve">
-    <value>Sent</value>
+    <value>Gesendet</value>
   </data>
   <data name="SnapStatusTapAndHold" xml:space="preserve">
-    <value>Tap and hold to view</value>
+    <value>[TRANSLATION NEEDED] Tap and hold to view</value>
   </data>
   <data name="SnapStatusTapToLoad" xml:space="preserve">
-    <value>Tap to load</value>
+    <value>[TRANSLATION NEEDED] Tap to load</value>
   </data>
   <data name="StartPageThirdParty.Text" xml:space="preserve">
-    <value>unofficial snapchat client</value>
+    <value>inoffiziell snapchat Anwendungssoftware</value>
   </data>
   <data name="StartPageTitle.Text" xml:space="preserve">
-    <value>Snapchat for Windows</value>
+    <value>Snapchat für Windows</value>
   </data>
   <data name="SettingsSignOut.Label" xml:space="preserve">
-    <value>sign out</value>
+    <value>ausloggen</value>
   </data>
   <data name="Block" xml:space="preserve">
-    <value>Block</value>
+    <value>Blockieren</value>
   </data>
   <data name="BlockingDialogBody" xml:space="preserve">
-    <value>You will no longer recieve snaps from this person. But you can undo this action at any time.</value>
+    <value>[TRANSLATION NEEDED] You will no longer recieve snaps from this person. But you can undo this action at any time.</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Stornieren</value>
   </data>
   <data name="ChangeDisplay" xml:space="preserve">
-    <value>Change Display Name</value>
+    <value>[TRANSLATION NEEDED] Change Display Name</value>
   </data>
   <data name="ChangeDisplayNameDialog.PrimaryButtonText" xml:space="preserve">
-    <value>change</value>
+    <value>ändern</value>
   </data>
   <data name="ChangeDisplayNameDialog.SecondaryButtonText" xml:space="preserve">
-    <value>cancel</value>
+    <value>stornieren</value>
   </data>
   <data name="ChangeDisplayNameDialog.Title" xml:space="preserve">
-    <value>CHANGE DISPLAY NAME</value>
+    <value>[TRANSLATION NEEDED] CHANGE DISPLAY NAME</value>
   </data>
   <data name="DisplayChangeWarningRun1.Text" xml:space="preserve">
-    <value>Changing this will change how your friend's name displayed in the application. It will not change his account in anyway.</value>
+    <value>[TRANSLATION NEEDED] Changing this will change how your friend's name displayed in the application. It will not change his account in anyway.</value>
   </data>
   <data name="DisplayChangeWarningRun2.Text" xml:space="preserve">
-    <value>To remove a display name, just change it to an empty name.</value>
+    <value>[TRANSLATION NEEDED] To remove a display name, just change it to an empty name.</value>
   </data>
   <data name="DisplayChangeWarningRun3.Text" xml:space="preserve">
-    <value>This can be un-done or changed at any time.</value>
+    <value>[TRANSLATION NEEDED] This can be un-done or changed at any time.</value>
   </data>
   <data name="DisplyNameTextBox.Header" xml:space="preserve">
-    <value>new display name</value>
+    <value>[TRANSLATION NEEDED] new display name</value>
   </data>
   <data name="GenericCautionDialogHeader" xml:space="preserve">
-    <value>Are you sure?</value>
+    <value>[TRANSLATION NEEDED] Are you sure?</value>
   </data>
   <data name="InvalidCredentialsBody" xml:space="preserve">
-    <value>The username and password combination you used to sign into snapchat is not correct.</value>
+    <value>[TRANSLATION NEEDED] The username and password combination you used to sign into snapchat is not correct.</value>
   </data>
   <data name="InvalidCredentialsHeader" xml:space="preserve">
-    <value>Invalid Username/Password</value>
+    <value>[TRANSLATION NEEDED] Invalid Username/Password</value>
   </data>
   <data name="InvalidHttpBody" xml:space="preserve">
-    <value>Unable to connect to Snapchat. The server responded:</value>
+    <value>[TRANSLATION NEEDED] Unable to connect to Snapchat. The server responded:</value>
   </data>
   <data name="InvalidHttpHeader" xml:space="preserve">
-    <value>Unable to connect to Snapchat</value>
+    <value>[TRANSLATION NEEDED] Unable to connect to Snapchat</value>
   </data>
   <data name="LoggingOut" xml:space="preserve">
-    <value>Logging Out...</value>
+    <value>[TRANSLATION NEEDED] Logging Out...</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>Nein</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Entfernen</value>
   </data>
   <data name="RemovingDialogBody" xml:space="preserve">
-    <value>This person will no longer appear on your friends list, but you might still get snaps from them depending on your privacy settings.</value>
+    <value>[TRANSLATION NEEDED] This person will no longer appear on your friends list, but you might still get snaps from them depending on your privacy settings.</value>
   </data>
   <data name="SigningIn" xml:space="preserve">
-    <value>Signing in...</value>
+    <value>Anmeldung bei...</value>
   </data>
   <data name="StatusBarBlocking" xml:space="preserve">
-    <value>Blocking...</value>
+    <value>Sperrt...</value>
   </data>
   <data name="StatusBarChangeDisplay" xml:space="preserve">
-    <value>Changing Display Name...</value>
+    <value>[TRANSLATION NEEDED] Changing Display Name...</value>
   </data>
   <data name="StatusBarRemoving" xml:space="preserve">
-    <value>Removing...</value>
+    <value>Entfernen...</value>
   </data>
   <data name="StatusBarUnblocking" xml:space="preserve">
-    <value>Unblocking...</value>
+    <value>[TRANSLATION NEEDED] Unblocking...</value>
   </data>
   <data name="UnauthorizedBody" xml:space="preserve">
-    <value>Your sign in infomation has expired. Please sign in again.</value>
+    <value>[TRANSLATION NEEDED] Your sign in infomation has expired. Please sign in again.</value>
   </data>
   <data name="UnauthorizedHeader" xml:space="preserve">
-    <value>You are Unauthorized</value>
+    <value>[TRANSLATION NEEDED] You are Unauthorized</value>
   </data>
   <data name="Unblock" xml:space="preserve">
-    <value>Unblock</value>
+    <value>[TRANSLATION NEEDED] Unblock</value>
   </data>
   <data name="UnblockingDialogBody" xml:space="preserve">
-    <value>You will now recieve snaps from this person. But you can redo this action at any time.</value>
+    <value>[TRANSLATION NEEDED] You will now recieve snaps from this person. But you can redo this action at any time.</value>
   </data>
   <data name="Updating" xml:space="preserve">
-    <value>Updating...</value>
+    <value>[TRANSLATION NEEDED] Updating...</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Ja</value>
   </data>
 </root>
