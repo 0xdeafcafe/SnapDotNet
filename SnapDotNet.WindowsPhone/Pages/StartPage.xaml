@@ -271,12 +271,12 @@
 
 			<StackPanel Grid.Column="1" Grid.Row="3">
 				<TextBlock x:Uid="RegistrationEmailTitle" FontSize="20">email</TextBlock>
-				<TextBox x:Name="RegistrationEmailTextBlock" Text="{Binding CurrentUsername, Mode=TwoWay}" InputScope="EmailSmtpAddress" />
+				<TextBox x:Name="RegistrationEmailTextBlock" Text="{Binding CurrentEmail, Mode=TwoWay}" InputScope="EmailSmtpAddress" />
 			</StackPanel>
 
 			<StackPanel Grid.Column="1" Grid.Row="5">
 				<TextBlock x:Uid="RegistrationPassword" FontSize="20">password</TextBlock>
-				<PasswordBox x:Name="RegistrationPasswordTextBlock" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
+				<PasswordBox x:Name="RegistrationPasswordTextBlock" Password="{Binding DesiredPassword, Mode=TwoWay}"/>
 			</StackPanel>
 
 			<StackPanel Grid.Column="1" Grid.Row="7">

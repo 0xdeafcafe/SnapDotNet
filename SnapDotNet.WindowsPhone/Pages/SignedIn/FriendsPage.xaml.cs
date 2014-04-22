@@ -71,11 +71,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			if (button == null) return;
 			var flyout = new MenuFlyout();
 			if (flyout.Items == null) return;
-			flyout.Items.Add(new MenuFlyoutItem { Text = "Remove", Command = ViewModel.RemoveFriendCommand, CommandParameter = button.DataContext });
-			flyout.Items.Add(new MenuFlyoutItem { Text = "Change Display Name", Command = ViewModel.ChangeDisplayNameCommand, CommandParameter = button.DataContext });
+			flyout.Items.Add(new MenuFlyoutItem { Text = App.Loader.GetString("Remove"), Command = ViewModel.RemoveFriendCommand, CommandParameter = button.DataContext });
+			flyout.Items.Add(new MenuFlyoutItem { Text = App.Loader.GetString("ChangeDisplay"), Command = ViewModel.ChangeDisplayNameCommand, CommandParameter = button.DataContext });
 			flyout.Items.Add(((Friend) button.DataContext).FriendRequestState == FriendRequestState.Blocked
-				? new MenuFlyoutItem {Text = "Unblock", Command = ViewModel.UnBlockFriendCommand, CommandParameter = button.DataContext}
-				: new MenuFlyoutItem {Text = "Block", Command = ViewModel.BlockFriendCommand, CommandParameter = button.DataContext});
+				? new MenuFlyoutItem { Text = App.Loader.GetString("Unblock"), Command = ViewModel.UnBlockFriendCommand, CommandParameter = button.DataContext }
+				: new MenuFlyoutItem { Text = App.Loader.GetString("Block"), Command = ViewModel.BlockFriendCommand, CommandParameter = button.DataContext });
 			flyout.ShowAt((FrameworkElement)sender);
 
 			// TODO: Refresh CollectionViewSource's after these commands have been executed... Not sure how though. Matt?
