@@ -323,10 +323,52 @@ namespace SnapDotNet.Apps.ViewModels
 		/// <summary>
 		/// Attempts to create a new account.
 		/// </summary>
-		private void Register(Page nextPage)
+		private async void Register(Page nextPage)
 		{
-			// TODO: API stuff
-			App.CurrentFrame.Navigate(nextPage.GetType());
+			if (string.IsNullOrEmpty(CurrentEmail))
+			{
+				var dialog =
+					new MessageDialog(App.Loader.GetString("EmptyEmailBody"), App.Loader.GetString("EmptyEmailHeader"));
+				dialog.ShowAsync();
+				return;
+			}
+			if (string.IsNullOrEmpty(DesiredPassword))
+			{
+				var dialog =
+					new MessageDialog(App.Loader.GetString("EmptyPasswordBody"), App.Loader.GetString("EmptyPasswordHeader"));
+				dialog.ShowAsync();
+				return;
+			}
+			
+
+			var age = DateTime.Today.Year - CurrentBirthday.Year;
+			if (DateTime.Today.DayOfYear < CurrentBirthday.DayOfYear)
+				age -= 1;
+
+			var birthdayString = string.Format("{0}-{1}-{2}", CurrentBirthday.Year, CurrentBirthday.Month, CurrentBirthday.Day);
+
+			try
+			{
+				var captcha = await App.SnapChatManager.Endpoints.RegisterAndGetCaptchaAsync(age, birthdayString, CurrentEmail, DesiredPassword);
+
+				new MessageDialog("Snaptchas have not been implemented yet", "Sorry Bud").ShowAsync();
+			}
+			catch (InvalidHttpResponseException exception)
+			{
+				var dialog =
+					new MessageDialog(String.Format("{0} \n {1}.", App.Loader.GetString("InvalidHttpBody"), exception.Message),
+						App.Loader.GetString("InvalidHttpHeader"));
+				dialog.ShowAsync();
+				return;
+			}
+
+			catch (InvalidRegistrationException exception)
+			{
+				var dialog =
+					new MessageDialog(exception.Message, App.Loader.GetString("RegistrationErrorHeader"));
+				dialog.ShowAsync();
+				return;
+			}
 		}
 	}
 }

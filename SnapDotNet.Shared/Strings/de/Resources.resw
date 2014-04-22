@@ -411,4 +411,19 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+  <data name="EmptyEmailBody" xml:space="preserve">
+    <value>[TRANSLATION NEEDED] Please enter an email address.</value>
+  </data>
+  <data name="EmptyEmailHeader" xml:space="preserve">
+    <value>[TRANSLATION NEEDED] No Email Entered</value>
+  </data>
+  <data name="EmptyPasswordBody" xml:space="preserve">
+    <value>[TRANSLATION NEEDED] Please enter a password.</value>
+  </data>
+  <data name="EmptyPasswordHeader" xml:space="preserve">
+    <value>[TRANSLATION NEEDED] No Password Entered</value>
+  </data>
+  <data name="RegistrationErrorHeader" xml:space="preserve">
+    <value>[TRANSLATION NEEDED] Registration Failed</value>
+  </data>
 </root>
