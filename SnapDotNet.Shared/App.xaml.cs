@@ -218,26 +218,31 @@ namespace SnapDotNet.Apps
 							Settings.UnreadSnapCount += 1;
 						}
 
-						// Update small tile
-						var smallTileContent = Notifications.TileContent.TileContentFactory.CreateTileSquare71x71IconWithBadge();
-						smallTileContent.ImageIcon.Src = "ms-appx:///Assets/Logo.png";
-						Notifications.TileUpdater.Update(smallTileContent.CreateNotification());
-
-						// Update large tile
-						var mediumTileContent = Notifications.TileContent.TileContentFactory.CreateTileSquare150x150IconWithBadge();
-						mediumTileContent.ImageIcon.Src = "ms-appx:///Assets/Logo.png";
-						Notifications.TileUpdater.Update(mediumTileContent.CreateNotification());
-
-						// Update wide tile
-						var wideTileContent = Notifications.TileContent.TileContentFactory.CreateTileWide310x150IconWithBadgeAndText();
-						wideTileContent.ImageIcon.Src = "ms-appx:///Assets/Logo.png";
-						wideTileContent.TextBody1.Text = args.ToastNotification.Content.InnerText.Trim('\n');
-						wideTileContent.Square150x150Content = mediumTileContent;
-						Notifications.TileUpdater.Update(wideTileContent.CreateNotification());
-
+						// Update Live Tile
+						var xml =
+							@"<tile>
+								<visual version=""3"">
+									<binding template=""TileSquare71x71IconWithBadge"">
+										<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
+									</binding>
+									<binding template=""TileSquare150x150IconWithBadge"">
+										<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
+									</binding>
+									<binding template=""TileSquare310x150IconWithBadgeAndText"">
+										<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
+										<text id=""1"">" + message + @"</text>
+									</binding>
+								</visual>
+							</tile>";
+						var xmlDoc = new XmlDocument();
+						xmlDoc.LoadXml(xml);
+						var tu = TileUpdateManager.CreateTileUpdaterForApplication();
+						tu.Update(new TileNotification(xmlDoc));
+						
 						// Update Badge
-						var badge = new Notifications.BadgeContent.BadgeNumericNotificationContent((uint)Settings.UnreadSnapCount);
-						Notifications.BadgeUpdater.Update(badge.CreateNotification());
+						xmlDoc.LoadXml("<badge value=\""+Settings.UnreadSnapCount+"\"/>");
+						var bu = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
+						bu.Update(new BadgeNotification(xmlDoc));
 
 						// Tell the app to navigate to snaps page
 						args.ToastNotification.Activated += (notification, o) =>
@@ -245,7 +250,7 @@ namespace SnapDotNet.Apps
 							CurrentFrame.Navigate(typeof(SnapsPage));
 							UpdateSnapchatData();
 						};
-						//args.ToastNotification.Group = "Snaps";
+						args.ToastNotification.Group = "Snaps";
 						break;
 
 					default:
