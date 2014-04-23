@@ -159,7 +159,7 @@
 	</Grid>
 
 	<Page.BottomAppBar>
-		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
+		<CommandBar Opacity="1.0">
 			<CommandBar.PrimaryCommands>
 				<AppBarButton x:Uid="SettingsSignOut" Label="sign out" Icon="Remote" Command="{Binding LogoutCommand}" />
 			</CommandBar.PrimaryCommands>
