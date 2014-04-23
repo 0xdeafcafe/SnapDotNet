@@ -6,11 +6,13 @@
 	xmlns:interactivity="using:Microsoft.Xaml.Interactivity" 
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
 	xmlns:media="using:Microsoft.Xaml.Interactions.Media" 
+	xmlns:Converters="using:SnapDotNet.Apps.Converters" 
 	x:Name="Page"
 	x:Class="SnapDotNet.Apps.Pages.StartPage"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
+		<Converters:BitmapImageFromCollectionConverter x:Key="BitmapImageFromCollectionConverter"/>
 		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
 				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
@@ -221,13 +223,13 @@
 
 				<!-- App Title -->
 				<TextBlock Grid.Row="0" HorizontalAlignment="Center" Padding="2" Style="{StaticResource TitleTextBlockStyle}" 
-						   FontWeight="Light" FontSize="28" FontFamily="Segoe WP Semilight">
+					FontWeight="Light" FontSize="28" FontFamily="Segoe WP Semilight">
 					<Run x:Uid="StartPageTitle" Text="Snapchat for Windows"/>
 				</TextBlock>
 
 				<!-- App Description -->
 				<TextBlock Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}" 
-						   FontWeight="Light" FontSize="16" FontFamily="Segoe WP">
+					FontWeight="Light" FontSize="16" FontFamily="Segoe WP">
 					<Run x:Uid="StartPageThirdParty" Text="unofficial snapchat client"/>
 				</TextBlock>
 			</Grid>
@@ -249,9 +251,9 @@
 		</Grid>
 
 		<!-- It's just modals past this point, sorry -->
-		
+
 		<Grid x:Name="SignInModalGrid" Grid.Row="0" 
-			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+			Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
 
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40" />
@@ -269,9 +271,9 @@
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="30" />
 			</Grid.ColumnDefinitions>
-			
+
 			<TextBlock Grid.Column="1" Grid.Row="1" x:Uid="SignInHeader" FontFamily="Segoe WP Semilight" 
-					   FontSize="30" Text="sign in to snapchat" />
+				FontSize="30" Text="sign in to snapchat" />
 
 			<StackPanel Grid.Column="1" Grid.Row="3">
 				<TextBlock x:Uid="SignInUsernameTitle" FontSize="20">username or email</TextBlock>
@@ -281,16 +283,16 @@
 			<StackPanel Grid.Column="1" Grid.Row="5">
 				<TextBlock x:Uid="SignInPassword" FontSize="20">password</TextBlock>
 				<PasswordBox x:Name="SignInPasswordTextBlock" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
-			</StackPanel>
+				</StackPanel>
 
-			<Button x:Uid="SignInButton" x:Name="SignInButton" Grid.Column="1" Grid.Row="7" Content="sign in" Background="#FFFFA500" 
+				<Button x:Uid="SignInButton" x:Name="SignInButton" Grid.Column="1" Grid.Row="7" Content="sign in" Background="#FFFFA500" 
 					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="SignInButton_OnClick">
-			</Button>
+				</Button>
 
 		</Grid>
 
 		<Grid x:Name="RegistrationModalGrid" Grid.Row="0" 
-			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+			Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
 
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40" />
@@ -312,7 +314,7 @@
 			</Grid.ColumnDefinitions>
 
 			<TextBlock Grid.Column="1" Grid.Row="1" x:Uid="RegistrationHeader" FontFamily="Segoe WP Semilight" 
-					   FontSize="30" Text="register for snapchat" />
+				FontSize="30" Text="register for snapchat" />
 
 			<StackPanel Grid.Column="1" Grid.Row="3">
 				<TextBlock x:Uid="RegistrationEmailTitle" FontSize="20">email</TextBlock>
@@ -340,47 +342,47 @@
 			<Button x:Uid="RegistrationContinueButton" x:Name="RegistrationButton" Grid.Column="1" Grid.Row="9" Content="continue" Background="#AA0EA0D6"
 					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="ContinueRegistrationButton_OnClick">
 			</Button>
-
+			
 		</Grid>
 
 		<Grid x:Name="CaptchaModalGrid" Grid.Row="0"
-			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+			Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
 
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40" />
-				<RowDefinition Height="70" />
+				<RowDefinition Height="80" />
 				<RowDefinition Height="40" />
-				<RowDefinition Height="110" />
+				<RowDefinition Height="Auto" MinHeight="110" MaxHeight="240" />
 				<RowDefinition Height="10" />
-				<RowDefinition Height="110" />
+				<RowDefinition Height="Auto" MinHeight="110" MaxHeight="240" />
 				<RowDefinition Height="10" />
-				<RowDefinition Height="110" />
+				<RowDefinition Height="Auto" MinHeight="110" MaxHeight="240" />
 				<RowDefinition Height="30" />
 				<RowDefinition Height="40" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="25" />
-				<ColumnDefinition Width="110" />
+				<ColumnDefinition Width="Auto" MinWidth="110" MaxWidth="240" />
 				<ColumnDefinition Width="10" />
-				<ColumnDefinition Width="110" />
+				<ColumnDefinition Width="Auto" MinWidth="110" MaxWidth="240" />
 				<ColumnDefinition Width="10" />
-				<ColumnDefinition Width="110" />
+				<ColumnDefinition Width="Auto" MinWidth="110" MaxWidth="240" />
 				<ColumnDefinition Width="25" />
 			</Grid.ColumnDefinitions>
 
 			<TextBlock Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" x:Uid="CaptchaHeader" FontFamily="Segoe WP Semilight" 
-					   FontSize="30" Text="select all images&#x0a;  containing a ghost" LineHeight="27" />
+				FontSize="30" Text="select all images&#xA;  containing a ghost"/>
 
-			<Image Grid.Column="1" Grid.Row="3" Source="{Binding CurrentCaptcha.Image0, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="3" Grid.Row="3" Source="{Binding CurrentCaptcha.Image1, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="5" Grid.Row="3" Source="{Binding CurrentCaptcha.Image2, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="1" Grid.Row="5" Source="{Binding CurrentCaptcha.Image3, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="3" Grid.Row="5" Source="{Binding CurrentCaptcha.Image4, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="5" Grid.Row="5" Source="{Binding CurrentCaptcha.Image5, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="1" Grid.Row="7" Source="{Binding CurrentCaptcha.Image6, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="3" Grid.Row="7" Source="{Binding CurrentCaptcha.Image7, FallbackValue='ms-appx:///Assets/Logo.png'}" />
-			<Image Grid.Column="5" Grid.Row="7" Source="{Binding CurrentCaptcha.Image8, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="1" Grid.Row="3" Source="{Binding CurrentCaptcha.Images, ConverterParameter=0, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="3" Grid.Row="3" Source="{Binding CurrentCaptcha.Images, ConverterParameter=1, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="5" Grid.Row="3" Source="{Binding CurrentCaptcha.Images, ConverterParameter=2, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="1" Grid.Row="5" Source="{Binding CurrentCaptcha.Images, ConverterParameter=3, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="3" Grid.Row="5" Source="{Binding CurrentCaptcha.Images, ConverterParameter=4, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="5" Grid.Row="5" Source="{Binding CurrentCaptcha.Images, ConverterParameter=5, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="1" Grid.Row="7" Source="{Binding CurrentCaptcha.Images, ConverterParameter=6, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/StoreLogo.png}" />
+			<Image Grid.Column="3" Grid.Row="7" Source="{Binding CurrentCaptcha.Images, ConverterParameter=7, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="5" Grid.Row="7" Source="{Binding CurrentCaptcha.Images, ConverterParameter=8, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
 
 			<Button x:Uid="RegistrationContinueButton" x:Name="SubmitCaptchaButton" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="9" Content="continue" Background="#AA0EA0D6"
 					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="SubmitCaptchaButton_OnClick">
@@ -392,7 +394,7 @@
 		</Grid>
 
 		<Grid Grid.Row="0" Background="#668F8F8F" Visibility="{Binding ProgressModalVisibility, FallbackValue=Collapsed}">
-			
+
 		</Grid>
 	</Grid>
 </Page>
