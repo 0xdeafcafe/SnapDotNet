@@ -12,29 +12,29 @@
 	<Page.Resources>
 		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
 			<!-- Show all background after 4 seconds. Makes page loading faster -->
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage1">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage2">
-				<DiscreteObjectKeyFrame KeyTime="0:0:2">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
 					<DiscreteObjectKeyFrame.Value>
 						<Visibility>Visible</Visibility>
 					</DiscreteObjectKeyFrame.Value>
 				</DiscreteObjectKeyFrame>
 			</ObjectAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage3">
-				<DiscreteObjectKeyFrame KeyTime="0:0:9">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
 					<DiscreteObjectKeyFrame.Value>
 						<Visibility>Visible</Visibility>
 					</DiscreteObjectKeyFrame.Value>
 				</DiscreteObjectKeyFrame>
 			</ObjectAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage4">
-				<DiscreteObjectKeyFrame KeyTime="0:0:9">
-					<DiscreteObjectKeyFrame.Value>
-						<Visibility>Visible</Visibility>
-					</DiscreteObjectKeyFrame.Value>
-				</DiscreteObjectKeyFrame>
-			</ObjectAnimationUsingKeyFrames>
-			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage5">
-				<DiscreteObjectKeyFrame KeyTime="0:0:9">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
 					<DiscreteObjectKeyFrame.Value>
 						<Visibility>Visible</Visibility>
 					</DiscreteObjectKeyFrame.Value>
@@ -128,21 +128,21 @@
 	<Grid>
 		<!-- Backgrounds -->
 		<Grid>
-			<Image
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage1"
+				   Stretch="UniformToFill" Visibility="Collapsed"
+				   Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage2" Visibility="Collapsed"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage3" Visibility="Collapsed"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage4" Visibility="Collapsed"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage5" Visibility="Collapsed"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage5"
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
 		</Grid>
 
 		<Grid Grid.Row="0" Background="#88686868">
