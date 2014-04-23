@@ -122,6 +122,7 @@
     <Content Include="Assets\Icons\appbar.camera.flip.png" />
     <Content Include="Assets\Icons\appbar.camera.png" />
     <Content Include="Assets\Icons\appbar.group.png" />
+    <Content Include="Assets\LiveTileLogo.scale-240.png" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\Panoramas\pano-1.jpg" />
     <Content Include="Assets\Panoramas\pano-2.jpg" />
