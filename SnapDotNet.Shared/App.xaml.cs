@@ -215,18 +215,30 @@ namespace SnapDotNet.Apps
 						Settings.UnreadSnapCount += 1;
 
 						// Update Live Tile
-						const string xml = 
+						var xml =
 							@"<tile>
-								<visual>
-									<binding template=""TileSquareText02""><text id=""1"">1</text><text id=""2"">2</text></binding>
+								<visual version=""3"">
+									<binding template=""TileSquare71x71IconWithBadge"">
+										<image id=""1"" src=""ms-appx:///Assets/Logo.png"" />
+									</binding>
+									<binding template=""TileSquare150x150IconWithBadge"">
+										<image id=""1"" src=""ms-appx:///Assets/Logo.png"" />
+									</binding>
+									<binding template=""TileSquare310x150IconWithBadgeAndText"">
+										<image id=""1"" src=""ms-appx:///Assets/Logo.png"" />
+										<text id=""1"">" + args.ToastNotification.Content.InnerText.Trim('\n') + @"</text>
+									</binding>
 								</visual>
 							</tile>";
-
 						var xmlDoc = new XmlDocument();
 						xmlDoc.LoadXml(xml);
-						var tn = new TileNotification(xmlDoc);
 						var tu = TileUpdateManager.CreateTileUpdaterForApplication();
-						tu.Update(tn);
+						tu.Update(new TileNotification(xmlDoc));
+						
+						// Update Badge
+						xmlDoc.LoadXml("<badge value=\""+Settings.UnreadSnapCount+"\"/>");
+						var bu = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
+						bu.Update(new BadgeNotification(xmlDoc));
 
 						// Tell the app to navigate to snaps page
 						args.ToastNotification.Activated += (notification, o) =>
