@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Apps.Attributes;
@@ -209,13 +211,41 @@ namespace SnapDotNet.Apps
 					case PushNotificationType.Toast:
 						if (args.ToastNotification == null) return;
 
+						var message = args.ToastNotification.Content.InnerText.Replace("\n", "").Trim();
+						if (message.ToLowerInvariant().StartsWith("new snap from"))
+						{
+							// New snap, we need to update the tile's badge
+							Settings.UnreadSnapCount += 1;
+						}
+
+						// Update small tile
+						var smallTileContent = Notifications.TileContent.TileContentFactory.CreateTileSquare71x71IconWithBadge();
+						smallTileContent.ImageIcon.Src = "ms-appx:///Assets/Logo.png";
+						Notifications.TileUpdater.Update(smallTileContent.CreateNotification());
+
+						// Update large tile
+						var mediumTileContent = Notifications.TileContent.TileContentFactory.CreateTileSquare150x150IconWithBadge();
+						mediumTileContent.ImageIcon.Src = "ms-appx:///Assets/Logo.png";
+						Notifications.TileUpdater.Update(mediumTileContent.CreateNotification());
+
+						// Update wide tile
+						var wideTileContent = Notifications.TileContent.TileContentFactory.CreateTileWide310x150IconWithBadgeAndText();
+						wideTileContent.ImageIcon.Src = "ms-appx:///Assets/Logo.png";
+						wideTileContent.TextBody1.Text = args.ToastNotification.Content.InnerText.Trim('\n');
+						wideTileContent.Square150x150Content = mediumTileContent;
+						Notifications.TileUpdater.Update(wideTileContent.CreateNotification());
+
+						// Update Badge
+						var badge = new Notifications.BadgeContent.BadgeNumericNotificationContent((uint)Settings.UnreadSnapCount);
+						Notifications.BadgeUpdater.Update(badge.CreateNotification());
+
 						// Tell the app to navigate to snaps page
 						args.ToastNotification.Activated += (notification, o) =>
 						{
+							CurrentFrame.Navigate(typeof(SnapsPage));
 							UpdateSnapchatData();
-							CurrentFrame.Navigate(typeof (SnapsPage));
 						};
-						args.ToastNotification.Group = "Dev";
+						//args.ToastNotification.Group = "Snaps";
 						break;
 
 					default:
@@ -230,8 +260,14 @@ namespace SnapDotNet.Apps
 			}
 			catch (Exception exception)
 			{
-				if (exception.HResult == 0x803E0103) // register request is already in progress
+				if (exception.HResult == 0x803E0103) return; // register request is already in progress
+
+				if (exception.HResult == 0x80131509) // the SDN WNS service is down
+				{
+					SnazzyDebug.WriteLine(exception);
 					return;
+				}
+
 				throw;
 			}
 #endif

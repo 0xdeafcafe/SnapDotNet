@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -12,44 +13,66 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 
 		public static async void WriteFileAsync(string fileName, string content)
 		{
-			var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-			using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
-				await writer.WriteAsync(content);
+			try
+			{
+				var file =
+					await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+				using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
+					await writer.WriteAsync(content);
+			}
+			catch (Exception exception)
+			{
+				SnazzyDebug.WriteLine(exception);
+			}
 		}
 
 		public static async Task WriteFileAsync(string fileName, byte[] content)
 		{
-			var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-
-			using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+			try
 			{
-				using (var outputStream = fileStream.GetOutputStreamAt(0))
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+				using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
 				{
-					using (var dataWriter = new DataWriter(outputStream))
+					using (var outputStream = fileStream.GetOutputStreamAt(0))
 					{
-						dataWriter.WriteBytes(content);
-						await dataWriter.StoreAsync();
-						dataWriter.DetachStream();
+						using (var dataWriter = new DataWriter(outputStream))
+						{
+							dataWriter.WriteBytes(content);
+							await dataWriter.StoreAsync();
+							dataWriter.DetachStream();
+						}
+						await outputStream.FlushAsync();
 					}
-					await outputStream.FlushAsync();
 				}
+			}
+			catch (Exception exception)
+			{
+				SnazzyDebug.WriteLine(exception);
 			}
 		}
 
 		public static async Task WriteFileAsync(StorageFile file, byte[] content)
 		{
-			using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+			try
 			{
-				using (var outputStream = fileStream.GetOutputStreamAt(0))
+				using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
 				{
-					using (var dataWriter = new DataWriter(outputStream))
+					using (var outputStream = fileStream.GetOutputStreamAt(0))
 					{
-						dataWriter.WriteBytes(content);
-						await dataWriter.StoreAsync();
-						dataWriter.DetachStream();
+						using (var dataWriter = new DataWriter(outputStream))
+						{
+							dataWriter.WriteBytes(content);
+							await dataWriter.StoreAsync();
+							dataWriter.DetachStream();
+						}
+						await outputStream.FlushAsync();
 					}
-					await outputStream.FlushAsync();
 				}
+			}
+			catch (Exception exception)
+			{
+				SnazzyDebug.WriteLine(exception);
 			}
 		}
 

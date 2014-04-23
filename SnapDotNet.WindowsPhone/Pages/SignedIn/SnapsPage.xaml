@@ -11,6 +11,36 @@
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
 		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
+			<!-- Show all background after 4 seconds. Makes page loading faster -->
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage2">
+				<DiscreteObjectKeyFrame KeyTime="0:0:2">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage3">
+				<DiscreteObjectKeyFrame KeyTime="0:0:9">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage4">
+				<DiscreteObjectKeyFrame KeyTime="0:0:9">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage5">
+				<DiscreteObjectKeyFrame KeyTime="0:0:9">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
 				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
@@ -101,16 +131,16 @@
 			<Image
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage2"
+			<Image x:Name="BackgroundImage2" Visibility="Collapsed"
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage3"
+			<Image x:Name="BackgroundImage3" Visibility="Collapsed"
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage4"
+			<Image x:Name="BackgroundImage4" Visibility="Collapsed"
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage5"
+			<Image x:Name="BackgroundImage5" Visibility="Collapsed"
 				Stretch="UniformToFill" 
 				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
 		</Grid>
