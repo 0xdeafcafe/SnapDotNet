@@ -121,6 +121,51 @@
 				</DiscreteObjectKeyFrame>
 			</ObjectAnimationUsingKeyFrames>
 		</Storyboard>
+
+		<Storyboard x:Name="CaptchaModalRevealStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CaptchaModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RegistrationModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="CaptchaModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RegistrationModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Name="CaptchaModalHideStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CaptchaModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RegistrationModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="CaptchaModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RegistrationModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
 	</Page.Resources>
 	<interactivity:Interaction.Behaviors>
 		<core:EventTriggerBehavior EventName="Loaded">
@@ -296,6 +341,54 @@
 					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="ContinueRegistrationButton_OnClick">
 			</Button>
 
+		</Grid>
+
+		<Grid x:Name="CaptchaModalGrid" Grid.Row="0"
+			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="40" />
+				<RowDefinition Height="70" />
+				<RowDefinition Height="40" />
+				<RowDefinition Height="110" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="110" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="110" />
+				<RowDefinition Height="30" />
+				<RowDefinition Height="40" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="25" />
+				<ColumnDefinition Width="110" />
+				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="110" />
+				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="110" />
+				<ColumnDefinition Width="25" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" x:Uid="CaptchaHeader" FontFamily="Segoe WP Semilight" 
+					   FontSize="30" Text="select all images&#x0a;  containing a ghost" LineHeight="27" />
+
+			<Image Grid.Column="1" Grid.Row="3" Source="{Binding CurrentCaptcha.Image0, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="3" Grid.Row="3" Source="{Binding CurrentCaptcha.Image1, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="5" Grid.Row="3" Source="{Binding CurrentCaptcha.Image2, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="1" Grid.Row="5" Source="{Binding CurrentCaptcha.Image3, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="3" Grid.Row="5" Source="{Binding CurrentCaptcha.Image4, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="5" Grid.Row="5" Source="{Binding CurrentCaptcha.Image5, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="1" Grid.Row="7" Source="{Binding CurrentCaptcha.Image6, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="3" Grid.Row="7" Source="{Binding CurrentCaptcha.Image7, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+			<Image Grid.Column="5" Grid.Row="7" Source="{Binding CurrentCaptcha.Image8, FallbackValue='ms-appx:///Assets/Logo.png'}" />
+
+			<Button x:Uid="RegistrationContinueButton" x:Name="SubmitCaptchaButton" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="9" Content="continue" Background="#AA0EA0D6"
+					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="SubmitCaptchaButton_OnClick">
+			</Button>
+		</Grid>
+
+		<Grid x:Name="AddnUsernameModalGrid" Grid.Row="0" 
+			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
 		</Grid>
 
 		<Grid Grid.Row="0" Background="#668F8F8F" Visibility="{Binding ProgressModalVisibility, FallbackValue=Collapsed}">

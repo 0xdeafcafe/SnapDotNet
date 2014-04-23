@@ -426,4 +426,8 @@
   <data name="RegistrationErrorHeader" xml:space="preserve">
     <value>[TRANSLATION NEEDED] Registration Failed</value>
   </data>
+  <data name="CaptchaHeader.Text" xml:space="preserve">
+    <value>[TRANSLATION NEEDED] select all images
+  containing a ghost</value>
+  </data>
 </root>

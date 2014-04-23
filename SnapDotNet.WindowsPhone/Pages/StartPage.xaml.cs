@@ -16,7 +16,7 @@ namespace SnapDotNet.Apps.Pages
 		{
 			InitializeComponent();
 
-			DataContext = ViewModel = new StartViewModel();
+			DataContext = ViewModel = new StartViewModel {StartPage = this};
 			HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 		}
 
@@ -55,6 +55,15 @@ namespace SnapDotNet.Apps.Pages
 				ViewModel.GoBackToStartCommand.Execute(null);
 				backPressedEventArgs.Handled = true;
 			}
+
+			if (ViewModel.IsCaptchaPageVisible)
+			{
+				var storyboard = (Storyboard)Resources["CaptchaModalHideStoryboard"];
+				if (storyboard == null) return;
+				storyboard.Begin();
+				ViewModel.GoBackToStartCommand.Execute(null);
+				backPressedEventArgs.Handled = true;
+			}
 		}
 
 		private void SignInButton_OnClick(object sender, RoutedEventArgs e)
@@ -64,7 +73,20 @@ namespace SnapDotNet.Apps.Pages
 
 		private void ContinueRegistrationButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			ViewModel.RegisterCommand.Execute(null);
+			ViewModel.RegisterPhase1Command.Execute(null);
+		}
+
+		private void SubmitCaptchaButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			ViewModel.RegisterPhase2Command.Execute(null);
+		}
+
+		public void RevealCaptchaPage()
+		{
+			var storyboard = (Storyboard)Resources["CaptchaModalRevealStoryboard"];
+			if (storyboard == null) return;
+			storyboard.Begin();
+			ViewModel.OpenCaptchaPageCommand.Execute(null);
 		}
 	}
 }

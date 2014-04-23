@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
@@ -43,6 +44,15 @@ namespace SnapDotNet.Apps.ViewModels
 				},
 				() => IsStartPageVisible);
 
+			OpenCaptchaPageCommand = new RelayCommand(
+				() =>
+				{
+					IsCaptchaPageVisible = true;
+					IsRegisterPageVisible = false;
+					IsStartPageVisible = false;
+				},
+				() => IsStartPageVisible);
+
 			GoBackToStartCommand = new RelayCommand(() =>
 			{
 				IsSignInPageVisible = false;
@@ -51,10 +61,21 @@ namespace SnapDotNet.Apps.ViewModels
 			});
 
 			SignInCommand = new RelayCommand<Page>(SignIn);
-			RegisterCommand = new RelayCommand<Page>(Register);
+			RegisterPhase1Command = new RelayCommand<Page>(RegisterPhase1);
+			RegisterPhase2Command = new RelayCommand<Page>(RegisterPhase2);
 
 			#endregion
 		}
+
+		/// <summary>
+		/// Gets the command to open the sign in form.
+		/// </summary>
+		public StartPage StartPage
+		{
+			get { return _startPage; }
+			set { SetField(ref _startPage, value); }
+		}
+		private StartPage _startPage;
 
 		/// <summary>
 		/// Gets the command to open the sign in form.
@@ -77,6 +98,16 @@ namespace SnapDotNet.Apps.ViewModels
 		private ICommand _openRegisterPageCommand;
 
 		/// <summary>
+		/// Gets the command to open the registration form.
+		/// </summary>
+		public ICommand OpenCaptchaPageCommand
+		{
+			get { return _openCaptchaPageCommand; }
+			private set { SetField(ref _openCaptchaPageCommand, value); }
+		}
+		private ICommand _openCaptchaPageCommand;
+
+		/// <summary>
 		/// Gets the command to go back to the start page.
 		/// </summary>
 		public ICommand GoBackToStartCommand
@@ -97,14 +128,24 @@ namespace SnapDotNet.Apps.ViewModels
 		private ICommand _signInCommand;
 
 		/// <summary>
-		/// Gets the command to register.
+		/// Gets the command to submit the first phase of registration, continuing to captchas.
 		/// </summary>
-		public ICommand RegisterCommand
+		public ICommand RegisterPhase1Command
 		{
-			get { return _registerCommand; }
-			private set { SetField(ref _registerCommand, value); }
+			get { return _registerPhase1Command; }
+			private set { SetField(ref _registerPhase1Command, value); }
 		}
-		private ICommand _registerCommand;
+		private ICommand _registerPhase1Command;
+
+		/// <summary>
+		/// Gets the command to submit the second phase of registration (solving captchas) and continue to attaching a username.
+		/// </summary>
+		public ICommand RegisterPhase2Command
+		{
+			get { return _registerPhase2Command; }
+			private set { SetField(ref _registerPhase2Command, value); }
+		}
+		private ICommand _registerPhase2Command;
 
 		/// <summary>
 		/// Gets whether the sign in form should be visible.
@@ -127,7 +168,18 @@ namespace SnapDotNet.Apps.ViewModels
 			get { return _isRegisterPageVisible; }
 			private set { SetField(ref _isRegisterPageVisible, value); }
 		}
+
 		private bool _isRegisterPageVisible;
+
+		/// <summary>
+		/// Gets whether the captcha page should be visible.
+		/// </summary>
+		public bool IsCaptchaPageVisible
+		{
+			get { return _isCaptchaPageVisible; }
+			private set { SetField(ref _isCaptchaPageVisible, value); }
+		}
+		private bool _isCaptchaPageVisible;
 
 		public bool ProgressModalIsVisible
 		{
@@ -202,6 +254,16 @@ namespace SnapDotNet.Apps.ViewModels
 			set { SetField(ref _currentBirthday, value); }
 		}
 		private DateTimeOffset _currentBirthday;
+
+		/// <summary>
+		/// Gets or sets the current birthday.
+		/// </summary>
+		public Captcha CurrentCaptcha
+		{
+			get { return _currentCaptcha; }
+			set { SetField(ref _currentCaptcha, value); }
+		}
+		private Captcha _currentCaptcha;
 
 
 		/// <summary>
@@ -323,7 +385,7 @@ namespace SnapDotNet.Apps.ViewModels
 		/// <summary>
 		/// Attempts to create a new account.
 		/// </summary>
-		private async void Register(Page nextPage)
+		private async void RegisterPhase1(Page nextPage)
 		{
 			if (string.IsNullOrEmpty(CurrentEmail))
 			{
@@ -340,7 +402,6 @@ namespace SnapDotNet.Apps.ViewModels
 				return;
 			}
 			
-
 			var age = DateTime.Today.Year - CurrentBirthday.Year;
 			if (DateTime.Today.DayOfYear < CurrentBirthday.DayOfYear)
 				age -= 1;
@@ -349,9 +410,9 @@ namespace SnapDotNet.Apps.ViewModels
 
 			try
 			{
-				var captcha = await App.SnapChatManager.Endpoints.RegisterAndGetCaptchaAsync(age, birthdayString, CurrentEmail, DesiredPassword);
+				CurrentCaptcha = await App.SnapChatManager.Endpoints.RegisterAndGetCaptchaAsync(age, birthdayString, CurrentEmail, DesiredPassword);
 
-				new MessageDialog("Snaptchas have not been implemented yet", "Sorry Bud").ShowAsync();
+				StartPage.RevealCaptchaPage();
 			}
 			catch (InvalidHttpResponseException exception)
 			{
@@ -369,6 +430,14 @@ namespace SnapDotNet.Apps.ViewModels
 				dialog.ShowAsync();
 				return;
 			}
+		}
+
+		/// <summary>
+		/// Submits captcha answer
+		/// </summary>
+		private async void RegisterPhase2(Page nextPage)
+		{
+			// TODO: Write this
 		}
 	}
 }
