@@ -126,7 +126,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				if (_mediaCapture != null)
 				{
 					await TryStopPreviewAsync();
-					Debug.WriteLine("======StoppedPreviewAsync======");
+					_mediaCapture.Dispose();
+					Debug.WriteLine("Disposed of _mediaCapture");
 				}
 			}
 			catch (Exception exception)
