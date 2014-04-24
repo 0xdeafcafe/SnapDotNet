@@ -128,7 +128,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					await TryStopPreviewAsync();
 					Debug.WriteLine("======StoppedPreviewAsync======");
 				}
-				await _mediaCapture.StopPreviewAsync();
 			}
 			catch (Exception exception)
 			{
