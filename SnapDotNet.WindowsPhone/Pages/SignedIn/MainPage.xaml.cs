@@ -97,15 +97,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			try
 			{
-<<<<<<< HEAD
 				if (_mediaCapture != null)
 				{
 					await _mediaCapture.StopPreviewAsync();
 					Debug.WriteLine("======StoppedPreviewAsync======");
 				}
-=======
-				await _mediaCapture.StopPreviewAsync();
->>>>>>> 05622232747e35b4c396dda2f94b0a1d8ccdadb7
 			}
 			catch (Exception exception)
 			{
