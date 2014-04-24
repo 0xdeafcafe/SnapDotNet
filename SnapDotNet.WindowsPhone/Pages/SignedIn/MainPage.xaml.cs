@@ -21,6 +21,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	public sealed partial class MainPage
 	{
 		public MainViewModel ViewModel { get; private set; }
+		private bool _areWeInitialising;
+		private bool _areWePreppingCamera;
 
 		private MediaCapture _mediaCapture;
 		private MediaCaptureInitializationSettings _mediaCaptureSettings;
@@ -29,8 +31,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private DeviceInformationCollection _microphoneInfoCollection;
 		private int _currentSelectedAudioDevice;
 
-		private bool _areWeInitialising;
-		private bool _areWePreppingCamera;
 		private bool _isCameraPrepped;
 		private bool _isCameraInitialised;
 
@@ -101,7 +101,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			try
 			{
 				if (_mediaCapture != null)
+				{
 					await _mediaCapture.StopPreviewAsync();
+					Debug.WriteLine("======StoppedPreviewAsync======");
+				}
 			}
 			catch (Exception exception)
 			{
@@ -170,6 +173,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 					Debug.WriteLine(">Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
 					await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
+					_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
 					ButtonCamera.IsEnabled = true;
 					ButtonRecord.IsEnabled = true; //not implemented
 

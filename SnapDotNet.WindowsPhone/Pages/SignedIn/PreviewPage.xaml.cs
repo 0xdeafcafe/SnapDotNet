@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -38,10 +39,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			//if IsPhoto = x put stream into and show relevant control, etc
 			// <-implement->
 
-			//var bmpimg = new BitmapImage();
-			//bmpimg.ImageFailed += bmpimg_ImageFailed;
-			//bmpimg.SetSource(stream);
-			//ImageReview.Source = bmpimg;
+			var bmpimg = new BitmapImage();
+			bmpimg.ImageFailed += bmpimg_ImageFailed;
+			bmpimg.SetSource(stream);
+			ImageReview.Source = bmpimg;
 		}
 
 		void bmpimg_ImageFailed(object sender, ExceptionRoutedEventArgs e)
