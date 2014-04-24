@@ -69,6 +69,7 @@
         </Style>
     </Page.Resources>
 
+    <!--
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.PrimaryCommands>
@@ -82,6 +83,7 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
+    -->
 
     <Grid>
 
@@ -122,7 +124,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid x:Name="BackgroundAmbienceGrid" Grid.RowSpan="2">
@@ -146,47 +148,8 @@
         <!-- Default layout -->
         <Grid x:Name="defaultView">
 
-            <!-- Signed-in user box -->
-            <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="65">
-                <Grid.Transitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition/>
-                    </TransitionCollection>
-                </Grid.Transitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="250"/>
-                </Grid.ColumnDefinitions>
-
-                <tk:PieSlice EndAngle="280" Radius="40" Grid.RowSpan="2" Margin="0,0,0,3" RenderTransformOrigin="0.5,0.5">
-                    <tk:PieSlice.RenderTransform>
-                        <CompositeTransform ScaleX="-1"/>
-                    </tk:PieSlice.RenderTransform>
-                    <tk:PieSlice.Fill>
-                        <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Assets/tempBackground.jpg"/>
-                    </tk:PieSlice.Fill>
-                </tk:PieSlice>
-
-                <TextBlock Text="{Binding Manager.Account.Username}"
-                           TextWrapping="NoWrap"
-                           TextTrimming="CharacterEllipsis"
-                           FontSize="20"
-                           VerticalAlignment="Bottom"
-                           Grid.Column="1" IsHitTestVisible="False" IsTextSelectionEnabled="True" IsDoubleTapEnabled="False" IsTapEnabled="False" IsHoldingEnabled="False" IsRightTapEnabled="False" ManipulationMode="None"/>
-
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Top" Margin="0,0,0,3"
-                            Grid.Row="1" Grid.Column="1" IsHitTestVisible="False" IsTapEnabled="False" IsRightTapEnabled="False" IsHoldingEnabled="False" IsDoubleTapEnabled="False" ManipulationMode="None">
-                    <SymbolIcon Symbol="Favorite" Foreground="Orange"/>
-                    <TextBlock Text="{Binding Manager.Account.Score}" FontSize="14" Foreground="LightGray" VerticalAlignment="Center" Margin="2,2,0,0"/>
-                    <TextBlock Text="Points" FontSize="14" Foreground="LightGray" VerticalAlignment="Center" Margin="2,2,0,0"/>
-                </StackPanel>
-            </Grid>
+            <!-- Bottom permanent app bar background -->
+            <Grid Grid.RowSpan="2" VerticalAlignment="Bottom" Background="#FF000000" Margin="0,0,0,0" Height="120"/>
 
             <!-- Actual content -->
             <Hub x:Uid="MainPageHub" Header="snapchat">
@@ -216,7 +179,11 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Image Margin="0,0,5,0" Height="60" Width="60" Stretch="UniformToFill" Source="ms-appx:///Assets/app logo.png"/>
+                            <Image Margin="0,0,15,0" Height="60" Width="60" Stretch="UniformToFill" Source="ms-appx:///Assets/LiveTileLogo.scale-240.png" RenderTransformOrigin="0.5,0.5">
+                                <Image.RenderTransform>
+                                    <CompositeTransform ScaleX="1.5" ScaleY="1.5"/>
+                                </Image.RenderTransform>
+                            </Image>
 
                             <TextBlock Text="{Binding}" Grid.Column="1"/>
                         </Grid>
@@ -245,7 +212,24 @@
                             <SearchBox x:Uid="FriendSearchBox" Width="300" PlaceholderText="Search friends" Padding="8" QueryText="{Binding CurrentFriendSearchQuery, Mode=TwoWay}"/>
 
                             <!-- TODO: Hide this if searchbox query isn't empty -->
-                            <ListView Grid.Row="1" ItemsSource="{Binding QuickAccessItems}" Margin="0,10,0,0" SelectionMode="Single" IsSwipeEnabled="False">
+                            <ListView Grid.Row="1" ItemsSource="{Binding QuickAccessItems}" Margin="0,10,0,0" SelectionMode="None" IsSwipeEnabled="False">
+                                <ListView.Resources>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListViewItem">
+                                                    <ListViewItemPresenter SelectedForeground="{TemplateBinding Foreground}"
+                                                                           PointerOverBackground="#AA333333"
+                                                                           SelectedBackground="#AA333333"
+                                                                           VerticalContentAlignment="Center"
+                                                                           Height="47"
+                                                                           FontFamily="Global User Interface"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.Resources>
+                                
                                 <ListView.ItemContainerTransitions>
                                     <TransitionCollection>
                                         <AddDeleteThemeTransition/>
@@ -256,34 +240,34 @@
                                     <selectors:QuickAccessFriendTemplateSelector>
                                         <selectors:QuickAccessFriendTemplateSelector.GroupTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal" Margin="4">
+                                                <StackPanel Orientation="Horizontal" Margin="0">
                                                     <SymbolIcon Symbol="People"/>
-                                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </selectors:QuickAccessFriendTemplateSelector.GroupTemplate>
                                         
                                         <selectors:QuickAccessFriendTemplateSelector.BestFriendTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal" Margin="4">
-                                                    <SymbolIcon Symbol="Favorite"/>
-                                                    <TextBlock Text="{Binding FriendlyName}" VerticalAlignment="Center" Margin="5,0,0,0" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"  Margin="0">
+                                                    <SymbolIcon Symbol="Favorite" Margin="4,4,0,4"/>
+                                                    <TextBlock Text="{Binding FriendlyName}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,4,4,4" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </selectors:QuickAccessFriendTemplateSelector.BestFriendTemplate>
 
                                         <selectors:QuickAccessFriendTemplateSelector.FriendTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding FriendlyName}" VerticalAlignment="Center" Margin="4" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding FriendlyName}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0" Padding="4" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
                                             </DataTemplate>
                                         </selectors:QuickAccessFriendTemplateSelector.FriendTemplate>
                                     </selectors:QuickAccessFriendTemplateSelector>
                                 </ListView.ItemTemplateSelector>
                             </ListView>
 
-                            <HyperlinkButton Grid.Row="2" Foreground="Orange" x:Uid="MoreFriendsHyperlinkButton" HorizontalAlignment="Right">
+                            <!--<HyperlinkButton Grid.Row="2" Foreground="Orange" x:Uid="MoreFriendsHyperlinkButton" HorizontalAlignment="Right">
                                 More friends...
-                            </HyperlinkButton>
+                            </HyperlinkButton>-->
                         </Grid>
                     </DataTemplate>
                 </HubSection>
@@ -300,7 +284,23 @@
                     </HubSection.HeaderTemplate>
 
                     <DataTemplate>
-                        <GridView ItemsSource="{Binding RecentSnaps}" Margin="0,0,0,50" MinWidth="360" SelectionMode="Single">
+                        <GridView ItemsSource="{Binding RecentSnaps}" Margin="0,0,0,50" MinWidth="360" SelectionMode="None">
+                            <GridView.Resources>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="GridViewItem">
+                                                <GridViewItemPresenter SelectedForeground="{TemplateBinding Foreground}"
+                                                                       PointerOverBackground="#AA333333"
+                                                                       SelectedBackground="#AA333333"
+                                                                       Padding="4,6,4,6"
+                                                                       />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GridView.Resources>
+                            
                             <GridView.ItemContainerTransitions>
                                 <TransitionCollection/>
                             </GridView.ItemContainerTransitions>
@@ -405,7 +405,23 @@
                     </HubSection.HeaderTemplate>
 
                     <DataTemplate>
-                        <GridView SelectionMode="Single" ItemsSource="{Binding Manager.Stories.FriendStoryFeed}">
+                        <GridView SelectionMode="None" ItemsSource="{Binding Manager.Stories.FriendStoryFeed}">
+                            <GridView.Resources>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="GridViewItem">
+                                                <GridViewItemPresenter SelectedForeground="{TemplateBinding Foreground}"
+                                                                       PointerOverBackground="#AA333333"
+                                                                       SelectedBackground="#AA333333"
+                                                                       Padding="0"
+                                                                       />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GridView.Resources>
+                            
                             <GridView.ItemContainerTransitions>
                                 <TransitionCollection>
                                     <AddDeleteThemeTransition/>
@@ -441,13 +457,63 @@
                                     </Grid>
                                 </DataTemplate>
                             </GridView.ItemTemplate>
-                            
-                            <Button/>
-                            <Button/>
                         </GridView>
                     </DataTemplate>
                 </HubSection>
             </Hub>
+
+            <!-- Signed-in user box -->
+            <Grid Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,30">
+                <Grid.Transitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition/>
+                    </TransitionCollection>
+                </Grid.Transitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+
+                <tk:PieSlice EndAngle="280" Radius="35" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,0,3" RenderTransformOrigin="0.5,0.5">
+                    <tk:PieSlice.RenderTransform>
+                        <CompositeTransform ScaleX="-1"/>
+                    </tk:PieSlice.RenderTransform>
+                    <tk:PieSlice.Fill>
+                        <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Assets/tempBackground.jpg"/>
+                    </tk:PieSlice.Fill>
+                </tk:PieSlice>
+
+                <StackPanel Grid.RowSpan="2" VerticalAlignment="Center" Grid.Column="2">
+                    <TextBlock Text="{Binding Manager.Account.Username}"
+                           TextWrapping="NoWrap"
+                           TextTrimming="CharacterEllipsis"
+                           FontSize="20"/>
+
+                    <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Bottom"
+                            IsHitTestVisible="False" IsTapEnabled="False" IsRightTapEnabled="False" IsHoldingEnabled="False" IsDoubleTapEnabled="False" ManipulationMode="None">
+                        <SymbolIcon Symbol="Favorite" Foreground="Orange"/>
+                        <TextBlock Text="{Binding Manager.Account.Score}" FontSize="14" Foreground="LightGray" VerticalAlignment="Center" Margin="2,2,0,0"/>
+                        <TextBlock Text="Points" FontSize="14" Foreground="LightGray" VerticalAlignment="Center" Margin="2,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,20">
+                <AppBarButton Label="Settings" Tapped="OnSettingsTapped">
+                    <AppBarButton.Icon>
+                        <SymbolIcon Height="40" Symbol="Setting" VerticalAlignment="Top"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton Label="Create snap" Icon="Camera"/>
+            </StackPanel>
         </Grid>
 
         <!-- Portrait Layout (content needs to scroll vertically, not horizontally) -->
@@ -456,6 +522,7 @@
         <!-- Minimal Layout -->
         <Grid x:Name="minimalView" Visibility="Collapsed"/>
 
+        <!--
         <Grid Grid.Row="1" Background="Orange"
               PointerEntered="OnBottomAppBarHintEntered"
               PointerExited="OnBottomAppBarHintExited"
@@ -463,5 +530,6 @@
               x:Uid="BottomAppBarHint">
             <SymbolIcon Symbol="More" Foreground="White" HorizontalAlignment="Right" Margin="0,0,55,0"/>
         </Grid>
+        -->
     </Grid>
 </Page>

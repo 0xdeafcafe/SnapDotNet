@@ -16,6 +16,7 @@
     <Page.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <Converters:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" IsInversed="True"/>
+        <Converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
 
         <!-- Width threshold for switching between the default and minimal views -->
         <x:Int32 x:Key="MinimalViewMaxWidth">615</x:Int32>
@@ -132,7 +133,8 @@
 					    HorizontalAlignment="Right"
 					    x:Uid="SignInButton"
 					    Command="{Binding OpenSignInPageCommand}"
-                        Content="Sign in">
+                        Content="Sign in"
+                        Tapped="OnSignInButtonTapped">
                     <Button.Transitions>
                         <TransitionCollection>
                             <EntranceThemeTransition/>
@@ -185,6 +187,7 @@
                          x:Uid="SignInUsername"
                          VerticalAlignment="Bottom"
                          Header="Username or email"
+                         x:Name="signInUserNameTextBox"
                          Text="{Binding CurrentUsername, Mode=TwoWay}">
                     <TextBox.HeaderTemplate>
                         <DataTemplate>
@@ -210,7 +213,7 @@
                         HorizontalAlignment="Center"
                         Command="{Binding SignInCommand}"
                         x:Uid="SignInButton"
-                        IsEnabled="{Binding ProgressModalIsVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                        IsEnabled="{Binding ProgressModalIsVisible, Converter={StaticResource InverseBooleanConverter}}">
                     <Button.CommandParameter>
                         <signedIn:MainPage/>
                     </Button.CommandParameter>
@@ -218,7 +221,11 @@
                     Sign in
                 </Button>
 
-                <ProgressBar IsIndeterminate="True" Visibility="{Binding ProgressModalVisibility}" IsEnabled="True" Grid.Row="2" Foreground="Red" BorderBrush="Red" VerticalAlignment="Bottom"/>
+                <ProgressBar IsIndeterminate="True"
+                             Visibility="{Binding ProgressModalVisibility}"
+                             IsEnabled="True"
+                             Grid.Row="2"
+                             VerticalAlignment="Bottom"/>
             </Grid>
 
             <!-- Default registration view -->

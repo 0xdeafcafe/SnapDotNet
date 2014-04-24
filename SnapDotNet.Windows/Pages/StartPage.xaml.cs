@@ -3,6 +3,8 @@ using SnapDotNet.Apps.ViewModels;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -42,6 +44,11 @@ namespace SnapDotNet.Apps.Pages
 			{
 				// TODO: Open privacy policy
 			}));
+		}
+
+		private void OnSignInButtonTapped(object sender, TappedRoutedEventArgs e)
+		{
+			signInUserNameTextBox.Focus(Windows.UI.Xaml.FocusState.Programmatic);
 		}
 	}
 }

@@ -128,6 +128,8 @@
   <ItemGroup>
     <Content Include="Assets\app logo.png" />
     <Content Include="Assets\ghost.png" />
+    <Content Include="Assets\LiveTileLogo.scale-240.png" />
+    <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\Panoramas\pano-1.jpg" />
     <Content Include="Assets\Panoramas\pano-2.jpg" />
     <Content Include="Assets\Panoramas\pano-3.jpg" />

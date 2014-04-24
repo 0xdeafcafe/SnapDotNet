@@ -19,6 +19,7 @@
 					<x:String x:Key="GlobalAppTitle">Snapchat</x:String>
 					<x:String x:Key="GlobalAppTitleLowerCase">snapchat</x:String>
 					-->
+                    <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="Orange" />
 
 					<SolidColorBrush x:Key="SecondaryFontColourBrush" Color="#FFDADADA" />
 

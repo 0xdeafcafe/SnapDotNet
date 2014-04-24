@@ -169,7 +169,7 @@
     <value>snapchat</value>
   </data>
   <data name="MainPageHub.Header" xml:space="preserve">
-    <value>Snapchat</value>
+    <value>snapchat</value>
   </data>
   <data name="NoAcceptedFriendsMessage.Text" xml:space="preserve">
     <value>You have no friends.. Need a hand?</value>

@@ -370,12 +370,14 @@ namespace SnapDotNet.Apps.ViewModels
 				ProgressModalVisibility = Visibility.Collapsed;
 				ProgressModalIsVisible = false;
 			}
-
 			if ( App.SnapChatManager.Account == null || 
 				!App.SnapChatManager.Account.Logged ||
 				!App.SnapChatManager.IsAuthenticated())
 			{
+#if WINDOWS_PHONE_APP
 				App.CurrentFrame.Navigate(typeof(StartPage), "removeBackStack");
+#endif
+
 				return;
 			}
 
@@ -412,7 +414,9 @@ namespace SnapDotNet.Apps.ViewModels
 			{
 				CurrentCaptcha = await App.SnapChatManager.Endpoints.RegisterAndGetCaptchaAsync(age, birthdayString, CurrentEmail, DesiredPassword);
 
+#if WINDOWS_PHONE_APP
 				StartPage.RevealCaptchaPage();
+#endif
 			}
 			catch (InvalidHttpResponseException exception)
 			{

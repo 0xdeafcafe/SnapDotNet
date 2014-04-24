@@ -28,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DisplayFriendsOtherNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendCountToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendHasStoryToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\InverseBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapChatTimestampToFriendlyConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapColourFromSnapConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapStatusToButtonStatusConverter.cs" />

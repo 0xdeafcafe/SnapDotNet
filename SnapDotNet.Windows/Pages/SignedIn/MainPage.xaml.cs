@@ -40,10 +40,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().IsScreenCaptureEnabled = false;
 #endif
 
-			BottomAppBar.Closed += delegate
+			/*BottomAppBar.Closed += delegate
 			{
 				
-			};
+			};*/
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -78,7 +78,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}));
 		}
 
-		private void OnBottomAppBarHintEntered(object sender, PointerRoutedEventArgs e)
+		/*private void OnBottomAppBarHintEntered(object sender, PointerRoutedEventArgs e)
 		{
 			(sender as Grid).Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xD6, 0x91, 0x11));
 		}
@@ -91,6 +91,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private void OnBottomAppBarHintTapped(object sender, TappedRoutedEventArgs e)
 		{
 			BottomAppBar.IsOpen = true;
+		}*/
+
+		private void OnSettingsTapped(object sender, RoutedEventArgs e)
+		{
+			SettingsPane.Show();
 		}
 	}
 }
