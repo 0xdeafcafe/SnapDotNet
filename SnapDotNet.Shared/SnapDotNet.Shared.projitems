@@ -35,8 +35,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToDisplayNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToFriendlySnapStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapToSnapStatusIconConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryToThumbnailConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryExpireToAngleConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\StoryToThumbnailConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendStoryExpireToAngleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendToStoryThumbnailConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\GreaterThanZeroToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\RemainingSecondsToDegreeConverter.cs" />

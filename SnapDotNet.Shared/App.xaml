@@ -31,6 +31,7 @@
 					<converters:FriendHasStoryToVisibilityConverter x:Name="IValueConverterFriendHasStoryToVisibility" />
 					<converters:FriendStoryExpireToAngleConverter x:Name="IValueConverterFriendStoryExpireToAngle" />
 					<converters:StoryToThumbnailConverter x:Name="IValueConverterStoryToThumbnail" />
+                    <converters:StoryExpireToAngleConverter x:Name="IValueConverterStoryExpireToAngle"/>
 
 					<converters:SnapChatTimestampToFriendlyConverter x:Name="IValueConverterSnapChatTimestampToFriendly" />
 					<converters:SnapToSnapStatusIconConverter x:Name="IValueConverterSnapToSnapStatusIcon" />

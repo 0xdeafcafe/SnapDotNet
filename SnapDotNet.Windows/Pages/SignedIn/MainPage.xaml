@@ -443,12 +443,13 @@
                                             </tk:PieSlice.RenderTransform>
                                         </tk:PieSlice>
 
-                                        <tk:PieSlice Radius="100" StartAngle="0" EndAngle="280" RenderTransformOrigin="0.5,0.5">
+                                        <tk:PieSlice Radius="100" StartAngle="0"
+                                                     EndAngle="{Binding Converter={StaticResource IValueConverterStoryExpireToAngle}}" RenderTransformOrigin="0.5,0.5">
                                             <tk:PieSlice.RenderTransform>
                                                 <CompositeTransform ScaleX="-1"/>
                                             </tk:PieSlice.RenderTransform>
                                             <tk:PieSlice.Fill>
-                                                <ImageBrush Stretch="UniformToFill" ImageSource="ms-appx:///Assets/tempBackground.jpg"/>
+                                                <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Converter={StaticResource IValueConverterStoryToThumbnail}}"/>
                                             </tk:PieSlice.Fill>
                                         </tk:PieSlice>
 
