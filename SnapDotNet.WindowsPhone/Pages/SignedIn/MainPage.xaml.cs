@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
+using Microsoft.VisualBasic.CompilerServices;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.ViewModels.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
@@ -62,7 +63,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			SetUiCameraXamlElements();
 			await InitialiseCameraDevice();
 
-			CapturePreview.Source = _mediaCapture;
 			await TryStartPreviewAsync();
 		}
 
@@ -74,7 +74,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			{
 				try
 				{
+					CapturePreview.Source = null;
+					CapturePreview.Source = _mediaCapture;
+
 					await _mediaCapture.StartPreviewAsync();
+
 					Debug.WriteLine("TryStartPreviewAsyc: OK?");
 				}
 				catch (Exception ex)
@@ -87,7 +91,28 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				Debug.WriteLine("TryStartPreviewAsync: NOT READY!");
 			}
 		}
+		private async Task TryStopPreviewAsync()
+		{
+			Debug.WriteLine("======TryStopPreviewAsync======");
 
+			if (_isCameraInitialised && _isCameraPrepped) //not really necessary, but may as well
+			{
+				try
+				{
+					CapturePreview.Source = null;
+					await _mediaCapture.StartPreviewAsync();
+					Debug.WriteLine("TryStopPreviewAsyc: OK?");
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine("TryStopPreviewAsyc: FAILED");
+				}
+			}
+			else
+			{
+				Debug.WriteLine("TryStopPreviewAsync: NOT READY!");
+			}
+		}
 
 		void videoRecordTimer_Tick(object sender, object e)
 		{
@@ -100,7 +125,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			{
 				if (_mediaCapture != null)
 				{
-					await _mediaCapture.StopPreviewAsync();
+					await TryStopPreviewAsync();
 					Debug.WriteLine("======StoppedPreviewAsync======");
 				}
 				await _mediaCapture.StopPreviewAsync();
@@ -178,7 +203,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					_mediaCapture = new MediaCapture();
 
 					Debug.WriteLine(">Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
+
+					Debug.WriteLine(">Initialize Async?");
 					await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
+					Debug.WriteLine(">Initialize Async: OK, yay!");
+
 					_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
 					ButtonCamera.IsEnabled = true;
 					ButtonRecord.IsEnabled = true; //not implemented
@@ -271,8 +300,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
 			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
-			await InitialiseCameraDevice();
-
 			var toggleButton = sender as ToggleButton;
 			if (toggleButton == null) return;
 			if (toggleButton.IsChecked == null) return;
@@ -282,7 +309,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
 			FrontFacingImage.Source = new BitmapImage(imagePath);
 
+			await TryStopPreviewAsync();
+			await InitialiseCameraDevice();
 			await TryStartPreviewAsync();
+
 			ButtonFrontFacing.IsEnabled = true;
 		}
 
