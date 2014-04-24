@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
+using Windows.Media.Devices;
 using Windows.Media.MediaProperties;
 using Windows.Phone.UI.Input;
 using Windows.Storage.Streams;
@@ -97,15 +98,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			try
 			{
-<<<<<<< HEAD
 				if (_mediaCapture != null)
 				{
 					await _mediaCapture.StopPreviewAsync();
 					Debug.WriteLine("======StoppedPreviewAsync======");
 				}
-=======
 				await _mediaCapture.StopPreviewAsync();
->>>>>>> 05622232747e35b4c396dda2f94b0a1d8ccdadb7
 			}
 			catch (Exception exception)
 			{
@@ -169,6 +167,13 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 					ButtonCamera.IsEnabled = false;
 					ButtonRecord.IsEnabled = false;
+
+					if (_mediaCapture != null)
+					{
+						Debug.WriteLine("> Disposing of existing mediaCapture host");
+						_mediaCapture.Dispose();
+					}
+
 
 					_mediaCapture = new MediaCapture();
 
@@ -263,21 +268,22 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			ButtonFrontFacing.IsEnabled = false;
 
 			//todo Figure out why I can no longer re-initialize the camera, without it bugging out ON A DEVICE.
-			////_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
-			////_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
+			_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
+			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
-			////await InitialiseCameraDevice();
+			await InitialiseCameraDevice();
 
-			////var toggleButton = sender as ToggleButton;
-			////if (toggleButton == null) return;
-			////if (toggleButton.IsChecked == null) return;
+			var toggleButton = sender as ToggleButton;
+			if (toggleButton == null) return;
+			if (toggleButton.IsChecked == null) return;
 
-			////var imagePath = (bool)toggleButton.IsChecked
-			////	? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
-			////	: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
-			////FrontFacingImage.Source = new BitmapImage(imagePath);
-			////await TryStartPreviewAsync();
-			////ButtonFrontFacing.IsEnabled = true;
+			var imagePath = (bool)toggleButton.IsChecked
+				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
+				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
+			FrontFacingImage.Source = new BitmapImage(imagePath);
+
+			await TryStartPreviewAsync();
+			ButtonFrontFacing.IsEnabled = true;
 		}
 
 		private void FlashButton_CheckChanged(object sender, RoutedEventArgs e)
@@ -287,15 +293,23 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			if (toggleButton == null) return;
 			if (toggleButton.IsChecked == null) return;
 
-			_mediaCapture.VideoDeviceController.FlashControl.Enabled = (bool)!toggleButton.IsChecked;
+			if (_mediaCapture.VideoDeviceController.FlashControl.Supported)
+			{
+				_mediaCapture.VideoDeviceController.FlashControl.Enabled = (bool)!toggleButton.IsChecked;
+			}
+			else
+			{
+				toggleButton.IsChecked = false;
+			}
 
 			var imagePath = (bool)toggleButton.IsChecked
 				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.off.png")
 				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.png");
 			FlashImage.Source = new BitmapImage(imagePath);
 
-			Debug.WriteLine("FlashControl.Enabled set to: " + _mediaCapture.VideoDeviceController.FlashControl.Enabled);
+			Debug.WriteLine("FlashControl.Enabled set to: " + toggleButton.IsChecked);
 			FlashButton.IsEnabled = true;
+			//todo can add some ui handling to disable it initialll if not supported later
 		}
 	}
 }
