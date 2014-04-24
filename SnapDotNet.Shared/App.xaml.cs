@@ -21,7 +21,6 @@ using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Models;
-using WinRTXamlToolkit.IO.Serialization;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;

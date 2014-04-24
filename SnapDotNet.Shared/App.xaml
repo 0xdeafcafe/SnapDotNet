@@ -13,18 +13,19 @@
 
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Assets/Vectors/SnapchatIcons.xaml"/>
-				
+
 				<ResourceDictionary>
 					<!--
-                    <x:String x:Key="GlobalAppTitle">Snapchat</x:String>
-                    <x:String x:Key="GlobalAppTitleLowerCase">snapchat</x:String>
-                    -->
+					<x:String x:Key="GlobalAppTitle">Snapchat</x:String>
+					<x:String x:Key="GlobalAppTitleLowerCase">snapchat</x:String>
+					-->
 
 					<SolidColorBrush x:Key="SecondaryFontColourBrush" Color="#FFDADADA" />
-					
+
+					<converters:BitmapImageFromCollectionConverter x:Key="BitmapImageFromCollectionConverter"/>
 					<converters:BooleanToVisibilityConverter x:Name="IValueBooleanToVisibility" />
 					<converters:BooleanColourSelectorConverter x:Name="IValueConverterWpBooleanColourSelectorSemanticZoom" TrueBrush="#FFFFA500" FalseBrush="#FF1f1f1f" />
-					
+
 					<converters:FriendToStoryThumbnailConverter x:Name="IValueConverterFriendToStoryThumbnail" />
 					<converters:FriendHasStoryToVisibilityConverter x:Name="IValueConverterFriendHasStoryToVisibility" />
 					<converters:FriendStoryExpireToAngleConverter x:Name="IValueConverterFriendStoryExpireToAngle" />
@@ -36,12 +37,12 @@
 					<converters:SnapColourFromSnapConverter x:Name="IValueConverterSnapColourFromSnap" />
 					<converters:SnapToFriendlySnapStatusConverter x:Name="IValueConverterSnapToFriendlySnapStatus" />
 					<converters:SnapStatusToButtonStatusConverter x:Name="IValueConverterSnapStatusToButtonStatus" />
-					
+
 					<converters:DisplayFriendsOtherNameConverter x:Name="IValueConverterDisplayFriendsOtherName" />
 					<converters:StringCaseConverter x:Name="IValueConverterStringToUpperCase" StringCase="Uppercase" />
 					<converters:StringCaseConverter x:Name="IValueConverterStringToLowerCase" StringCase="Lowercase" />
-					
-					
+
+
 					<Style x:Key="WpCleanButtonStyle" TargetType="Button">
 						<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 						<Setter Property="Template">
@@ -424,7 +425,7 @@
 							</Setter.Value>
 						</Setter>
 					</Style>
-					
+
 					<DataTemplate x:Key="WpSemanticZoomOutTemplate">
 						<Grid Width="82" Height="82" Background="{Binding Path=Group.KeyIsVisible, Converter={StaticResource IValueConverterWpBooleanColourSelectorSemanticZoom}}" Margin="10,10,0,0">
 							<TextBlock Text="{Binding Path=Group.Key}" VerticalAlignment="Bottom" HorizontalAlignment="Left" 

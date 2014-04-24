@@ -6,13 +6,11 @@
 	xmlns:interactivity="using:Microsoft.Xaml.Interactivity" 
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core" 
 	xmlns:media="using:Microsoft.Xaml.Interactions.Media" 
-	xmlns:Converters="using:SnapDotNet.Apps.Converters" 
 	x:Name="Page"
 	x:Class="SnapDotNet.Apps.Pages.StartPage"
 	mc:Ignorable="d"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
-		<Converters:BitmapImageFromCollectionConverter x:Key="BitmapImageFromCollectionConverter"/>
 		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
 				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
@@ -374,15 +372,15 @@
 			<TextBlock Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" x:Uid="CaptchaHeader" FontFamily="Segoe WP Semilight" 
 				FontSize="30" Text="select all images&#xA;  containing a ghost"/>
 
-			<Image Grid.Column="1" Grid.Row="3" Source="{Binding CurrentCaptcha.Images, ConverterParameter=0, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
-			<Image Grid.Column="3" Grid.Row="3" Source="{Binding CurrentCaptcha.Images, ConverterParameter=1, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
-			<Image Grid.Column="5" Grid.Row="3" Source="{Binding CurrentCaptcha.Images, ConverterParameter=2, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
-			<Image Grid.Column="1" Grid.Row="5" Source="{Binding CurrentCaptcha.Images, ConverterParameter=3, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
-			<Image Grid.Column="3" Grid.Row="5" Source="{Binding CurrentCaptcha.Images, ConverterParameter=4, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
-			<Image Grid.Column="5" Grid.Row="5" Source="{Binding CurrentCaptcha.Images, ConverterParameter=5, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
-			<Image Grid.Column="1" Grid.Row="7" Source="{Binding CurrentCaptcha.Images, ConverterParameter=6, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/StoreLogo.png}" />
-			<Image Grid.Column="3" Grid.Row="7" Source="{Binding CurrentCaptcha.Images, ConverterParameter=7, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
-			<Image Grid.Column="5" Grid.Row="7" Source="{Binding CurrentCaptcha.Images, ConverterParameter=8, Converter={StaticResource BitmapImageFromCollectionConverter}, FallbackValue=ms-appx:///Assets/Square71x71Logo.png}" />
+			<Image Grid.Column="1" Grid.Row="3" Source="{Binding Path=CurrentCaptcha.Images[0]}" />
+			<Image Grid.Column="3" Grid.Row="3" Source="{Binding Path=CurrentCaptcha.Images[1]}" />
+			<Image Grid.Column="5" Grid.Row="3" Source="{Binding Path=CurrentCaptcha.Images[2]}" />
+			<Image Grid.Column="1" Grid.Row="5" Source="{Binding Path=CurrentCaptcha.Images[3]}" />
+			<Image Grid.Column="3" Grid.Row="5" Source="{Binding Path=CurrentCaptcha.Images[4]}" />
+			<Image Grid.Column="5" Grid.Row="5" Source="{Binding Path=CurrentCaptcha.Images[5]}" />
+			<Image Grid.Column="1" Grid.Row="7" Source="{Binding Path=CurrentCaptcha.Images[6]}" />
+			<Image Grid.Column="3" Grid.Row="7" Source="{Binding Path=CurrentCaptcha.Images[7]}" />
+			<Image Grid.Column="5" Grid.Row="7" Source="{Binding Path=CurrentCaptcha.Images[8]}" />
 
 			<Button x:Uid="RegistrationContinueButton" x:Name="SubmitCaptchaButton" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="9" Content="continue" Background="#AA0EA0D6"
 					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="SubmitCaptchaButton_OnClick">
