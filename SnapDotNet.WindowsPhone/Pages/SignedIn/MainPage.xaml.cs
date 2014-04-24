@@ -193,6 +193,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					ButtonCamera.IsEnabled = false;
 					ButtonRecord.IsEnabled = false;
 
+					Debug.WriteLine(">Unbind the UI (may already be so)");
+					CapturePreview.Source = null;
+
 					if (_mediaCapture != null)
 					{
 						Debug.WriteLine("> Disposing of existing mediaCapture host");
