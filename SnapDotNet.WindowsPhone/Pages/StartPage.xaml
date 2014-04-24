@@ -361,11 +361,11 @@
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="25" />
-				<ColumnDefinition Width="Auto" MinWidth="110" MaxWidth="240" />
+				<ColumnDefinition Width="*" MinWidth="110" MaxWidth="240" />
 				<ColumnDefinition Width="10" />
-				<ColumnDefinition Width="Auto" MinWidth="110" MaxWidth="240" />
+				<ColumnDefinition Width="*" MinWidth="110" MaxWidth="240" />
 				<ColumnDefinition Width="10" />
-				<ColumnDefinition Width="Auto" MinWidth="110" MaxWidth="240" />
+				<ColumnDefinition Width="*" MinWidth="110" MaxWidth="240" />
 				<ColumnDefinition Width="25" />
 			</Grid.ColumnDefinitions>
 
