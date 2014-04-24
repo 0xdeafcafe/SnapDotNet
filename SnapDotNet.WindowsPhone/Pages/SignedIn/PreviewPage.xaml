@@ -21,10 +21,10 @@
 	<Page.BottomAppBar>
 		<CommandBar Opacity="0.4">
 			<CommandBar.PrimaryCommands>
-				<AppBarButton Label="Timer" Icon="Target" />
-				<AppBarButton Label="Accept" Icon="Accept"/>
-				<AppBarButton Label="Reject" Icon="Cancel"/>
-				<AppBarButton Label="Filters" Icon="Filter"/>
+				<AppBarButton x:Uid="PreviewTimer" Label="Timer" Icon="Target" />
+				<AppBarButton x:Uid="PreviewAccept" Label="Accept" Icon="Accept"/>
+				<AppBarButton x:Uid="PreviewReject" Label="Reject" Icon="Cancel"/>
+				<AppBarButton x:Uid="PreviewFilters" Label="Filters" Icon="Filter"/>
 			</CommandBar.PrimaryCommands>
 			<!--<CommandBar.SecondaryCommands>
 				<AppBarButton Label="refresh" />

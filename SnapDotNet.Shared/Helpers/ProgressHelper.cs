@@ -9,7 +9,7 @@ namespace SnapDotNet.Apps.Helpers
 		public static async Task ShowStatusBar(string status)
 		{
 #if WINDOWS_PHONE_APP
-			StatusBar.GetForCurrentView().ProgressIndicator.Text = "Updating...";
+			StatusBar.GetForCurrentView().ProgressIndicator.Text = App.Loader.GetString("Updating");
 			await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
 #endif
 		}

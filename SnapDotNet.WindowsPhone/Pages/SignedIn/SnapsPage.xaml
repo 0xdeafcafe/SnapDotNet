@@ -11,6 +11,36 @@
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
 		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
+			<!-- Show all background after 4 seconds. Makes page loading faster -->
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage1">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage2">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage3">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BackgroundImage4">
+				<DiscreteObjectKeyFrame KeyTime="0:0:3">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BackgroundImage5">
 				<EasingDoubleKeyFrame KeyTime="0:0:5" Value="1"/>
 				<EasingDoubleKeyFrame KeyTime="0:0:7" Value="0"/>
@@ -98,21 +128,21 @@
 	<Grid>
 		<!-- Backgrounds -->
 		<Grid>
-			<Image
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage2"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage3"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
-			<Image x:Name="BackgroundImage4"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage1"
+				   Stretch="UniformToFill" Visibility="Collapsed"
+				   Source="ms-appx:///Assets/Panoramas/pano-1.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage2" Visibility="Collapsed"
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage3" Visibility="Collapsed"
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left"/>
+			<Image x:Name="BackgroundImage4" Visibility="Collapsed"
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left"/>
 			<Image x:Name="BackgroundImage5"
-				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
+				   Stretch="UniformToFill" 
+				   Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
 		</Grid>
 
 		<Grid Grid.Row="0" Background="#88686868">
@@ -129,7 +159,7 @@
 			
 			<StackPanel Grid.Row="0" Orientation="Vertical" Margin="20,0,0,0">
 				<TextBlock Text="{Binding Path=Manager.Account.Username, FallbackValue='loading...'}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
-				<TextBlock Text="SNAPS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
+				<TextBlock x:Uid="Snaps" Text="SNAPS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
 			</StackPanel>
 			
 			<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" 
@@ -198,7 +228,7 @@
 			
 			<Grid Width="45" Height="45" Background="#99000000"
 				  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25">
-				<TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Light" FontSize="24" />
+				<TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe WP Semibold" FontSize="24" />
 			</Grid>
 		</Grid>
 	</Grid>
@@ -206,8 +236,8 @@
 	<Page.BottomAppBar>
 		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
 			<CommandBar.SecondaryCommands>
-				<AppBarButton Label="refresh" Command="{Binding RefreshCommand}" />
-				<AppBarButton Label="settings" Command="{Binding GoToSettingsCommand}" />
+				<AppBarButton x:Uid="AppBarRefresh" Label="refresh" Command="{Binding RefreshCommand}" />
+				<AppBarButton x:Uid="AppBarSettings" Label="settings" Command="{Binding GoToSettingsCommand}" />
 			</CommandBar.SecondaryCommands>
 		</CommandBar>
 	</Page.BottomAppBar>

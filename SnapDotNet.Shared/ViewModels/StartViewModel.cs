@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 using SnapDotNet.Apps.Common;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
@@ -43,6 +44,15 @@ namespace SnapDotNet.Apps.ViewModels
 				},
 				() => IsStartPageVisible);
 
+			OpenCaptchaPageCommand = new RelayCommand(
+				() =>
+				{
+					IsCaptchaPageVisible = true;
+					IsRegisterPageVisible = false;
+					IsStartPageVisible = false;
+				},
+				() => IsStartPageVisible);
+
 			GoBackToStartCommand = new RelayCommand(() =>
 			{
 				IsSignInPageVisible = false;
@@ -51,10 +61,21 @@ namespace SnapDotNet.Apps.ViewModels
 			});
 
 			SignInCommand = new RelayCommand<Page>(SignIn);
-			RegisterCommand = new RelayCommand<Page>(Register);
+			RegisterPhase1Command = new RelayCommand<Page>(RegisterPhase1);
+			RegisterPhase2Command = new RelayCommand<Page>(RegisterPhase2);
 
 			#endregion
 		}
+
+		/// <summary>
+		/// Gets the command to open the sign in form.
+		/// </summary>
+		public StartPage StartPage
+		{
+			get { return _startPage; }
+			set { SetField(ref _startPage, value); }
+		}
+		private StartPage _startPage;
 
 		/// <summary>
 		/// Gets the command to open the sign in form.
@@ -77,6 +98,16 @@ namespace SnapDotNet.Apps.ViewModels
 		private ICommand _openRegisterPageCommand;
 
 		/// <summary>
+		/// Gets the command to open the registration form.
+		/// </summary>
+		public ICommand OpenCaptchaPageCommand
+		{
+			get { return _openCaptchaPageCommand; }
+			private set { SetField(ref _openCaptchaPageCommand, value); }
+		}
+		private ICommand _openCaptchaPageCommand;
+
+		/// <summary>
 		/// Gets the command to go back to the start page.
 		/// </summary>
 		public ICommand GoBackToStartCommand
@@ -97,14 +128,24 @@ namespace SnapDotNet.Apps.ViewModels
 		private ICommand _signInCommand;
 
 		/// <summary>
-		/// Gets the command to register.
+		/// Gets the command to submit the first phase of registration, continuing to captchas.
 		/// </summary>
-		public ICommand RegisterCommand
+		public ICommand RegisterPhase1Command
 		{
-			get { return _registerCommand; }
-			private set { SetField(ref _registerCommand, value); }
+			get { return _registerPhase1Command; }
+			private set { SetField(ref _registerPhase1Command, value); }
 		}
-		private ICommand _registerCommand;
+		private ICommand _registerPhase1Command;
+
+		/// <summary>
+		/// Gets the command to submit the second phase of registration (solving captchas) and continue to attaching a username.
+		/// </summary>
+		public ICommand RegisterPhase2Command
+		{
+			get { return _registerPhase2Command; }
+			private set { SetField(ref _registerPhase2Command, value); }
+		}
+		private ICommand _registerPhase2Command;
 
 		/// <summary>
 		/// Gets whether the sign in form should be visible.
@@ -127,7 +168,25 @@ namespace SnapDotNet.Apps.ViewModels
 			get { return _isRegisterPageVisible; }
 			private set { SetField(ref _isRegisterPageVisible, value); }
 		}
+
 		private bool _isRegisterPageVisible;
+
+		/// <summary>
+		/// Gets whether the captcha page should be visible.
+		/// </summary>
+		public bool IsCaptchaPageVisible
+		{
+			get { return _isCaptchaPageVisible; }
+			private set { SetField(ref _isCaptchaPageVisible, value); }
+		}
+		private bool _isCaptchaPageVisible;
+
+		public bool ProgressModalIsVisible
+		{
+			get { return _progressModalIsVisible; }
+			set { SetField(ref _progressModalIsVisible, value); }
+		}
+		private bool _progressModalIsVisible;
 
 		public Visibility ProgressModalVisibility
 		{
@@ -196,6 +255,16 @@ namespace SnapDotNet.Apps.ViewModels
 		}
 		private DateTimeOffset _currentBirthday;
 
+		/// <summary>
+		/// Gets or sets the current birthday.
+		/// </summary>
+		public Captcha CurrentCaptcha
+		{
+			get { return _currentCaptcha; }
+			set { SetField(ref _currentCaptcha, value); }
+		}
+		private Captcha _currentCaptcha;
+
 
 		/// <summary>
 		/// Attempts to sign the user into Snapchat.
@@ -236,18 +305,18 @@ namespace SnapDotNet.Apps.ViewModels
 				if (string.IsNullOrEmpty(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
 				{
 					var dialog =
-						new MessageDialog("The username and password combination you used to sign into snapchat is not correct.",
-							"Invalid Username/Password");
+						new MessageDialog(App.Loader.GetString("InvalidCredentialsBody"), App.Loader.GetString("InvalidCredentialsHeader"));
 					await dialog.ShowAsync();
 					return;
 				}
 
 #if WINDOWS_PHONE_APP
 				// Tell UI we're Signing In
-				StatusBar.GetForCurrentView().ProgressIndicator.Text = "Signing in...";
+				StatusBar.GetForCurrentView().ProgressIndicator.Text = App.Loader.GetString("SigningIn");
 				await StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
 #endif
 				ProgressModalVisibility = Visibility.Visible;
+				ProgressModalIsVisible = true;
 
 				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
@@ -259,7 +328,7 @@ namespace SnapDotNet.Apps.ViewModels
 				{
 					if (exception.Message == "Unauthorized")
 					{
-						var dialog = new MessageDialog("Your sign in infomation has expired. Please sign in again.", "You are Unauthorized");
+						var dialog = new MessageDialog(App.Loader.GetString("UnauthorizedBody"), App.Loader.GetString("UnauthorizedHeader"));
 						dialog.ShowAsync();
 					}
 				}
@@ -281,15 +350,14 @@ namespace SnapDotNet.Apps.ViewModels
 			catch (InvalidCredentialsException)
 			{
 				var dialog =
-					new MessageDialog("The username and password combination you used to sign into Snapchat is not correct.",
-						"Invalid Username/Password");
+					new MessageDialog(App.Loader.GetString("InvalidCredentialsBody"), App.Loader.GetString("InvalidCredentialsHeader"));
 				dialog.ShowAsync();
 			}
 			catch (InvalidHttpResponseException exception)
 			{
 				var dialog =
-					new MessageDialog(String.Format("Unable to connect to Snapchat. The server responded: \n {0}.", exception.Message),
-						"Unable to connect to Snapchat");
+					new MessageDialog(String.Format("{0} \n {1}.", App.Loader.GetString("InvalidHttpBody"), exception.Message),
+						App.Loader.GetString("InvalidHttpHeader"));
 				dialog.ShowAsync();
 			}
 			finally
@@ -300,6 +368,7 @@ namespace SnapDotNet.Apps.ViewModels
 				StatusBar.GetForCurrentView().ProgressIndicator.HideAsync();
 #endif
 				ProgressModalVisibility = Visibility.Collapsed;
+				ProgressModalIsVisible = false;
 			}
 
 			if ( App.SnapChatManager.Account == null || 
@@ -316,10 +385,59 @@ namespace SnapDotNet.Apps.ViewModels
 		/// <summary>
 		/// Attempts to create a new account.
 		/// </summary>
-		private void Register(Page nextPage)
+		private async void RegisterPhase1(Page nextPage)
 		{
-			// TODO: API stuff
-			App.CurrentFrame.Navigate(nextPage.GetType());
+			if (string.IsNullOrEmpty(CurrentEmail))
+			{
+				var dialog =
+					new MessageDialog(App.Loader.GetString("EmptyEmailBody"), App.Loader.GetString("EmptyEmailHeader"));
+				dialog.ShowAsync();
+				return;
+			}
+			if (string.IsNullOrEmpty(DesiredPassword))
+			{
+				var dialog =
+					new MessageDialog(App.Loader.GetString("EmptyPasswordBody"), App.Loader.GetString("EmptyPasswordHeader"));
+				dialog.ShowAsync();
+				return;
+			}
+			
+			var age = DateTime.Today.Year - CurrentBirthday.Year;
+			if (DateTime.Today.DayOfYear < CurrentBirthday.DayOfYear)
+				age -= 1;
+
+			var birthdayString = string.Format("{0}-{1}-{2}", CurrentBirthday.Year, CurrentBirthday.Month, CurrentBirthday.Day);
+
+			try
+			{
+				CurrentCaptcha = await App.SnapChatManager.Endpoints.RegisterAndGetCaptchaAsync(age, birthdayString, CurrentEmail, DesiredPassword);
+
+				StartPage.RevealCaptchaPage();
+			}
+			catch (InvalidHttpResponseException exception)
+			{
+				var dialog =
+					new MessageDialog(String.Format("{0} \n {1}.", App.Loader.GetString("InvalidHttpBody"), exception.Message),
+						App.Loader.GetString("InvalidHttpHeader"));
+				dialog.ShowAsync();
+				return;
+			}
+
+			catch (InvalidRegistrationException exception)
+			{
+				var dialog =
+					new MessageDialog(exception.Message, App.Loader.GetString("RegistrationErrorHeader"));
+				dialog.ShowAsync();
+				return;
+			}
+		}
+
+		/// <summary>
+		/// Submits captcha answer
+		/// </summary>
+		private async void RegisterPhase2(Page nextPage)
+		{
+			// TODO: Write this
 		}
 	}
 }

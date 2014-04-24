@@ -76,6 +76,96 @@
 				</DiscreteObjectKeyFrame>
 			</ObjectAnimationUsingKeyFrames>
 		</Storyboard>
+
+		<Storyboard x:Name="RegistrationModalRevealStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RegistrationModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainPageContent">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RegistrationModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MainPageContent">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Name="RegistrationModalHideStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RegistrationModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainPageContent">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RegistrationModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MainPageContent">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
+
+		<Storyboard x:Name="CaptchaModalRevealStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CaptchaModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RegistrationModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="CaptchaModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RegistrationModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Name="CaptchaModalHideStoryboard">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CaptchaModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RegistrationModalGrid">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="CaptchaModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0:0:0.4">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Collapsed</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="RegistrationModalGrid">
+				<DiscreteObjectKeyFrame KeyTime="0">
+					<DiscreteObjectKeyFrame.Value>
+						<Visibility>Visible</Visibility>
+					</DiscreteObjectKeyFrame.Value>
+				</DiscreteObjectKeyFrame>
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
 	</Page.Resources>
 	<interactivity:Interaction.Behaviors>
 		<core:EventTriggerBehavior EventName="Loaded">
@@ -131,13 +221,13 @@
 
 				<!-- App Title -->
 				<TextBlock Grid.Row="0" HorizontalAlignment="Center" Padding="2" Style="{StaticResource TitleTextBlockStyle}" 
-						   FontWeight="Light" FontSize="28" FontFamily="Segoe WP Semilight">
+					FontWeight="Light" FontSize="28" FontFamily="Segoe WP Semilight">
 					<Run x:Uid="StartPageTitle" Text="Snapchat for Windows"/>
 				</TextBlock>
 
 				<!-- App Description -->
 				<TextBlock Grid.Row="1" HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}" 
-						   FontWeight="Light" FontSize="16" FontFamily="Segoe WP">
+					FontWeight="Light" FontSize="16" FontFamily="Segoe WP">
 					<Run x:Uid="StartPageThirdParty" Text="unofficial snapchat client"/>
 				</TextBlock>
 			</Grid>
@@ -152,16 +242,16 @@
 				<Button Grid.Column="0" HorizontalAlignment="Stretch" x:Uid="SignInButton" Click="ShowSignInButton_Click" Content="sign in" Background="#AAFFA500"
 					Style="{StaticResource WpDefaultButtonStyle}"/>
 
-				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Content="register" Background="#AA0EA0D6"
+				<Button Grid.Column="2" HorizontalAlignment="Stretch" x:Uid="CreateAccountButton" Click="CreateAccountButtonButton_Click" Content="register" Background="#AA0EA0D6"
 					Style="{StaticResource WpDefaultButtonStyle}" />
 
 			</Grid>
 		</Grid>
 
 		<!-- It's just modals past this point, sorry -->
-		
+
 		<Grid x:Name="SignInModalGrid" Grid.Row="0" 
-			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+			Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
 
 			<Grid.RowDefinitions>
 				<RowDefinition Height="40" />
@@ -179,9 +269,9 @@
 				<ColumnDefinition Width="*" />
 				<ColumnDefinition Width="30" />
 			</Grid.ColumnDefinitions>
-			
+
 			<TextBlock Grid.Column="1" Grid.Row="1" x:Uid="SignInHeader" FontFamily="Segoe WP Semilight" 
-					   FontSize="30" Text="sign in to snapchat" />
+				FontSize="30" Text="sign in to snapchat" />
 
 			<StackPanel Grid.Column="1" Grid.Row="3">
 				<TextBlock x:Uid="SignInUsernameTitle" FontSize="20">username or email</TextBlock>
@@ -191,16 +281,118 @@
 			<StackPanel Grid.Column="1" Grid.Row="5">
 				<TextBlock x:Uid="SignInPassword" FontSize="20">password</TextBlock>
 				<PasswordBox x:Name="SignInPasswordTextBlock" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
-			</StackPanel>
+				</StackPanel>
 
-			<Button x:Uid="SignInButton" x:Name="SignInButton" Grid.Column="1" Grid.Row="7" Content="sign in" Background="#FFFFA500" 
+				<Button x:Uid="SignInButton" x:Name="SignInButton" Grid.Column="1" Grid.Row="7" Content="sign in" Background="#FFFFA500" 
 					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="SignInButton_OnClick">
-			</Button>
+				</Button>
 
 		</Grid>
 
-		<Grid Grid.Row="0" Background="#668F8F8F" Visibility="{Binding ProgressModalVisibility, FallbackValue=Collapsed}">
+		<Grid x:Name="RegistrationModalGrid" Grid.Row="0" 
+			Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="40" />
+				<RowDefinition Height="45" />
+				<RowDefinition Height="50" />
+				<RowDefinition Height="80" />
+				<RowDefinition Height="25" />
+				<RowDefinition Height="80" />
+				<RowDefinition Height="25" />
+				<RowDefinition Height="80" />
+				<RowDefinition Height="40" />
+				<RowDefinition Height="40" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="25" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="30" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Column="1" Grid.Row="1" x:Uid="RegistrationHeader" FontFamily="Segoe WP Semilight" 
+				FontSize="30" Text="register for snapchat" />
+
+			<StackPanel Grid.Column="1" Grid.Row="3">
+				<TextBlock x:Uid="RegistrationEmailTitle" FontSize="20">email</TextBlock>
+				<TextBox x:Name="RegistrationEmailTextBlock" Text="{Binding CurrentEmail, Mode=TwoWay}" InputScope="EmailSmtpAddress" />
+			</StackPanel>
+
+			<StackPanel Grid.Column="1" Grid.Row="5">
+				<TextBlock x:Uid="RegistrationPassword" FontSize="20">password</TextBlock>
+				<PasswordBox x:Name="RegistrationPasswordTextBlock" Password="{Binding DesiredPassword, Mode=TwoWay}"/>
+			</StackPanel>
+
+			<StackPanel Grid.Column="1" Grid.Row="7">
+				<TextBlock x:Uid="RegistrationBirthday" FontSize="20">birthday</TextBlock>
+				<DatePicker
+                            Header=" "
+                            Date="{Binding CurrentBirthday, Mode=TwoWay}" Margin="0,-20,0,0">
+					<DatePicker.HeaderTemplate>
+						<DataTemplate>
+							<TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="{Binding}"/>
+						</DataTemplate>
+					</DatePicker.HeaderTemplate>
+				</DatePicker>
+			</StackPanel>
+
+			<Button x:Uid="RegistrationContinueButton" x:Name="RegistrationButton" Grid.Column="1" Grid.Row="9" Content="continue" Background="#AA0EA0D6"
+					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="ContinueRegistrationButton_OnClick">
+			</Button>
 			
+		</Grid>
+
+		<Grid x:Name="CaptchaModalGrid" Grid.Row="0"
+			Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="40" />
+				<RowDefinition Height="80" />
+				<RowDefinition Height="40" />
+				<RowDefinition Height="Auto" MinHeight="110" MaxHeight="240" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="Auto" MinHeight="110" MaxHeight="240" />
+				<RowDefinition Height="10" />
+				<RowDefinition Height="Auto" MinHeight="110" MaxHeight="240" />
+				<RowDefinition Height="30" />
+				<RowDefinition Height="40" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="25" />
+				<ColumnDefinition Width="*" MinWidth="110" MaxWidth="240" />
+				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="*" MinWidth="110" MaxWidth="240" />
+				<ColumnDefinition Width="10" />
+				<ColumnDefinition Width="*" MinWidth="110" MaxWidth="240" />
+				<ColumnDefinition Width="25" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" x:Uid="CaptchaHeader" FontFamily="Segoe WP Semilight" 
+				FontSize="30" Text="select all images&#xA;  containing a ghost"/>
+
+			<Image Grid.Column="1" Grid.Row="3" Source="{Binding Path=CurrentCaptcha.Images[0]}" />
+			<Image Grid.Column="3" Grid.Row="3" Source="{Binding Path=CurrentCaptcha.Images[1]}" />
+			<Image Grid.Column="5" Grid.Row="3" Source="{Binding Path=CurrentCaptcha.Images[2]}" />
+			<Image Grid.Column="1" Grid.Row="5" Source="{Binding Path=CurrentCaptcha.Images[3]}" />
+			<Image Grid.Column="3" Grid.Row="5" Source="{Binding Path=CurrentCaptcha.Images[4]}" />
+			<Image Grid.Column="5" Grid.Row="5" Source="{Binding Path=CurrentCaptcha.Images[5]}" />
+			<Image Grid.Column="1" Grid.Row="7" Source="{Binding Path=CurrentCaptcha.Images[6]}" />
+			<Image Grid.Column="3" Grid.Row="7" Source="{Binding Path=CurrentCaptcha.Images[7]}" />
+			<Image Grid.Column="5" Grid.Row="7" Source="{Binding Path=CurrentCaptcha.Images[8]}" />
+
+			<Button x:Uid="RegistrationContinueButton" x:Name="SubmitCaptchaButton" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="9" Content="continue" Background="#AA0EA0D6"
+					HorizontalAlignment="Stretch" Style="{StaticResource WpDefaultButtonStyle}" Click="SubmitCaptchaButton_OnClick">
+			</Button>
+		</Grid>
+
+		<Grid x:Name="AddnUsernameModalGrid" Grid.Row="0" 
+			  Background="#338F8F8F" Visibility="Collapsed" Opacity="0">
+		</Grid>
+
+		<Grid Grid.Row="0" Background="#668F8F8F" Visibility="{Binding ProgressModalVisibility, FallbackValue=Collapsed}">
+
 		</Grid>
 	</Grid>
 </Page>

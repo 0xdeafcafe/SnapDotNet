@@ -76,7 +76,7 @@
 			</Grid.ChildrenTransitions>
 
 			<Hub HeaderTemplate="{StaticResource HeaderDataTemplate}">
-				<HubSection Header="INFO">
+				<HubSection x:Uid="InfoHubSection" Header="INFO">
 					<DataTemplate>
 						<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 							<Grid>
@@ -89,7 +89,7 @@
 								</Grid.RowDefinitions>
 
 								<TextBlock Grid.Row="0">
-									<Run Text="snapchat score:" FontSize="20" />
+									<Run x:Uid="FriendScore" Text="snapchat score:" FontSize="20" />
 									<LineBreak />
 									<Run Text="{Binding Path=SelectedActivity.Score, FallbackValue='1,337'}" 
 										 Foreground="{StaticResource SystemColorControlAccentBrush}" 
@@ -97,7 +97,7 @@
 								</TextBlock>
 
 								<TextBlock Grid.Row="1">
-									<Run Text="full story:" FontSize="20" />
+									<Run x:Uid="FriendFullStory" Text="full story:" FontSize="20" />
 								</TextBlock>
 								<controls:PieSlice Radius="40" Grid.Row="2"
 												   StartAngle="0" 
@@ -116,7 +116,7 @@
 								</controls:PieSlice>
 							
 								<TextBlock Grid.Row="3">
-									<Run Text="best friends:" FontSize="20" />
+									<Run x:Uid="FriendBestFriends" Text="best friends:" FontSize="20" />
 								</TextBlock>
 								<ItemsControl Grid.Row="4" ItemsSource="{Binding Path=SelectedActivity.BestFriends}">
 									<ItemsControl.ItemTemplate>
@@ -149,8 +149,8 @@
 	<Page.BottomAppBar>
 		<CommandBar Opacity="0.4" ClosedDisplayMode="Minimal">
 			<CommandBar.SecondaryCommands>
-				<AppBarButton Label="refresh" Command="{Binding RefreshCommand}" />
-				<AppBarButton Label="settings" Command="{Binding GoToSettingsCommand}" />
+				<AppBarButton x:Uid="AppBarRefresh" Label="refresh" Command="{Binding RefreshCommand}" />
+				<AppBarButton x:Uid="AppBarSettings" Label="settings" Command="{Binding GoToSettingsCommand}" />
 			</CommandBar.SecondaryCommands>
 		</CommandBar>
 	</Page.BottomAppBar>

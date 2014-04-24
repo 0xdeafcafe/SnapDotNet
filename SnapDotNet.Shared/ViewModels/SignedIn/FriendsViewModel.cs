@@ -98,7 +98,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 		private static async void ChangeDisplayName(Friend friend)
 		{
-			await ProgressHelper.ShowStatusBar("Changing Display Name...");
+			await ProgressHelper.ShowStatusBar(App.Loader.GetString("StatusBarChangeDisplay"));
 
 #if WINDOWS_PHONE_APP
 			var contentDialog = new ChangeDisplayNameDialog(friend.FriendlyName);
@@ -119,14 +119,13 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 		private static async void BlockFriend(Friend friend)
 		{
-			await ProgressHelper.ShowStatusBar("Blocking...");
+			await ProgressHelper.ShowStatusBar(App.Loader.GetString("StatusBarBlocking"));
 
-			var dialog = new MessageDialog("You will no longer recieve snaps from this person. But you can undo this action at any time.", 
-				"Are you sure?");
-			dialog.Commands.Add(new UICommand("Yes"));
-			dialog.Commands.Add(new UICommand("Cancel", command => ProgressHelper.HideStatusBar().Wait()));
+			var dialog = new MessageDialog(App.Loader.GetString("BlockingDialogBody"), App.Loader.GetString("GenericCautionDialogHeader"));
+			dialog.Commands.Add(new UICommand(App.Loader.GetString("Yes")));
+			dialog.Commands.Add(new UICommand(App.Loader.GetString("Cancel"), command => ProgressHelper.HideStatusBar().Wait()));
 			var result = await dialog.ShowAsync();
-			if (result.Label != "Yes") return;
+			if (result.Label != App.Loader.GetString("Yes")) return;
 			await App.SnapChatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Block);
 
 			friend.NotifyPropertyChanged("FriendRequestState");
@@ -136,14 +135,13 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 		private static async void UnblockFriend(Friend friend)
 		{
-			await ProgressHelper.ShowStatusBar("Unblocking...");
+			await ProgressHelper.ShowStatusBar(App.Loader.GetString("StatusBarUnblocking"));
 
-			var dialog = new MessageDialog("You will now recieve snaps from this person. But you can redo this action at any time.",
-				"Are you sure?");
-			dialog.Commands.Add(new UICommand("Yes"));
-			dialog.Commands.Add(new UICommand("Cancel", command => ProgressHelper.HideStatusBar().Wait()));
+			var dialog = new MessageDialog(App.Loader.GetString("UnblockingDialogBody"), App.Loader.GetString("GenericCautionDialogHeader"));
+			dialog.Commands.Add(new UICommand(App.Loader.GetString("Yes")));
+			dialog.Commands.Add(new UICommand(App.Loader.GetString("Cancel"), command => ProgressHelper.HideStatusBar().Wait()));
 			var result = await dialog.ShowAsync();
-			if (result.Label != "Yes") return;
+			if (result.Label != App.Loader.GetString("Yes")) return;
 			await App.SnapChatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Unblock);
 
 			friend.NotifyPropertyChanged("FriendRequestState");
@@ -153,14 +151,13 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 		private static async void RemoveFriend(Friend friend)
 		{
-			await ProgressHelper.ShowStatusBar("Removing...");
+			await ProgressHelper.ShowStatusBar(App.Loader.GetString("StatusBarRemoving"));
 
-			var dialog = new MessageDialog("This person will no longer appear on your friends list, but you might still get snaps from them depending on your privacy settings.",
-				"Are you sure?");
-			dialog.Commands.Add(new UICommand("Yes"));
-			dialog.Commands.Add(new UICommand("Cancel", command => ProgressHelper.HideStatusBar().Wait()));
+			var dialog = new MessageDialog(App.Loader.GetString("RemovingDialogBody"), App.Loader.GetString("GenericCautionDialogHeader"));
+			dialog.Commands.Add(new UICommand(App.Loader.GetString("Yes")));
+			dialog.Commands.Add(new UICommand(App.Loader.GetString("Cancel"), command => ProgressHelper.HideStatusBar().Wait()));
 			var result = await dialog.ShowAsync();
-			if (result.Label != "Yes") return;
+			if (result.Label != App.Loader.GetString("Yes")) return;
 			await App.SnapChatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Delete);
 
 			friend.NotifyPropertyChanged("FriendRequestState");

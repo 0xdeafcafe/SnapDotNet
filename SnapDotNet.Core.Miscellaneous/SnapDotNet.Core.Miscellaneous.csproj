@@ -49,6 +49,7 @@
     <Compile Include="Helpers\ApplicationSettings.cs" />
     <Compile Include="Helpers\Async\AsyncHelpers.cs" />
     <Compile Include="Helpers\Async\TaskCompletionNotifier.cs" />
+    <Compile Include="Helpers\ImageConverter.cs" />
     <Compile Include="Helpers\Compression\Gzip.cs" />
     <Compile Include="Helpers\Compression\Zip.cs" />
     <Compile Include="Helpers\NetworkInformationHelper.cs" />

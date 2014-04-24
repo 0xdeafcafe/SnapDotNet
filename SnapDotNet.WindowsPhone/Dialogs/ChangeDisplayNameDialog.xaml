@@ -12,17 +12,17 @@
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
 	<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-		<TextBox x:Name="DisplyNameTextBox" Header="new display name"/>
+		<TextBox x:Name="DisplyNameTextBox" x:Uid="DisplyNameTextBox" Header="new display name"/>
 
 		<!-- Content body -->
 		<TextBlock Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
-			<Run Text="Changing this will change how your friend's name displayed in the application. It will not change his account in anyway." />
+			<Run x:Uid="DisplayChangeWarningRun1" Text="Changing this will change how your friend's name displayed in the application. It will not change his account in anyway." />
 			<LineBreak />
 			<LineBreak />
-			<Run Text="To remove a display name, just change it to an empty name." />
+			<Run x:Uid="DisplayChangeWarningRun2" Text="To remove a display name, just change it to an empty name." />
 			<LineBreak />
 			<LineBreak />
-			<Run Text="This can be un-done or changed at any time." />
+			<Run x:Uid="DisplayChangeWarningRun3" Text="This can be un-done or changed at any time." />
 		</TextBlock>
 	</StackPanel>
 </ContentDialog>
