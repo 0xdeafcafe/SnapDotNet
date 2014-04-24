@@ -20,6 +20,8 @@ using SnapDotNet.Apps.Pages.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
+using SnapDotNet.Core.Snapchat.Models;
+using WinRTXamlToolkit.IO.Serialization;
 #if WINDOWS_PHONE_APP
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.System.Profile;
@@ -149,6 +151,9 @@ namespace SnapDotNet.Apps
 
 			// Get Snapchat Updates
 			UpdateSnapchatData();
+
+			// Update Live Tile
+			UpdateLiveTile();
 			
 #if WINDOWS_PHONE_APP
 			// Hide StatusBar background for entire application
@@ -176,7 +181,6 @@ namespace SnapDotNet.Apps
 			{
 				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof(MainPage)));
-				return;
 			}
 		}
 
@@ -210,39 +214,20 @@ namespace SnapDotNet.Apps
 				{
 					case PushNotificationType.Toast:
 						if (args.ToastNotification == null) return;
+						Debug.WriteLine(args.ToastNotification);
 
-						var message = args.ToastNotification.Content.InnerText.Replace("\n", "").Trim();
-						if (message.ToLowerInvariant().StartsWith("new snap from"))
-						{
+						var s = args.ToastNotification.Content.SelectSingleNode("/toast/visual/binding/text[@id = '2']");
+						var notificationString = "";
+						if (s != null) notificationString = s.InnerText;
+
+						if (notificationString.ToLowerInvariant().StartsWith("new snap from"))
 							// New snap, we need to update the tile's badge
 							Settings.UnreadSnapCount += 1;
-						}
-
-						// Update Live Tile
-						var xml =
-							@"<tile>
-								<visual version=""3"">
-									<binding template=""TileSquare71x71IconWithBadge"">
-										<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
-									</binding>
-									<binding template=""TileSquare150x150IconWithBadge"">
-										<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
-									</binding>
-									<binding template=""TileSquare310x150IconWithBadgeAndText"">
-										<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
-										<text id=""1"">" + message + @"</text>
-									</binding>
-								</visual>
-							</tile>";
-						var xmlDoc = new XmlDocument();
-						xmlDoc.LoadXml(xml);
-						var tu = TileUpdateManager.CreateTileUpdaterForApplication();
-						tu.Update(new TileNotification(xmlDoc));
 						
-						// Update Badge
-						xmlDoc.LoadXml("<badge value=\""+Settings.UnreadSnapCount+"\"/>");
-						var bu = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
-						bu.Update(new BadgeNotification(xmlDoc));
+						// Update Live Tile
+						UpdateLiveTile(notificationString);
+
+						Debug.WriteLine("*** Everything did aite");
 
 						// Tell the app to navigate to snaps page
 						args.ToastNotification.Activated += (notification, o) =>
@@ -277,7 +262,40 @@ namespace SnapDotNet.Apps
 			}
 #endif
 		}
-		
+
+		public static void UpdateLiveTile(string notificationString = null)
+		{
+			var status1 = notificationString ?? "No new notifications";
+			var status2 = (notificationString != null && Settings.UnreadSnapCount > 1) ? "More..." : "";
+
+			var xml = @"
+				<tile>
+					<visual version=""3"">
+						<binding template=""TileSquare71x71IconWithBadge"">
+							<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
+						</binding>
+						<binding template=""TileSquare150x150IconWithBadge"">
+							<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
+						</binding>
+						<binding template=""TileWide310x150IconWithBadgeAndText"">
+							<image id=""1"" src=""ms-appx:///Assets/LiveTileLogo.png"" />
+							<text id=""1"">Snapchat</text>
+							<text id=""2"">" + status1 + @"</text>
+							<text id=""3"">" + status2 + @"</text>
+						</binding>
+					</visual>
+				</tile>";
+
+			var xmlDoc = new XmlDocument();
+			xmlDoc.LoadXml(xml);
+			var tu = TileUpdateManager.CreateTileUpdaterForApplication();
+			tu.Update(new TileNotification(xmlDoc));
+
+			// Update Badge
+			xmlDoc.LoadXml("<badge value=\"" + Settings.UnreadSnapCount + "\"/>");
+			var bu = BadgeUpdateManager.CreateBadgeUpdaterForApplication();
+			bu.Update(new BadgeNotification(xmlDoc));
+		}
 
 		/// <summary>
 		///     Invoked when application execution is being suspended.  Application state is saved
@@ -302,15 +320,21 @@ namespace SnapDotNet.Apps
 		public static async void UpdateSnapchatData()
 		{
 			if (!SnapChatManager.IsAuthenticated()) return;
-
-			// Get Snapchat Updates
-
-			bool forceLogout = false;
+			var forceLogout = false;
 
 			try
 			{
+				// Get Snapchat Updates
 				await ProgressHelper.ShowStatusBar(Loader.GetString("Updating"));
 				await SnapChatManager.UpdateAllAsync(async () => { await ProgressHelper.HideStatusBar(); }, Settings);
+
+				// Get ones to set notification count on
+				Settings.UnreadSnapCount = (uint)SnapChatManager.Account.Snaps.Count(s => s.SenderName != null && s.Status == SnapStatus.Delivered);
+				var mostRecent =
+					SnapChatManager.Account.Snaps.OrderByDescending(s => s.Timestamp)
+						.FirstOrDefault(s => s.SenderName != null && s.Status == SnapStatus.Delivered);
+
+				UpdateLiveTile(String.Format("New Snap from {0}", mostRecent.SenderName));
 			}
 			catch (InvalidCredentialsException exception)
 			{
@@ -322,7 +346,7 @@ namespace SnapDotNet.Apps
 				if (exception.Message == "Unauthorized")
 				{
 					var dialog = new MessageDialog(Loader.GetString("UnauthorizedBody"), Loader.GetString("UnauthorizedHeader"));
-					var showDialogTask = dialog.ShowAsync();
+					dialog.ShowAsync();
 					forceLogout = true;
 				}
 			}
@@ -332,9 +356,7 @@ namespace SnapDotNet.Apps
 			}
 
 			if (forceLogout)
-			{
 				await LogoutAsync();
-			}
 
 			await ProgressHelper.HideStatusBar();
 		}
