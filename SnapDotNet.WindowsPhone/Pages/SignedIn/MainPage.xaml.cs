@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
+using Windows.Media.Devices;
 using Windows.Media.MediaProperties;
 using Windows.Phone.UI.Input;
 using Windows.Storage.Streams;
@@ -11,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
+using Microsoft.VisualBasic.CompilerServices;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.ViewModels.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
@@ -21,6 +23,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 	public sealed partial class MainPage
 	{
 		public MainViewModel ViewModel { get; private set; }
+		private bool _areWeInitialising;
+		private bool _areWePreppingCamera;
 
 		private MediaCapture _mediaCapture;
 		private MediaCaptureInitializationSettings _mediaCaptureSettings;
@@ -29,8 +33,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		private DeviceInformationCollection _microphoneInfoCollection;
 		private int _currentSelectedAudioDevice;
 
-		private bool _areWeInitialising;
-		private bool _areWePreppingCamera;
 		private bool _isCameraPrepped;
 		private bool _isCameraInitialised;
 
@@ -61,7 +63,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			SetUiCameraXamlElements();
 			await InitialiseCameraDevice();
 
-			CapturePreview.Source = _mediaCapture;
 			await TryStartPreviewAsync();
 		}
 
@@ -73,7 +74,11 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			{
 				try
 				{
+					CapturePreview.Source = null;
+					CapturePreview.Source = _mediaCapture;
+
 					await _mediaCapture.StartPreviewAsync();
+
 					Debug.WriteLine("TryStartPreviewAsyc: OK?");
 				}
 				catch (Exception ex)
@@ -86,7 +91,28 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				Debug.WriteLine("TryStartPreviewAsync: NOT READY!");
 			}
 		}
+		private async Task TryStopPreviewAsync()
+		{
+			Debug.WriteLine("======TryStopPreviewAsync======");
 
+			if (_isCameraInitialised && _isCameraPrepped) //not really necessary, but may as well
+			{
+				try
+				{
+					CapturePreview.Source = null;
+					await _mediaCapture.StartPreviewAsync();
+					Debug.WriteLine("TryStopPreviewAsyc: OK?");
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine("TryStopPreviewAsyc: FAILED");
+				}
+			}
+			else
+			{
+				Debug.WriteLine("TryStopPreviewAsync: NOT READY!");
+			}
+		}
 
 		void videoRecordTimer_Tick(object sender, object e)
 		{
@@ -97,7 +123,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			try
 			{
-				await _mediaCapture.StopPreviewAsync();
+				if (_mediaCapture != null)
+				{
+					await TryStopPreviewAsync();
+					_mediaCapture.Dispose();
+					Debug.WriteLine("Disposed of _mediaCapture");
+				}
 			}
 			catch (Exception exception)
 			{
@@ -162,10 +193,25 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					ButtonCamera.IsEnabled = false;
 					ButtonRecord.IsEnabled = false;
 
+					Debug.WriteLine(">Unbind the UI (may already be so)");
+					CapturePreview.Source = null;
+
+					if (_mediaCapture != null)
+					{
+						Debug.WriteLine("> Disposing of existing mediaCapture host");
+						_mediaCapture.Dispose();
+					}
+
+
 					_mediaCapture = new MediaCapture();
 
 					Debug.WriteLine(">Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
+
+					Debug.WriteLine(">Initialize Async?");
 					await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
+					Debug.WriteLine(">Initialize Async: OK, yay!");
+
+					_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
 					ButtonCamera.IsEnabled = true;
 					ButtonRecord.IsEnabled = true; //not implemented
 
@@ -254,21 +300,23 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			ButtonFrontFacing.IsEnabled = false;
 
 			//todo Figure out why I can no longer re-initialize the camera, without it bugging out ON A DEVICE.
-			////_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
-			////_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
+			_currentSelectedCameraDevice = _currentSelectedCameraDevice == 0 ? 1 : 0;
+			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
-			////await InitialiseCameraDevice();
+			var toggleButton = sender as ToggleButton;
+			if (toggleButton == null) return;
+			if (toggleButton.IsChecked == null) return;
 
-			////var toggleButton = sender as ToggleButton;
-			////if (toggleButton == null) return;
-			////if (toggleButton.IsChecked == null) return;
+			var imagePath = (bool)toggleButton.IsChecked
+				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
+				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
+			FrontFacingImage.Source = new BitmapImage(imagePath);
 
-			////var imagePath = (bool)toggleButton.IsChecked
-			////	? new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.off.png")
-			////	: new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png");
-			////FrontFacingImage.Source = new BitmapImage(imagePath);
-			////await TryStartPreviewAsync();
-			////ButtonFrontFacing.IsEnabled = true;
+			await TryStopPreviewAsync();
+			await InitialiseCameraDevice();
+			await TryStartPreviewAsync();
+
+			ButtonFrontFacing.IsEnabled = true;
 		}
 
 		private void FlashButton_CheckChanged(object sender, RoutedEventArgs e)
@@ -278,15 +326,23 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			if (toggleButton == null) return;
 			if (toggleButton.IsChecked == null) return;
 
-			_mediaCapture.VideoDeviceController.FlashControl.Enabled = (bool)!toggleButton.IsChecked;
+			if (_mediaCapture.VideoDeviceController.FlashControl.Supported)
+			{
+				_mediaCapture.VideoDeviceController.FlashControl.Enabled = (bool)!toggleButton.IsChecked;
+			}
+			else
+			{
+				toggleButton.IsChecked = false;
+			}
 
 			var imagePath = (bool)toggleButton.IsChecked
 				? new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.off.png")
 				: new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.png");
 			FlashImage.Source = new BitmapImage(imagePath);
 
-			Debug.WriteLine("FlashControl.Enabled set to: " + _mediaCapture.VideoDeviceController.FlashControl.Enabled);
+			Debug.WriteLine("FlashControl.Enabled set to: " + toggleButton.IsChecked);
 			FlashButton.IsEnabled = true;
+			//todo can add some ui handling to disable it initialll if not supported later
 		}
 	}
 }
