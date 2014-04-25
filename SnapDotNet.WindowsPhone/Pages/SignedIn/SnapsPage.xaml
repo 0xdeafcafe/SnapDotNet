@@ -8,7 +8,7 @@
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
 	mc:Ignorable="d"
-	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" ManipulationCompleted="Page_ManipulationCompleted" PointerExited="Page_PointerExited">
 	<Page.Resources>
 		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
 			<!-- Show all background after 4 seconds. Makes page loading faster -->
@@ -223,8 +223,8 @@
 			</ListView>
 		</Grid>
 
-		<Grid Grid.Row="0" x:Name="MediaGrid" Background="#FF000000">
-			<Image x:Name="MediaImage" />
+		<Grid Grid.Row="0" x:Name="MediaGrid" Background="#FF000000"  IsHitTestVisible="True">
+			<Image x:Name="MediaImage" PointerExited="MediaGrid_PointerExited" />
 			
 			<Grid Width="45" Height="45" Background="#99000000"
 				  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25">

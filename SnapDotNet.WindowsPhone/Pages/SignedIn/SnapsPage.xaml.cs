@@ -159,6 +159,21 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			MediaImage.Source = null;
 		}
 
+		private void Page_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+		{
+			Debug.WriteLine("Page_ManipulationCompleted");
+		}
+
+		private void Page_PointerExited(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("Page_PointerExited");
+		}
+
+		private void MediaGrid_PointerExited(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("MediaGrid_PointerExited");
+		}
+
 		//private void ButtonSnap_OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
 		//{
 		//	//var button = sender as Button;

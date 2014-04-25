@@ -236,9 +236,6 @@ namespace SnapDotNet.Apps
 						};
 						args.ToastNotification.Group = "Snaps";
 						break;
-
-					default:
-						throw new NotImplementedException();
 				}
 			};
 
