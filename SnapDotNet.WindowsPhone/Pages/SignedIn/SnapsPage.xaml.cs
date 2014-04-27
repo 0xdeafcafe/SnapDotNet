@@ -38,7 +38,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 #endif
 
 			_holdingTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 0, 0, 200)};
-			//_holdingTimer.Tick += HoldingTimerOnTick;
+			_holdingTimer.Tick += HoldingTimerOnTick;
 
 			// Make this default later
 			MediaGrid.Visibility = Visibility.Collapsed;
@@ -159,73 +159,58 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			MediaImage.Source = null;
 		}
 
-		private void Page_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+		private void ButtonSnap_OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
 		{
-			Debug.WriteLine("Page_ManipulationCompleted");
+			Debug.WriteLine("ButtonSnap_OnManipulationStarted");
+			var button = sender as Button;
+			if (button == null) return;
+			var snap = button.DataContext as Snap;
+			if (snap == null) return;
+			_relevantSnap = snap;
+
+			_isFingerDown = true;
+			//_scrollYIndex = ScrollViewer.VerticalOffset;
+			_holdingTimer.Start();
 		}
 
-		private void Page_PointerExited(object sender, PointerRoutedEventArgs e)
+		private void ButtonSnap_OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
 		{
-			Debug.WriteLine("Page_PointerExited");
+			Debug.WriteLine("ButtonSnap_OnManipulationCompleted");
+			_isFingerDown = false;
+			if (!_isMediaOpen)
+			{
+				_isMediaOpen = false;
+				return;
+			}
+
+			DisposeMediaTidily();
 		}
 
-		private void MediaGrid_PointerExited(object sender, PointerRoutedEventArgs e)
+		private async void HoldingTimerOnTick(object sender, object o)
 		{
-			Debug.WriteLine("MediaGrid_PointerExited");
+			Debug.WriteLine("HoldingTimerOnTick");
+			_holdingTimer.Stop();
+			if (!_isFingerDown)
+				return;
+
+			Debug.WriteLine("HoldingTimerOnTick :: _isFingerDown");
+
+			//var diff = _scrollYIndex - ScrollViewer.VerticalOffset;
+			//if (diff < -10 || diff > 10)
+			//	return;
+
+			// Start Media
+			_isMediaOpen = true;
+			MediaGrid.Visibility = Visibility.Visible;
+			if (BottomAppBar != null) BottomAppBar.Visibility = Visibility.Collapsed;
+
+			var media = await _relevantSnap.GetSnapBlobAsync();
+
+			if (_relevantSnap.MediaType == MediaType.Image ||
+				_relevantSnap.MediaType == MediaType.FriendRequestImage)
+			{
+				MediaImage.Source = media.ToBitmapImage();
+			}
 		}
-
-		//private void ButtonSnap_OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
-		//{
-		//	//var button = sender as Button;
-		//	//if (button == null) return;
-		//	//var snap = button.DataContext as Snap;
-		//	//if (snap == null) return;
-		//	//_relevantSnap = snap;
-
-		//	//_isFingerDown = true;
-		//	//_scrollYIndex = ScrollViewer.VerticalOffset;
-		//	//_holdingTimer.Start();
-		//}
-
-		//private async void HoldingTimerOnTick(object sender, object o)
-		//{
-		//	//_holdingTimer.Stop();
-		//	//if (!_isFingerDown)
-		//	//	return;
-
-		//	//var diff = _scrollYIndex - ScrollViewer.VerticalOffset;
-		//	//if (diff < -10 || diff > 10)
-		//	//	return;
-
-		//	//// Start Media
-		//	//_isMediaOpen = true;
-		//	//MediaGrid.Visibility = Visibility.Visible;
-		//	//if (BottomAppBar != null) BottomAppBar.Visibility = Visibility.Collapsed;
-
-		//	//var media = await _relevantSnap.GetSnapBlobAsync();
-
-		//	//if (_relevantSnap.MediaType == MediaType.Image ||
-		//	//	_relevantSnap.MediaType == MediaType.FriendRequestImage)
-		//	//{
-		//	//	MediaImage.Source = media.ToBitmapImage();
-		//	//}
-		//}
-
-		//private void ButtonSnap_OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-		//{
-		//	_isFingerDown = false;
-		//	if (!_isMediaOpen)
-		//	{
-		//		_isMediaOpen = false;
-		//		return;
-		//	}
-
-		//	DisposeMediaTidily();
-		//}
-		
-		//private void ButtonSnap_OnHolding(object sender, HoldingRoutedEventArgs e)
-		//{
-		//	throw new NotImplementedException();
-		//}
 	}
 }

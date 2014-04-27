@@ -8,7 +8,7 @@
 	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	xmlns:media="using:Microsoft.Xaml.Interactions.Media"
 	mc:Ignorable="d"
-	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" ManipulationCompleted="Page_ManipulationCompleted" PointerExited="Page_PointerExited">
+	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 	<Page.Resources>
 		<Storyboard x:Name="BackgroundAmbienceStoryboard" RepeatBehavior="Forever">
 			<!-- Show all background after 4 seconds. Makes page loading faster -->
@@ -167,10 +167,13 @@
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<Button x:Name="ButtonSnap" Style="{StaticResource BasicEmptyButtonStyle}"
-								IsEnabled="{Binding Converter={StaticResource IValueConverterSnapStatusToButtonStatus}}"
+								ManipulationCompleted="ButtonSnap_OnManipulationCompleted"
+								ManipulationStarted="ButtonSnap_OnManipulationStarted">
+
+							<!--IsEnabled="{Binding Converter={StaticResource IValueConverterSnapStatusToButtonStatus}}"
 								Command="{Binding ElementName=ItemsControl, Path=DataContext.TryDownloadMediaCommand}" 
-								CommandParameter="{Binding}" Holding="ButtonSnap_Holding">
-							
+								CommandParameter="{Binding}"-->
+
 							<Grid HorizontalAlignment="Stretch" Height="75">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="70" />
@@ -224,7 +227,7 @@
 		</Grid>
 
 		<Grid Grid.Row="0" x:Name="MediaGrid" Background="#FF000000"  IsHitTestVisible="True">
-			<Image x:Name="MediaImage" PointerExited="MediaGrid_PointerExited" />
+			<Image x:Name="MediaImage" />
 			
 			<Grid Width="45" Height="45" Background="#99000000"
 				  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25">
