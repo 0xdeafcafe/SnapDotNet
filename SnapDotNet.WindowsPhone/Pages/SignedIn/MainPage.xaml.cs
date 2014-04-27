@@ -2,17 +2,16 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
-using Windows.Media.Devices;
 using Windows.Media.MediaProperties;
 using Windows.Phone.UI.Input;
 using Windows.Storage.Streams;
 using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.Capture;
-using Microsoft.VisualBasic.CompilerServices;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.ViewModels.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
@@ -183,9 +182,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		private async Task InitialiseCameraDevice() //must manually.stopPreviewAsync Before re-initialising. -> now auto
 		{
-			if (_isCameraPrepped == true)
+			if (_isCameraPrepped)
 			{
-				if (_areWeInitialising != true)
+				if (!_areWeInitialising)
 				{
 					Debug.WriteLine("Initialising Camera");
 					_areWeInitialising = true;
@@ -205,13 +204,24 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 					_mediaCapture = new MediaCapture();
 
-					Debug.WriteLine(">Using VDevice " + _currentSelectedCameraDevice + ", ID: " + _mediaCaptureSettings.VideoDeviceId);
+					Debug.WriteLine(">Using VDevice {0}, ID: {1}", _currentSelectedCameraDevice, _mediaCaptureSettings.VideoDeviceId);
 
 					Debug.WriteLine(">Initialize Async?");
 					await _mediaCapture.InitializeAsync(_mediaCaptureSettings);
 					Debug.WriteLine(">Initialize Async: OK, yay!");
 
-					_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
+					// check if we front facin m8
+					if (ButtonFrontFacing.IsChecked ?? false)
+					{
+						_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
+						CapturePreview.RenderTransform = new CompositeTransform { ScaleX = -1 };
+					}
+					else
+					{
+						_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise90Degrees);
+						CapturePreview.RenderTransform = new CompositeTransform {ScaleX = 1};
+					}
+
 					ButtonCamera.IsEnabled = true;
 					ButtonRecord.IsEnabled = true; //not implemented
 
@@ -220,14 +230,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					Debug.WriteLine("Initialising Camera: OK");
 				}
 				else
-				{
 					Debug.WriteLine("Initialising Camera: FAIL; Already Initialising");
-				}
 			}
 			else
-			{
 				Debug.WriteLine("Initialising Camera: FAIL; Camera not Prepped yet");
-			}
 		}
 
 		private void SetUiCameraXamlElements()
@@ -267,6 +273,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			if (e.HoldingState == HoldingState.Started)
 			{
 				ButtonCamera.IsEnabled = false;
+				VideoTimerBlock.Visibility = Visibility.Visible;
 				_videoRecordStopwatch.Reset();
 				_videoRecordStopwatch.Start();
 				_videoRecordTimer.Start();
@@ -284,6 +291,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				await _mediaCapture.StopRecordAsync();
 				Debug.WriteLine("Stopping Video: OK, stream size " + stream.Size);
 				ButtonCamera.IsEnabled = true;
+				VideoTimerBlock.Visibility = Visibility.Collapsed;
 
 				var v = new { Stream = stream, IsPhoto = false };
 				App.CurrentFrame.Navigate(typeof(PreviewPage), v);

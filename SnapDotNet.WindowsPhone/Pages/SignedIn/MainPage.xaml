@@ -16,19 +16,19 @@
 		</Grid.RowDefinitions>
 
 		<!--Image Grid.Row="0" Grid.RowSpan="3" Source="http://i.imgur.com/WLYZhR4.jpg" Stretch="UniformToFill"/-->
-		<CaptureElement x:Name="CapturePreview" 
-						Grid.Row="0" Grid.RowSpan="4" Stretch="UniformToFill" />
+		<CaptureElement x:Name="CapturePreview" Grid.Row="0" Grid.RowSpan="4" 
+						Stretch="UniformToFill" RenderTransformOrigin="0.5,0.5" />
 
 		<TextBlock Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left"
 				   Text="0s" Opacity="0.4" Margin="10,0,0,10" FontSize="100"
-				   x:Name="VideoTimerBlock"/>
-		
-		<Grid Grid.Row="0" Background="#66000000">
+				   x:Name="VideoTimerBlock" Visibility="Collapsed"/>
+
+		<Grid Grid.Row="0">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="25" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			
+
 			<StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
 				<Button Style="{StaticResource WpSmallRoundButtonStyle}" Command="{Binding ViewSnapsCommand}">
 					<Image Source="ms-appx:///Assets/Icons/appbar.box.layered.png" Margin="5" />
@@ -54,11 +54,9 @@
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,10">
 				<Button Style="{StaticResource WpLargeRoundButtonStyle}" IsEnabled="False"
 						x:Name="ButtonRecord"
-						Holding="ButtonRecord_OnHolding"
-						>
-					<Ellipse Fill="Red" StrokeThickness="0" Width="25" Height="25">
-						
-					</Ellipse>
+						Holding="ButtonRecord_OnHolding">
+					<Border Background="Red" BorderThickness="0" CornerRadius="15" 
+							Width="25" Height="25" />
 				</Button>
 				<Button Style="{StaticResource WpLargeRoundButtonStyle}" IsEnabled="False"
 						x:Name="ButtonCamera"
