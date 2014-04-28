@@ -78,17 +78,17 @@
 									<VisualStateGroup.Transitions>
 										<VisualTransition From="Pressed" To="PointerOver">
 											<Storyboard>
-												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+												<!--<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>-->
 											</Storyboard>
 										</VisualTransition>
 										<VisualTransition From="PointerOver" To="Normal">
 											<Storyboard>
-												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+												<!--<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>-->
 											</Storyboard>
 										</VisualTransition>
 										<VisualTransition From="Pressed" To="Normal">
 											<Storyboard>
-												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+												<!--<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>-->
 											</Storyboard>
 										</VisualTransition>
 									</VisualStateGroup.Transitions>
@@ -145,7 +145,7 @@
 				   Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left"/>
 		</Grid>
 
-		<Grid Grid.Row="0" Background="#88686868">
+		<Grid Background="#88686868">
 			<Grid.ChildrenTransitions>
 				<TransitionCollection>
 					<EntranceThemeTransition/>
@@ -161,73 +161,69 @@
 				<TextBlock Text="{Binding Path=Manager.Account.Username, FallbackValue='loading...'}" Margin="0,12,0,0" Style="{ThemeResource HeaderTextBlockStyle}"/>
 				<TextBlock x:Uid="Snaps" Text="SNAPS" Style="{ThemeResource TitleTextBlockStyle}" Typography.Capitals="SmallCaps"/>
 			</StackPanel>
-			
-			<ListView Grid.Row="1" HorizontalContentAlignment="Stretch" 
-						ItemsSource="{Binding Path=Manager.Account.Snaps}">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<Button x:Name="ButtonSnap" Style="{StaticResource BasicEmptyButtonStyle}"
-								ManipulationCompleted="ButtonSnap_OnManipulationCompleted"
-								ManipulationStarted="ButtonSnap_OnManipulationStarted">
 
-							<!--IsEnabled="{Binding Converter={StaticResource IValueConverterSnapStatusToButtonStatus}}"
-								Command="{Binding ElementName=ItemsControl, Path=DataContext.TryDownloadMediaCommand}" 
-								CommandParameter="{Binding}"-->
+			<ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Disabled" 
+						  Padding="0,0,0,20" Grid.Row="1" HorizontalContentAlignment="Stretch" ManipulationMode="All">
+				<ListView HorizontalContentAlignment="Stretch" 
+						  ItemsSource="{Binding Path=Manager.Account.Snaps}">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<Button x:Name="ButtonSnap" Style="{StaticResource BasicEmptyButtonStyle}"
+									ManipulationStarting="ButtonSnap_OnManipulationStarting"
+									ManipulationCompleted="ButtonSnap_OnManipulationCompleted"
+									ManipulationInertiaStarting="ButtonSnap_OnManipulationInertiaStarting"
+									ManipulationMode="All"
+									Command="{Binding ElementName=ItemsControl, Path=DataContext.TryDownloadMediaCommand}" 
+									CommandParameter="{Binding}">
+							
+								<Grid HorizontalAlignment="Stretch" Height="75">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="70" />
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="60" />
+										<ColumnDefinition Width="10" />
+									</Grid.ColumnDefinitions>
 
-							<Grid HorizontalAlignment="Stretch" Height="75">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="70" />
-									<ColumnDefinition Width="*" />
-									<ColumnDefinition Width="60" />
-									<ColumnDefinition Width="10" />
-								</Grid.ColumnDefinitions>
+									<ContentControl Grid.Row="0" VerticalAlignment="Center"
+													Template="{Binding Converter={StaticResource IValueConverterSnapToSnapStatusIcon}}" />
 
-								<ContentControl Grid.Row="0" VerticalAlignment="Center"
-												Template="{Binding Converter={StaticResource IValueConverterSnapToSnapStatusIcon}}" />
+									<StackPanel Grid.Column="1" VerticalAlignment="Center">
+										<StackPanel Orientation="Vertical">
+											<TextBlock Foreground="White"
+													   Text="{Binding Converter={StaticResource IValueConverterSnapToDisplayName}, FallbackValue='loading...'}"
+													   FontSize="18" />
 
-								<StackPanel Grid.Column="1" VerticalAlignment="Center">
-									<StackPanel Orientation="Vertical">
-										<TextBlock Foreground="White"
-												   Text="{Binding Converter={StaticResource IValueConverterSnapToDisplayName}, FallbackValue='loading...'}"
-												   FontSize="18" />
-
-										<TextBlock Foreground="{StaticResource SecondaryFontColourBrush}" FontSize="14" TextTrimming="WordEllipsis">
-											<Run Text="{Binding Path=Timestamp, FallbackValue=18/08/94 - 14:34, Converter={StaticResource IValueConverterSnapChatTimestampToFriendly}}" />
-											<Run Text=" - " />
-											<Run Text="{Binding Path=Id, Converter={StaticResource IValueConverterSnapToFriendlySnapStatus}}" />
-										</TextBlock>
+											<TextBlock Foreground="{StaticResource SecondaryFontColourBrush}" FontSize="14" TextTrimming="WordEllipsis">
+												<Run Text="{Binding Path=Timestamp, FallbackValue=18/08/94 - 14:34, Converter={StaticResource IValueConverterSnapChatTimestampToFriendly}}" />
+												<Run Text=" - " />
+												<Run Text="{Binding Path=Id, Converter={StaticResource IValueConverterSnapToFriendlySnapStatus}}" />
+											</TextBlock>
+										</StackPanel>
 									</StackPanel>
-								</StackPanel>
 
-								<ProgressBar Grid.Column="1" Margin="0,0,0,10"
-											 Visibility="{Binding Path=IsDownloading, Converter={StaticResource IValueBooleanToVisibility}}"
-											 HorizontalAlignment="Stretch" VerticalAlignment="Bottom" 
-											 IsIndeterminate="True"  />
+									<ProgressBar Grid.Column="1" Margin="0,0,0,10"
+												 Visibility="{Binding Path=IsDownloading, Converter={StaticResource IValueBooleanToVisibility}}"
+												 HorizontalAlignment="Stretch" VerticalAlignment="Bottom" 
+												 IsIndeterminate="True"  />
 
-								<Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">
-									<TextBlock Text="{Binding Path=RemainingSeconds}" Foreground="White" />
+									<Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">
+										<TextBlock Text="{Binding Path=RemainingSeconds}" Foreground="White" />
+									</Grid>
 								</Grid>
-							</Grid>
-						</Button>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-				<ListView.ItemsPanel>
-					<ItemsPanelTemplate>
-						<VirtualizingStackPanel HorizontalAlignment="Stretch"></VirtualizingStackPanel>
-					</ItemsPanelTemplate>
-				</ListView.ItemsPanel>
-				<ListView.Template>
-					<ControlTemplate>
-						<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,0,20">
-							<ItemsPresenter />
-						</ScrollViewer>
-					</ControlTemplate>
-				</ListView.Template>
-			</ListView>
+							</Button>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+					<ListView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel HorizontalAlignment="Stretch"></VirtualizingStackPanel>
+						</ItemsPanelTemplate>
+					</ListView.ItemsPanel>
+				</ListView>
+			</ScrollViewer>
 		</Grid>
 
-		<Grid Grid.Row="0" x:Name="MediaGrid" Background="#FF000000"  IsHitTestVisible="True">
-			<Image x:Name="MediaImage" />
+		<Grid x:Name="MediaGrid" Background="#FF000000" IsHitTestVisible="False">
+			<Image x:Name="MediaImage" IsHitTestVisible="False"/>
 			
 			<Grid Width="45" Height="45" Background="#99000000"
 				  VerticalAlignment="Top" HorizontalAlignment="Right" Margin="25">
