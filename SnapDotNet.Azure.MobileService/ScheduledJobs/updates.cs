@@ -4,6 +4,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -43,12 +44,19 @@ namespace SnapDotNet.Azure.MobileService.ScheduledJobs
 					foreach (var user in usersToUpdate)
 					{
 						var safeUser = user;
-						var updates = await endpoints.GetUpdatesAsync(user.SnapchatUsername, user.SnapchatAuthToken);
-						if (updates == null)
+						var updateRaw = await endpoints.GetUpdatesAsync(user.SnapchatUsername, user.SnapchatAuthToken);
+						if (updateRaw.Item1.StatusCode == HttpStatusCode.Forbidden)
 						{
 							user.AuthExpired = true;
+						}
+						else if (updateRaw.Item1.StatusCode != HttpStatusCode.OK || updateRaw.Item2 == null)
+						{
+							// skip to end, something fucked
 							goto alldone;
 						}
+
+						// Get account data
+						var updates = updateRaw.Item2;
 
 						foreach (var newSnap in updates.Snaps)
 						{

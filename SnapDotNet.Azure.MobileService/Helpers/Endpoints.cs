@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading.Tasks;
 using SnapDotNet.Azure.MobileService.Models;
 
@@ -19,7 +21,7 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<Account> GetUpdatesAsync(string username, string authToken)
+		public async Task<Tuple<HttpResponseMessage, Account>> GetUpdatesAsync(string username, string authToken)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
@@ -28,12 +30,10 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
 			};
 
-			var account =
+			return
 				await
 					_webConnect.PostAsync(UpdatesEndpointUrl, postData, authToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
-
-			return account;
 		}
 	}
 }

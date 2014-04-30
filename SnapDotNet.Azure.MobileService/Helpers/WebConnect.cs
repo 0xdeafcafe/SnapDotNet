@@ -23,7 +23,7 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		public async Task<Account> PostAsync(string endpoint, Dictionary<string, string> postData,
+		public async Task<Tuple<HttpResponseMessage, Account>> PostAsync(string endpoint, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
 			var webClient = new HttpClient();
@@ -57,10 +57,10 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 					if (deseralizedData == null || !deseralizedData.Logged)
 						return null;
 
-					return deseralizedData;
+					return new Tuple<HttpResponseMessage, Account>(response, deseralizedData);
 
 				default:
-					return null;
+					return new Tuple<HttpResponseMessage, Account>(response, null);
 			}
 		}
 
