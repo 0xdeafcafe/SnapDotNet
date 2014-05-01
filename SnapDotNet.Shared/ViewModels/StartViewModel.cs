@@ -33,6 +33,7 @@ namespace SnapDotNet.Apps.ViewModels
 				{
 					IsSignInPageVisible = true;
 					IsStartPageVisible = false;
+					IsCaptchaPageVisible = false;
 				},
 				() => IsStartPageVisible);
 
@@ -41,6 +42,7 @@ namespace SnapDotNet.Apps.ViewModels
 				{
 					IsRegisterPageVisible = true;
 					IsStartPageVisible = false;
+					IsCaptchaPageVisible = false;
 				},
 				() => IsStartPageVisible);
 
@@ -320,7 +322,9 @@ namespace SnapDotNet.Apps.ViewModels
 
 				// Try and log into SnapChat
 				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
-				try
+
+				// This is unnecessary here and slows down the sign in process significantly. xoxo, Matt
+				/*try
 				{
 					await App.SnapChatManager.UpdateAllAsync(() => { }, App.Settings);
 				}
@@ -331,7 +335,7 @@ namespace SnapDotNet.Apps.ViewModels
 						var dialog = new MessageDialog(App.Loader.GetString("UnauthorizedBody"), App.Loader.GetString("UnauthorizedHeader"));
 						dialog.ShowAsync();
 					}
-				}
+				}*/
 
 #if WINDOWS_PHONE_APP
 				// Register device for Push Notifications

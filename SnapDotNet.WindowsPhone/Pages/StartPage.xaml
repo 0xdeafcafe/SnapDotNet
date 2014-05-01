@@ -189,16 +189,16 @@
                 ext:ImageExtensions.FadeInOnLoaded="True"/>
 			<Image x:Name="BackgroundImage2"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-2.jpg" HorizontalAlignment="Left" Margin="0,0,0,0" Opacity="0"/>
 			<Image x:Name="BackgroundImage3"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-3.jpg" HorizontalAlignment="Left" Margin="0,0,0,0" Opacity="0"/>
 			<Image x:Name="BackgroundImage4"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-4.jpg" HorizontalAlignment="Left" Margin="0,0,0,0" Opacity="0"/>
 			<Image x:Name="BackgroundImage5"
 				Stretch="UniformToFill" 
-				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+				Source="ms-appx:///Assets/Panoramas/pano-5.jpg" HorizontalAlignment="Left" Margin="0,0,0,0" Opacity="0"/>
 		</Grid>
 
 		<Grid x:Name="MainPageContent" Grid.Row="0">
