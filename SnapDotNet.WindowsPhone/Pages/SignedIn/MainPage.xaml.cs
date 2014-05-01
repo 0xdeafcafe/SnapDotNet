@@ -15,6 +15,7 @@ using Windows.Media.Capture;
 using SnapDotNet.Apps.Attributes;
 using SnapDotNet.Apps.ViewModels.SignedIn;
 using SnapDotNet.Core.Miscellaneous.Helpers;
+using System.Threading;
 
 namespace SnapDotNet.Apps.Pages.SignedIn
 {
@@ -190,7 +191,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					_areWeInitialising = true;
 
 					ButtonCamera.IsEnabled = false;
-					ButtonRecord.IsEnabled = false;
+					//ButtonRecord.IsEnabled = false;
 
 					Debug.WriteLine(">Unbind the UI (may already be so)");
 					CapturePreview.Source = null;
@@ -225,7 +226,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					}
 
 					ButtonCamera.IsEnabled = true;
-					ButtonRecord.IsEnabled = true; //not implemented
+					//ButtonRecord.IsEnabled = true; //not implemented
 
 					_isCameraInitialised = true;
 					_areWeInitialising = false;
@@ -265,16 +266,20 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			CapturePhoto();
 		}
+
 		void HardwareButtons_CameraPressed(object sender, CameraEventArgs e)
 		{
 			CapturePhoto();
 		}
+
 		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e) // TODO: broken, final video stream is of size 0....
 		{
 			var stream = new InMemoryRandomAccessStream();
 			if (e.HoldingState == HoldingState.Started)
 			{
-				ButtonCamera.IsEnabled = false;
+				RecordingIcon.Visibility = Visibility.Visible;
+				CameraIcon.Visibility = Visibility.Collapsed;
+				//ButtonCamera.IsEnabled = false;
 				VideoTimerBlock.Visibility = Visibility.Visible;
 				_videoRecordStopwatch.Reset();
 				_videoRecordStopwatch.Start();
@@ -287,12 +292,14 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}
 			else
 			{
+				RecordingIcon.Visibility = Visibility.Collapsed;
+				CameraIcon.Visibility = Visibility.Visible;
 				_videoRecordTimer.Stop();
 				_videoRecordStopwatch.Stop();
 				Debug.WriteLine("Stopping Video");
 				await _mediaCapture.StopRecordAsync();
 				Debug.WriteLine("Stopping Video: OK, stream size " + stream.Size);
-				ButtonCamera.IsEnabled = true;
+				//ButtonCamera.IsEnabled = true;
 				VideoTimerBlock.Visibility = Visibility.Collapsed;
 
 				var v = new { Stream = stream, IsPhoto = false };

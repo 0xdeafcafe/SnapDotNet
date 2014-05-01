@@ -104,7 +104,7 @@ namespace SnapDotNet.Apps
 				rootFrame = new Frame
 				{
 					// TODO: change this value to a cache size
-					CacheSize = 1
+					CacheSize = 2
 				};
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -149,9 +149,10 @@ namespace SnapDotNet.Apps
 			InitNotificationsAsync();
 
 			// Get Snapchat Updates
-			UpdateSnapchatData();
+			//UpdateSnapchatData();
 
 			// Update Live Tile
+			Settings.UnreadSnapCount = 0;
 			UpdateLiveTile();
 			
 #if WINDOWS_PHONE_APP
