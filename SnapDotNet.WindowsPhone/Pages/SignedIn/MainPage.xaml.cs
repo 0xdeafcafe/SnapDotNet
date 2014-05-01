@@ -99,7 +99,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				try
 				{
 					CapturePreview.Source = null;
-					await _mediaCapture.StartPreviewAsync();
+					await _mediaCapture.StopPreviewAsync();
 					Debug.WriteLine("TryStopPreviewAsyc: OK?");
 				}
 				catch (Exception ex)
