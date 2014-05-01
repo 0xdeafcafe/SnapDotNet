@@ -255,12 +255,12 @@
 
 			<StackPanel Grid.Column="1" Grid.Row="3">
 				<TextBlock x:Uid="SignInUsernameTitle" FontSize="20">username or email</TextBlock>
-				<TextBox x:Name="SignInUsernameTextBlock" Text="{Binding CurrentUsername, Mode=TwoWay}" InputScope="EmailSmtpAddress" />
+				<TextBox x:Name="SignInUsernameTextBlock" Text="{Binding CurrentUsername, Mode=TwoWay}" InputScope="EmailSmtpAddress" KeyDown="SignInUsernameTextBlock_KeyDown"/>
 			</StackPanel>
 
 			<StackPanel Grid.Column="1" Grid.Row="5">
 				<TextBlock x:Uid="SignInPassword" FontSize="20">password</TextBlock>
-				<PasswordBox x:Name="SignInPasswordTextBlock" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
+				<PasswordBox x:Name="SignInPasswordTextBlock" Password="{Binding CurrentPassword, Mode=TwoWay}" KeyDown="SignInPasswordTextBlock_KeyDown"/>
 				</StackPanel>
 
 				<Button x:Uid="SignInButton" x:Name="SignInButton" Grid.Column="1" Grid.Row="7" Content="sign in" Background="#FFFFA500" 
@@ -296,17 +296,17 @@
 
 			<StackPanel Grid.Column="1" Grid.Row="3">
 				<TextBlock x:Uid="RegistrationEmailTitle" FontSize="20">email</TextBlock>
-				<TextBox x:Name="RegistrationEmailTextBlock" Text="{Binding CurrentEmail, Mode=TwoWay}" InputScope="EmailSmtpAddress" />
+				<TextBox x:Name="RegistrationEmailTextBlock" Text="{Binding CurrentEmail, Mode=TwoWay}" InputScope="EmailSmtpAddress" KeyDown="RegistrationEmailTextBlock_KeyDown" />
 			</StackPanel>
 
 			<StackPanel Grid.Column="1" Grid.Row="5">
 				<TextBlock x:Uid="RegistrationPassword" FontSize="20">password</TextBlock>
-				<PasswordBox x:Name="RegistrationPasswordTextBlock" Password="{Binding DesiredPassword, Mode=TwoWay}"/>
+				<PasswordBox x:Name="RegistrationPasswordTextBlock" Password="{Binding DesiredPassword, Mode=TwoWay}" KeyDown="RegistrationPasswordTextBlock_KeyDown"/>
 			</StackPanel>
 
 			<StackPanel Grid.Column="1" Grid.Row="7">
 				<TextBlock x:Uid="RegistrationBirthday" FontSize="20">birthday</TextBlock>
-				<DatePicker
+				<DatePicker x:Name="RegistrationBirthdayPicker"
                             Header=" "
                             Date="{Binding CurrentBirthday, Mode=TwoWay}" Margin="0,-20,0,0">
 					<DatePicker.HeaderTemplate>

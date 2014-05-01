@@ -379,7 +379,8 @@ namespace SnapDotNet.Apps.ViewModels
 				!App.SnapChatManager.IsAuthenticated())
 			{
 #if WINDOWS_PHONE_APP
-				App.CurrentFrame.Navigate(typeof(StartPage), "removeBackStack");
+				CurrentPassword = "";
+				//App.CurrentFrame.Navigate(typeof(StartPage), "removeBackStack");
 #endif
 
 				return;

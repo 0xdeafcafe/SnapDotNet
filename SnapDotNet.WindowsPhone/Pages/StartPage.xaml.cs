@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 using SnapDotNet.Apps.ViewModels;
+using Windows.UI.Xaml.Input;
 
 namespace SnapDotNet.Apps.Pages
 {
@@ -87,6 +88,30 @@ namespace SnapDotNet.Apps.Pages
 			if (storyboard == null) return;
 			storyboard.Begin();
 			ViewModel.OpenCaptchaPageCommand.Execute(null);
+		}
+
+		private void SignInUsernameTextBlock_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				SignInPasswordTextBlock.Focus(FocusState.Keyboard);
+		}
+
+		private void SignInPasswordTextBlock_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				ViewModel.SignInCommand.Execute(null);
+		}
+
+		private void RegistrationEmailTextBlock_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				RegistrationPasswordTextBlock.Focus(FocusState.Keyboard);
+		}
+
+		private void RegistrationPasswordTextBlock_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				RegistrationBirthdayPicker.Focus(FocusState.Keyboard);
 		}
 	}
 }
