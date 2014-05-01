@@ -211,14 +211,16 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					Debug.WriteLine(">Initialize Async: OK, yay!");
 
 					// check if we front facin m8
+					// upside down m8
 					if (ButtonFrontFacing.IsChecked ?? false)
 					{
-						_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
-						CapturePreview.RenderTransform = new CompositeTransform { ScaleX = -1 };
+						_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise90Degrees);
+						//CapturePreview.RenderTransform = new CompositeTransform { ScaleX = -1 }; //todo: reversing the rear cam? Is this intentional?
+						CapturePreview.RenderTransform = new CompositeTransform { ScaleX = 1 };
 					}
 					else
 					{
-						_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise90Degrees);
+						_mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
 						CapturePreview.RenderTransform = new CompositeTransform {ScaleX = 1};
 					}
 
