@@ -46,6 +46,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 			DataContext = ViewModel = new MainViewModel();
+
+			this.Loaded += delegate { App.UpdateSnapchatData(); };
 		}
 
 		protected async override void OnNavigatedTo(NavigationEventArgs e)

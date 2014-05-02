@@ -72,6 +72,8 @@ namespace SnapDotNet.Apps
 			InitializeComponent();
 			Suspending += OnSuspending;
 			Resuming += OnResuming;
+
+			
 		}
 
 		/// <summary>
@@ -148,11 +150,7 @@ namespace SnapDotNet.Apps
 			// Register for Push Notifications
 			InitNotificationsAsync();
 
-			// Get Snapchat Updates
-			//UpdateSnapchatData();
-
 			// Update Live Tile
-			Settings.UnreadSnapCount = 0;
 			UpdateLiveTile();
 			
 #if WINDOWS_PHONE_APP
@@ -331,7 +329,7 @@ namespace SnapDotNet.Apps
 					SnapChatManager.Account.Snaps.OrderByDescending(s => s.Timestamp)
 						.FirstOrDefault(s => s.SenderName != null && s.Status == SnapStatus.Delivered);
 
-				UpdateLiveTile(String.Format("New Snap from {0}", mostRecent.SenderName));
+				UpdateLiveTile(String.Format("New message from {0}", mostRecent.SenderName));
 			}
 			catch (InvalidCredentialsException exception)
 			{
