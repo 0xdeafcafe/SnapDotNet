@@ -19,6 +19,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 	{
 		private readonly SnapChatManager _snapchatManager;
 		private readonly WebConnect _webConnect;
+		private readonly WebConnect _logWebConnect;
 		
 		private const string BestsEndpointUrl =				"bests";
 		private const string SnapBlobEndpointUrl =			"blob";
@@ -45,7 +46,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public Endpoints(SnapChatManager snapchatManager)
 		{
 			_snapchatManager = snapchatManager;
-			_webConnect = new WebConnect();
+			_webConnect = new WebConnect(Settings.ApiBasePoint);
+			_logWebConnect = new WebConnect(Settings.ApiLogBasePoint);
 		}
 
 		#region Registration

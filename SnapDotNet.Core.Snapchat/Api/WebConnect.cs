@@ -13,6 +13,17 @@ namespace SnapDotNet.Core.Snapchat.Api
 {
 	public class WebConnect
 	{
+		public WebConnect(string endpointBase)
+		{
+			EndpointBase = endpointBase;
+		}
+
+		#region Properties
+
+		private static string EndpointBase { get; set; }
+
+		#endregion
+
 		#region Post
 
 		/// <summary>
@@ -142,7 +153,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			var postBody = PostBodyParser(postData);
 			var response =
 				await
-					webClient.PostAsync(new Uri(Settings.ApiBasePoint + endpoint),
+					webClient.PostAsync(new Uri(EndpointBase + endpoint),
 						new StringContent(postBody, Encoding.UTF8, "application/x-www-form-urlencoded"));
 
 			switch (response.StatusCode)
@@ -168,7 +179,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns>Http Response Message</returns>
 		public async Task<byte[]> GetBytesAsync(string endpoint, Dictionary<string, string> headers = null)
 		{
-			return await GetBytesAsync(new Uri(Settings.ApiBasePoint + endpoint), headers);
+			return await GetBytesAsync(new Uri(EndpointBase + endpoint), headers);
 		}
 
 		/// <summary>
