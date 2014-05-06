@@ -49,5 +49,10 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			Debug.WriteLine("Image Decoding Failed");
 		}
+
+		private void AppBarButton_Click(object sender, RoutedEventArgs e)
+		{
+			App.CurrentFrame.Navigate(typeof(MainPage));
+		}
 	}
 }

@@ -236,7 +236,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 					mediaCapture = new MediaCapture();
 					await mediaCapture.InitializeAsync(_mediaCaptureSettings);
 					isFlashSupported = mediaCapture.VideoDeviceController.FlashControl.Supported;
-					mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
+					mediaCapture.SetPreviewRotation(VideoRotation.Clockwise90Degrees);
 					EnableFlash();
 				}
 			_areWeInitialising = false;
@@ -253,6 +253,15 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			await TryStopPreviewAsync();
 			await Initialise();
+
+			if (_currentSelectedCameraDevice == 1)
+			{
+				mediaCapture.SetPreviewRotation(VideoRotation.Clockwise90Degrees);
+			}
+			else
+			{
+				mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
+			}
 			await TryStartPreviewAsync();
 		}
 		public async Task<InMemoryRandomAccessStream> CapturePhoto()
