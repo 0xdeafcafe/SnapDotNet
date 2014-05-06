@@ -204,7 +204,8 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			//generate default settings
 			_currentSelectedAudioDevice = 0;
-			_currentSelectedCameraDevice = 1;
+			_currentSelectedCameraDevice = _cameraInfoCollection.Count > 1 ? 1 : 0;
+			
 			var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
 			//var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
 
