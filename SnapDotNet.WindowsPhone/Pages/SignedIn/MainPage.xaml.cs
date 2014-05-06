@@ -8,6 +8,7 @@ using Windows.Phone.UI.Input;
 using Windows.Storage.Streams;
 using Windows.UI.Input;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -39,7 +40,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_cam = new CameraWrapped();
 		}
 
-		protected async override void OnNavigatedTo(NavigationEventArgs e)
+		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			Debug.WriteLine("**MainPage OnNavigateTo Triggered**");
 			//Check backstack
@@ -49,11 +50,18 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			_videoRecordTimer.Interval = new TimeSpan(0, 0, 0, 1);
 			_videoRecordTimer.Tick += videoRecordTimer_Tick;
-			
+
+			camOnNav();
+		}
+
+		private async Task camOnNav()
+		{
+			await _cam.Initialise();
 			CapturePreview.Source = null;
 			CapturePreview.Source = _cam.mediaCapture;
+			await _cam.TryStartPreviewAsync();
 			ButtonFrontFacing.IsEnabled = _cam.isFrontFacingSupported;
-			_cam.TryStartPreviewAsync();
+			ButtonCamera.IsEnabled = true;
 		}
 		protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e)
 		{
@@ -82,7 +90,6 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		}
 		private async void ButtonRecord_OnHolding(object sender, Windows.UI.Xaml.Input.HoldingRoutedEventArgs e) // TODO: broken, final video stream is of size 0....
 		{
-			var stream = new InMemoryRandomAccessStream();
 			if (e.HoldingState == HoldingState.Started)
 			{
 				RecordingIcon.Visibility = Visibility.Visible;
@@ -141,7 +148,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			if (toggleButton.IsChecked == null) return;
 
 
-			if ((bool)toggleButton.IsChecked)
+			if (!(bool)toggleButton.IsChecked)
 			{
 				_cam.EnableFlash();
 			}
@@ -173,16 +180,12 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 		public bool isFlashSupported;
 		public bool isFrontFacingSupported;
-		public CameraWrapped()
-		{
-			GenerateDefaults();
-		}
 
 		public void EnableFlash()
 		{
 			if (isFlashSupported)
 			{
-				mediaCapture.VideoDeviceController.FlashControl.Enabled = true;
+				mediaCapture.VideoDeviceController.FlashControl.Enabled = true; //auto
 			}
 		}
 
@@ -193,7 +196,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 				mediaCapture.VideoDeviceController.FlashControl.Enabled = false;
 			}
 		}
-		public async Task GenerateDefaults()
+		private async Task GenerateDefaults()
 		{
 			await GetCameraDevices();
 
@@ -201,7 +204,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 
 			//generate default settings
 			_currentSelectedAudioDevice = 0;
-			_currentSelectedCameraDevice = 0;
+			_currentSelectedCameraDevice = 1;
 			var cameraInfo = _cameraInfoCollection[_currentSelectedCameraDevice]; //default to first device
 			//var microphoneInfo = _microphoneInfoCollection[_currentSelectedAudioDevice]; //default to first device
 
@@ -215,29 +218,28 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			_cameraInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
 			_microphoneInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.AudioCapture);
 
-			isFrontFacingSupported = _cameraInfoCollection.Count < 2;
+			isFrontFacingSupported = _cameraInfoCollection.Count > 1;
 		}
-
 		public async Task Initialise()
 		{
-			if (_mediaCaptureSettings != null)
+			if (!_areWeInitialising)
 			{
-				if (!_areWeInitialising)
+				_areWeInitialising = true;
+				if (_mediaCaptureSettings == null) { await GenerateDefaults(); }
+				if (_mediaCaptureSettings != null)
 				{
-					_areWeInitialising = true;
 
 					if (mediaCapture != null)
 					{
 						mediaCapture.Dispose();
 					}
-
 					mediaCapture = new MediaCapture();
 					await mediaCapture.InitializeAsync(_mediaCaptureSettings);
-
 					isFlashSupported = mediaCapture.VideoDeviceController.FlashControl.Supported;
-
-					_areWeInitialising = false;
+					mediaCapture.SetPreviewRotation(VideoRotation.Clockwise270Degrees);
+					EnableFlash();
 				}
+			_areWeInitialising = false;
 			}
 		}
 		public async void ChangeActiveCamera()
@@ -249,7 +251,9 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			}
 			_mediaCaptureSettings.VideoDeviceId = _cameraInfoCollection[_currentSelectedCameraDevice].Id;
 
+			await TryStopPreviewAsync();
 			await Initialise();
+			await TryStartPreviewAsync();
 		}
 		public async Task<InMemoryRandomAccessStream> CapturePhoto()
 		{
@@ -283,7 +287,20 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 		{
 			if (mediaCapture != null)
 			{
-				await mediaCapture.StartPreviewAsync();
+				try
+				{
+					await mediaCapture.StartPreviewAsync();
+
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine(ex.Message + ex.StackTrace);
+				}
+				Debug.WriteLine("Started Preview");
+			}
+			else
+			{
+				Debug.WriteLine("Camera not initialised yet");
 			}
 		}
 		public async Task TryStopPreviewAsync()
@@ -291,6 +308,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			if (mediaCapture != null)
 			{
 				await mediaCapture.StopPreviewAsync();
+				Debug.WriteLine("Stopped Preview");
 			}
 		}
 	}
