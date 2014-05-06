@@ -36,6 +36,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string SettingsEndpointUrl =			"settings";
 		private const string UpdatesFeaturesEndpointUrl =	"update_feature_settings";
 		private const string SendSnapEventsEndpointUrl =	"update_snaps";
+		private const string SendStoryEventsEndpointUrl =	"update_stories";
 		private const string RegisterEndpointUrl =			"register";
 		private const string GetCaptchaEndpointUrl =		"get_captcha";
 		private const string SolveCaptchaEndpointUrl =		"solve_captcha";
@@ -532,7 +533,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="timeViewed"></param>
 		/// <param name="captureTime"></param>
 		/// <returns></returns>
-		public async Task<bool> SendViewedEventAsync(string snapId, int timeViewed, int captureTime)
+		public async Task<bool> SendSnapViewedEventAsync(string snapId, int timeViewed, int captureTime)
 		{
 			var snapInfo = new Dictionary<string, Dictionary<string, double>>
 			{
@@ -561,9 +562,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="timeViewed"></param>
 		/// <param name="captureTime"></param>
 		/// <returns></returns>
-		public bool SendViewedEvent(string snapId, int timeViewed, int captureTime)
+		public bool SendSnapViewedEvent(string snapId, int timeViewed, int captureTime)
 		{
-			return SendViewedEventAsync(snapId, timeViewed, captureTime).Result;
+			return SendSnapViewedEventAsync(snapId, timeViewed, captureTime).Result;
 		}
 
 		/// <summary>
@@ -584,7 +585,63 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 
 			await
-				_webConnect.PostToStringAsync(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
+				_webConnect.PostToStringAsync(SendSnapEventsEndpointUrl, postData, _snapchatManager.AuthToken,
+					timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return true;
+		}
+
+		#endregion
+
+		#region Story Events
+
+		/// <summary>
+		/// </summary>
+		/// <param name="storyId"></param>
+		/// <param name="screenshotCount"></param>
+		/// <returns></returns>
+		public async Task<bool> SendStoryViewedEventAsync(string storyId, int screenshotCount = 0)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestampWithMilliseconds();
+			var storyInfo =
+				new Dictionary<string, string>
+				{
+					{"id", storyId},
+					{"screenshot_count", screenshotCount.ToString()},
+					{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+
+
+				};
+
+			return await SendStoryEventsAsync(storyInfo);
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="storyId"></param>
+		/// <param name="screenshotCount"></param>
+		/// <returns></returns>
+		public bool SendStoryViewedEvent(string storyId, int screenshotCount = 0)
+		{
+			return SendStoryViewedEventAsync(storyId, screenshotCount).Result;
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="storyInfo"></param>
+		/// <returns></returns>
+		private async Task<bool> SendStoryEventsAsync(Dictionary<string, string> storyInfo)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"friend_stories", JsonConvert.SerializeObject(storyInfo)},
+			};
+
+			await
+				_webConnect.PostToStringAsync(SendStoryEventsEndpointUrl, postData, _snapchatManager.AuthToken,
 					timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return true;
