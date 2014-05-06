@@ -57,7 +57,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			_snapchatManager = snapchatManager;
 			_webConnect = new WebConnect(Settings.ApiBasePoint);
-			//_logWebConnect = new WebConnect(Settings.ApiLogBasePoint);
+			_logWebConnect = new WebConnect(Settings.ApiLogBasePoint);
 		}
 
 		#region Registration
