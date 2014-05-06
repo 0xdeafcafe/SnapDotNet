@@ -20,7 +20,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private readonly SnapChatManager _snapchatManager;
 		private readonly WebConnect _webConnect;
 		private readonly WebConnect _logWebConnect;
-		
+
+		#region /bq/ Endpoints (use _webConnect)
+
 		private const string BestsEndpointUrl =				"bests";
 		private const string SnapBlobEndpointUrl =			"blob";
 		private const string ClearFeedEndpointUrl =			"clear";
@@ -33,10 +35,17 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string BestFriendCountEndpointUrl =	"set_num_best_friends";
 		private const string SettingsEndpointUrl =			"settings";
 		private const string UpdatesFeaturesEndpointUrl =	"update_feature_settings";
+		private const string SendSnapEventsEndpointUrl =	"update_snaps";
 		private const string RegisterEndpointUrl =			"register";
 		private const string GetCaptchaEndpointUrl =		"get_captcha";
 		private const string SolveCaptchaEndpointUrl =		"solve_captcha";
 		private const string RegisterUsernameEndpointUrl =	"register_username";
+
+		#endregion
+
+		#region /log/ Endpoionts (use _logWebConnect)
+
+		#endregion
 
 		/// <summary>
 		/// 
@@ -511,6 +520,74 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public Stories GetStories()
 		{
 			return GetStoriesAsync().Result;
+		}
+
+		#endregion
+
+		#region Snap Events
+
+		/// <summary>
+		/// </summary>
+		/// <param name="snapId"></param>
+		/// <param name="timeViewed"></param>
+		/// <param name="captureTime"></param>
+		/// <returns></returns>
+		public async Task<bool> SendViewedEventAsync(string snapId, int timeViewed, int captureTime)
+		{
+			var snapInfo = new Dictionary<string, Dictionary<string, double>>
+			{
+				{
+					snapId,
+					new Dictionary<string, double>
+					{
+						{"t", Timestamps.GenerateRetardedTimestampWithMilliseconds()},
+						{"sv", captureTime + new Random(0xdead).NextDouble()}
+					}
+				}
+			};
+
+			var events = new[]
+			{
+				Events.CreateEvent(Events.EventType.SnapViewed, snapId, timeViewed),
+				Events.CreateEvent(Events.EventType.SnapExpired, snapId, timeViewed + captureTime)
+			};
+
+			return await SendSnapEventsAsync(events, snapInfo);
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="snapId"></param>
+		/// <param name="timeViewed"></param>
+		/// <param name="captureTime"></param>
+		/// <returns></returns>
+		public bool SendViewedEvent(string snapId, int timeViewed, int captureTime)
+		{
+			return SendViewedEventAsync(snapId, timeViewed, captureTime).Result;
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="events"></param>
+		/// <param name="snapInfo"></param>
+		/// <returns></returns>
+		private async Task<bool> SendSnapEventsAsync(Dictionary<string, object>[] events, Dictionary<string, Dictionary<string, double>> snapInfo)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"events", JsonConvert.SerializeObject(events)},
+				{"json", JsonConvert.SerializeObject(snapInfo)}
+			};
+
+
+			await
+				_webConnect.PostToStringAsync(StoriesEndpointUrl, postData, _snapchatManager.AuthToken,
+					timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return true;
 		}
 
 		#endregion
