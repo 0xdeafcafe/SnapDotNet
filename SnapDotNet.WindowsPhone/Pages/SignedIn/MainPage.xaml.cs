@@ -61,6 +61,7 @@ namespace SnapDotNet.Apps.Pages.SignedIn
 			CapturePreview.Source = _cam.mediaCapture;
 			await _cam.TryStartPreviewAsync();
 			ButtonFrontFacing.IsEnabled = _cam.isFrontFacingSupported;
+			FlashButton.IsEnabled = _cam.isFlashSupported;
 			ButtonCamera.IsEnabled = true;
 		}
 		protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e)
