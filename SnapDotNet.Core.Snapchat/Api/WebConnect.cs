@@ -20,7 +20,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Properties
 
-		private static string EndpointBase { get; set; }
+		private string EndpointBase { get; set; }
 
 		#endregion
 
@@ -136,7 +136,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		private static async Task<HttpResponseMessage> PostAsync(string endpoint, Dictionary<string, string> postData,
+		private async Task<HttpResponseMessage> PostAsync(string endpoint, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
 			var webClient = new HttpClient();
