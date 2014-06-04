@@ -56,8 +56,18 @@ namespace Snapchat.ViewModels
 		/// </summary>
 		private async void LogInAsync()
 		{
+#if DEBUG
+			if (string.IsNullOrEmpty(CurrentUsername.Trim()))
+			{
+				// alex is hacky, and wants to use his other auth token
+				App.SnapchatManager.UpdateAuthToken(CurrentPassword);
+				await App.SnapchatManager.Endpoints.GetUpdatesAsync();
+				return;
+			}
+#endif
+
 			// Username or password cannot be null.
-			if (string.IsNullOrWhiteSpace(CurrentUsername) || string.IsNullOrEmpty(CurrentPassword))
+			if (string.IsNullOrEmpty(CurrentUsername.Trim()) || string.IsNullOrEmpty(CurrentPassword.Trim()))
 			{
 				await (new MessageDialog(App.Strings.GetString("InvalidCredentialsExceptionFriendlyMessage"))).ShowAsync();
 				return;
@@ -71,7 +81,7 @@ namespace Snapchat.ViewModels
 			try
 			{
 				// Try to log into Snapchat.
-				var account = await App.SnapchatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
+				await App.SnapchatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
 
 				// Register this device for push notifications.
 				await
@@ -86,7 +96,8 @@ namespace Snapchat.ViewModels
 						});
 
 				// Navigate to the main page.
-				(Window.Current.Content as Frame).Navigate(typeof(MainPage));
+				var frame = Window.Current.Content as Frame;
+				if (frame != null) frame.Navigate(typeof(MainPage));
 			}
 			catch (InvalidCredentialsException)
 			{
