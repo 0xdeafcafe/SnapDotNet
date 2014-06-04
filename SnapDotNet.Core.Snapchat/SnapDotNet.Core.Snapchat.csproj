@@ -52,6 +52,7 @@
     <Compile Include="Converters\Json\StoryPrivacyToEnumConverter.cs" />
     <Compile Include="Converters\Json\UnixDateTimeConverter.cs" />
     <Compile Include="Helpers\Blob.cs" />
+    <Compile Include="Helpers\Events.cs" />
     <Compile Include="Helpers\Timestamps.cs" />
     <Compile Include="Helpers\Tokens.cs" />
     <Compile Include="Models\Account.cs" />

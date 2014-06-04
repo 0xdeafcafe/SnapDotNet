@@ -23,7 +23,7 @@
 			<CommandBar.PrimaryCommands>
 				<AppBarButton x:Uid="PreviewTimer" Label="Timer" Icon="Target" />
 				<AppBarButton x:Uid="PreviewAccept" Label="Accept" Icon="Accept"/>
-				<AppBarButton x:Uid="PreviewReject" Label="Reject" Icon="Cancel"/>
+				<AppBarButton x:Uid="PreviewReject" Label="Reject" Icon="Cancel" Click="AppBarButton_Click"/>
 				<AppBarButton x:Uid="PreviewFilters" Label="Filters" Icon="Filter"/>
 			</CommandBar.PrimaryCommands>
 			<!--<CommandBar.SecondaryCommands>
