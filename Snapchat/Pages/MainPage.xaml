@@ -11,6 +11,58 @@
 			<Setter Property="HorizontalAlignment" Value="Center" />
 			<Setter Property="FontSize" Value="25" />
 		</Style>
+
+		<Style x:Key="EmptyButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="MinHeight" Value="0"/>
+			<Setter Property="MinWidth" Value="0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Grid x:Name="Grid" Background="Transparent">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualStateGroup.Transitions>
+										<VisualTransition From="Pressed" To="PointerOver">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="PointerOver" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="Pressed" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Normal"/>
+									<VisualState x:Name="PointerOver"/>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Grid">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="#FF00A2FF"/>
+											</ObjectAnimationUsingKeyFrames>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+							<ContentPresenter x:Name="ContentPresenter" 
+											  AutomationProperties.AccessibilityView="Raw" 
+											  ContentTemplate="{TemplateBinding ContentTemplate}" 
+											  Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
+											  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+											  Margin="{TemplateBinding Padding}" 
+											  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Page.Resources>
 
 	<ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" 
@@ -43,19 +95,23 @@
 					<Grid VerticalAlignment="Bottom" Height="70" Margin="0,0,0,80">
 
 						<!-- Outer borders for both icons provide a bigger touch sensitive region for better UX -->
-						<Border x:Name="ConversationsIcon" HorizontalAlignment="Left" Background="Transparent" Width="70" Height="70" Tapped="ConversationsIcon_Tapped" PointerPressed="ConversationsIcon_PointerPressed" PointerExited="ConversationsIcon_PointerExited">
+						<Button x:Name="ConversationsButton" HorizontalAlignment="Left" VerticalAlignment="Center"
+								Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
+								Command="{Binding GoToConversationsCommand}">
 							<Border Margin="0,0,0,0" Width="32" Height="32"
 									HorizontalAlignment="Center" VerticalAlignment="Center"
 									BorderBrush="White" BorderThickness="2"
 									Background="Transparent"
-									CornerRadius="0">
+									CornerRadius="4">
 								<TextBlock Text="{Binding Path=Account.PendingSnaps, FallbackValue=''}"
 										   FontSize="17" FontFamily="Segoe WP" 
 										   VerticalAlignment="Center" HorizontalAlignment="Center"/>
 							</Border>
-						</Border>
+						</Button>
 
-						<Border x:Name="StoriesIcon" HorizontalAlignment="Right" Background="Transparent" Width="70" Height="70" Tapped="StoriesIcon_Tapped" PointerPressed="StoriesIcon_PointerPressed" PointerExited="StoriesIcon_PointerExited">
+						<Button x:Name="StoriesButton" HorizontalAlignment="Right" VerticalAlignment="Center"
+								Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
+								Command="{Binding GoToFriendsCommand}">
 							<Path Margin="0,0,0,0" Width="32" Height="32"
 								  HorizontalAlignment="Center" VerticalAlignment="Center"
 								  Fill="White"
@@ -63,7 +119,7 @@
 										M 2,14 L 30,14 30,16 2,16 Z
 										M 2,24 L 30,24 30,26 2,26 Z">
 							</Path>
-						</Border>
+						</Button>
 					</Grid>
 					<Grid VerticalAlignment="Bottom" Height="80">
 						<TextBlock Text="appbar" VerticalAlignment="Center" HorizontalAlignment="Center" />
