@@ -1,15 +1,10 @@
-﻿using System.Diagnostics;
-using Windows.Devices.Enumeration;
-using Windows.Media.Capture;
+﻿using System.Linq;
 using Windows.System.Threading;
 using Windows.UI.Core;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Microsoft.Xaml.Interactivity;
 using Snapchat.Common;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -20,47 +15,51 @@ namespace Snapchat.Pages
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class MainPage : Page
+	public sealed partial class MainPage
 	{
 		#region App Bar Buttons
 
 		private static readonly Uri FlashOnUri = new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.png");
 		private static readonly Uri FlashOffUri = new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.off.png");
 
-		private readonly AppBarButton RefreshAppBarButton = new AppBarButton
+		private readonly AppBarButton _refreshAppBarButton = new AppBarButton
 		{
 			Label = App.Strings.GetString("RefreshAppBarButtonLabel")
 		};
 
-		private readonly AppBarButton SettingsAppBarButton = new AppBarButton
+		private readonly AppBarButton _settingsAppBarButton = new AppBarButton
 		{
 			Label = App.Strings.GetString("SettingsAppBarButtonLabel"),
-			Command = new RelayCommand(() => { (Window.Current.Content as Frame).Navigate(typeof (SettingsPage)); })
+			Command = new RelayCommand(() =>
+			{
+				var frame = Window.Current.Content as Frame;
+				if (frame != null) frame.Navigate(typeof (SettingsPage));
+			})
 		};
 
-		private readonly AppBarButton FlipCameraAppBarButton = new AppBarButton
+		private readonly AppBarButton _flipCameraAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon {UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png")},
 			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel")
 		};
 
-		private readonly AppBarButton ToggleFlashAppBarButton = new AppBarButton
+		private readonly AppBarButton _toggleFlashAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon {UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.png")},
 			Label = App.Strings.GetString("ToggleFlashAppBarButtonLabel"),
 		};
 
-		private readonly AppBarButton DownloadAllSnapsAppBarButton = new AppBarButton
+		private readonly AppBarButton _downloadAllSnapsAppBarButton = new AppBarButton
 		{
 			Label = App.Strings.GetString("DownloadAllSnapsAppBarButtonLabel")
 		};
 
-		private readonly AppBarButton ImportPictureAppBarButton = new AppBarButton
+		private readonly AppBarButton _importPictureAppBarButton = new AppBarButton
 		{
 			Label = App.Strings.GetString("ImportPictureAppBarButtonLabel")
 		};
 
-		private readonly AppBarButton SendMessageAppBarButton = new AppBarButton
+		private readonly AppBarButton _sendMessageAppBarButton = new AppBarButton
 		{
 			Icon = new SymbolIcon {Symbol = Symbol.Send},
 			Label = App.Strings.GetString("SendCommentAppBarButtonLabel")
@@ -81,13 +80,13 @@ namespace Snapchat.Pages
 
 			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
 
-			ToggleFlashAppBarButton.Command = new RelayCommand(() =>
+			_toggleFlashAppBarButton.Command = new RelayCommand(() =>
 			{
 				MediaCaptureManager.IsFlashEnabled = !MediaCaptureManager.IsFlashEnabled;
 				// TODO: Change icon
 			});
 
-			FlipCameraAppBarButton.Command = new RelayCommand(async () =>
+			_flipCameraAppBarButton.Command = new RelayCommand(async () =>
 			{
 				await MediaCaptureManager.ToggleCameraAsync();
 				UpdateBottomAppBar();
@@ -97,7 +96,7 @@ namespace Snapchat.Pages
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			// Must defer ChangeView execution by at least 10ms for it to work. Yeah, I know... wtf?
-			ThreadPoolTimer.CreateTimer(async (source) =>
+			ThreadPoolTimer.CreateTimer(async source =>
 			{
 				await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true));
@@ -116,11 +115,15 @@ namespace Snapchat.Pages
 		private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
 		{
 			// Determine the page that's currently in view.
-			int pageIndex = (int) Math.Round(ScrollViewer.HorizontalOffset/CameraPage.ActualWidth);
-			string currentPage = (PagesContainer.Children[pageIndex] as FrameworkElement).Tag.ToString();
+			var pageIndex = (int) Math.Round(ScrollViewer.HorizontalOffset/CameraPage.ActualWidth);
+			var frameworkElement = PagesContainer.Children[pageIndex] as FrameworkElement;
+			if (frameworkElement != null)
+			{
+				var currentPage = frameworkElement.Tag.ToString();
 
-			// Change visual state to current page.
-			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), currentPage, true);
+				// Change visual state to current page.
+				VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), currentPage, true);
+			}
 			UpdateBottomAppBar();
 		}
 
@@ -129,61 +132,55 @@ namespace Snapchat.Pages
 			if (BottomAppBar == null)
 				BottomAppBar = new CommandBar();
 			var appBar = BottomAppBar as CommandBar;
+			if (appBar == null) return;
 
 			var primaryCommands = new Collection<ICommandBarElement>();
 			var secondaryCommands = new Collection<ICommandBarElement>();
-			AppBarClosedDisplayMode displayMode = appBar.ClosedDisplayMode;
+			var displayMode = appBar.ClosedDisplayMode;
 
-			var currentState = PagesVisualStateGroup.CurrentState.Name;
-			switch (currentState)
+			if (PagesVisualStateGroup.CurrentState != null)
 			{
-				case "Conversations":
-					secondaryCommands.Add(DownloadAllSnapsAppBarButton);
-					displayMode = AppBarClosedDisplayMode.Minimal;
-					break;
+				var currentState = PagesVisualStateGroup.CurrentState.Name;
+				switch (currentState)
+				{
+					case "Conversations":
+						secondaryCommands.Add(_downloadAllSnapsAppBarButton);
+						displayMode = AppBarClosedDisplayMode.Minimal;
+						break;
 
-				case "Camera":
-					if (MediaCaptureManager.HasFrontCamera)
-						primaryCommands.Add(FlipCameraAppBarButton);
+					case "Camera":
+						if (MediaCaptureManager.HasFrontCamera)
+							primaryCommands.Add(_flipCameraAppBarButton);
 					
-					if (MediaCaptureManager.IsFlashSupported)
-						primaryCommands.Add(ToggleFlashAppBarButton);
+						if (MediaCaptureManager.IsFlashSupported)
+							primaryCommands.Add(_toggleFlashAppBarButton);
 
-					secondaryCommands.Add(ImportPictureAppBarButton);
-					displayMode = AppBarClosedDisplayMode.Compact;
-					break;
+						secondaryCommands.Add(_importPictureAppBarButton);
+						displayMode = AppBarClosedDisplayMode.Compact;
+						break;
 
-				case "Stories":
-					displayMode = AppBarClosedDisplayMode.Minimal;
-					break;
+					case "Stories":
+						displayMode = AppBarClosedDisplayMode.Minimal;
+						break;
 
-				case "ManageFriends":
-					displayMode = AppBarClosedDisplayMode.Minimal;
-					break;
+					case "ManageFriends":
+						displayMode = AppBarClosedDisplayMode.Minimal;
+						break;
+				}
 			}
 
 			// Add global commands.
-			secondaryCommands.Add(RefreshAppBarButton);
-			secondaryCommands.Add(SettingsAppBarButton);
+			secondaryCommands.Add(_refreshAppBarButton);
+			secondaryCommands.Add(_settingsAppBarButton);
 
 			// Update the app bar if commands have changed (to avoid animation glitches).
 			bool updatePrimary = (primaryCommands.Count == 0), updateSecondary = (secondaryCommands.Count == 0);
-			for (int i = 0; i < primaryCommands.Count; i++)
-			{
-				if (appBar.PrimaryCommands.Count != primaryCommands.Count || !appBar.PrimaryCommands[i].Equals(primaryCommands[i]))
-				{
-					updatePrimary = true;
-					break;
-				}
-			}
-			for (int i = 0; i < secondaryCommands.Count; i++)
-			{
-				if (appBar.SecondaryCommands.Count != secondaryCommands.Count || !appBar.SecondaryCommands[i].Equals(secondaryCommands[i]))
-				{
-					updateSecondary = true;
-					break;
-				}
-			}
+			if (primaryCommands.Where((t, i) => appBar.PrimaryCommands.Count != primaryCommands.Count || !appBar.PrimaryCommands[i].Equals(t)).Any())
+				updatePrimary = true;
+
+			if (secondaryCommands.Where((t, i) => appBar.SecondaryCommands.Count != secondaryCommands.Count || !appBar.SecondaryCommands[i].Equals(t)).Any())
+				updateSecondary = true;
+
 			if (updatePrimary)
 			{
 				appBar.PrimaryCommands.Clear();

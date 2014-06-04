@@ -31,7 +31,6 @@
 			</Grid>
 		</StackPanel>
 
-
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
 				<VisualState x:Name="Conversations"/>
