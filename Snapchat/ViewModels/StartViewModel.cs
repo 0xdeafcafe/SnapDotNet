@@ -57,17 +57,35 @@ namespace Snapchat.ViewModels
 		private async void LogInAsync()
 		{
 #if DEBUG
-			if (string.IsNullOrEmpty(CurrentUsername.Trim()))
+			if (true)
 			{
-				// alex is hacky, and wants to use his other auth token
-				App.SnapchatManager.UpdateAuthToken(CurrentPassword);
+				// Show progress indicator.
+				var progIndicator = StatusBar.GetForCurrentView().ProgressIndicator;
+				progIndicator.Text = App.Strings.GetString("StatusLoggingIn");
+				await progIndicator.ShowAsync();
+
+				// set le auth token here
+				App.SnapchatManager.UpdateAuthToken("ca4e79c1-34ee-4b3a-851e-34ff685891b8");
+				App.SnapchatManager.UpdateUsername("alexerax");
 				await App.SnapchatManager.Endpoints.GetUpdatesAsync();
+
+				// Hide progress indicator.
+				progIndicator.Text = String.Empty;
+				progIndicator.HideAsync();
+
+				// Navigate to the main page.
+				var frame = Window.Current.Content as Frame;
+				if (frame != null) frame.Navigate(typeof(MainPage));
+
 				return;
 			}
 #endif
 
 			// Username or password cannot be null.
-			if (string.IsNullOrEmpty(CurrentUsername.Trim()) || string.IsNullOrEmpty(CurrentPassword.Trim()))
+			if (string.IsNullOrWhiteSpace(CurrentUsername) ||
+				string.IsNullOrEmpty(CurrentUsername) ||
+				string.IsNullOrWhiteSpace(CurrentPassword) || 
+				string.IsNullOrEmpty(CurrentPassword))
 			{
 				await (new MessageDialog(App.Strings.GetString("InvalidCredentialsExceptionFriendlyMessage"))).ShowAsync();
 				return;
