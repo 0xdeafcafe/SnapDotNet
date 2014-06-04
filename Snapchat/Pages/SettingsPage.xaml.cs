@@ -1,5 +1,4 @@
 ﻿using Windows.Phone.UI.Input;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Attributes;
@@ -20,17 +19,24 @@ namespace Snapchat.Pages
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 		}
 
 		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
 		{
 			HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+			HardwareButtons.CameraPressed -= HardwareButtons_CameraPressed;
 		}
 
 		private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
 		{
-			(Window.Current.Content as Frame).GoBack();
+			App.RootFrame.GoBack();
 			e.Handled = true;
+		}
+
+		private void HardwareButtons_CameraPressed(object sender, CameraEventArgs e)
+		{
+			App.RootFrame.GoBack();
 		}
 	}
 }

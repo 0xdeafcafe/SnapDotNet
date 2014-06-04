@@ -74,16 +74,15 @@ namespace Snapchat.Pages
 
 		#endregion
 
+		private double _previousScrollViewerOffset = 0;
+		private bool _goingToCamera = false;
+
 		public MainPage()
 		{
 			InitializeComponent();
 
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
-			ScrollViewer.ViewChanging += delegate
-			{
-				if (BottomAppBar != null)
-					BottomAppBar.IsOpen = false;
-			};
+			ScrollViewer.ViewChanging += ScrollViewer_ViewChanging;
 
 			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
 
@@ -118,12 +117,32 @@ namespace Snapchat.Pages
 				await App.SnapchatManager.LoadAsync();
 
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 		}
 
 		protected async override void OnNavigatedFrom(NavigationEventArgs e)
 		{
 			HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+			HardwareButtons.CameraPressed -= HardwareButtons_CameraPressed;
 			await MediaCaptureManager.StopPreviewAsync();
+		}
+
+		private void HardwareButtons_CameraPressed(object sender, CameraEventArgs e)
+		{
+			if (PagesVisualStateGroup.CurrentState == null)
+				return;
+
+			var currentState = PagesVisualStateGroup.CurrentState.Name;
+			if (currentState == "Camera")
+			{
+				// TODO: Take a picture
+			}
+			else
+			{
+				ScrollViewer.HorizontalSnapPointsType = SnapPointsType.None;
+				_goingToCamera = true;
+				ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
+			}
 		}
 
 		private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
@@ -144,6 +163,7 @@ namespace Snapchat.Pages
 					break;
 
 				case "Stories":
+					ScrollViewer.HorizontalSnapPointsType = SnapPointsType.None;
 					ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
 					e.Handled = true;
 					break;
@@ -153,6 +173,17 @@ namespace Snapchat.Pages
 					e.Handled = true;
 					break;
 			}
+		}
+
+		private void ScrollViewer_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
+		{
+			if (BottomAppBar != null)
+				BottomAppBar.IsOpen = false;
+
+			// Fix scroll viewer after scrolling all the way back to camera from the manage friends page.
+			if ((ScrollViewer.HorizontalOffset > _previousScrollViewerOffset && !_goingToCamera) || ScrollViewer.HorizontalOffset < CameraPage.ActualWidth)
+				ScrollViewer.HorizontalSnapPointsType = SnapPointsType.MandatorySingle;
+			_previousScrollViewerOffset = ScrollViewer.HorizontalOffset;
 		}
 
 		private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
@@ -172,6 +203,14 @@ namespace Snapchat.Pages
 			// Prevent stories and convo icons from retaining their touch response colors whenever the user slips their finger.
 			StoriesIcon.Background = new SolidColorBrush(Colors.Transparent);
 			ConversationsIcon.Background = new SolidColorBrush(Colors.Transparent);
+
+			// Fix scroll viewer after scrolling all the way back to camera from the manage friends page.
+			if (pageIndex == 1)
+			{
+				_goingToCamera = false;
+				if (!e.IsIntermediate)
+					ScrollViewer.HorizontalSnapPointsType = SnapPointsType.MandatorySingle;
+			}
 		}
 
 		private void UpdateBottomAppBar()
