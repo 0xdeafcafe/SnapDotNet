@@ -186,7 +186,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 			}
 		}
 
-		public async Task DownloadSnapBlobAsync(SnapChatManager manager)
+		public async Task DownloadSnapBlobAsync(SnapchatManager manager)
 		{
 			if (IsDownloading || Status != SnapStatus.Delivered || SenderName == manager.Account.Username || HasMedia) return;
 

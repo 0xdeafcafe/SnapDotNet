@@ -3,7 +3,12 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:i="using:Microsoft.Xaml.Interactivity"
-      xmlns:core="using:Microsoft.Xaml.Interactions.Core">
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:viewModels="using:Snapchat.ViewModels">
+    
+    <Page.DataContext>
+        <viewModels:StartViewModel/>
+    </Page.DataContext>
 
     <Page.Resources>
         <!--<LinearGradientBrush x:Key="PageBackgroundBrush" EndPoint="0,1" StartPoint="1,0">
@@ -219,8 +224,8 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="10,0,10,0">
-                <TextBox x:Uid="LogInPageEmailUsernameTextBox" x:Name="LogInPageEmailUsernameTextBox" Header="Username or email" InputScope="EmailSmtpAddress" KeyDown="LogInPageEmailUsernameTextBox_KeyDown"/>
-                <PasswordBox x:Uid="LogInPagePasswordBox" x:Name="LogInPagePasswordBox" Header="Password" KeyDown="LogInPagePasswordBox_KeyDown"/>
+                <TextBox x:Uid="LogInPageEmailUsernameTextBox" x:Name="LogInPageEmailUsernameTextBox" Header="Username or email" InputScope="EmailSmtpAddress" KeyDown="LogInPageEmailUsernameTextBox_KeyDown" Text="{Binding CurrentUsername, Mode=TwoWay}"/>
+                <PasswordBox x:Uid="LogInPagePasswordBox" x:Name="LogInPagePasswordBox" Header="Password" KeyDown="LogInPagePasswordBox_KeyDown" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
                 <HyperlinkButton x:Uid="ForgotPasswordButton"
                                  NavigateUri="http://support.snapchat.com/password-reset-request"
                                  HorizontalAlignment="Right"
@@ -229,13 +234,7 @@
                                  Style="{StaticResource PivotTitleContentControlStyle}"/>
             </StackPanel>
 
-            <Button x:Uid="LogInButton" x:Name="LogInPageLoginButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FFFF7C55" Content="LOG IN">
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Tapped">
-                        <core:NavigateToPageAction TargetPage="Snapchat.Pages.MainPage"/>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </Button>
+            <Button x:Uid="LogInButton" x:Name="LogInPageLoginButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FFFF7C55" Content="LOG IN" Command="{Binding LogInCommand}"/>
         </Grid>
 
 

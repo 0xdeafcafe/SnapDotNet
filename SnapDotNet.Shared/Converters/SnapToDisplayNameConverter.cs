@@ -15,7 +15,7 @@ namespace SnapDotNet.Apps.Converters
 			var name = snap.RecipientName ?? snap.SenderName;
 
 			var output = name;
-			foreach (var friend in App.SnapChatManager.Account.Friends.Where(friend => friend.Name == name))
+			foreach (var friend in App.SnapchatManager.Account.Friends.Where(friend => friend.Name == name))
 				output = friend.FriendlyName;
 			return output;
 		}

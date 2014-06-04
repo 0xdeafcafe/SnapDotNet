@@ -12,10 +12,10 @@ namespace SnapDotNet.Apps.Converters
 			var snapId = value as string;
 			if (snapId == null) return null;
 
-			var snap = App.SnapChatManager.Account.Snaps.FirstOrDefault(s => s.Id == snapId);
+			var snap = App.SnapchatManager.Account.Snaps.FirstOrDefault(s => s.Id == snapId);
 			if (snap == null) return null;
 
-			if (snap.SenderName == App.SnapChatManager.Account.Username)
+			if (snap.SenderName == App.SnapchatManager.Account.Username)
 				return snap.Status.ToString();
 
 			switch (snap.Status)

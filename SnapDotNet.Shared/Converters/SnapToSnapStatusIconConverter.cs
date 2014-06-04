@@ -13,7 +13,7 @@ namespace SnapDotNet.Apps.Converters
 			if (snap == null) return null;
 
 			if (snap.SenderName == null ||
-				snap.SenderName == App.SnapChatManager.Account.Username)
+				snap.SenderName == App.SnapchatManager.Account.Username)
 			{
 				// You sent this!
 				switch (snap.Status)

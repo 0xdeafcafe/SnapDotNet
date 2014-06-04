@@ -26,7 +26,7 @@ namespace SnapDotNet.Apps.Converters
 			switch (snapStatus)
 			{
 				case SnapStatus.Delivered:
-					return (snap.SenderName == App.SnapChatManager.Account.Username) ? SentDeliveredIcon : ReceivedDeliveredIcon;
+					return (snap.SenderName == App.SnapchatManager.Account.Username) ? SentDeliveredIcon : ReceivedDeliveredIcon;
 
 				case SnapStatus.Downloading:
 					return DownloadingIcon;

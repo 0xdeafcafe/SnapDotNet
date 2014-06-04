@@ -13,14 +13,14 @@ namespace SnapDotNet.Apps.Converters
 			var friend = value as Friend;
 			if (friend == null) return null;
 
-			var story = App.SnapChatManager.Stories.FriendStories.FirstOrDefault(f => f.Username == friend.Name);
+			var story = App.SnapchatManager.Stories.FriendStories.FirstOrDefault(f => f.Username == friend.Name);
 			if (story == null) return null;
 
 			var mostRecentStory = story.Stories.FirstOrDefault();
 			if (mostRecentStory == null) return null;
 
 			// download thumbnail blob
-			var blob = App.SnapChatManager.Endpoints.GetStoryThumbnailBlob(mostRecentStory.Story);
+			var blob = App.SnapchatManager.Endpoints.GetStoryThumbnailBlob(mostRecentStory.Story);
 
 			return (blob == null) ? null : blob.ToBitmapImage();
 		}

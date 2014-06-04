@@ -12,7 +12,7 @@ namespace SnapDotNet.Apps.Converters
 			var friend = value as Friend;
 			if (friend == null) return 0;
 
-			var story = App.SnapChatManager.Stories.FriendStories.FirstOrDefault(f => f.Username == friend.Name);
+			var story = App.SnapchatManager.Stories.FriendStories.FirstOrDefault(f => f.Username == friend.Name);
 			if (story == null) return 0;
 
 			var lastStory = story.Stories.FirstOrDefault();

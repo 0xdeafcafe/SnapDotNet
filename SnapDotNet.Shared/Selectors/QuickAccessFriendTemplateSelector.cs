@@ -20,7 +20,7 @@ namespace SnapDotNet.Apps.Selectors
 				return GroupTemplate;
 
 			Friend friend = item as Friend;
-			if (friend != null && App.SnapChatManager.Account.BestFriends.Contains(friend.Name))
+			if (friend != null && App.SnapchatManager.Account.BestFriends.Contains(friend.Name))
 			{
 				return BestFriendTemplate;
 			}

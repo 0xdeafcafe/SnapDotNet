@@ -56,7 +56,7 @@ namespace SnapDotNet.Apps
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SnapChatManager SnapChatManager = new SnapChatManager();
+		public static readonly SnapchatManager SnapchatManager = new SnapchatManager();
 
 		/// <summary>
 		/// 
@@ -168,14 +168,14 @@ namespace SnapDotNet.Apps
 				navigatingCancelEventArgs.SourcePageType.GetTypeInfo()
 					.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof (RequiresAuthentication)) != null;
 
-			if (requiresAuthentication && !SnapChatManager.IsAuthenticated())
+			if (requiresAuthentication && !SnapchatManager.IsAuthenticated())
 			{
 				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof (StartPage)));
 				return;
 			}
 
-			if (!requiresAuthentication && SnapChatManager.IsAuthenticated())
+			if (!requiresAuthentication && SnapchatManager.IsAuthenticated())
 			{
 				await CurrentFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => CurrentFrame.Navigate(typeof(MainPage)));
@@ -314,19 +314,19 @@ namespace SnapDotNet.Apps
 
 		public static async void UpdateSnapchatData()
 		{
-			if (!SnapChatManager.IsAuthenticated()) return;
+			if (!SnapchatManager.IsAuthenticated()) return;
 			var forceLogout = false;
 
 			try
 			{
 				// Get Snapchat Updates
 				await ProgressHelper.ShowStatusBar(Loader.GetString("Updating"));
-				await SnapChatManager.UpdateAllAsync(async () => { await ProgressHelper.HideStatusBar(); }, Settings);
+				await SnapchatManager.UpdateAllAsync(async () => { await ProgressHelper.HideStatusBar(); }, Settings);
 
 				// Get ones to set notification count on
-				Settings.UnreadSnapCount = (uint)SnapChatManager.Account.Snaps.Count(s => s.SenderName != null && s.Status == SnapStatus.Delivered);
+				Settings.UnreadSnapCount = (uint)SnapchatManager.Account.Snaps.Count(s => s.SenderName != null && s.Status == SnapStatus.Delivered);
 				var mostRecent =
-					SnapChatManager.Account.Snaps.OrderByDescending(s => s.Timestamp)
+					SnapchatManager.Account.Snaps.OrderByDescending(s => s.Timestamp)
 						.FirstOrDefault(s => s.SenderName != null && s.Status == SnapStatus.Delivered);
 
 				UpdateLiveTile(String.Format("New message from {0}", mostRecent.SenderName));
@@ -360,7 +360,7 @@ namespace SnapDotNet.Apps
 		{
 			await ProgressHelper.ShowStatusBar(Loader.GetString("LoggingOut"));
 
-			await SnapChatManager.Logout();
+			await SnapchatManager.Logout();
 			CurrentFrame.Navigate(typeof(StartPage));
 
 			await ProgressHelper.HideStatusBar();

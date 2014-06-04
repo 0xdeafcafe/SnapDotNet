@@ -129,6 +129,12 @@
   <data name="ImportPictureAppBarButtonLabel" xml:space="preserve">
     <value>select photo...</value>
   </data>
+  <data name="InvalidCredentialsExceptionFriendlyMessage" xml:space="preserve">
+    <value>Username or password is incorrect</value>
+  </data>
+  <data name="InvalidHttpResponseExceptionMessage" xml:space="preserve">
+    <value>Something went wrong and we're trying to fix this issue right away!</value>
+  </data>
   <data name="LogInButton.Content" xml:space="preserve">
     <value>LOG IN</value>
   </data>
@@ -167,6 +173,9 @@
   </data>
   <data name="SignUpPagePasswordBox.Header" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="StatusLoggingIn" xml:space="preserve">
+    <value>Logging into Snapchat...</value>
   </data>
   <data name="ToggleFlashAppBarButtonLabel" xml:space="preserve">
     <value>toggle flash</value>

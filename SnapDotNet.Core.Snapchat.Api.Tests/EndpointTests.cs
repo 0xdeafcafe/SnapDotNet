@@ -11,7 +11,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 		[TestMethod]
 		public async Task SolveCaptchaAsyncTest()
 		{
-			var sm = new SnapChatManager();
+			var sm = new SnapchatManager();
 			var registration = await sm.Endpoints.RegisterAsync(20, "1993-08-08", "registration.test@yopmail.com", "dildosROCK");
 			var captchaZip = await sm.Endpoints.GetCaptchaImagesAsync(registration.Email, registration.AuthToken);
 
@@ -34,7 +34,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 		[TestMethod]
 		public async Task SettingsAsyncTest()
 		{
-			var sm = new SnapChatManager(Settings.Username, Settings.AuthToken);
+			var sm = new SnapchatManager(Settings.Username, Settings.AuthToken);
 			var pr = await sm.Endpoints.UpdateAccountPrivacyAsync(true);
 			var bd = await sm.Endpoints.UpdateBirthdayAsync(10, 23);
 			var em = await sm.Endpoints.UpdateEmailAsync(sm.Account.Email);
@@ -52,7 +52,7 @@ namespace SnapDotNet.Core.Snapchat.Api.Tests
 			// There has to be a better way...
 			var tups = new ObservableCollection<Tuple<string, string>> { new Tuple<string, string>("5173037008", "Collin Yoloman") };
 
-			var sm = new SnapChatManager(Settings.Username, Settings.AuthToken);
+			var sm = new SnapchatManager(Settings.Username, Settings.AuthToken);
 			var res = await sm.Endpoints.FindFriendsAsync("US", tups);
 
 			Assert.AreEqual(true, true);

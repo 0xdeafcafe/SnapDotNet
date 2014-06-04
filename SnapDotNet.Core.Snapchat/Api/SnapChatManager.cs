@@ -12,7 +12,7 @@ using SnapDotNet.Core.Snapchat.Models;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
-	public class SnapChatManager
+	public sealed class SnapchatManager
 		: NotifyPropertyChangedBase
 	{
 		private const string AccountDataFileName = "accountData.json";
@@ -63,17 +63,19 @@ namespace SnapDotNet.Core.Snapchat.Api
 		}
 		private Endpoints _endpoints;
 
+		public bool Loaded { get; private set; }
+
 
 		#region Constructors
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public SnapChatManager()
+		public SnapchatManager()
 		{
 			Endpoints = new Endpoints(this);
 
-			Load();
+			//Load();
 		}
 
 		/// <summary>
@@ -82,7 +84,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="username"></param>
 		/// <param name="authToken"></param>
 		/// <param name="getUpdates"></param>
-		public SnapChatManager(string username, string authToken, bool getUpdates = false)
+		public SnapchatManager(string username, string authToken, bool getUpdates = false)
 		{
 			Endpoints = new Endpoints(this);
 
@@ -253,10 +255,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 			IsolatedStorage.DeleteRoamingSetting(RoamingSnapchatDataContainer, "AuthToken");
 		}
 
-		public void Load()
+		public async Task LoadAsync()
 		{
 			// Deseralize the Account model from IsolatedStorage
-			var accountData = IsolatedStorage.ReadFileAsync(AccountDataFileName).Result;
+			var accountData = await IsolatedStorage.ReadFileAsync(AccountDataFileName);
 			if (accountData != null && !String.IsNullOrEmpty(accountData) && accountData != "null")
 			{
 				try
@@ -271,7 +273,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 
 			// Deseralize the Stories model from IsolatedStorage
-			var storiesData = IsolatedStorage.ReadFileAsync(StoriesDataFileName).Result;
+			var storiesData = await IsolatedStorage.ReadFileAsync(StoriesDataFileName);
 			if (storiesData != null && !String.IsNullOrEmpty(storiesData) && storiesData != "null")
 			{
 				try 
@@ -286,7 +288,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 
 			// Deseralize the PublicActivity model from IsolatedStorage
-			var publicActiviesData = IsolatedStorage.ReadFileAsync(PublicActivityDataFileName).Result;
+			var publicActiviesData = await IsolatedStorage.ReadFileAsync(PublicActivityDataFileName);
 			if (publicActiviesData != null && !String.IsNullOrEmpty(publicActiviesData) && publicActiviesData != "null")
 			{
 				try
@@ -304,6 +306,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 			// Load AuthToken and Username from Roaming storage
 			UpdateUsername(IsolatedStorage.ReadRoamingSetting(RoamingSnapchatDataContainer, "Username"));
 			UpdateAuthToken(IsolatedStorage.ReadRoamingSetting(RoamingSnapchatDataContainer, "AuthToken"));
+
+			Loaded = true;
 		}
 
 		public async Task UpdateAllAsync(Action hidependingUiAction, ApplicationSettings settings)

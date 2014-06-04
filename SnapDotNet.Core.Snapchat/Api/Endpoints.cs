@@ -17,7 +17,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 {
 	public class Endpoints
 	{
-		private readonly SnapChatManager _snapchatManager;
+		private readonly SnapchatManager _snapchatManager;
 		private readonly WebConnect _webConnect;
 		
 		private const string BestsEndpointUrl =				"bests";
@@ -42,7 +42,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </summary>
 		/// <param name="snapchatManager"></param>
 		/// <returns></returns>
-		public Endpoints(SnapChatManager snapchatManager)
+		public Endpoints(SnapchatManager snapchatManager)
 		{
 			_snapchatManager = snapchatManager;
 			_webConnect = new WebConnect(Settings.ApiBasePoint);

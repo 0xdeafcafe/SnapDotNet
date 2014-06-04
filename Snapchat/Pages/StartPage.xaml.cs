@@ -1,11 +1,11 @@
-﻿using Microsoft.Xaml.Interactivity;
+﻿using Windows.ApplicationModel;
+using Microsoft.Xaml.Interactivity;
 using System.Linq;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-using Snapchat.Helpers;
 
 namespace Snapchat.Pages
 {
@@ -17,9 +17,12 @@ namespace Snapchat.Pages
             NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-	    protected override void OnNavigatedTo(NavigationEventArgs e)
+	    protected override async void OnNavigatedTo(NavigationEventArgs e)
 	    {
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
+			if (!App.SnapchatManager.Loaded)
+				await App.SnapchatManager.LoadAsync();
 	    }
 
 	    protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -49,8 +52,7 @@ namespace Snapchat.Pages
 		    if (e.Key == Windows.System.VirtualKey.Enter)
 		    {
 				LogInPageLoginButton.Focus(FocusState.Programmatic);
-
-			    // TODO: Invoke Sign In command in VM
+				LogInPageLoginButton.Command.Execute(null);
 		    }
 	    }
 

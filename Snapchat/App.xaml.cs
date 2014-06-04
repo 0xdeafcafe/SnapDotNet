@@ -1,6 +1,5 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
+﻿using Windows.ApplicationModel.Resources;
+using Microsoft.WindowsAzure.MobileServices;
 using Snapchat.Helpers;
 using Snapchat.Pages;
 using System;
@@ -10,6 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using SnapDotNet.Core.Snapchat.Api;
 
 namespace Snapchat
 {
@@ -19,6 +19,14 @@ namespace Snapchat
     public sealed partial class App : Application
     {
 		public static readonly ResourceLoader Strings = new ResourceLoader();
+
+		public static MobileServiceClient MobileService = new MobileServiceClient(
+			"https://snapdotnet.azure-mobile.net/",
+			"sTdykEmtfJsTQmafUMxrKalcdkaphW67"
+		);
+		public static string DeviceId;
+
+	    public static readonly SnapchatManager SnapchatManager = new SnapchatManager();
 
         private TransitionCollection _transitions;
 

@@ -104,7 +104,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			var contentDialog = new ChangeDisplayNameDialog(friend.FriendlyName);
 			var result = await contentDialog.ShowAsync();
 			if (result != ContentDialogResult.Primary) return;
-			await App.SnapChatManager.Endpoints.ChangeFriendDisplayNameAsync(friend.Name, contentDialog.NewDisplayName);
+			await App.SnapchatManager.Endpoints.ChangeFriendDisplayNameAsync(friend.Name, contentDialog.NewDisplayName);
 			friend.DisplayName = contentDialog.NewDisplayName;
 #else
 			// TODO: Windows 8 App logic
@@ -126,7 +126,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			dialog.Commands.Add(new UICommand(App.Loader.GetString("Cancel"), command => ProgressHelper.HideStatusBar().Wait()));
 			var result = await dialog.ShowAsync();
 			if (result.Label != App.Loader.GetString("Yes")) return;
-			await App.SnapChatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Block);
+			await App.SnapchatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Block);
 
 			friend.NotifyPropertyChanged("FriendRequestState");
 			await ProgressHelper.HideStatusBar();
@@ -142,7 +142,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			dialog.Commands.Add(new UICommand(App.Loader.GetString("Cancel"), command => ProgressHelper.HideStatusBar().Wait()));
 			var result = await dialog.ShowAsync();
 			if (result.Label != App.Loader.GetString("Yes")) return;
-			await App.SnapChatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Unblock);
+			await App.SnapchatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Unblock);
 
 			friend.NotifyPropertyChanged("FriendRequestState");
 			await ProgressHelper.HideStatusBar();
@@ -158,7 +158,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 			dialog.Commands.Add(new UICommand(App.Loader.GetString("Cancel"), command => ProgressHelper.HideStatusBar().Wait()));
 			var result = await dialog.ShowAsync();
 			if (result.Label != App.Loader.GetString("Yes")) return;
-			await App.SnapChatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Delete);
+			await App.SnapchatManager.Endpoints.SendFriendActionAsync(friend.Name, FriendAction.Delete);
 
 			friend.NotifyPropertyChanged("FriendRequestState");
 			await ProgressHelper.HideStatusBar();
@@ -167,7 +167,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 		private static async void GetFriends()
 		{
-			if (App.SnapChatManager.Account.CanViewMatureContent)
+			if (App.SnapchatManager.Account.CanViewMatureContent)
 				await Launcher.LaunchUriAsync(new Uri("http://www.reddit.com/r/DirtySnapchat"));
 			else
 				await Launcher.LaunchUriAsync(new Uri("http://www.reddit.com/r/Snapchat"));

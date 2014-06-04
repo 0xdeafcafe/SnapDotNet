@@ -94,7 +94,7 @@ namespace Snapchat.Pages
 			});
 		}
 
-		protected override void OnNavigatedTo(NavigationEventArgs e)
+		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			// Must defer ChangeView execution by at least 10ms for it to work. Yeah, I know... wtf?
 			ThreadPoolTimer.CreateTimer(async (source) =>
@@ -103,6 +103,9 @@ namespace Snapchat.Pages
 					() => ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true));
 			},
 			TimeSpan.FromMilliseconds(50));
+
+			if (!App.SnapchatManager.Loaded)
+				await App.SnapchatManager.LoadAsync();
 		}
 
 		protected async override void OnNavigatedFrom(NavigationEventArgs e)

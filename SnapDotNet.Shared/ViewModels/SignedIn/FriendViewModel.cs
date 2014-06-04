@@ -27,7 +27,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 				try
 				{
 					PublicActivity output;
-					App.SnapChatManager.PublicActivities.TryGetValue(SelectedFriend.Name, out output);
+					App.SnapchatManager.PublicActivities.TryGetValue(SelectedFriend.Name, out output);
 					return output;
 				}
 				catch (Exception)
@@ -41,7 +41,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 		{
 			get
 			{
-				var friendStory = App.SnapChatManager.Stories.FriendStories.FirstOrDefault(f => f.Username == SelectedFriend.Name);
+				var friendStory = App.SnapchatManager.Stories.FriendStories.FirstOrDefault(f => f.Username == SelectedFriend.Name);
 				return friendStory;
 			}
 		}
