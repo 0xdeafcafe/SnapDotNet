@@ -57,7 +57,8 @@ namespace Snapchat.ViewModels
 		private async void LogInAsync()
 		{
 #if DEBUG
-			if (true)
+			if (string.IsNullOrWhiteSpace(CurrentUsername) ||
+				string.IsNullOrWhiteSpace(CurrentPassword))
 			{
 				// Show progress indicator.
 				var progIndicator = StatusBar.GetForCurrentView().ProgressIndicator;
@@ -83,9 +84,7 @@ namespace Snapchat.ViewModels
 
 			// Username or password cannot be null.
 			if (string.IsNullOrWhiteSpace(CurrentUsername) ||
-				string.IsNullOrEmpty(CurrentUsername) ||
-				string.IsNullOrWhiteSpace(CurrentPassword) || 
-				string.IsNullOrEmpty(CurrentPassword))
+				string.IsNullOrWhiteSpace(CurrentPassword))
 			{
 				await (new MessageDialog(App.Strings.GetString("InvalidCredentialsExceptionFriendlyMessage"))).ShowAsync();
 				return;
