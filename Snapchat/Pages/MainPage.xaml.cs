@@ -1,7 +1,10 @@
 ﻿using System.Linq;
+using Windows.ApplicationModel;
 using Windows.System.Threading;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Input;
 using Microsoft.Xaml.Interactivity;
+using Snapchat.Attributes;
 using Snapchat.Common;
 using System;
 using System.Collections.ObjectModel;
@@ -15,6 +18,7 @@ namespace Snapchat.Pages
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
+	[RequiresAuthentication]
 	public sealed partial class MainPage
 	{
 		#region App Bar Buttons
@@ -101,7 +105,11 @@ namespace Snapchat.Pages
 				await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
 					() => ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true));
 			},
-			TimeSpan.FromMilliseconds(50));
+			TimeSpan.FromMilliseconds(200));
+
+			// Start the camera.
+			if (!DesignMode.DesignModeEnabled)
+				await MediaCaptureManager.StartPreviewAsync(CapturePreview);
 
 			if (!App.SnapchatManager.Loaded)
 				await App.SnapchatManager.LoadAsync();
@@ -194,6 +202,26 @@ namespace Snapchat.Pages
 					appBar.SecondaryCommands.Add(command);
 			}
 			appBar.ClosedDisplayMode = displayMode;
+		}
+
+		private void ConversationsIcon_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			ThreadPoolTimer.CreateTimer(async source =>
+			{
+				await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => ScrollViewer.ChangeView(0, null, null, false));
+			},
+			TimeSpan.FromMilliseconds(25));
+		}
+
+		private void StoriesIcon_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			ThreadPoolTimer.CreateTimer(async source =>
+			{
+				await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+					() => ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false));
+			},
+			TimeSpan.FromMilliseconds(25));
 		}
 	}
 }

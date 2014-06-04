@@ -6,7 +6,8 @@
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:pageContents="using:Snapchat.Pages.PageContents">
 
-	<ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
+	<ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False"
+                  >
 		<i:Interaction.Behaviors>
 			<core:EventTriggerBehavior EventName="Loaded">
 				<core:GoToStateAction StateName="Chat"/>
@@ -19,8 +20,42 @@
 			</Grid>
 
 			<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<pageContents:CameraPageContent x:Name="CameraPageContent"/>
-			</Grid>
+                <Grid>
+                    <CaptureElement x:Name="CapturePreview" Stretch="UniformToFill"/>
+
+                    <Ellipse VerticalAlignment="Bottom" Margin="0,0,0,100" 
+				                HorizontalAlignment="Center" 
+				                Width="80" Height="80"
+				                Fill="#66FFFFFF"
+				                Stroke="White" StrokeThickness="4">
+                    </Ellipse>
+
+                    <Grid VerticalAlignment="Bottom" Height="70" Margin="0,0,0,80">
+                        
+                        <!-- Outer borders for both icons provide a bigger touch sensitive region for better UX -->
+                        
+                        <Border HorizontalAlignment="Left" Background="Transparent" Width="54" Height="54" Tapped="ConversationsIcon_Tapped">
+                            <Border Margin="0,0,0,0" Width="32" Height="32"
+			                        HorizontalAlignment="Center" VerticalAlignment="Center"
+			                        BorderBrush="White" BorderThickness="2"
+			                        CornerRadius="0"/>
+                        </Border>
+
+                        <Border HorizontalAlignment="Right" Background="Transparent" Width="54" Height="54" Tapped="StoriesIcon_Tapped">
+                            <Path Margin="0,0,0,0" Width="32" Height="32"
+			                  HorizontalAlignment="Center" VerticalAlignment="Center"
+			                  Fill="White"
+			                  Data="M 2,4 L 30,4 30,6 2,6 Z
+					                M 2,14 L 30,14 30,16 2,16 Z
+					                M 2,24 L 30,24 30,26 2,26 Z">
+                            </Path>
+                        </Border>
+                    </Grid>
+                    <Grid VerticalAlignment="Bottom" Height="80">
+                        <TextBlock Text="appbar" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Grid>
+                </Grid>
+            </Grid>
 
 			<Grid x:Name="StoriesPage" Tag="Stories" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Yellow">
 				<TextBlock>Stories goes here</TextBlock>
