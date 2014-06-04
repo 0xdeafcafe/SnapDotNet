@@ -1,5 +1,9 @@
-﻿using Windows.ApplicationModel.Resources;
+﻿using System.Linq;
+using System.Reflection;
+using Windows.ApplicationModel.Resources;
+using Windows.UI.Core;
 using Microsoft.WindowsAzure.MobileServices;
+using Snapchat.Attributes;
 using Snapchat.Helpers;
 using Snapchat.Pages;
 using System;
@@ -42,6 +46,8 @@ namespace Snapchat
 			UnhandledException += OnUnhandledException;
 		}
 
+		public static Frame RootFrame { get; private set; }
+
 		/// <summary>
 		/// Invoked when the application is launched normally by the end user.  Other entry points
 		/// will be used when the application is launched to open a specific file, to display
@@ -57,14 +63,12 @@ namespace Snapchat
 			}
 #endif
 
-			var rootFrame = Window.Current.Content as Frame;
-
 			// Do not repeat app initialization when the Window already has content,
 			// just ensure that the window is active
-			if (rootFrame == null)
+			if (RootFrame == null)
 			{
 				// Create a Frame to act as the navigation context and navigate to the first page
-				rootFrame = new Frame { CacheSize = 2 };
+				RootFrame = new Frame { CacheSize = 2 };
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{
@@ -72,36 +76,39 @@ namespace Snapchat
 				}
 
 				// Place the frame in the current Window
-				Window.Current.Content = rootFrame;
+				Window.Current.Content = RootFrame;
 			}
 
-			if (rootFrame.Content == null)
+			if (RootFrame.Content == null)
 			{
 				// Removes the turnstile navigation for startup.
-				if (rootFrame.ContentTransitions != null)
+				if (RootFrame.ContentTransitions != null)
 				{
 					_transitions = new TransitionCollection();
-					foreach (var c in rootFrame.ContentTransitions)
+					foreach (var c in RootFrame.ContentTransitions)
 					{
 						_transitions.Add(c);
 					}
 				}
 
-				rootFrame.ContentTransitions = null;
-				rootFrame.Navigated += RootFrame_FirstNavigated;
+				RootFrame.ContentTransitions = null;
+				RootFrame.Navigated += RootFrame_FirstNavigated;
+
+				// Go to Main Page if the user is still authenticated.
+				if (!App.SnapchatManager.Loaded)
+					await App.SnapchatManager.LoadAsync();
+				var destinationPage = SnapchatManager.IsAuthenticated() ? typeof (MainPage) : typeof (StartPage);
 
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				if (!rootFrame.Navigate(typeof(StartPage), e.Arguments))
+				if (!RootFrame.Navigate(destinationPage, e.Arguments))
 				{
 					throw new Exception("Failed to create initial page");
 				}
 			}
 
 			Window.Current.Activate();
-
-			await MediaCaptureManager.InitializeCameraAsync();
 		}
 
 		/// <summary>
