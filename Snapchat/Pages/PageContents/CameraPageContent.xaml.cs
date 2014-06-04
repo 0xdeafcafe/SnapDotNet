@@ -1,16 +1,23 @@
 ﻿using Windows.ApplicationModel;
-using Windows.UI.Xaml.Controls;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 using Snapchat.Helpers;
+using Snapchat.ViewModels;
+using Snapchat.ViewModels.PageControls;
 
 namespace Snapchat.Pages.PageContents
 {
-	public sealed partial class CameraPageContent : UserControl
+	public sealed partial class CameraPageContent
 	{
-		public CameraPageContent()
+		public CameraViewModel ViewModel { get; private set; }
+
+		/// <summary>
+		/// Only use this in the designer
+		/// </summary>
+		public CameraPageContent() {  }
+
+		public CameraPageContent(MainViewModel viewModel)
 		{
-			this.InitializeComponent();
+			InitializeComponent();
+			DataContext = ViewModel = new CameraViewModel(viewModel, (int) ActualWidth);
 			Loaded += async delegate
 			{
 				if (!DesignMode.DesignModeEnabled)
