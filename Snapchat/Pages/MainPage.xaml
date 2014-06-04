@@ -1,0 +1,44 @@
+﻿<Page x:Name="Page"
+      x:Class="Snapchat.Pages.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:i="using:Microsoft.Xaml.Interactivity"
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:pageContents="using:Snapchat.Pages.PageContents">
+
+    <ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
+        <i:Interaction.Behaviors>
+            <core:EventTriggerBehavior EventName="Loaded">
+                <core:GoToStateAction StateName="Chat"/>
+            </core:EventTriggerBehavior>
+        </i:Interaction.Behaviors>
+
+        <StackPanel x:Name="PagesContainer" Orientation="Horizontal">
+            <Grid x:Name="SnapsPage" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
+                <pageContents:ConversationsPageContent/>
+            </Grid>
+
+            <Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
+                <pageContents:CameraPageContent x:Name="CameraPageContent"/>
+            </Grid>
+
+            <Grid x:Name="StoriesPage" Tag="Stories" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Yellow">
+                <TextBlock>Stories goes here</TextBlock>
+            </Grid>
+
+            <Grid x:Name="ManageFriendsPage" Tag="ManageFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
+                <TextBlock>Add/remove friends page goes here</TextBlock>
+            </Grid>
+        </StackPanel>
+
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="PagesVisualStateGroup">
+                <VisualState x:Name="Conversations"/>
+                <VisualState x:Name="Camera"/>
+                <VisualState x:Name="Stories"/>
+                <VisualState x:Name="ManageFriends"/>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </ScrollViewer>
+</Page>

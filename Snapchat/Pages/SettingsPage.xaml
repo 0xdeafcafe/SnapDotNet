@@ -1,0 +1,66 @@
+﻿<Page x:Name="Page"
+      x:Class="Snapchat.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:i="using:Microsoft.Xaml.Interactivity"
+      xmlns:core="using:Microsoft.Xaml.Interactions.Core">
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Uid="LogOutAppBarButton" Label="log out" Icon="Remote">
+                <i:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="Click">
+                        <core:NavigateToPageAction TargetPage="Snapchat.Pages.StartPage"/>
+                    </core:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+
+    <Pivot>
+        <PivotItem Header="profile">
+            <StackPanel>
+                <TextBlock>username</TextBlock>
+                <TextBlock>display name</TextBlock>
+                <TextBlock>email</TextBlock>
+                <TextBlock>phone number</TextBlock>
+                <TextBlock>number of best friends</TextBlock>
+                <TextBlock>next replay</TextBlock>
+            </StackPanel>
+        </PivotItem>
+        
+        <PivotItem Header="privacy">
+            <StackPanel>
+                <TextBlock>who can see my story</TextBlock>
+                <TextBlock>who can send me snaps</TextBlock>
+            </StackPanel>
+        </PivotItem>
+
+        <PivotItem Header="notifications">
+            <StackPanel>
+                <ToggleSwitch Header="Live tile" IsOn="True"/>
+                <ToggleSwitch Header="Toast notifications" IsOn="True"/>
+
+                <CheckBox IsEnabled="False" Content="Instant notifications"/>
+                <TextBlock TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
+                    If you enable instant notifications, you give us permission to store
+                    your Snapchat auth token on our secure cloud service.
+                </TextBlock>
+                <Button HorizontalAlignment="Stretch">Unlock this feature for just $1.99!</Button>
+            </StackPanel>
+        </PivotItem>
+
+        <PivotItem Header="app">
+            <StackPanel>
+                <ToggleSwitch Header="Hold to view snap" IsOn="False"/>
+                <ToggleSwitch Header="Front-camera mirror effect" IsOn="True"/>
+                <ComboBox Header="Automatically download snaps" SelectedIndex="1">
+                    <ComboBoxItem>Never</ComboBoxItem>
+                    <ComboBoxItem>Wi-Fi only</ComboBoxItem>
+                    <ComboBoxItem>Always</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+        </PivotItem>
+    </Pivot>
+
+</Page>
