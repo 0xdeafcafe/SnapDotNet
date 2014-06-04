@@ -15,7 +15,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Helpers;
-using Snapchat.Pages.PageContents;
 using Snapchat.ViewModels;
 
 namespace Snapchat.Pages
@@ -77,8 +76,8 @@ namespace Snapchat.Pages
 		#endregion
 
 		public MainViewModel ViewModel { get; private set; }
-		private double _previousScrollViewerOffset = 0;
-		private bool _goingToCamera = false;
+		private double _previousScrollViewerOffset;
+		private bool _goingToCamera;
 
 		public MainPage()
 		{
