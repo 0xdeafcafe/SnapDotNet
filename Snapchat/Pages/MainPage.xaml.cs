@@ -237,7 +237,7 @@ namespace Snapchat.Pages
 					case "Camera":
 						if (MediaCaptureManager.HasFrontCamera)
 							primaryCommands.Add(_flipCameraAppBarButton);
-					
+
 						if (MediaCaptureManager.IsFlashSupported)
 							primaryCommands.Add(_toggleFlashAppBarButton);
 

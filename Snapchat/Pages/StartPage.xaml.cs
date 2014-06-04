@@ -1,11 +1,11 @@
-﻿using Windows.ApplicationModel;
-using Microsoft.Xaml.Interactivity;
+﻿using Microsoft.Xaml.Interactivity;
 using System.Linq;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
+using Snapchat.Helpers;
 
 namespace Snapchat.Pages
 {
@@ -21,8 +21,8 @@ namespace Snapchat.Pages
 	    {
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 
-			if (!App.SnapchatManager.Loaded)
-				await App.SnapchatManager.LoadAsync();
+		    var logoutTask = App.SnapchatManager.Logout();
+			var initializeCameraTask = MediaCaptureManager.InitializeCameraAsync();
 	    }
 
 	    protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)

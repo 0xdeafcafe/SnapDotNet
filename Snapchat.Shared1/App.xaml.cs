@@ -93,42 +93,22 @@ namespace Snapchat
 
 				RootFrame.ContentTransitions = null;
 				RootFrame.Navigated += RootFrame_FirstNavigated;
-				RootFrame.Navigating += RootFrame_Navigating;
+
+				// Go to Main Page if the user is still authenticated.
+				if (!App.SnapchatManager.Loaded)
+					await App.SnapchatManager.LoadAsync();
+				var destinationPage = SnapchatManager.IsAuthenticated() ? typeof (MainPage) : typeof (StartPage);
 
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				if (!RootFrame.Navigate(typeof(StartPage), e.Arguments))
+				if (!RootFrame.Navigate(destinationPage, e.Arguments))
 				{
 					throw new Exception("Failed to create initial page");
 				}
 			}
 
 			Window.Current.Activate();
-
-			await MediaCaptureManager.InitializeCameraAsync();
-		}
-
-		private async void RootFrame_Navigating(object sender, NavigatingCancelEventArgs e)
-		{
-			bool requiresAuth =
-				e.SourcePageType.GetTypeInfo()
-				.CustomAttributes.FirstOrDefault(a => a.AttributeType == typeof(RequiresAuthenticationAttribute)) != null;
-
-			bool isAuth = SnapchatManager.IsAuthenticated();
-
-			if (requiresAuth && !isAuth)
-			{
-				await RootFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-					() => RootFrame.Navigate(typeof(StartPage)));
-				return;
-			}
-
-			if (!requiresAuth && isAuth)
-			{
-				await RootFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-					() => RootFrame.Navigate(typeof(MainPage)));
-			}
 		}
 
 		/// <summary>
