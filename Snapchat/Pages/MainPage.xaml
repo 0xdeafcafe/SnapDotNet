@@ -5,8 +5,19 @@
       xmlns:i="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:pageContents="using:Snapchat.Pages.PageContents">
+	<Page.Resources>
+		<Style x:Key="PlaceholderOverlayTextblockStyle" TargetType="TextBlock">
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="FontSize" Value="25" />
+		</Style>
+	</Page.Resources>
 
-	<ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
+	<ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" 
+				  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
+				  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
+				  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
+				  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
 		<i:Interaction.Behaviors>
 			<core:EventTriggerBehavior EventName="Loaded">
 				<core:GoToStateAction StateName="Chat"/>
@@ -15,19 +26,57 @@
 
 		<StackPanel x:Name="PagesContainer" Orientation="Horizontal">
 			<Grid x:Name="SnapsPage" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<pageContents:ConversationsPageContent/>
+				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Conversations Go Here</TextBlock>
 			</Grid>
 
 			<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<pageContents:CameraPageContent x:Name="CameraPageContent"/>
+				<Grid>
+					<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill"/>
+
+					<Ellipse VerticalAlignment="Bottom" Margin="0,0,0,100" 
+							 HorizontalAlignment="Center" 
+							 Width="80" Height="80"
+							 Fill="#66FFFFFF"
+							 Stroke="White" StrokeThickness="4">
+					</Ellipse>
+
+					<Grid VerticalAlignment="Bottom" Height="70" Margin="0,0,0,80">
+
+						<!-- Outer borders for both icons provide a bigger touch sensitive region for better UX -->
+						<Border x:Name="ConversationsIcon" HorizontalAlignment="Left" Background="Transparent" Width="70" Height="70" Tapped="ConversationsIcon_Tapped" PointerPressed="ConversationsIcon_PointerPressed" PointerExited="ConversationsIcon_PointerExited">
+							<Border Margin="0,0,0,0" Width="32" Height="32"
+									HorizontalAlignment="Center" VerticalAlignment="Center"
+									BorderBrush="White" BorderThickness="2"
+									Background="Transparent"
+									CornerRadius="0">
+								<TextBlock Text="{Binding Path=Account.PendingSnaps, FallbackValue=''}"
+										   FontSize="17" FontFamily="Segoe WP" 
+										   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+							</Border>
+						</Border>
+
+						<Border x:Name="StoriesIcon" HorizontalAlignment="Right" Background="Transparent" Width="70" Height="70" Tapped="StoriesIcon_Tapped" PointerPressed="StoriesIcon_PointerPressed" PointerExited="StoriesIcon_PointerExited">
+							<Path Margin="0,0,0,0" Width="32" Height="32"
+								  HorizontalAlignment="Center" VerticalAlignment="Center"
+								  Fill="White"
+								  Data="M 2,4 L 30,4 30,6 2,6 Z
+										M 2,14 L 30,14 30,16 2,16 Z
+										M 2,24 L 30,24 30,26 2,26 Z">
+							</Path>
+						</Border>
+					</Grid>
+					<Grid VerticalAlignment="Bottom" Height="80">
+						<TextBlock Text="appbar" VerticalAlignment="Center" HorizontalAlignment="Center" />
+					</Grid>
+				</Grid>
 			</Grid>
 
 			<Grid x:Name="StoriesPage" Tag="Stories" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Yellow">
-				<TextBlock>Stories goes here</TextBlock>
+				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Stories Goes Here</TextBlock>
 			</Grid>
 
 			<Grid x:Name="ManageFriendsPage" Tag="ManageFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
-				<TextBlock>Add/remove friends page goes here</TextBlock>
+				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Friend Management Goes Here</TextBlock>
 			</Grid>
 		</StackPanel>
 
