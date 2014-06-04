@@ -43,9 +43,15 @@ namespace Snapchat.Helpers
 		{
 			get
 			{
+				if (!IsInitialized)
+					return false;
+
 				return MediaCapture.VideoDeviceController.FlashControl.Supported;
 			}
 		}
+
+		public static bool IsPrepared { get { return _isPrepared; } }
+		public static bool IsInitialized { get { return _isInitialized; } }
 
 		private static DeviceInformationCollection _cameraInfoCollection, _microphoneInfoCollection;
 		private static int _currentAudioDevice = 0, _currentVideoDevice;
@@ -166,10 +172,13 @@ namespace Snapchat.Helpers
 			if (PreviewElement != null)
 				PreviewElement.Source = null;
 
-			await MediaCapture.StopPreviewAsync();
+			try
+			{
+				await MediaCapture.StopPreviewAsync();
+				Debug.WriteLine("Stopped camera preview");
+			}
+			catch (Exception e) { }
 			IsPreviewing = false;
-
-			Debug.WriteLine("Stopped camera preview");
 		}
 	}
 }

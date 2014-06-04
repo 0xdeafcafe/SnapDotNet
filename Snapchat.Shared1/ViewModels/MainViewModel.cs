@@ -1,6 +1,4 @@
-﻿
-
-using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml.Controls;
 
 namespace Snapchat.ViewModels
 {
