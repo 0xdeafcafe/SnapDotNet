@@ -7,15 +7,16 @@ namespace Snapchat.ViewModels.PageControls
 		: BaseViewModel
 	{
 		private readonly MainViewModel _mainViewModel;
-		private readonly int _actualWidth;
 
-		public CameraViewModel(MainViewModel mainViewModel, int actualWidth)
+		public CameraViewModel(MainViewModel mainViewModel)
 		{
 			_mainViewModel = mainViewModel;
-			_actualWidth = actualWidth;
 
 			GoToConversationsCommand = new RelayCommand(GoToConversations);
+			GoToFriendsCommand = new RelayCommand(GoToFriends);
 		}
+
+		public int ActualWidth { get; set; }
 
 		/// <summary>
 		/// Gets the command to slide to messages
@@ -27,9 +28,24 @@ namespace Snapchat.ViewModels.PageControls
 		}
 		private ICommand _goToConversationsCommand;
 
+		/// <summary>
+		/// Gets the command to slide to friends
+		/// </summary>
+		public ICommand GoToFriendsCommand
+		{
+			get { return _goToFriendsCommand; }
+			private set { TryChangeValue(ref _goToFriendsCommand, value); }
+		}
+		private ICommand _goToFriendsCommand;
+
 		private void GoToConversations()
 		{
-			_mainViewModel.ScrollToPage(Page.Conversation, _actualWidth);
+			_mainViewModel.ScrollToPage(Page.Conversation, ActualWidth);
+		}
+
+		private void GoToFriends()
+		{
+			_mainViewModel.ScrollToPage(Page.ManageFriends, ActualWidth);
 		}
 	}
 }

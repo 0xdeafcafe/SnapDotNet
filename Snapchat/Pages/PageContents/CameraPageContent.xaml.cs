@@ -17,11 +17,13 @@ namespace Snapchat.Pages.PageContents
 		public CameraPageContent(MainViewModel viewModel)
 		{
 			InitializeComponent();
-			DataContext = ViewModel = new CameraViewModel(viewModel, (int) ActualWidth);
+			DataContext = ViewModel = new CameraViewModel(viewModel);
 			Loaded += async delegate
 			{
 				if (!DesignMode.DesignModeEnabled)
 					await MediaCaptureManager.StartPreviewAsync(CapturePreview);
+
+				ViewModel.ActualWidth = (int) ActualWidth;
 			};
 		}
 	}

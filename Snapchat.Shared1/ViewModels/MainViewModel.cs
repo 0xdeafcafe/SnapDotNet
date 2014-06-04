@@ -31,7 +31,7 @@ namespace Snapchat.ViewModels
 					break;
 
 				case Page.ManageFriends:
-					PageScrollViewer.ChangeView(actualWidth*3, null, null, false);
+					PageScrollViewer.ChangeView(actualWidth * 3, null, null, false);
 					break;
 			}
 		}
