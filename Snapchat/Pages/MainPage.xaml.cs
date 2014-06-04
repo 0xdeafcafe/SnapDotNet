@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Windows.ApplicationModel;
+using Windows.Phone.UI.Input;
 using Windows.System.Threading;
 using Windows.UI;
 using Windows.UI.Core;
@@ -115,11 +116,43 @@ namespace Snapchat.Pages
 
 			if (!App.SnapchatManager.Loaded)
 				await App.SnapchatManager.LoadAsync();
+
+			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 		}
 
 		protected async override void OnNavigatedFrom(NavigationEventArgs e)
 		{
+			HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
 			await MediaCaptureManager.StopPreviewAsync();
+		}
+
+		private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+		{
+			if (PagesVisualStateGroup.CurrentState == null)
+				return;
+
+			var currentState = PagesVisualStateGroup.CurrentState.Name;
+			switch (currentState)
+			{
+				case "Conversations":
+					ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
+					e.Handled = true;
+					break;
+
+				case "Camera":
+					// exit the app
+					break;
+
+				case "Stories":
+					ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
+					e.Handled = true;
+					break;
+
+				case "ManageFriends":
+					ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false); // go to stories
+					e.Handled = true;
+					break;
+			}
 		}
 
 		private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
