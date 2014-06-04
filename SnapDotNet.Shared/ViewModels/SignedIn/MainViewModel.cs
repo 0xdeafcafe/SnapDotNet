@@ -19,7 +19,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 		public MainViewModel()
 		{
-			if (App.SnapChatManager.Account == null) return;
+			if (App.SnapchatManager.Account == null) return;
 
 			RecentSnaps = new ObservableCollection<Snap>();
 
@@ -34,26 +34,26 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 			#endregion
 
-			RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+			RecentSnaps = new ObservableCollection<Snap>(App.SnapchatManager.Account.Snaps.Take(MaximumRecentSnaps));
 			GetFriends();
 
-			App.SnapChatManager.PropertyChanged += delegate
+			App.SnapchatManager.PropertyChanged += delegate
 			{
-				if (App.SnapChatManager.Account != null)
+				if (App.SnapchatManager.Account != null)
 				{
-					RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+					RecentSnaps = new ObservableCollection<Snap>(App.SnapchatManager.Account.Snaps.Take(MaximumRecentSnaps));
 					GetFriends();
 				}
 			};
-			App.SnapChatManager.Account.PropertyChanged += delegate
+			App.SnapchatManager.Account.PropertyChanged += delegate
 			{
-				RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+				RecentSnaps = new ObservableCollection<Snap>(App.SnapchatManager.Account.Snaps.Take(MaximumRecentSnaps));
 				GetFriends();
 			};
 
-			App.SnapChatManager.Account.Snaps.CollectionChanged += delegate
+			App.SnapchatManager.Account.Snaps.CollectionChanged += delegate
 			{
-				RecentSnaps = new ObservableCollection<Snap>(App.SnapChatManager.Account.Snaps.Take(MaximumRecentSnaps));
+				RecentSnaps = new ObservableCollection<Snap>(App.SnapchatManager.Account.Snaps.Take(MaximumRecentSnaps));
 			};
 		}
 
@@ -118,12 +118,12 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 				// TODO: Add group support
 
 				// Then best friends
-				foreach (var bestFriend in App.SnapChatManager.Account.BestFriends)
+				foreach (var bestFriend in App.SnapchatManager.Account.BestFriends)
 				{
 					if (QuickAccessItems.Count > MaximumFriendRows)
 						break;
 
-					foreach (var friend in App.SnapChatManager.Account.Friends)
+					foreach (var friend in App.SnapchatManager.Account.Friends)
 					{
 						if (friend.Name == bestFriend)
 						{
@@ -134,7 +134,7 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 				}
 
 				// Then the bottom feeders (TODO: Sort by recent interactions)
-				foreach (var friend in App.SnapChatManager.Account.Friends)
+				foreach (var friend in App.SnapchatManager.Account.Friends)
 				{
 					if (QuickAccessItems.Count > MaximumFriendRows)
 						break;

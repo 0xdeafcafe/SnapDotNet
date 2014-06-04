@@ -15,7 +15,7 @@ namespace SnapDotNet.Apps.Selectors
 		{
 			var snap = item as Snap;
 
-			if (snap.Status == SnapStatus.Opened && snap.SenderName != App.SnapChatManager.Account.Username)
+			if (snap.Status == SnapStatus.Opened && snap.SenderName != App.SnapchatManager.Account.Username)
 				return CountdownTemplate;
 
 			return DefaultTemplate;

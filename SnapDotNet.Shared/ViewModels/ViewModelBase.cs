@@ -23,14 +23,14 @@ namespace SnapDotNet.Apps.ViewModels
 			LogoutCommand = new RelayCommand(async () => await App.LogoutAsync());
 		}
 
-		public SnapChatManager Manager
+		public SnapchatManager Manager
 		{
-			get { return App.SnapChatManager; }
+			get { return App.SnapchatManager; }
 		}
 
 		public Account Account
 		{
-			get { return App.SnapChatManager.Account; }
+			get { return App.SnapchatManager.Account; }
 		}
 
 		public ApplicationSettings ApplicationSettings

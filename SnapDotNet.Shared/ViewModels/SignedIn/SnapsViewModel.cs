@@ -72,8 +72,8 @@ namespace SnapDotNet.Apps.ViewModels.SignedIn
 
 			TryDownloadMediaCommand = new RelayCommand<Snap>(async snap =>
 			{
-				await snap.DownloadSnapBlobAsync(App.SnapChatManager);
-				App.SnapChatManager.SaveAccountData();
+				await snap.DownloadSnapBlobAsync(App.SnapchatManager);
+				App.SnapchatManager.SaveAccountData();
 			});
 		}
 

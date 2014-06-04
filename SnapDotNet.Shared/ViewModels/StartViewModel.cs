@@ -321,7 +321,7 @@ namespace SnapDotNet.Apps.ViewModels
 				ProgressModalIsVisible = true;
 
 				// Try and log into SnapChat
-				await App.SnapChatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
+				await App.SnapchatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
 
 				// This is unnecessary here and slows down the sign in process significantly. xoxo, Matt
 				/*try
@@ -346,8 +346,8 @@ namespace SnapDotNet.Apps.ViewModels
 							AuthExpired = false,
 							NewUser = true,
 							DeviceIdent = App.DeviceIdent,
-							SnapchatAuthToken = App.SnapChatManager.AuthToken,
-							SnapchatUsername = App.SnapChatManager.Username
+							SnapchatAuthToken = App.SnapchatManager.AuthToken,
+							SnapchatUsername = App.SnapchatManager.Username
 						});
 #endif
 			}
@@ -374,9 +374,9 @@ namespace SnapDotNet.Apps.ViewModels
 				ProgressModalVisibility = Visibility.Collapsed;
 				ProgressModalIsVisible = false;
 			}
-			if ( App.SnapChatManager.Account == null || 
-				!App.SnapChatManager.Account.Logged ||
-				!App.SnapChatManager.IsAuthenticated())
+			if ( App.SnapchatManager.Account == null || 
+				!App.SnapchatManager.Account.Logged ||
+				!App.SnapchatManager.IsAuthenticated())
 			{
 #if WINDOWS_PHONE_APP
 				CurrentPassword = "";
@@ -417,7 +417,7 @@ namespace SnapDotNet.Apps.ViewModels
 
 			try
 			{
-				CurrentCaptcha = await App.SnapChatManager.Endpoints.RegisterAndGetCaptchaAsync(age, birthdayString, CurrentEmail, DesiredPassword);
+				CurrentCaptcha = await App.SnapchatManager.Endpoints.RegisterAndGetCaptchaAsync(age, birthdayString, CurrentEmail, DesiredPassword);
 
 #if WINDOWS_PHONE_APP
 				StartPage.RevealCaptchaPage();
