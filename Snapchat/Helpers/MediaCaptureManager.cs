@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Graphics.Display;
@@ -49,8 +48,8 @@ namespace Snapchat.Helpers
 		}
 
 		private static DeviceInformationCollection _cameraInfoCollection, _microphoneInfoCollection;
-		private static int _currentAudioDevice = 0, _currentVideoDevice = 0;
-		private static bool _isPrepared = false, _isInitialized = false;
+		private static int _currentAudioDevice = 0, _currentVideoDevice;
+		private static bool _isPrepared, _isInitialized;
 
 		/// <summary>
 		/// Prepares the media capture manager by obtaining device information.
