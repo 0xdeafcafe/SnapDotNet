@@ -33,15 +33,16 @@
                     <Grid VerticalAlignment="Bottom" Height="70" Margin="0,0,0,80">
                         
                         <!-- Outer borders for both icons provide a bigger touch sensitive region for better UX -->
-                        
-                        <Border HorizontalAlignment="Left" Background="Transparent" Width="54" Height="54" Tapped="ConversationsIcon_Tapped">
+
+                        <Border x:Name="ConversationsIcon" HorizontalAlignment="Left" Background="Transparent" Width="70" Height="70" Tapped="ConversationsIcon_Tapped" PointerPressed="ConversationsIcon_PointerPressed" PointerExited="ConversationsIcon_PointerExited">
                             <Border Margin="0,0,0,0" Width="32" Height="32"
 			                        HorizontalAlignment="Center" VerticalAlignment="Center"
 			                        BorderBrush="White" BorderThickness="2"
-			                        CornerRadius="0"/>
+			                        CornerRadius="0">
+                            </Border>
                         </Border>
 
-                        <Border HorizontalAlignment="Right" Background="Transparent" Width="54" Height="54" Tapped="StoriesIcon_Tapped">
+                        <Border x:Name="StoriesIcon" HorizontalAlignment="Right" Background="Transparent" Width="70" Height="70" Tapped="StoriesIcon_Tapped" PointerPressed="StoriesIcon_PointerPressed" PointerExited="StoriesIcon_PointerExited">
                             <Path Margin="0,0,0,0" Width="32" Height="32"
 			                  HorizontalAlignment="Center" VerticalAlignment="Center"
 			                  Fill="White"

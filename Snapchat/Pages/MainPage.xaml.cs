@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using Windows.ApplicationModel;
 using Windows.System.Threading;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Microsoft.Xaml.Interactivity;
 using Snapchat.Attributes;
 using Snapchat.Common;
@@ -133,6 +135,10 @@ namespace Snapchat.Pages
 				VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), currentPage, true);
 			}
 			UpdateBottomAppBar();
+
+			// Prevent stories and convo icons from retaining their touch response colors whenever the user slips their finger.
+			StoriesIcon.Background = new SolidColorBrush(Colors.Transparent);
+			ConversationsIcon.Background = new SolidColorBrush(Colors.Transparent);
 		}
 
 		private void UpdateBottomAppBar()
@@ -212,6 +218,8 @@ namespace Snapchat.Pages
 					() => ScrollViewer.ChangeView(0, null, null, false));
 			},
 			TimeSpan.FromMilliseconds(25));
+
+			ConversationsIcon.Background = new SolidColorBrush(Colors.Transparent);
 		}
 
 		private void StoriesIcon_Tapped(object sender, TappedRoutedEventArgs e)
@@ -222,6 +230,28 @@ namespace Snapchat.Pages
 					() => ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false));
 			},
 			TimeSpan.FromMilliseconds(25));
+
+			StoriesIcon.Background = new SolidColorBrush(Colors.Transparent);
+		}
+
+		private void ConversationsIcon_PointerPressed(object sender, PointerRoutedEventArgs e)
+		{
+			ConversationsIcon.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0xA2, 0xFF));
+		}
+
+		private void ConversationsIcon_PointerExited(object sender, PointerRoutedEventArgs e)
+		{
+			ConversationsIcon.Background = new SolidColorBrush(Colors.Transparent);
+		}
+
+		private void StoriesIcon_PointerPressed(object sender, PointerRoutedEventArgs e)
+		{
+			StoriesIcon.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0xA2, 0xFF));
+		}
+
+		private void StoriesIcon_PointerExited(object sender, PointerRoutedEventArgs e)
+		{
+			StoriesIcon.Background = new SolidColorBrush(Colors.Transparent);
 		}
 	}
 }
