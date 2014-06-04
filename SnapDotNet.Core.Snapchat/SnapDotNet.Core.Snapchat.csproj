@@ -59,6 +59,8 @@
     <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\FriendGroup.cs" />
     <Compile Include="Models\FoundFriend.cs" />
+    <Compile Include="Models\New\Conversation.cs" />
+    <Compile Include="Models\New\Update.cs" />
     <Compile Include="Models\PublicActivity.cs" />
     <Compile Include="Models\Captcha.cs" />
     <Compile Include="Models\RegistrationResponse.cs" />
@@ -81,6 +83,7 @@
       <Name>SnapDotNet.Core.Miscellaneous</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
