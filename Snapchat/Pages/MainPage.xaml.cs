@@ -9,6 +9,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Helpers;
+using Snapchat.Pages.PageContents;
+using Snapchat.ViewModels;
 
 namespace Snapchat.Pages
 {
@@ -67,9 +69,13 @@ namespace Snapchat.Pages
 
 		#endregion
 
+		public MainViewModel ViewModel { get; private set; }
+
 		public MainPage()
 		{
 			InitializeComponent();
+
+			DataContext = ViewModel = new MainViewModel(ScrollViewer);
 
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
 			ScrollViewer.ViewChanging += delegate
@@ -91,6 +97,9 @@ namespace Snapchat.Pages
 				await MediaCaptureManager.ToggleCameraAsync();
 				UpdateBottomAppBar();
 			});
+
+			CameraPage.Children.Clear();
+			CameraPage.Children.Add(new CameraPageContent(ViewModel));
 		}
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)

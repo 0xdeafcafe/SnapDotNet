@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Snapchat.Converters.Json;
@@ -255,8 +256,24 @@ namespace SnapDotNet.Core.Snapchat.Models
 		public ObservableCollection<Snap> Snaps
 		{
 			get { return _snaps; }
-			set { SetField(ref _snaps, value); }
+			set
+			{
+				SetField(ref _snaps, value);
+				NotifyPropertyChanged("PendingSnaps");
+			}
 		}
 		private ObservableCollection<Snap> _snaps;
+
+		[IgnoreDataMember]
+		public String PendingSnaps
+		{
+			get
+			{
+				var count =
+					Snaps.Count(
+						snap => snap.SenderName != null && snap.Status == SnapStatus.Delivered || snap.Status == SnapStatus.Downloading);
+				return count <= 0 ? "" : count.ToString();
+			}
+		}
 	}
 }
