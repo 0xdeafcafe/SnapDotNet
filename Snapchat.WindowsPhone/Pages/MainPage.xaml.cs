@@ -136,7 +136,7 @@ namespace Snapchat.Pages
 		{
 			if (PagesVisualStateGroup.CurrentState == null)
 				return;
-
+			
 			var currentState = PagesVisualStateGroup.CurrentState.Name;
 			if (currentState == "Camera")
 			{
@@ -219,7 +219,7 @@ namespace Snapchat.Pages
 		private void UpdateBottomAppBar()
 		{
 			if (BottomAppBar == null)
-				BottomAppBar = new CommandBar();
+				BottomAppBar = new CommandBar {Opacity = 0.5f};
 			var appBar = BottomAppBar as CommandBar;
 			if (appBar == null) return;
 

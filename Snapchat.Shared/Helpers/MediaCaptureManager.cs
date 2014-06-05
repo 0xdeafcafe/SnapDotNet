@@ -109,8 +109,8 @@ namespace Snapchat.Helpers
 
 			// Correct camera rotation
 			MediaCapture.SetPreviewRotation(IsUsingFrontCamera
-				? VideoRotation.Clockwise270Degrees
-				: VideoRotation.Clockwise90Degrees);
+				? VideoRotation.Clockwise90Degrees
+				: VideoRotation.Clockwise270Degrees);
 
 			if (IsMirrored && IsUsingFrontCamera)
 				MediaCapture.SetPreviewMirroring(true);

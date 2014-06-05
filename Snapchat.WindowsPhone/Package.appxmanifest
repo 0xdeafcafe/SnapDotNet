@@ -32,6 +32,7 @@
     <Capability Name="internetClientServer" />
     <Capability Name="picturesLibrary" />
     <m3:Capability Name="contacts" />
+    <Capability Name="videosLibrary" />
     <DeviceCapability Name="webcam" />
     <DeviceCapability Name="microphone" />
     <DeviceCapability Name="location" />
