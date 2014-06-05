@@ -6,7 +6,7 @@
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:viewModels="using:Snapchat.ViewModels"
       xmlns:settings="using:Snapchat.Converters.Settings">
-    
+
     <Page.DataContext>
         <viewModels:SettingsViewModel/>
     </Page.DataContext>
@@ -22,7 +22,7 @@
             </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
-    
+
     <Page.Resources>
         <settings:IntegerConverter x:Key="StoryPrivacyConverter"/>
         <settings:IntegerConverter x:Key="DownloadSnapsModeConverter"/>
