@@ -120,6 +120,15 @@
   <data name="AppNameTextBlock.Text" xml:space="preserve">
     <value>ColdSnap</value>
   </data>
+  <data name="AutomaticallyDownloadSnapsAlways.Content" xml:space="preserve">
+    <value>Always</value>
+  </data>
+  <data name="AutomaticallyDownloadSnapsNever.Content" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="AutomaticallyDownloadSnapsWifi.Content" xml:space="preserve">
+    <value>WiFi</value>
+  </data>
   <data name="DownloadAllSnapsAppBarButtonLabel" xml:space="preserve">
     <value>download all snaps</value>
   </data>
@@ -128,6 +137,9 @@
   </data>
   <data name="ImportPictureAppBarButtonLabel" xml:space="preserve">
     <value>select photo...</value>
+  </data>
+  <data name="InstantNotificationsDisclaimer.Text" xml:space="preserve">
+    <value>If you enable instant notifications, you give us permission to store your Snapchat auth token on our secure cloud service.</value>
   </data>
   <data name="InvalidCredentialsExceptionFriendlyMessage" xml:space="preserve">
     <value>Username or password is incorrect</value>
@@ -150,6 +162,12 @@
   <data name="LogOutAppBarButton.Label" xml:space="preserve">
     <value>logout</value>
   </data>
+  <data name="MessagePrivacyEveryone.Content" xml:space="preserve">
+    <value>Everyone</value>
+  </data>
+  <data name="MessagePrivacyFriends.Content" xml:space="preserve">
+    <value>Friends</value>
+  </data>
   <data name="RefreshAppBarButtonLabel" xml:space="preserve">
     <value>refresh</value>
   </data>
@@ -158,6 +176,54 @@
   </data>
   <data name="SettingsAppBarButtonLabel" xml:space="preserve">
     <value>view settings...</value>
+  </data>
+  <data name="SettingsAppGroup.Header" xml:space="preserve">
+    <value>apps</value>
+  </data>
+  <data name="SettingsAutomaticallyDownloadSnaps.Header" xml:space="preserve">
+    <value>Automatically download snaps</value>
+  </data>
+  <data name="SettingsDisplayNameTextBox.Header" xml:space="preserve">
+    <value>Display name</value>
+  </data>
+  <data name="SettingsEmailTextBox.Header" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="SettingsFrontCameraMirrorEffect.Header" xml:space="preserve">
+    <value>Front camera mirror effect</value>
+  </data>
+  <data name="SettingsHoldToViewSnap.Header" xml:space="preserve">
+    <value>Hold to view snaps</value>
+  </data>
+  <data name="SettingsInstantNotifications.Content" xml:space="preserve">
+    <value>Instant notifications</value>
+  </data>
+  <data name="SettingsLiveTile.Header" xml:space="preserve">
+    <value>Live tile</value>
+  </data>
+  <data name="SettingsMessagePrivacy.Header" xml:space="preserve">
+    <value>Who can send me snaps?</value>
+  </data>
+  <data name="SettingsNotificationsGroup.Header" xml:space="preserve">
+    <value>notifications</value>
+  </data>
+  <data name="SettingsPhoneTextBox.Header" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="SettingsPrivacyGroup.Header" xml:space="preserve">
+    <value>privacy</value>
+  </data>
+  <data name="SettingsProfileGroup.Header" xml:space="preserve">
+    <value>profile</value>
+  </data>
+  <data name="SettingsStoryPrivacy.Header" xml:space="preserve">
+    <value>Who can see my story?</value>
+  </data>
+  <data name="SettingsToastNotifications.Header" xml:space="preserve">
+    <value>Toast notifications</value>
+  </data>
+  <data name="SettingsUsernameTextBox.Header" xml:space="preserve">
+    <value>Username</value>
   </data>
   <data name="SignUpButton.Content" xml:space="preserve">
     <value>SIGN UP</value>
@@ -177,7 +243,19 @@
   <data name="StatusLoggingIn" xml:space="preserve">
     <value>Logging into Snapchat...</value>
   </data>
+  <data name="StoryPrivacyCustom.Content" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="StoryPrivacyEveryone.Content" xml:space="preserve">
+    <value>Everyone</value>
+  </data>
+  <data name="StoryPrivacyFriends.Content" xml:space="preserve">
+    <value>Friends</value>
+  </data>
   <data name="ToggleFlashAppBarButtonLabel" xml:space="preserve">
     <value>toggle flash</value>
+  </data>
+  <data name="UpgradeToProButton.Content" xml:space="preserve">
+    <value>Unlock this feature for just $1.99!</value>
   </data>
 </root>
