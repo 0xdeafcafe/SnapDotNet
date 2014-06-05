@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SnapDotNet.Core.Snapchat.Models;
+using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace SnapDotNet.Core.Snapchat.Converters.Json
 {

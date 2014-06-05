@@ -7,7 +7,7 @@
 		public static readonly string Secret = "iEk21fuwZApXlz93750dmW22pw389dPwOk";
 		public static readonly string StaticToken = "m198sOkJEn37DjqZ32lpRu76xmw288xSQ9";
 		public static readonly string ApiBasePoint = "https://feelinsonice-hrd.appspot.com/bq/";
-		public static readonly string ApiLogBasePoint = "https://feelinsonice-hrd.appspot.com/log/";
-		public static readonly string UserAgent = "Snapchat/4.1.07 (Nexus 4; Android 18; gzip)";
+		public static readonly string ApiLoqBasePoint = "https://feelinsonice-hrd.appspot.com/loq/";
+		public static readonly string UserAgent = "User-Agent: Snapchat/5.0.5 (Nexus 4; Android 19; gzip)";
 	}
 }

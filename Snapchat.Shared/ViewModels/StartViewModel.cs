@@ -66,9 +66,9 @@ namespace Snapchat.ViewModels
 				await progIndicator.ShowAsync();
 
 				// set le auth token here
-				App.SnapchatManager.UpdateAuthToken("ca4e79c1-34ee-4b3a-851e-34ff685891b8");
+				App.SnapchatManager.UpdateAuthToken("5ee95824-c242-4716-b4e2-d50dc4609ff9");
 				App.SnapchatManager.UpdateUsername("alexerax");
-				await App.SnapchatManager.Endpoints.GetUpdatesAsync();
+				await App.SnapchatManager.Endpoints.GetAllUpdatesAsync();
 
 				// Hide progress indicator.
 				progIndicator.Text = String.Empty;
@@ -100,6 +100,12 @@ namespace Snapchat.ViewModels
 				// Try to log into Snapchat.
 				await App.SnapchatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
 
+				// Good, now lets get the data from the new API
+				var updates = await App.SnapchatManager.Endpoints.GetAllUpdatesAsync();
+
+				if (updates == null || updates.UpdatesResponse == null)
+					throw new InvalidHttpResponseException();
+
 				// Register this device for push notifications.
 				await
 					App.MobileService.GetTable<User>()
@@ -109,7 +115,7 @@ namespace Snapchat.ViewModels
 							NewUser = true,
 							DeviceIdent = App.DeviceId,
 							SnapchatAuthToken = App.SnapchatManager.AuthToken,
-							SnapchatUsername = App.SnapchatManager.Username
+							SnapchatUsername = App.SnapchatManager.AllUpdates.UpdatesResponse.Username
 						});
 
 				// Navigate to the main page.

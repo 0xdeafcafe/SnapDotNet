@@ -7,6 +7,8 @@ namespace SnapDotNet.Core.Snapchat.Api.Exceptions
 	{
 		public HttpResponseMessage HttpResponseMessage { get; private set; }
 
+		public InvalidHttpResponseException() { }
+
 		public InvalidHttpResponseException(string message, HttpResponseMessage httpResponseMessage)
 			: base(message)
 		{

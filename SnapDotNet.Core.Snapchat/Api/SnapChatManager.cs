@@ -1,60 +1,42 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
-using SnapDotNet.Core.Snapchat.Models;
+using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
 	public sealed class SnapchatManager
 		: NotifyPropertyChangedBase
 	{
-		private const string AccountDataFileName = "accountData.json";
-		private const string StoriesDataFileName = "storiesData.json";
-		private const string PublicActivityDataFileName = "publicActivityData.json";
+		private const string AccountDataFileName = "update.json";
 		private const string RoamingSnapchatDataContainer = "SnapchatData";
 
+		public AllUpdatesResponse AllUpdates
+		{
+			get { return _allUpdates; }
+			set { SetField(ref _allUpdates, value); }
+		}
+		private AllUpdatesResponse _allUpdates;
 
 		public String AuthToken
 		{
-			get { return _authToken; }
-			set { SetField(ref _authToken, value); }
+			get
+			{
+				if (AllUpdates != null && AllUpdates.UpdatesResponse != null)
+					return AllUpdates.UpdatesResponse.AuthToken;
+				
+				return null;
+			}
 		}
-		private String _authToken;
 
-		public String Username
+		public StoriesResponse Stories
 		{
-			get { return _username; }
-			set { SetField(ref _username, value); }
+			get { return AllUpdates.StoriesResponse; }
 		}
-		private String _username;
-
-		public Account Account
-		{
-			get { return _account; }
-			set { SetField(ref _account, value); }
-		}
-		private Account _account;
-
-		public ObservableDictionary<string, PublicActivity> PublicActivities
-		{
-			get { return _publicActivities; }
-			set { SetField(ref _publicActivities, value); }
-		}
-		private ObservableDictionary<string, PublicActivity> _publicActivities;
-
-		public Stories Stories
-		{
-			get { return _stories; }
-			set { SetField(ref _stories, value); }
-		}
-		private Stories _stories;
 
 		public Endpoints Endpoints
 		{
@@ -64,7 +46,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private Endpoints _endpoints;
 
 		public bool Loaded { get; private set; }
-
 
 		#region Constructors
 
@@ -93,8 +74,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			if (!getUpdates) return;
 
-			Endpoints.GetUpdatesAsync().Wait();
-			Endpoints.GetStoriesAsync().Wait();
+			Endpoints.GetAllUpdatesAsync().Wait();
 		}
 
 		#endregion
@@ -106,16 +86,12 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			try
 			{
-				Account = null;
-				AuthToken = null;
-				Username = null;
-				Stories = null;
-				PublicActivities = null;
+				AllUpdates = null;
 				await DeleteAsync();
 				await Endpoints.LogoutAsync();
 				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return false;
 			}
@@ -123,81 +99,68 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public void UpdateAuthToken(string authToken)
 		{
-			AuthToken = authToken;
+			if (AllUpdates == null)
+				AllUpdates = new AllUpdatesResponse
+				{
+					ConversationResponse = new ConversationResponse[0],
+					MessagingGatewayInfo = new MessagingGatewayInfo(),
+					StoriesResponse = new StoriesResponse(),
+					UpdatesResponse = new UpdatesResponse()
+				};
+
+			AllUpdates.UpdatesResponse.AuthToken = authToken;
 		}
 
-		public void UpdateAccount(Account account)
+		public void Update(AllUpdatesResponse allUpdates)
 		{
-			if (Account == null)
-			{
-				Account = account;
-				return;
-			}
+			AllUpdates = allUpdates;
 
-			// we got some house keeping to do
-			foreach (var newSnap in account.Snaps)
-			{
-				var found = false;
-				foreach (var oldSnap in Account.Snaps.Where(oldSnap => newSnap.Id == oldSnap.Id))
-				{
-					found = true;
-					if (newSnap.RecipientName == Account.Username || newSnap.RecipientName == null)
-						break;
+			// TODO: Recode this
+			//if (AllUpdates == null)
+			//{
+			//	AllUpdates = allUpdates;
+			//	return;
+			//}
 
-					// replace, instead
-					var position = Account.Snaps.IndexOf(oldSnap);
-					if (position == -1) break;
-					Account.Snaps.RemoveAt(position);
-					Account.Snaps.Insert(position, newSnap);
-					break;
-				}
+			//// we got some house keeping to do
+			//foreach (var newSnap in account.Snaps)
+			//{
+			//	var found = false;
+			//	foreach (var oldSnap in Account.Snaps.Where(oldSnap => newSnap.Id == oldSnap.Id))
+			//	{
+			//		found = true;
+			//		if (newSnap.RecipientName == Account.Username || newSnap.RecipientName == null)
+			//			break;
 
-				if (!found)
-					Account.Snaps.Insert(0, newSnap);
-			}
+			//		// replace, instead
+			//		var position = Account.Snaps.IndexOf(oldSnap);
+			//		if (position == -1) break;
+			//		Account.Snaps.RemoveAt(position);
+			//		Account.Snaps.Insert(position, newSnap);
+			//		break;
+			//	}
 
-			Account.Snaps = new ObservableCollection<Snap>(Account.Snaps.OrderByDescending(s => s.SentTimestamp).Take(50));
-			account.Snaps = Account.Snaps;
-			Account = account;
+			//	if (!found)
+			//		Account.Snaps.Insert(0, newSnap);
+			//}
+
+			//Account.Snaps = new ObservableCollection<Snap>(Account.Snaps.OrderByDescending(s => s.SentTimestamp).Take(50));
+			//account.Snaps = Account.Snaps;
+			//Account = account;
 		}
 
 		public void UpdateUsername(string username)
 		{
-			Username = username;
-		}
-
-		public void UpdateStories(Stories stories)
-		{
-			if (Stories == null)
-			{
-				Stories = stories;
-				return;
-			}
-
-			// we got some house keeping to do
-			var downloadingFriendsStories = (from friendStory in Stories.FriendStories from story in friendStory.Stories where story.Story.IsDownloading select story.Story).ToList();
-			var downloadingMyStories = (from story in Stories.MyStories where story.Story.IsDownloading select story.Story).ToList();
-
-			foreach (var story in stories.FriendStories.SelectMany(friendStory => friendStory.Stories))
-				foreach (var downloadingStory in downloadingFriendsStories.Where(downloadingStory => downloadingStory.Id == story.Story.Id))
+			if (AllUpdates == null)
+				AllUpdates = new AllUpdatesResponse
 				{
-					story.Story.IsDownloading = true;
-					break;
-				}
+					ConversationResponse = new ConversationResponse[0],
+					MessagingGatewayInfo = new MessagingGatewayInfo(),
+					StoriesResponse = new StoriesResponse(),
+					UpdatesResponse = new UpdatesResponse()
+				};
 
-			foreach (var story in stories.MyStories)
-				foreach (var downloadingStory in downloadingMyStories.Where(downloadingStory => downloadingStory.Id == story.Story.Id))
-				{
-					story.Story.IsDownloading = true;
-					break;
-				}
-
-			Stories = stories;
-		}
-
-		public void UpdatePublicActivities(ObservableDictionary<string, PublicActivity> publicActivities)
-		{
-			PublicActivities = publicActivities;
+			AllUpdates.UpdatesResponse.Username = username;
 		}
 
 		#endregion
@@ -211,7 +174,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public bool IsAuthenticated()
 		{
-			return (Account != null && AuthToken != null && Account.AuthToken == AuthToken && Account.Logged);
+			return (AllUpdates != null && AllUpdates.UpdatesResponse != null && AllUpdates.UpdatesResponse.Logged);
 		}
 
 		#endregion
@@ -221,27 +184,17 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Actions:Save
 
-		public async void Save()
+		public void Save()
 		{
 			SaveAccountData();
-
-			// Seralize the Stories model and save as json string in Isolated Storage
-			IsolatedStorage.WriteFileAsync(StoriesDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Stories)));
-
-			// Seralize the PublicActivies model and save as json string in Isolated Storage
-			IsolatedStorage.WriteFileAsync(PublicActivityDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(PublicActivities)));
-
-			// Save AuthToken and Username to Roaming storage
-			IsolatedStorage.WriteRoamingSetting(RoamingSnapchatDataContainer, "Username", Username);
-			IsolatedStorage.WriteRoamingSetting(RoamingSnapchatDataContainer, "AuthToken", AuthToken);
-
+			
 			// All done b
 		}
 
 		public async void SaveAccountData()
 		{
 			// Seralize the Account model and save as json string in Isolated Storage
-			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(Account)));
+			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(AllUpdates)));
 		}
 
 		#endregion
@@ -249,8 +202,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public async Task DeleteAsync()
 		{
 			await IsolatedStorage.DeleteFileAsync(AccountDataFileName);
-			await IsolatedStorage.DeleteFileAsync(StoriesDataFileName);
-			await IsolatedStorage.DeleteFileAsync(PublicActivityDataFileName);
 			IsolatedStorage.DeleteRoamingSetting(RoamingSnapchatDataContainer, "Username");
 			IsolatedStorage.DeleteRoamingSetting(RoamingSnapchatDataContainer, "AuthToken");
 		}
@@ -263,63 +214,26 @@ namespace SnapDotNet.Core.Snapchat.Api
 			{
 				try
 				{
-					var accountDataParsed = JsonConvert.DeserializeObject<Account>(accountData);
-					UpdateAccount(accountDataParsed);
+					var accountDataParsed = JsonConvert.DeserializeObject<AllUpdatesResponse>(accountData);
+					Update(accountDataParsed);
 				}
 				catch (Exception exception)
 				{
 					Debug.WriteLine(exception.ToString());
 				}
 			}
-
-			// Deseralize the Stories model from IsolatedStorage
-			var storiesData = await IsolatedStorage.ReadFileAsync(StoriesDataFileName);
-			if (storiesData != null && !String.IsNullOrEmpty(storiesData) && storiesData != "null")
-			{
-				try 
-				{
-					var storiesDataParsed = JsonConvert.DeserializeObject<Stories>(storiesData);
-					UpdateStories(storiesDataParsed);
-				}
-				catch (Exception exception)
-				{
-					Debug.WriteLine(exception.ToString());
-				}
-			}
-
-			// Deseralize the PublicActivity model from IsolatedStorage
-			var publicActiviesData = await IsolatedStorage.ReadFileAsync(PublicActivityDataFileName);
-			if (publicActiviesData != null && !String.IsNullOrEmpty(publicActiviesData) && publicActiviesData != "null")
-			{
-				try
-				{
-					var publicActiviesDataParsed =
-						JsonConvert.DeserializeObject<ObservableDictionary<string, PublicActivity>>(storiesData);
-					UpdatePublicActivities(publicActiviesDataParsed);
-				}
-				catch (Exception exception)
-				{
-					Debug.WriteLine(exception.ToString());
-				}
-			}
-
-			// Load AuthToken and Username from Roaming storage
-			UpdateUsername(IsolatedStorage.ReadRoamingSetting(RoamingSnapchatDataContainer, "Username"));
-			UpdateAuthToken(IsolatedStorage.ReadRoamingSetting(RoamingSnapchatDataContainer, "AuthToken"));
 
 			Loaded = true;
 		}
 
 		public async Task UpdateAllAsync(Action hidependingUiAction, ApplicationSettings settings)
 		{
-			await Endpoints.GetUpdatesAsync();
-			await Endpoints.GetStoriesAsync();
-			await Endpoints.GetPublicActivityAsync();
+			await Endpoints.GetAllUpdatesAsync();
 			hidependingUiAction();
-			await DownloadSnaps(settings);
+			DownloadSnaps(settings);
 		}
 
-		private async Task DownloadSnaps(ApplicationSettings settings)
+		private void DownloadSnaps(ApplicationSettings settings)
 		{
 			// Never check
 			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Never) return;
@@ -332,8 +246,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Wifi &&
 				!NetworkInformationHelper.OnWifiConnection()) return;
 
-			foreach (var snap in Account.Snaps)
-				await snap.DownloadSnapBlobAsync(this);
+			//foreach (var conversation in AllUpdates.ConversationResponse)
+			//	foreach (var snap in conversation.ConversationMessages.Messages.Where(m => m.Snap != null))
+			//		await snap.DownloadSnapBlobAsync(this);
 
 			// yea son
 			SaveAccountData();

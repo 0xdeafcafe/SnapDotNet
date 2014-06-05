@@ -10,7 +10,15 @@ namespace SnapDotNet.Core.Snapchat.Converters.Json
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
 			JsonSerializer serializer)
 		{
-			return reader.TokenType != JsonToken.Integer ? DateTime.UtcNow : Timestamps.ConvertToDateTime((long) reader.Value);
+			if (reader.TokenType != JsonToken.Integer) 
+				return DateTime.UtcNow;
+
+			var converted = Timestamps.ConvertToDateTime((long) reader.Value);
+			//if (reader.Path.Contains("replay") || converted.Year < 2013)
+			//{
+			//	Debug Code, leave this here for tests
+			//}
+			return converted;
 		}
 
 		public override void WriteJson(JsonWriter writer, object value,
@@ -18,24 +26,15 @@ namespace SnapDotNet.Core.Snapchat.Converters.Json
 		{
 			if (value == null)
 			{
-				writer.WriteNull();
+				writer.WriteValue(0);
 				return;
 			}
 
-			long ticks;
-			if (value is DateTime)
-			{
-				var epoc = new DateTime(1970, 1, 1);
-				var delta = ((DateTime)value) - epoc;
-				if (delta.TotalSeconds < 0)
-					throw new ArgumentOutOfRangeException("value", "Unix epoc starts January 1st, 1970");
+			if (!(value is DateTime)) throw new Exception("Expected date object value.");
 
-				ticks = (long)delta.TotalSeconds;
-			}
-			else
-				throw new Exception("Expected date object value.");
-
-			writer.WriteValue(ticks);
+			var epoc = new DateTime(1970, 1, 1);
+			var delta = ((DateTime)value) - epoc;
+			writer.WriteValue(delta.TotalSeconds < 0 ? 0 : (long) delta.TotalSeconds);
 		}
 	}
 }

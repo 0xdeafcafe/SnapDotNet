@@ -11,7 +11,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		/// <summary>
 		///     The date of the Unix Epoch
 		/// </summary>
-		private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		public static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		/// <summary>
 		///     Generates this fucking retarded timestamp that snapchat use...
@@ -37,12 +37,8 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		/// <returns>A nice, non retarded DateTime object.</returns>
 		public static DateTime ConvertToDateTime(Int64 retardedTimeStamp)
 		{
-			var unixShit = retardedTimeStamp.ToString(CultureInfo.InvariantCulture);
-
-			if (unixShit.Length > 10)
-				unixShit = unixShit.Remove(10);
-
-			return UnixEpoch.AddSeconds(Int64.Parse(unixShit));
+			// Strip the last 4 digits from the number, they are milliseconds and don't effect us at all
+			return UnixEpoch.AddSeconds((long) (retardedTimeStamp / 1000));
 		}
 
 		/// <summary>

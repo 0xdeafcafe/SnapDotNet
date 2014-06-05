@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
 
 namespace SnapDotNet.Core.Snapchat.Models
@@ -49,7 +50,7 @@ namespace SnapDotNet.Core.Snapchat.Models
 	/// </summary>
 	[DataContract]
 	public class Account
-		: Response
+		: NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "bests")]
 		public ObservableCollection<string> BestFriends
