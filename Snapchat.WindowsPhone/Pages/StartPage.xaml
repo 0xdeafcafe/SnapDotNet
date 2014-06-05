@@ -84,15 +84,40 @@
 
 		<i:Interaction.Behaviors>
 			<core:EventTriggerBehavior EventName="Loaded">
-				<core:GoToStateAction StateName="Start"/>
+				<core:GoToStateAction StateName="StartPortrait"/>
 			</core:EventTriggerBehavior>
 		</i:Interaction.Behaviors>
 
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup>
-				<VisualState x:Name="Start">
+				<VisualState x:Name="StartPortrait">
 					<Storyboard>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGrid">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridPortrait">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+
+						<DoubleAnimation Storyboard.TargetName="LogInPageGridTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
+							<DoubleAnimation.EasingFunction>
+								<QuadraticEase EasingMode="EaseOut"/>
+							</DoubleAnimation.EasingFunction>
+						</DoubleAnimation>
+						<DoubleAnimation Storyboard.TargetName="SignUpPageTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
+							<DoubleAnimation.EasingFunction>
+								<QuadraticEase EasingMode="EaseOut"/>
+							</DoubleAnimation.EasingFunction>
+						</DoubleAnimation>
+
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPageGrid" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPageGrid" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="StartLandscape">
+					<Storyboard>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridLandscape">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
 
@@ -125,7 +150,10 @@
 								<CircleEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGrid" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridPortrait" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridLandscape" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
@@ -140,7 +168,10 @@
 								<CircleEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGrid" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridPortrait" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridLandscape" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
@@ -150,7 +181,7 @@
 
 
 		<!-- Start Page -->
-		<Grid x:Name="StartPageGrid" Background="{StaticResource PageBackgroundBrush}">
+		<Grid x:Name="StartPageGridPortrait" Visibility="Collapsed" Background="{StaticResource PageBackgroundBrush}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
@@ -158,7 +189,7 @@
 			</Grid.RowDefinitions>
 
 			<!-- Hovering Ghost -->
-			<Image x:Name="Logo"
+			<Image x:Name="LogoPortrait"
                     Source="ms-appx:///Assets/Ghost.png"
                     VerticalAlignment="Top"
                     Stretch="None" Height="275" Margin="15,0">
@@ -166,11 +197,11 @@
 					<EventTrigger RoutedEvent="Image.Loaded">
 						<BeginStoryboard>
 							<Storyboard>
-								<DoubleAnimation Storyboard.TargetName="Logo"
+								<DoubleAnimation Storyboard.TargetName="LogoPortrait"
                                                 Storyboard.TargetProperty="Opacity"
                                                 To="1" From="0"
                                                 Duration="00:00:00.9"/>
-								<DoubleAnimation Storyboard.TargetName="LogoTranslate"
+								<DoubleAnimation Storyboard.TargetName="LogoPortraitTranslate"
                                                 Storyboard.TargetProperty="Y"
                                                 To="0"
                                                 From="-25"
@@ -186,7 +217,7 @@
 					</EventTrigger>
 				</Image.Triggers>
 				<Image.RenderTransform>
-					<TranslateTransform x:Name="LogoTranslate" Y="-25"/>
+					<TranslateTransform x:Name="LogoPortraitTranslate" Y="-25"/>
 				</Image.RenderTransform>
 			</Image>
 
@@ -202,6 +233,69 @@
 				</i:Interaction.Behaviors>
 			</Button>
 			<Button x:Uid="SignUpButton" Style="{StaticResource BigButtonStyle}" Grid.Row="2" Background="#FF00A2FF" Content="SIGN UP">
+				<i:Interaction.Behaviors>
+					<core:EventTriggerBehavior EventName="Tapped">
+						<core:GoToStateAction StateName="SignUp"/>
+					</core:EventTriggerBehavior>
+				</i:Interaction.Behaviors>
+			</Button>
+		</Grid>
+		<Grid x:Name="StartPageGridLandscape" Background="{StaticResource PageBackgroundBrush}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Hovering Ghost -->
+			<Image x:Name="LogoLandscape" Grid.ColumnSpan="2"
+                    Source="ms-appx:///Assets/Ghost.png"
+                    VerticalAlignment="Top"
+                    Stretch="None" Height="275" Margin="15,-15">
+				<Image.Triggers>
+					<EventTrigger RoutedEvent="Image.Loaded">
+						<BeginStoryboard>
+							<Storyboard>
+								<DoubleAnimation Storyboard.TargetName="LogoLandscape"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1" From="0"
+                                                Duration="00:00:00.9"/>
+								<DoubleAnimation Storyboard.TargetName="LogoLandscapeTranslate"
+                                                Storyboard.TargetProperty="Y"
+                                                To="0"
+                                                From="-25"
+                                                Duration="00:00:01.5"
+                                                AutoReverse="True"
+                                                RepeatBehavior="Forever">
+									<DoubleAnimation.EasingFunction>
+										<SineEase EasingMode="EaseInOut"/>
+									</DoubleAnimation.EasingFunction>
+								</DoubleAnimation>
+							</Storyboard>
+						</BeginStoryboard>
+					</EventTrigger>
+				</Image.Triggers>
+				<Image.RenderTransform>
+					<TranslateTransform x:Name="LogoLandscapeTranslate" Y="-25"/>
+				</Image.RenderTransform>
+			</Image>
+
+			<!-- App Name -->
+			<TextBlock Grid.ColumnSpan="2" Grid.Row="1" x:Uid="AppNameTextBlock" VerticalAlignment="Center" FontSize="28" HorizontalAlignment="Center" Margin="0,15">&lt; app name &gt;</TextBlock>
+
+			<!-- Buttons -->
+			<Button x:Uid="LogInButton" Style="{StaticResource BigButtonStyle}" Grid.Row="2" Grid.Column="0" Background="#FFF36136" Content="LOG IN">
+				<i:Interaction.Behaviors>
+					<core:EventTriggerBehavior EventName="Tapped">
+						<core:GoToStateAction StateName="LogIn"/>
+					</core:EventTriggerBehavior>
+				</i:Interaction.Behaviors>
+			</Button>
+			<Button x:Uid="SignUpButton" Style="{StaticResource BigButtonStyle}" Grid.Row="2" Grid.Column="1" Background="#FF00A2FF" Content="SIGN UP">
 				<i:Interaction.Behaviors>
 					<core:EventTriggerBehavior EventName="Tapped">
 						<core:GoToStateAction StateName="SignUp"/>
