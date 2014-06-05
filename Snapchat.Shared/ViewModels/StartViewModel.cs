@@ -13,7 +13,7 @@ using SnapDotNet.Core.Snapchat.Api.Exceptions;
 namespace Snapchat.ViewModels
 {
 	public sealed class StartViewModel
-		: ObservableObject
+		: BaseViewModel
 	{
 		public StartViewModel()
 		{

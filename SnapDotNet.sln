@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SnapDotNet.Azure", "SnapDot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Azure.MobileService", "SnapDotNet.Azure.MobileService\SnapDotNet.Azure.MobileService.csproj", "{C49169F2-A1B1-4DD1-9959-9E75B3F2FB30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Miscellaneous", "SnapDotNet.Core.Miscellaneous\SnapDotNet.Core.Miscellaneous.csproj", "{43F7F39F-37E3-4A7B-8C5E-B9B93A4ACE65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Snapchat", "SnapDotNet.Core.Snapchat\SnapDotNet.Core.Snapchat.csproj", "{E53AF6A8-4ECB-4E70-8EE9-6E65D3AA6A79}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B675F934-7B2C-4756-A33A-C76ACFBE4AA3}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -28,23 +32,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B675F9
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Miscellaneous", "SnapDotNet.Core.Miscellaneous\SnapDotNet.Core.Miscellaneous.csproj", "{43F7F39F-37E3-4A7B-8C5E-B9B93A4ACE65}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Snapchat", "SnapDotNet.Core.Snapchat\SnapDotNet.Core.Snapchat.csproj", "{E53AF6A8-4ECB-4E70-8EE9-6E65D3AA6A79}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snapchat", "Snapchat\Snapchat.csproj", "{29B29605-215D-41C9-B083-30B85532C13F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Snapchat", "Snapchat", "{91EFE32B-A9A1-4394-A5E4-6E3891B388B6}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Snapchat.Shared", "Snapchat.Shared1\Snapchat.Shared.shproj", "{0099AB56-AED8-44A1-9FAD-DD8952559C61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snapchat.WindowsPhone", "Snapchat.WindowsPhone\Snapchat.WindowsPhone.csproj", "{29B29605-215D-41C9-B083-30B85532C13F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Snapchat.Shared", "Snapchat.Shared\Snapchat.Shared.shproj", "{0099AB56-AED8-44A1-9FAD-DD8952559C61}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Snapchat.Shared1\Snapchat.Shared1.projitems*{29b29605-215d-41c9-b083-30b85532c13f}*SharedItemsImports = 4
+		Snapchat.Shared\Snapchat.Shared.projitems*{29b29605-215d-41c9-b083-30b85532c13f}*SharedItemsImports = 4
 		SnapDotNet.Shared\SnapDotNet.Shared.projitems*{a92f4564-8f8b-4e84-998e-748484be45f3}*SharedItemsImports = 4
 		SnapDotNet.Shared\SnapDotNet.Shared.projitems*{1b26e745-508e-4c01-bb08-18b3ef0f55b1}*SharedItemsImports = 4
 		SnapDotNet.Shared\SnapDotNet.Shared.projitems*{886db274-baca-4986-af5f-57d786dfcf2d}*SharedItemsImports = 13
-		Snapchat.Shared1\Snapchat.Shared1.projitems*{0099ab56-aed8-44a1-9fad-dd8952559c61}*SharedItemsImports = 13
+		Snapchat.Shared\Snapchat.Shared.projitems*{0099ab56-aed8-44a1-9fad-dd8952559c61}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
