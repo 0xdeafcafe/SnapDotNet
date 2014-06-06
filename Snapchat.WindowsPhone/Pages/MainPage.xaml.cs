@@ -127,6 +127,9 @@ namespace Snapchat.Pages
 			// Setup hardware events
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
+
+			// Set the status bar
+			SetStatusBar();
 		}
 
 		protected async override void OnNavigatedFrom(NavigationEventArgs e)
@@ -239,7 +242,6 @@ namespace Snapchat.Pages
 					case "Conversations":
 						secondaryCommands.Add(_downloadAllSnapsAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Minimal;
-						SetStatusBar();
 						break;
 
 					case "Camera":
@@ -251,17 +253,14 @@ namespace Snapchat.Pages
 
 						secondaryCommands.Add(_importPictureAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Compact;
-						SetStatusBar();
 						break;
 
 					case "Stories":
 						displayMode = AppBarClosedDisplayMode.Minimal;
-						SetStatusBar();
 						break;
 
 					case "ManageFriends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
-						SetStatusBar();
 						break;
 				}
 			}
