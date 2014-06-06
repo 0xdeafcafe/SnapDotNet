@@ -1,11 +1,15 @@
-﻿<UserControl x:Name="Content"
-             x:Class="Snapchat.Pages.PageContents.ConversationsPageContent"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:i="using:Microsoft.Xaml.Interactivity"
-             xmlns:core="using:Microsoft.Xaml.Interactions.Core">
-    
-    <Grid>
-        <TextBlock>Convos</TextBlock>
-    </Grid>
+﻿<UserControl	x:Class="Snapchat.Pages.PageContents.ConversationsPageContent"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:controls="using:Snapchat.Controls">
+
+	<Grid>
+		<Grid Background="#58a690" VerticalAlignment="Top" Height="100">
+
+			<controls:StateTextBlock PrimaryText="snapchat" SecondaryText="123 | 432"
+									 VerticalAlignment="Bottom" HorizontalAlignment="Left"
+									 Margin="18,0,0,0" FontWeight="Light"
+									 FontFamily="Segoe WP" FontSize="40" />
+		</Grid>
+	</Grid>
 </UserControl>

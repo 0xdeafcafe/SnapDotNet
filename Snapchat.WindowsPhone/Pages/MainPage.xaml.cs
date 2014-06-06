@@ -2,7 +2,9 @@
 using Windows.ApplicationModel;
 using Windows.Phone.UI.Input;
 using Windows.System.Threading;
+using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Microsoft.Xaml.Interactivity;
 using Snapchat.Attributes;
 using Snapchat.Common;
@@ -118,9 +120,11 @@ namespace Snapchat.Pages
 			if (!DesignMode.DesignModeEnabled)
 				await MediaCaptureManager.StartPreviewAsync(CapturePreview);
 
+			// Load data
 			if (!App.SnapchatManager.Loaded)
 				await App.SnapchatManager.LoadAsync();
 
+			// Setup hardware events
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
 		}
@@ -235,6 +239,7 @@ namespace Snapchat.Pages
 					case "Conversations":
 						secondaryCommands.Add(_downloadAllSnapsAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						SetStatusBar();
 						break;
 
 					case "Camera":
@@ -246,14 +251,17 @@ namespace Snapchat.Pages
 
 						secondaryCommands.Add(_importPictureAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Compact;
+						SetStatusBar();
 						break;
 
 					case "Stories":
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						SetStatusBar();
 						break;
 
 					case "ManageFriends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						SetStatusBar();
 						break;
 				}
 			}
@@ -283,6 +291,16 @@ namespace Snapchat.Pages
 					appBar.SecondaryCommands.Add(command);
 			}
 			appBar.ClosedDisplayMode = displayMode;
+		}
+
+		private static void SetStatusBar()
+		{
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+
+			var statusBar = StatusBar.GetForCurrentView();
+			statusBar.BackgroundOpacity = 0.0f;
+			statusBar.BackgroundColor = Colors.Transparent;
+			statusBar.ForegroundColor = Colors.White;
 		}
 	}
 }

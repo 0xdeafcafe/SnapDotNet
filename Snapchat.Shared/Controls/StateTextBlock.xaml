@@ -1,0 +1,21 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controls="using:Snapchat.Controls">
+
+	<Style TargetType="controls:StateTextBlock">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Grid Background="Transparent" IsHitTestVisible="True">
+						<TextBlock Text="{Binding PrimaryText, RelativeSource={RelativeSource TemplatedParent}}" 
+								   Visibility="{Binding PrimaryTextVisibility, RelativeSource={RelativeSource TemplatedParent}}" />
+						<TextBlock Text="{Binding SecondaryText, RelativeSource={RelativeSource TemplatedParent}}" 
+								   Visibility="{Binding SecondaryTextVisibility, RelativeSource={RelativeSource TemplatedParent}}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+</ResourceDictionary>
