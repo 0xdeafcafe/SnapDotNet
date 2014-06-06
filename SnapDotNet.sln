@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.21730.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SnapDotNet.Core", "SnapDotNet.Core", "{F9870B4E-8AFF-4477-851C-FA1073EA9BF2}"
 EndProject
@@ -47,8 +47,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{194757E6-0DFF-4CF2-BFFB-7625B1A2F789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{194757E6-0DFF-4CF2-BFFB-7625B1A2F789}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{194757E6-0DFF-4CF2-BFFB-7625B1A2F789}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{194757E6-0DFF-4CF2-BFFB-7625B1A2F789}.Debug|ARM.ActiveCfg = Debug|ARM
 		{194757E6-0DFF-4CF2-BFFB-7625B1A2F789}.Debug|ARM.Build.0 = Debug|ARM
 		{194757E6-0DFF-4CF2-BFFB-7625B1A2F789}.Debug|ARM.Deploy.0 = Debug|ARM

@@ -5,7 +5,8 @@
       xmlns:i="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:viewModels="using:Snapchat.ViewModels"
-      xmlns:settings="using:Snapchat.Converters.Settings">
+      xmlns:converters="using:Snapchat.Converters"
+      xmlns:settingsConverters="using:Snapchat.Converters.Settings">
 
     <Page.DataContext>
         <viewModels:SettingsViewModel/>
@@ -24,30 +25,41 @@
     </Page.BottomAppBar>
 
     <Page.Resources>
-        <settings:IntegerConverter x:Key="StoryPrivacyConverter"/>
-        <settings:IntegerConverter x:Key="DownloadSnapsModeConverter"/>
+        <converters:IntegerConverter x:Key="StoryPrivacyConverter"/>
+        <converters:IntegerConverter x:Key="MessagePrivacyConverter"/>
+        <converters:IntegerConverter x:Key="DownloadSnapsModeConverter"/>
+        <settingsConverters:NumberOfBestFriendsToIndexConverter x:Key="NumberOfBestFriendsToIndexConverter"/>
     </Page.Resources>
 
     <Pivot>
         <PivotItem x:Uid="SettingsProfileGroup" Header="profile">
-            <StackPanel>
-                <TextBox x:Uid="SettingsUsernameTextBox" Header="Username"/>
-                <TextBox x:Uid="SettingsDisplayNameTextBox" Header="Display name" InputScope="EmailSmtpAddress"/>
-                <TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress"/>
-                <TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber"/>
-                <TextBlock>TODO: number of best friends</TextBlock>
-                <TextBlock>TODO: next replay</TextBlock>
-            </StackPanel>
+            <ScrollViewer>
+                <Grid>
+                    <StackPanel>
+                        <TextBox x:Uid="SettingsUsernameTextBox" Header="Username" Text="{Binding Username, Mode=TwoWay}" InputScope="EmailSmtpAddress"/>
+                        <TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Email, Mode=TwoWay}"/>
+                        <TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Phone, Mode=TwoWay}"/>
+                        <ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends"
+                                  SelectedIndex="{Binding NumberOfBestFriends, Converter={StaticResource NumberOfBestFriendsToIndexConverter}, Mode=TwoWay}">
+                            <ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
+                            <ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
+                            <ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
         </PivotItem>
 
         <PivotItem x:Uid="SettingsPrivacyGroup" Header="privacy">
             <StackPanel>
-                <ComboBox x:Uid="SettingsStoryPrivacy" Header="Who can see my story?">
+                <ComboBox x:Uid="SettingsStoryPrivacy" Header="Who can see my story?" SelectedIndex="{Binding StoryPrivacy, Converter={StaticResource StoryPrivacyConverter}, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="StoryPrivacyEveryone">Everyone</ComboBoxItem>
                     <ComboBoxItem x:Uid="StoryPrivacyFriends">Friends</ComboBoxItem>
                     <ComboBoxItem x:Uid="StoryPrivacyCustom">Custom</ComboBoxItem>
                 </ComboBox>
-                <ComboBox x:Uid="SettingsMessagePrivacy" Header="Who can send me snaps?">
+                <ComboBox x:Uid="SettingsMessagePrivacy" Header="Who can send me snaps?" SelectedIndex="{Binding AccountPrivacy, Converter={StaticResource MessagePrivacyConverter}, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="MessagePrivacyEveryone">Everyone</ComboBoxItem>
                     <ComboBoxItem x:Uid="MessagePrivacyFriends">Friends</ComboBoxItem>
                 </ComboBox>
@@ -78,6 +90,55 @@
                     <ComboBoxItem x:Uid="AutomaticallyDownloadSnapsAlways">Always</ComboBoxItem>
                 </ComboBox>
             </StackPanel>
+        </PivotItem>
+
+        <PivotItem x:Uid="SettingsAboutGroup" Header="about" ScrollViewer.VerticalScrollMode="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
+            <ScrollViewer>
+                <Grid>
+                    <StackPanel>
+                        <TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}" Foreground="#FFFFFFFF">ColdSnap</TextBlock>
+                        <TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
+
+                        <!-- Street creds -->
+                        <TextBlock x:Uid="AboutDevelopersGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Developers</TextBlock>
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontFamily="Global User Interface">
+                    <Run>Matt Saville&#160;</Run>
+                    <Hyperlink NavigateUri="https://twitter.com/mattsaville8" Foreground="#FF00A2FF">@mattsaville8</Hyperlink>
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                    <Run>Alex Reed&#160;</Run>
+                    <Hyperlink NavigateUri="https://twitter.com/alexerax" Foreground="#FF00A2FF">@alexerax</Hyperlink>
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                    <Run>Collin Dillinger&#160;</Run>
+                    <Hyperlink NavigateUri="https://twitter.com/cddillinger" Foreground="#FF00A2FF">@cddillinger</Hyperlink>
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                    <Run>Kaelan Fouwels&#160;</Run>
+                    <Hyperlink NavigateUri="https://twitter.com/kfouwels" Foreground="#FF00A2FF">@kfouwels</Hyperlink>
+                        </TextBlock>
+
+                        <!-- Localization credits -->
+                        <TextBlock x:Uid="AboutTranslatorsGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Localization</TextBlock>
+
+                        <!-- Spanish -->
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
+                        <TextBlock>Pablo Cortez</TextBlock>
+
+                        <!-- German -->
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
+                        <TextBlock>Mr. Volkswagen</TextBlock>
+                        <TextBlock>Adolf Hitler</TextBlock>
+
+                        <!-- Chinese -->
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}">Chinese</TextBlock>
+                        <TextBlock>Ho Lee Fuk</TextBlock>
+                        <TextBlock>Wi To Lo</TextBlock>
+                        <TextBlock>Sum Ting Wong</TextBlock>
+                        <TextBlock>Bang Ding Ow</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
         </PivotItem>
     </Pivot>
 

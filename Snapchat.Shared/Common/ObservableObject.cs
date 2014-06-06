@@ -22,11 +22,15 @@ namespace Snapchat.Common
 				return false;
 
 			field = value;
-
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			OnNotifyPropertyChanged(propertyName);
 
 			return true;
+		}
+
+		protected void OnNotifyPropertyChanged([CallerMemberName] string propertyName = "")
+		{
+			if (PropertyChanged != null)
+				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

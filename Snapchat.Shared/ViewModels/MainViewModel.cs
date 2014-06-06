@@ -79,7 +79,8 @@ namespace Snapchat.ViewModels
 								width = ActualWidth * 3;
 								break;
 						}
-						PageScrollViewer.ChangeView(width, null, null, false);
+
+						while (!PageScrollViewer.ChangeView(width, null, null, false)) { }
 					});
 			},
 			TimeSpan.FromMilliseconds(25));

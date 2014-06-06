@@ -1,5 +1,8 @@
 ﻿using System.Windows.Input;
 using Snapchat.Common;
+using System;
+using SnapDotNet.Core.Snapchat.Models.New;
+using Windows.UI.Xaml;
 
 namespace Snapchat.ViewModels
 {
@@ -8,12 +11,17 @@ namespace Snapchat.ViewModels
 	{
 		public SettingsViewModel()
 		{
+			// TODO: Load from roaming settings
 			LiveTileEnabled = true;
 			ToastsEnabled = true;
 			FrontCameraMirrorEffect = true;
 			DownloadSnapsMode = AutomaticallyDownloadSnapsMode.WiFi;
 
 			UpgradeProCommand = new RelayCommand(UpgradeToPro);
+
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+			timer.Tick += delegate { OnNotifyPropertyChanged("NextReplay"); };
+			timer.Start();
 		}
 
 		/// <summary>
@@ -92,6 +100,77 @@ namespace Snapchat.ViewModels
 			set { TryChangeValue(ref _downloadSnapsMode, value); }
 		}
 		private AutomaticallyDownloadSnapsMode _downloadSnapsMode;
+
+		/// <summary>
+		/// Gets or sets the number of best friends.
+		/// </summary>
+		public int NumberOfBestFriends
+		{
+			get { return Account.NumberOfBestFriends; }
+			set
+			{
+				Account.NumberOfBestFriends = value;
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the username of the account.
+		/// </summary>
+		public string Username
+		{
+			get { return Account.Username; }
+			set
+			{
+				Account.Username = value;
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		public string Email
+		{
+			get { return Account.Email; }
+			set
+			{
+				Account.Email = value;
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		public string Phone
+		{
+			get { return Account.SnapchatPhoneNumber; }
+			set
+			{
+				Account.SnapchatPhoneNumber = value;
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		public StoryPrivacy StoryPrivacy
+		{
+			get { return Account.StoryPrivacy; }
+			set
+			{
+				Account.StoryPrivacy = value;
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		public AccountPrivacy AccountPrivacy
+		{
+			get { return Account.AccountPrivacy; }
+			set
+			{
+				Account.AccountPrivacy = value;
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		public TimeSpan NextReplay
+		{
+			get { return DateTime.Now - Account.LastReplayedSnap; }
+		}
 
 		private void UpgradeToPro()
 		{

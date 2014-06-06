@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace Snapchat.Converters.Settings
+namespace Snapchat.Converters
 {
 	public sealed class IntegerConverter
 		: IValueConverter
