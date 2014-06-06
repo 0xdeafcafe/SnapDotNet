@@ -82,8 +82,8 @@
 
         <PivotItem x:Uid="SettingsAppGroup" Header="app">
             <StackPanel>
-                <ToggleSwitch x:Uid="SettingsHoldToViewSnap" Header="Hold to view snaps" IsOn="{Binding HoldToViewSnap}"/>
-                <ToggleSwitch x:Uid="SettingsFrontCameraMirrorEffect" Header="Front camera mirror effect" IsOn="{Binding FrontCameraMirrorEffect}"/>
+                <ToggleSwitch x:Uid="SettingsHoldToViewSnap" Header="Hold to view snaps" IsOn="{Binding HoldToViewSnap, Mode=TwoWay}"/>
+                <ToggleSwitch x:Uid="SettingsFrontCameraMirrorEffect" Header="Front camera mirror effect" IsOn="{Binding FrontCameraMirrorEffect, Mode=TwoWay}"/>
                 <ComboBox x:Uid="SettingsAutomaticallyDownloadSnaps" Header="Automatically download snaps" SelectedIndex="{Binding DownloadSnapsMode, Converter={StaticResource DownloadSnapsModeConverter}, Mode=TwoWay}">
                     <ComboBoxItem x:Uid="AutomaticallyDownloadSnapsNever">Never</ComboBoxItem>
                     <ComboBoxItem x:Uid="AutomaticallyDownloadSnapsWifi">Wi-Fi only</ComboBoxItem>

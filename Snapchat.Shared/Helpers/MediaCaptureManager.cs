@@ -15,7 +15,11 @@ namespace Snapchat.Helpers
 
 		public static bool IsRecording { get; set; }
 		public static bool IsPreviewing { get; set; }
-		public static bool IsMirrored { get; set; }
+		public static bool IsMirrored
+		{
+			get { return AppSettings.Get<bool>("FrontCameraMirrorEffect"); }
+			set { AppSettings.Set("FrontCameraMirrorEffect", value); }
+		}
 
 		public static bool IsUsingFrontCamera
 		{
@@ -112,8 +116,9 @@ namespace Snapchat.Helpers
 				? VideoRotation.Clockwise90Degrees
 				: VideoRotation.Clockwise270Degrees);
 
-			if (IsMirrored && IsUsingFrontCamera)
-				MediaCapture.SetPreviewMirroring(true);
+			// Crashes if enabled even inside a try/catch block :x
+			//if (IsMirrored && IsUsingFrontCamera)
+			//	MediaCapture.SetPreviewMirroring(true);
 
 			Debug.WriteLine("Initialized camera!");
 		}
