@@ -82,6 +82,10 @@ namespace Snapchat.Pages
 		{
 			InitializeComponent();
 
+			// Horrible UI Design Time cleanup
+			CameraPreviewImage.Visibility = Visibility.Collapsed;
+
+			// Setup the datas
 			DataContext = ViewModel = new MainViewModel(ScrollViewer);
 
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;

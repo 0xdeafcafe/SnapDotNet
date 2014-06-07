@@ -25,6 +25,11 @@ namespace Snapchat.ViewModels
 			get { return App.SnapchatManager.AllUpdates.UpdatesResponse; }
 		}
 
+		public ConversationResponse[] Conversations
+		{
+			get { return App.SnapchatManager.AllUpdates.ConversationResponse; }
+		}
+
 		public SnapchatDataHelpers Helpers { get; set; }
 	}
 

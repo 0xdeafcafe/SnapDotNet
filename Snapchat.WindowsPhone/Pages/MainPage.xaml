@@ -84,16 +84,30 @@
 
 			<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
 				<Grid>
+					<Image x:Name="CameraPreviewImage" Source="ms-appx:///Assets/camera_background_testing.jpg" Stretch="UniformToFill" />
 					<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill"/>
 
-					<Ellipse VerticalAlignment="Bottom" Margin="0,0,0,100" 
+					<StackPanel x:Name="FirstRunPrompt" VerticalAlignment="Bottom" Margin="0,0,0,180" Height="100">
+						<Grid Height="80" Background="#AA000000">
+							<TextBlock FontFamily="Segoe WP" FontSize="22" TextAlignment="Center" TextWrapping="Wrap" Margin="50,0" VerticalAlignment="Center">
+								<Run Text="Tap" Foreground="Orange" />
+								<Run Text="to take a photo." />
+								<Run Text="Hold" Foreground="Orange" />
+								<Run Text="to take a video." />
+							</TextBlock>
+						</Grid>
+						<Path Fill="#AA000000" HorizontalAlignment="Center" Width="40" Height="20"
+							  Data="M 0,0 L 40,0 20,20 0,0" />
+					</StackPanel>
+
+					<Ellipse VerticalAlignment="Bottom" Margin="0,0,0,90" 
 							 HorizontalAlignment="Center" 
-							 Width="80" Height="80"
+							 Width="90" Height="90"
 							 Fill="#66FFFFFF"
 							 Stroke="White" StrokeThickness="4">
 					</Ellipse>
 
-					<Grid VerticalAlignment="Bottom" Height="70" Margin="0,0,0,70">
+					<Grid VerticalAlignment="Bottom" Height="70" Margin="0,0,0,60">
 						<!-- Outer borders for both icons provide a bigger touch sensitive region for better UX -->
 						<Button HorizontalAlignment="Left" VerticalAlignment="Center"
 								Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
 
@@ -66,7 +67,16 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public Int32 NumberOfBestFriends { get; set; }
 
 		[DataMember(Name = "received")]
-		public Int32 RecievedSnaps { get; set; }
+		public Int32 RecievedSnaps
+		{
+			get { return _recievedSnaps; }
+			set
+			{
+				SetField(ref _recievedSnaps, value);
+				NotifyPropertyChanged("FriendlyRatio");
+			}
+		}
+		private Int32 _recievedSnaps;
 
 		[DataMember(Name = "recents")]
 		public String[] RecentFriends { get; set; }
@@ -75,13 +85,40 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public ObservableCollection<string> Requests { get; set; }
 
 		[DataMember(Name = "score")]
-		public Int32 Score { get; set; }
+		public Int32 Score
+		{
+			get { return _score; }
+			set
+			{
+				SetField(ref _score, value);
+				NotifyPropertyChanged("FriendlyRatio");
+			}
+		}
+		private Int32 _score;
+
+		[IgnoreDataMember]
+		public String FriendlyRatio
+		{
+			get
+			{
+				return String.Format("{0} | {1}", SentSnaps.ToDelimiter(), RecievedSnaps.ToDelimiter());
+			}
+		}
 
 		[DataMember(Name = "searchable_by_phone_number")]
 		public Boolean SearchableByPhoneNumber { get; set; }
 
 		[DataMember(Name = "sent")]
-		public Int32 SentSnaps { get; set; }
+		public Int32 SentSnaps
+		{
+			get { return _sentSnaps; }
+			set
+			{
+				SetField(ref _sentSnaps, value);
+				NotifyPropertyChanged("FriendlyRatio");
+			}
+		}
+		private Int32 _sentSnaps;
 
 		[DataMember(Name = "should_call_to_verify_number")]
 		public Boolean ShouldCallToVerifyNumber { get; set; }
