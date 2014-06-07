@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using SnapDotNet.Core.Miscellaneous.Models;
 
@@ -8,6 +9,11 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	public class AllUpdatesResponse
 		: NotifyPropertyChangedBase
 	{
+		public AllUpdatesResponse()
+		{
+			ConversationResponse.CollectionChanged += (sender, args) => NotifyPropertyChanged("ConversationResponse");
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -23,12 +29,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		/// 
 		/// </summary>
 		[DataMember(Name = "conversations_response")]
-		public ConversationResponse[] ConversationResponse
+		public ObservableCollection<ConversationResponse> ConversationResponse
 		{
 			get { return _conversationResponse; }
 			set { SetField(ref _conversationResponse, value); }
 		}
-		private ConversationResponse[] _conversationResponse;
+		private ObservableCollection<ConversationResponse> _conversationResponse = new ObservableCollection<ConversationResponse>();
 
 		/// <summary>
 		/// 

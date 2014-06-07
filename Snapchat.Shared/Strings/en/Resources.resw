@@ -270,6 +270,9 @@
   <data name="StatusLoggingIn" xml:space="preserve">
     <value>Logging into Snapchat...</value>
   </data>
+  <data name="StatusUpdating" xml:space="preserve">
+    <value>Updating...</value>
+  </data>
   <data name="StoryPrivacyCustom.Content" xml:space="preserve">
     <value>Custom</value>
   </data>

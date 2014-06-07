@@ -1,8 +1,7 @@
 ﻿<UserControl	x:Class="Snapchat.Pages.PageContents.ConversationsPageContent"
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				xmlns:controls="using:Snapchat.Controls"
-				xmlns:xc="using:WinRTXamlToolkit.Controls">
+				xmlns:controls="using:Snapchat.Controls">
 
 	<Grid Background="White">
 		<Grid.RowDefinitions>
@@ -10,7 +9,6 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<Grid Background="#58a690" Grid.Row="0" Margin="0,0,-0.167,0">
-
 			<controls:StateTextBlock PrimaryText="snapchat" 
 									 SecondaryText="{Binding Path=Account.FriendlyRatio, FallbackValue='69 | 69'}"
 									 VerticalAlignment="Bottom" HorizontalAlignment="Left"
@@ -148,7 +146,8 @@
 										<ColumnDefinition Width="*" />
 									</Grid.ColumnDefinitions>
 
-									<Border Width="19" Height="19" CornerRadius="2" Background="#9b55a0" Grid.Column="0" />
+									<ContentControl Grid.Row="0" VerticalAlignment="Center"
+													Template="{Binding Converter={StaticResource SnapIconConverter}}" />
 
 									<StackPanel Grid.Column="1" VerticalAlignment="Center">
 										<TextBlock Text="{Binding Path=Participants[1], FallbackValue='matty'}" 

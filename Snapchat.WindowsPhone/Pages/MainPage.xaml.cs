@@ -31,7 +31,8 @@ namespace Snapchat.Pages
 
 		private readonly AppBarButton _refreshAppBarButton = new AppBarButton
 		{
-			Label = App.Strings.GetString("RefreshAppBarButtonLabel")
+			Label = App.Strings.GetString("RefreshAppBarButtonLabel"),
+			Command = new RelayCommand(App.UpdateSnapchatData)
 		};
 
 		private readonly AppBarButton _settingsAppBarButton = new AppBarButton
