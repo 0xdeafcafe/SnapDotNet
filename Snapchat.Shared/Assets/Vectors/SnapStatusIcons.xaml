@@ -34,22 +34,22 @@
 	<ControlTemplate x:Key="sent_screenshotted">
 		<Grid>
 			<Path Width="22" Height="22" Stroke="{Binding Converter={StaticResource SnapColourConverter}, FallbackValue='#e92754'}" 
-				  Fill="White" StrokeLineJoin="Round" Margin="-6,0,0,0"
-				  Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" RenderTransformOrigin="0.5,0.5" >
+				  Fill="White" StrokeLineJoin="Round" Margin="-8,0,0,0"
+				  Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" RenderTransformOrigin="0.5,0.5" StrokeThickness="1.5" >
 				<Path.RenderTransform>
-					<CompositeTransform ScaleX="-0.9" ScaleY="0.9"/>
+					<CompositeTransform ScaleX="-1.0" ScaleY="1.0"/>
 				</Path.RenderTransform>
 			</Path>
 			<Path Width="22" Height="22" Stroke="White" 
 				  Fill="White" StrokeLineJoin="Round"
-				  Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" RenderTransformOrigin="0.5,0.5" >
+				  Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" RenderTransformOrigin="0.5,0.5" StrokeThickness="1.5" >
 				<Path.RenderTransform>
-					<CompositeTransform ScaleX="1.15" ScaleY="1.15"/>
+					<CompositeTransform ScaleX="1.2" ScaleY="1.2"/>
 				</Path.RenderTransform>
 			</Path>
 			<Path Width="22" Height="22" Stroke="{Binding Converter={StaticResource SnapColourConverter}, FallbackValue='#e92754'}" 
 				  Fill="White" StrokeLineJoin="Round"
-				  Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" />
+				  Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" StrokeThickness="1.5" />
 		</Grid>
 	</ControlTemplate>
 </ResourceDictionary>
