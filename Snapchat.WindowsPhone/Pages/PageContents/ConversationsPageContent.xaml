@@ -1,7 +1,17 @@
 ﻿<UserControl	x:Class="Snapchat.Pages.PageContents.ConversationsPageContent"
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-				xmlns:controls="using:Snapchat.Controls">
+				xmlns:controls="using:Snapchat.Controls"
+				xmlns:conversations="using:Snapchat.Converters.Conversations">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
+
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../../Controls/StateTextBlock.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
 
 	<Grid Background="White">
 		<Grid.RowDefinitions>
