@@ -1,9 +1,5 @@
-﻿using System.Linq;
-using System.Reflection;
-using Windows.ApplicationModel.Resources;
-using Windows.UI.Core;
+﻿using Windows.ApplicationModel.Resources;
 using Microsoft.WindowsAzure.MobileServices;
-using Snapchat.Attributes;
 using Snapchat.Helpers;
 using Snapchat.Pages;
 using System;
@@ -95,8 +91,8 @@ namespace Snapchat
 				RootFrame.Navigated += RootFrame_FirstNavigated;
 
 				// Go to Main Page if the user is still authenticated.
-				if (!App.SnapchatManager.Loaded)
-					await App.SnapchatManager.LoadAsync();
+				if (!SnapchatManager.Loaded)
+					await SnapchatManager.LoadAsync();
 				var destinationPage = SnapchatManager.IsAuthenticated() ? typeof (MainPage) : typeof (StartPage);
 
 				// When the navigation stack isn't restored navigate to the first page,
@@ -144,5 +140,19 @@ namespace Snapchat
 		{
 			await MediaCaptureManager.CleanupCaptureResourcesAsync();
 		}
+
+		#region Snapchat Data Helpers
+		// TODO: Do this in a much nicer way
+
+		public static async void UpdateSnapchatData()
+		{
+			// show update ui
+			await ProgressHelper.ShowStatusBarAsync(Strings.GetString("StatusUpdating"));
+
+			// update data, and hide ui
+			await SnapchatManager.UpdateAllAsync(ProgressHelper.HideStatusBar);
+		}
+
+		#endregion
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -102,7 +103,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			if (AllUpdates == null)
 				AllUpdates = new AllUpdatesResponse
 				{
-					ConversationResponse = new ConversationResponse[0],
+					ConversationResponse = new ObservableCollection<ConversationResponse>(),
 					MessagingGatewayInfo = new MessagingGatewayInfo(),
 					StoriesResponse = new StoriesResponse(),
 					UpdatesResponse = new UpdatesResponse()
@@ -154,7 +155,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			if (AllUpdates == null)
 				AllUpdates = new AllUpdatesResponse
 				{
-					ConversationResponse = new ConversationResponse[0],
+					ConversationResponse = new ObservableCollection<ConversationResponse>(),
 					MessagingGatewayInfo = new MessagingGatewayInfo(),
 					StoriesResponse = new StoriesResponse(),
 					UpdatesResponse = new UpdatesResponse()
@@ -226,11 +227,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 			Loaded = true;
 		}
 
-		public async Task UpdateAllAsync(Action hidependingUiAction, ApplicationSettings settings)
+		public async Task UpdateAllAsync(Action hidependingUiAction)
 		{
 			await Endpoints.GetAllUpdatesAsync();
 			hidependingUiAction();
-			DownloadSnaps(settings);
+			//DownloadSnaps(settings);
 		}
 
 		private void DownloadSnaps(ApplicationSettings settings)

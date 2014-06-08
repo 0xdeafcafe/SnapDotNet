@@ -114,6 +114,22 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		}
 		private DateTime _timestamp;
 
+		#region Helpers
+
+		[IgnoreDataMember]
+		public Boolean IsIncoming
+		{
+			get { return RecipientName == null; }
+		}
+
+		[IgnoreDataMember]
+		public Boolean IsImage
+		{
+			get { return (MediaType == MediaType.Image || MediaType == MediaType.FriendRequestImage); }
+		}
+
+		#endregion
+
 		#region IComparable<Snap> Members
 
 		public int CompareTo(Snap other)

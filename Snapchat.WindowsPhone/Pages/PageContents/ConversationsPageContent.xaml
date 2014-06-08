@@ -3,13 +3,24 @@
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				xmlns:controls="using:Snapchat.Controls"
 				xmlns:xc="using:WinRTXamlToolkit.Controls"
-                xmlns:viewModels="using:Snapchat.ViewModels.PageContents">
+                xmlns:viewModels="using:Snapchat.ViewModels.PageContents"
+                xmlns:conversations="using:Snapchat.Converters.Conversations">
 
     <UserControl.DataContext>
         <viewModels:ConversationsViewModel/>
     </UserControl.DataContext>
 
-	<Grid Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <conversations:SnapIconConverter x:Key="SnapIconConverter" />
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../Controls/StateTextBlock.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="White">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="75" />
             <RowDefinition Height="Auto"/>
@@ -128,7 +139,7 @@
 																  VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
 
                                             <ContentControl x:Name="PlaceholderTextContentPresenter" Content="{TemplateBinding PlaceholderText}" 
-																	Foreground="#b9b9b9" FontStyle="Italic" FontWeight="Light" FontFamily="Segoe WP"
+																	Foreground="#b9b9b9" FontStyle="Italic" FontWeight="SemiLight" FontFamily="Segoe WP"
 																	FontSize="{ThemeResource ContentControlFontSize}" 
 																	IsTabStop="False" VerticalAlignment="Center"
 																	Padding="{TemplateBinding Padding}" Grid.Column="1"/>
@@ -154,8 +165,9 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Border Width="19" Height="19" CornerRadius="2" Background="#9b55a0" Grid.Column="0" />
-
+                                <ContentControl Grid.Row="0" VerticalAlignment="Center"
+													Template="{Binding Converter={StaticResource SnapIconConverter}}" />
+                                
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Path=Participants[1], FallbackValue='matty'}" 
 												   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20"/>

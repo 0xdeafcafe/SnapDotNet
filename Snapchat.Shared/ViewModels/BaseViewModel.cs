@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
@@ -25,7 +26,7 @@ namespace Snapchat.ViewModels
 			get { return App.SnapchatManager.AllUpdates.UpdatesResponse; }
 		}
 
-		public ConversationResponse[] Conversations
+		public ObservableCollection<ConversationResponse> Conversations
 		{
 			get { return App.SnapchatManager.AllUpdates.ConversationResponse; }
 		}
