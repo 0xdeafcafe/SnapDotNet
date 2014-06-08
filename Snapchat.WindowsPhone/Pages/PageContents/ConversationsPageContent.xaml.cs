@@ -40,6 +40,7 @@ namespace Snapchat.Pages.PageContents
 			var cumX = e.Cumulative.Translation.X;
 			if (indicator == null) return;
 			indicator.Width = cumX > 0 ? cumX : 0;
+			e.Handled = true;
 		}
 
 		private void Grid_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
@@ -49,13 +50,14 @@ namespace Snapchat.Pages.PageContents
 			var indicator = container.Children[0] as Grid;
 			if (indicator == null) return;
 
-			if (indicator.ActualWidth >= container.ActualWidth) 
+			if (indicator.ActualWidth == indicator.MaxWidth)
 			{
 				// TODO: Make main page ScrollViewer scroll to the newly available individual chat page.
 			}
 			else
 			{
 				// TODO: Go back to 0 with easing (invoke storyboard or something?)
+				indicator.Width = 0;
 			}
 		}
 	}

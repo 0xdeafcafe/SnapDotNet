@@ -27,7 +27,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Grid Background="#58a690" Grid.Row="0" Margin="0,0,-0.167,0">
+		<Grid Background="#FF3cb2e2" Grid.Row="0" Margin="0,0,-0.167,0">
 
 			<controls:StateTextBlock x:Uid="ConvosPageTitleStateTextBlock"
 									 PrimaryText="coldsnap" 
