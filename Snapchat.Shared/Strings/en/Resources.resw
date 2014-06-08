@@ -147,8 +147,17 @@
   <data name="DownloadAllSnapsAppBarButtonLabel" xml:space="preserve">
     <value>download all snaps</value>
   </data>
-  <data name="FirstRunPromptTextBlock.Text" xml:space="preserve">
-    <value>Tap to take a photo. Hold to record.</value>
+  <data name="FirstRunPromptHold" xml:space="preserve">
+    <value>Hold</value>
+  </data>
+  <data name="FirstRunPromptPhoto" xml:space="preserve">
+    <value>to take a photo.</value>
+  </data>
+  <data name="FirstRunPromptTap" xml:space="preserve">
+    <value>Tap</value>
+  </data>
+  <data name="FirstRunPromptVideo" xml:space="preserve">
+    <value>to take a video.</value>
   </data>
   <data name="FlipCameraAppBarButtonLabel" xml:space="preserve">
     <value>flip camera</value>
@@ -275,6 +284,24 @@
   </data>
   <data name="SignUpPagePasswordBox.Header" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="SnapStatusDelivered" xml:space="preserve">
+    <value>Delivered</value>
+  </data>
+  <data name="SnapStatusDownloading" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="SnapStatusNone" xml:space="preserve">
+    <value>No Status, this shouldn't happen. Oops</value>
+  </data>
+  <data name="SnapStatusOpened" xml:space="preserve">
+    <value>Swipe right to chat</value>
+  </data>
+  <data name="SnapStatusScreenshot" xml:space="preserve">
+    <value>Screenshot!</value>
+  </data>
+  <data name="SnapStatusTapLoad" xml:space="preserve">
+    <value>Tap to load</value>
   </data>
   <data name="SnapTimeToday" xml:space="preserve">
     <value>Today</value>

@@ -15,6 +15,7 @@
 			<conversations:PendingChatsConverter x:Key="PendingChatsConverter" />
 			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
 			<conversations:FriendlySnapTimeConverter x:Key="FriendlySnapTimeConverter" />
+			<conversations:SnapStatusConverter x:Key="SnapStatusConverter" />
 
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../../Controls/StateTextBlock.xaml"/>
@@ -197,7 +198,7 @@
 								<TextBlock FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FFA8A8A8" FontSize="14">
 									<Run Text="{Binding Converter={StaticResource FriendlySnapTimeConverter}}" />
 									<Run Text="-" />
-									<Run Text="Snap Status" />
+									<Run Text="{Binding Converter={StaticResource SnapStatusConverter}}" />
 								</TextBlock>
 							</StackPanel>
 						</Grid>

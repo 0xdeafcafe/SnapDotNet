@@ -25,12 +25,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlyFriendNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlySnapTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingChatsConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapIconConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IntegerConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extentions\StringExtentions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extentions\TimeSpanExtentions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\MediaCaptureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
