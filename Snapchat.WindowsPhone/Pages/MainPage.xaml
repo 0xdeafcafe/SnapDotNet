@@ -131,8 +131,7 @@
 							Stroke="White" StrokeThickness="4">
 				</Ellipse>
 
-				<Grid x:Name="NavButtonsContainer" VerticalAlignment="Bottom" Height="70" Margin="0,0,0,60" Opacity="0">
-					
+				<Grid x:Name="NavButtonsContainer" VerticalAlignment="Bottom" Height="70" Margin="0,0,0,55" Opacity="0">
 					<Grid.RenderTransform>
 						<TranslateTransform x:Name="NavButtonsTranslateTransform" Y="30"/>
 					</Grid.RenderTransform>
