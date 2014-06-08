@@ -35,39 +35,5 @@ namespace Snapchat.Pages.PageContents
 		{
 			MainPage.Singleton.RestoreBottomAppBar();
 		}
-
-		private void Grid_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
-		{
-			var grid = sender as Grid;
-			if (grid == null) return;
-
-			var cumX = e.Cumulative.Translation.X;
-			if (cumX < 0) cumX = 0;
-			if (cumX > 55) cumX = 55;
-			cumX = cumX > 0 ? cumX : 0;
-
-			var translateTransform = grid.RenderTransform as TranslateTransform;
-			if (translateTransform == null) return;
-			translateTransform.X = cumX;
-		}
-
-		private void Grid_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-		{
-			var grid = sender as Grid;
-			if (grid == null) return;
-
-			var translateTransform = grid.RenderTransform as TranslateTransform;
-			if (translateTransform == null) return;
-
-			if (translateTransform.X >= 55)
-			{
-				// TODO: Scroll to one-on-one chat page
-			}
-
-			// Translate the item back to its original state.
-			var storyboard = grid.Resources["CloseChatPeekIndicatorStoryboard"] as Storyboard;
-			if (storyboard == null) return;
-			storyboard.Begin();
-		}
 	}
 }
