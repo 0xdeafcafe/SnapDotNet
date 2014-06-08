@@ -17,7 +17,7 @@ namespace Snapchat.Pages.PageContents
 		public ConversationsPageContent()
 		{
 			InitializeComponent();
-			ViewModel = DataContext as ConversationsViewModel;
+			DataContext = ViewModel = new ConversationsViewModel();
 
 			HardwareButtons.CameraPressed += delegate
 			{

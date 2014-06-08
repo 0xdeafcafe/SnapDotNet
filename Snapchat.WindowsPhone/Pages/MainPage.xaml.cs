@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Helpers;
 using Snapchat.ViewModels;
+using Snapchat.Pages.PageContents;
+using Windows.UI.Xaml.Media;
 
 namespace Snapchat.Pages
 {
@@ -46,13 +48,23 @@ namespace Snapchat.Pages
 		private readonly AppBarButton _flipCameraAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png") },
-			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel")
+			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel"),
+			Command = new RelayCommand(async () =>
+			{
+				await MediaCaptureManager.ToggleCameraAsync();
+				MainPage.Singleton.UpdateBottomAppBar();
+			})
 		};
 
 		private readonly AppBarButton _toggleFlashAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon { UriSource = FlashOnUri },
 			Label = App.Strings.GetString("ToggleFlashAppBarButtonLabel"),
+			Command = new RelayCommand(() =>
+			{
+				MediaCaptureManager.IsFlashEnabled = !MediaCaptureManager.IsFlashEnabled;
+				// TODO: Change icon
+			})
 		};
 
 		private readonly AppBarButton _downloadAllSnapsAppBarButton = new AppBarButton
@@ -73,6 +85,8 @@ namespace Snapchat.Pages
 
 		#endregion
 
+		private static readonly SolidColorBrush AppBarBackgroundBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
+
 		private double _previousScrollViewerOffset;
 		private bool _goingToCamera;
 		private AppBar _hiddenCommandBar;
@@ -88,22 +102,23 @@ namespace Snapchat.Pages
 			// Setup ALL the datas :D
 			DataContext = ViewModel = new MainViewModel(ScrollViewer);
 
+			// Set up the scroll viewer
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
 			ScrollViewer.ViewChanging += ScrollViewer_ViewChanging;
-
 			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
 
-			_toggleFlashAppBarButton.Command = new RelayCommand(() =>
-			{
-				MediaCaptureManager.IsFlashEnabled = !MediaCaptureManager.IsFlashEnabled;
-				// TODO: Change icon
-			});
+			// Workaround h4x to avoid some weird exception about some primitive control
+			ConversationsPage.Children.Add(new ConversationsPageContent());
 
-			_flipCameraAppBarButton.Command = new RelayCommand(async () =>
+			// Delete the camera button tip if necessary.
+			if (AppSettings.Get<bool>("FirstTime", defaultValue: true))
 			{
-				await MediaCaptureManager.ToggleCameraAsync();
-				UpdateBottomAppBar();
-			});
+				AppSettings.Set("FirstTime", false);
+			}
+			else
+			{
+				CameraPage.Children.Remove(FirstRunPrompt);
+			}
 		}
 
 		public static MainPage Singleton { get; private set; }
@@ -133,6 +148,7 @@ namespace Snapchat.Pages
 				if (!ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true)) return;
 
 				ViewModel.ActualWidth = ActualWidth;
+				ConversationsPage.Opacity = 1;
 				timer.Stop();
 			};
 			timer.Start();
@@ -253,7 +269,7 @@ namespace Snapchat.Pages
 		private void UpdateBottomAppBar()
 		{
 			if (BottomAppBar == null)
-				BottomAppBar = new CommandBar { Opacity = 0.5f };
+				BottomAppBar = new CommandBar { Background = AppBarBackgroundBrush };
 			var appBar = BottomAppBar as CommandBar;
 			if (appBar == null) return;
 
