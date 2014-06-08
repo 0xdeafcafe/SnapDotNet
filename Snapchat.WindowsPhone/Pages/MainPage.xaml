@@ -113,8 +113,12 @@
 					<Path Fill="#AA000000" HorizontalAlignment="Center" Width="40" Height="20"
 							Data="M 0,0 L 40,0 20,20 0,0" />
 				</StackPanel>
-
-				<Ellipse x:Name="CapturePhotoButton" VerticalAlignment="Bottom" Margin="0,0,0,90" 
+				
+				<Ellipse	x:Name="CapturePhotoButton"
+							Tapped="CapturePhotoButton_Tapped"
+							Holding="CapturePhotoButton_Holding"
+							PointerPressed="CapturePhotoButton_PointerPressed"
+							VerticalAlignment="Bottom" Margin="0,0,0,90" 
 							HorizontalAlignment="Center" 
 							Width="90" Height="90"
 							Fill="#66FFFFFF"

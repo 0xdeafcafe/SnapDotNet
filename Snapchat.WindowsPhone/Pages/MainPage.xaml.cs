@@ -15,6 +15,7 @@ using Snapchat.Helpers;
 using Snapchat.ViewModels;
 using Snapchat.Pages.PageContents;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Input;
 
 namespace Snapchat.Pages
 {
@@ -333,6 +334,21 @@ namespace Snapchat.Pages
 					appBar.SecondaryCommands.Add(command);
 			}
 			appBar.ClosedDisplayMode = displayMode;
+		}
+
+		private void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			// TODO: Take snapshot
+		}
+
+		private void CapturePhotoButton_Holding(object sender, HoldingRoutedEventArgs e)
+		{
+			// Play storyboard that shows a red ring circling the capture button
+		}
+
+		private void CapturePhotoButton_PointerPressed(object sender, PointerRoutedEventArgs e)
+		{
+			// TODO: Start recording
 		}
 	}
 }
