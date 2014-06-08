@@ -6,7 +6,8 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
-
+			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
+			
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../../Controls/StateTextBlock.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
@@ -62,7 +63,7 @@
 											<ControlTemplate TargetType="TextBox">
 												<Grid Height="50">
 													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="40" />
+														<ColumnDefinition Width="55" />
 														<ColumnDefinition Width="*" />
 													</Grid.ColumnDefinitions>
 													<VisualStateManager.VisualStateGroups>
@@ -146,24 +147,24 @@
 				</Border>
 
 				<!-- le items -->
-				<ItemsControl ItemsSource="{Binding Path=Conversations}" MinHeight="10">
+				<ItemsControl ItemsSource="{Binding Path=Conversations}" MinHeight="10" Margin="0,0,0,25">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1">
 								<Grid>
 									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="50" />
+										<ColumnDefinition Width="55" />
 										<ColumnDefinition Width="*" />
 									</Grid.ColumnDefinitions>
 
 									<ContentControl Grid.Row="0" VerticalAlignment="Center"
-													Template="{Binding Converter={StaticResource SnapIconConverter}}" />
+														Template="{Binding Converter={StaticResource SnapIconConverter}}" />
 
 									<StackPanel Grid.Column="1" VerticalAlignment="Center">
-										<TextBlock Text="{Binding Path=Participants[1], FallbackValue='matty'}" 
-												   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20"/>
+										<TextBlock Text="{Binding Path=Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue='matty'}" 
+													   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20"/>
 										<TextBlock Text="Today 4:08AM - Press and hold to view" 
-												   FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FFA8A8A8" FontSize="14"/>
+													   FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FFA8A8A8" FontSize="14"/>
 									</StackPanel>
 								</Grid>
 							</Border>
