@@ -89,7 +89,7 @@
 
 					<StackPanel x:Name="FirstRunPrompt" VerticalAlignment="Bottom" Margin="0,0,0,180" Height="100">
 						<Grid Height="80" Background="#AA000000">
-							<TextBlock FontFamily="Segoe WP" FontSize="22" TextAlignment="Center" TextWrapping="Wrap" Margin="50,0" VerticalAlignment="Center">
+							<TextBlock x:Uid="FirstRunPromptTextBlock" FontFamily="Segoe WP" FontSize="22" TextAlignment="Center" TextWrapping="Wrap" Margin="50,0" VerticalAlignment="Center">
 								<Run Text="Tap" Foreground="Orange" />
 								<Run Text="to take a photo." />
 								<Run Text="Hold" Foreground="Orange" />

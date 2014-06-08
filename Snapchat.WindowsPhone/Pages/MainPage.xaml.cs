@@ -74,18 +74,19 @@ namespace Snapchat.Pages
 
 		#endregion
 
-		public MainViewModel ViewModel { get; private set; }
 		private double _previousScrollViewerOffset;
 		private bool _goingToCamera;
+		private AppBar _hiddenCommandBar;
 
 		public MainPage()
 		{
 			InitializeComponent();
+			Singleton = this;
 
 			// Horrible UI Design Time cleanup
 			CameraPreviewImage.Visibility = Visibility.Collapsed;
 
-			// Setup the datas
+			// Setup ALL the datas :D
 			DataContext = ViewModel = new MainViewModel(ScrollViewer);
 
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
@@ -106,19 +107,37 @@ namespace Snapchat.Pages
 			});
 		}
 
+		public static MainPage Singleton { get; private set; }
+		public MainViewModel ViewModel { get; private set; }
+
+		public void HideBottomAppBar()
+		{
+			_hiddenCommandBar = BottomAppBar;
+			BottomAppBar = null;
+		}
+
+		public void RestoreBottomAppBar()
+		{
+			if (_hiddenCommandBar == null)
+				return;
+
+			BottomAppBar = _hiddenCommandBar;
+			_hiddenCommandBar = null;
+		}
+
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
-			// Must defer ChangeView execution by at least 10ms for it to work. Yeah, I know... wtf?
-			ThreadPoolTimer.CreateTimer(async source =>
+			// Keep trying to change the ScrollViewer's view until it succeeds.
+			DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+			timer.Tick += delegate
 			{
-				await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-					() =>
-					{
-						ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true);
-						ViewModel.ActualWidth = ActualWidth;
-					});
-			},
-			TimeSpan.FromMilliseconds(200));
+				if (ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true))
+				{
+					ViewModel.ActualWidth = ActualWidth;
+					timer.Stop();
+				}
+			};
+			timer.Start();
 
 			// Start the camera.
 			if (!DesignMode.DesignModeEnabled)
@@ -216,10 +235,6 @@ namespace Snapchat.Pages
 			}
 			UpdateBottomAppBar();
 
-			// TODO: Prevent stories and convo icons from retaining their touch response colors whenever the user slips their finger.
-			//StoriesIcon.Background = new SolidColorBrush(Colors.Transparent);
-			//ConversationsIcon.Background = new SolidColorBrush(Colors.Transparent);
-
 			// Fix scroll viewer after scrolling all the way back to camera from the manage friends page.
 			if (pageIndex != 1) return;
 			_goingToCamera = false;
@@ -227,10 +242,20 @@ namespace Snapchat.Pages
 				ScrollViewer.HorizontalSnapPointsType = SnapPointsType.MandatorySingle;
 		}
 
+		private static void SetStatusBar()
+		{
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+
+			var statusBar = StatusBar.GetForCurrentView();
+			statusBar.BackgroundOpacity = 0.0f;
+			statusBar.BackgroundColor = Colors.Transparent;
+			statusBar.ForegroundColor = Colors.White;
+		}
+
 		private void UpdateBottomAppBar()
 		{
 			if (BottomAppBar == null)
-				BottomAppBar = new CommandBar {Opacity = 0.5f};
+				BottomAppBar = new CommandBar { Opacity = 0.5f };
 			var appBar = BottomAppBar as CommandBar;
 			if (appBar == null) return;
 
@@ -294,16 +319,6 @@ namespace Snapchat.Pages
 					appBar.SecondaryCommands.Add(command);
 			}
 			appBar.ClosedDisplayMode = displayMode;
-		}
-
-		private static void SetStatusBar()
-		{
-			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
-
-			var statusBar = StatusBar.GetForCurrentView();
-			statusBar.BackgroundOpacity = 0.0f;
-			statusBar.BackgroundColor = Colors.Transparent;
-			statusBar.ForegroundColor = Colors.White;
 		}
 	}
 }

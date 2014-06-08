@@ -139,13 +139,16 @@
     <value>Wi-Fi</value>
   </data>
   <data name="ConvosPageTitleStateTextBlock.PrimaryText" xml:space="preserve">
-    <value>snapchat</value>
+    <value>coldsnap</value>
   </data>
   <data name="ConvosSearchBox.PlaceholderText" xml:space="preserve">
     <value>Search</value>
   </data>
   <data name="DownloadAllSnapsAppBarButtonLabel" xml:space="preserve">
     <value>download all snaps</value>
+  </data>
+  <data name="FirstRunPromptTextBlock.Text" xml:space="preserve">
+    <value>Tap to take a photo. Hold to record.</value>
   </data>
   <data name="FlipCameraAppBarButtonLabel" xml:space="preserve">
     <value>flip camera</value>
