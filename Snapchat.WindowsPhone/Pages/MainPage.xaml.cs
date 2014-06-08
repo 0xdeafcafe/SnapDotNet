@@ -16,6 +16,7 @@ using Snapchat.ViewModels;
 using Snapchat.Pages.PageContents;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Snapchat.Pages
 {
@@ -156,7 +157,10 @@ namespace Snapchat.Pages
 
 			// Start the camera.
 			if (!DesignMode.DesignModeEnabled)
+			{
 				await MediaCaptureManager.StartPreviewAsync(CapturePreview);
+				(CapturePreview.Resources["FadeInStoryboard"] as Storyboard).Begin();
+			}
 
 			// Load data
 			if (!App.SnapchatManager.Loaded)

@@ -87,10 +87,10 @@
 					<EventTrigger RoutedEvent="Grid.Loaded">
 						<BeginStoryboard>
 							<Storyboard>
-								<DoubleAnimation Storyboard.TargetName="NavButtonsContainer" Storyboard.TargetProperty="Opacity" To="1" BeginTime="00:00:00.9" Duration="00:00:00.3"/>
-								<DoubleAnimation Storyboard.TargetName="NavButtonsTranslateTransform" Storyboard.TargetProperty="Y" To="0" BeginTime="00:00:00.9" Duration="00:00:00.3">
+								<DoubleAnimation Storyboard.TargetName="NavButtonsContainer" Storyboard.TargetProperty="Opacity" To="1" BeginTime="00:00:00.8" Duration="00:00:00.5"/>
+								<DoubleAnimation Storyboard.TargetName="NavButtonsTranslateTransform" Storyboard.TargetProperty="Y" To="0" BeginTime="00:00:00.9" Duration="00:00:00.5">
 									<DoubleAnimation.EasingFunction>
-										<SineEase/>
+										<BackEase EasingMode="EaseOut"/>
 									</DoubleAnimation.EasingFunction>
 								</DoubleAnimation>
 							</Storyboard>
@@ -99,7 +99,13 @@
 				</Grid.Triggers>
 				
 				<Image x:Name="CameraPreviewImage" Source="ms-appx:///Assets/camera_background_testing.jpg" Stretch="UniformToFill" />
-				<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill"/>
+				<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0">
+					<CaptureElement.Resources>
+						<Storyboard x:Key="FadeInStoryboard">
+							<DoubleAnimation To="1" Storyboard.TargetName="CapturePreview" Storyboard.TargetProperty="Opacity" Duration="00:00:00.3"/>
+						</Storyboard>
+					</CaptureElement.Resources>
+				</CaptureElement>
 
 				<StackPanel x:Name="FirstRunPrompt" VerticalAlignment="Bottom" Margin="0,0,0,180" Height="100">
 					<Grid Height="80" Background="#AA000000">
