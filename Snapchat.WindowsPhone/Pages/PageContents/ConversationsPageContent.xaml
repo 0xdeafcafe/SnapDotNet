@@ -19,7 +19,7 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<Grid Background="#58a690" Grid.Row="0" Margin="0,0,-0.167,0">
-			<controls:StateTextBlock PrimaryText="snapchat" 
+			<controls:StateTextBlock PrimaryText="coldsnap" 
 									 SecondaryText="{Binding Path=Account.FriendlyRatio, FallbackValue='69 | 69'}"
 									 VerticalAlignment="Bottom" HorizontalAlignment="Left"
 									 Margin="18,0,0,0" FontWeight="Light"
@@ -131,7 +131,7 @@
 																  VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
 
 													<ContentControl x:Name="PlaceholderTextContentPresenter" Content="{TemplateBinding PlaceholderText}" 
-																	Foreground="#b9b9b9" FontStyle="Italic" FontWeight="Light" FontFamily="Segoe WP"
+																	Foreground="#b9b9b9" FontStyle="Italic" FontWeight="SemiLight" FontFamily="Segoe WP"
 																	FontSize="{ThemeResource ContentControlFontSize}" 
 																	IsTabStop="False" VerticalAlignment="Center"
 																	Padding="{TemplateBinding Padding}" Grid.Column="1"/>
