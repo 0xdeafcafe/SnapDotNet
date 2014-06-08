@@ -7,6 +7,7 @@ using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Converters.Conversations
 {
+	// ReSharper disable UnusedVariable
 	public class PendingChatsConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, string language)

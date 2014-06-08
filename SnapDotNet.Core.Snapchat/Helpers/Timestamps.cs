@@ -38,7 +38,10 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		public static DateTime ConvertToDateTime(Int64 retardedTimeStamp)
 		{
 			// Strip the last 4 digits from the number, they are milliseconds and don't effect us at all
-			return UnixEpoch.AddSeconds((long) (retardedTimeStamp / 1000));
+			if (retardedTimeStamp.ToString().Length > 10)
+				retardedTimeStamp = Int64.Parse(retardedTimeStamp.ToString().Remove(10));
+
+			return UnixEpoch.AddSeconds(retardedTimeStamp);
 		}
 
 		/// <summary>
