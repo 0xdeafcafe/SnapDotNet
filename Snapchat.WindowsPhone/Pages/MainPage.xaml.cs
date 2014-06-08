@@ -195,14 +195,14 @@ namespace Snapchat.Pages
 					// exit the app
 					break;
 
-				case "Stories":
+				case "Friends":
 					ScrollViewer.HorizontalSnapPointsType = SnapPointsType.None;
 					ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
 					e.Handled = true;
 					break;
 
-				case "ManageFriends":
-					ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false); // go to stories
+				case "AddFriends":
+					ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false); // go to friends
 					e.Handled = true;
 					break;
 			}
@@ -282,11 +282,11 @@ namespace Snapchat.Pages
 						displayMode = AppBarClosedDisplayMode.Compact;
 						break;
 
-					case "Stories":
+					case "Friends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
 						break;
 
-					case "ManageFriends":
+					case "AddFriends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
 						break;
 				}

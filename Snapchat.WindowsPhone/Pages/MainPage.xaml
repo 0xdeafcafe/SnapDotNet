@@ -138,12 +138,12 @@
 				</Grid>
 			</Grid>
 
-			<Grid Tag="Stories" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Yellow">
-				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Stories Goes Here</TextBlock>
+			<Grid Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
+				<!--<pageContents:FriendsPageContent />-->
 			</Grid>
 
-			<Grid Tag="ManageFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
-				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Friend Management Goes Here</TextBlock>
+			<Grid Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
+				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Adding Friends Goes Here</TextBlock>
 			</Grid>
 		</StackPanel>
 
@@ -151,8 +151,8 @@
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
 				<VisualState x:Name="Conversations"/>
 				<VisualState x:Name="Camera"/>
-				<VisualState x:Name="Stories"/>
-				<VisualState x:Name="ManageFriends"/>
+				<VisualState x:Name="Friends"/>
+				<VisualState x:Name="AddFriends"/>
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
 	</ScrollViewer>

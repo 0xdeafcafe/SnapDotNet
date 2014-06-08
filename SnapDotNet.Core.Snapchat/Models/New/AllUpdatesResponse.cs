@@ -11,7 +11,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	{
 		public AllUpdatesResponse()
 		{
-			ConversationResponse.CollectionChanged += (sender, args) => NotifyPropertyChanged("ConversationResponse");
+			_conversationResponse.CollectionChanged += (sender, args) => NotifyPropertyChanged("ConversationResponse");
 		}
 
 		/// <summary>
