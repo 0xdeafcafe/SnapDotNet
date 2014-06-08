@@ -34,15 +34,20 @@ namespace Snapchat.Pages.PageContents
 
 		private void Grid_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
 		{
-			var indicator = (sender as Grid).Children[0] as Grid;
-			double cumX = e.Cumulative.Translation.X;
+			var grid = sender as Grid;
+			if (grid == null) return;
+			var indicator = grid.Children[0] as Grid;
+			var cumX = e.Cumulative.Translation.X;
+			if (indicator == null) return;
 			indicator.Width = cumX > 0 ? cumX : 0;
 		}
 
 		private void Grid_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
 		{
 			var container = sender as Grid;
+			if (container == null) return;
 			var indicator = container.Children[0] as Grid;
+			if (indicator == null) return;
 
 			if (indicator.ActualWidth >= container.ActualWidth) 
 			{
