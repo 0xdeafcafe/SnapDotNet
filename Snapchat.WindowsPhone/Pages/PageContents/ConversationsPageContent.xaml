@@ -177,16 +177,22 @@
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1">
-						<Grid>
+						<Grid ManipulationMode="TranslateRailsX,TranslateX,TranslateInertia" ManipulationDelta="Grid_ManipulationDelta" ManipulationCompleted="Grid_ManipulationCompleted">
 							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="55" />
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
+							
+							<!-- Peek indicator -->
+							<Grid Width="0" Background="#FF00A2FF">
+								<SymbolIcon Symbol="Message" Height="55" Width="55" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+							</Grid>
 
-							<ContentControl Grid.Row="0" VerticalAlignment="Center"
-													Template="{Binding Converter={StaticResource SnapIconConverter}}" />
+							<ContentControl Grid.Column="1" VerticalAlignment="Center" Width="55" 
+											Template="{Binding Converter={StaticResource SnapIconConverter}}" />
 
-							<StackPanel Grid.Column="1" VerticalAlignment="Center">
+							<StackPanel Grid.Column="2" VerticalAlignment="Center">
 								<TextBlock Text="{Binding Path=Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue='matty'}" 
                                                FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20"/>
 
