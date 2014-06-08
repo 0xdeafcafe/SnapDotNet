@@ -1,9 +1,7 @@
 ﻿using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Phone.UI.Input;
-using Windows.System.Threading;
 using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Microsoft.Xaml.Interactivity;
 using Snapchat.Attributes;
@@ -47,13 +45,13 @@ namespace Snapchat.Pages
 
 		private readonly AppBarButton _flipCameraAppBarButton = new AppBarButton
 		{
-			Icon = new BitmapIcon {UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png")},
+			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png") },
 			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel")
 		};
 
 		private readonly AppBarButton _toggleFlashAppBarButton = new AppBarButton
 		{
-			Icon = new BitmapIcon {UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flash.png")},
+			Icon = new BitmapIcon { UriSource = FlashOnUri },
 			Label = App.Strings.GetString("ToggleFlashAppBarButtonLabel"),
 		};
 
@@ -129,14 +127,13 @@ namespace Snapchat.Pages
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			// Keep trying to change the ScrollViewer's view until it succeeds.
-			DispatcherTimer timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
 			timer.Tick += delegate
 			{
-				if (ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true))
-				{
-					ViewModel.ActualWidth = ActualWidth;
-					timer.Stop();
-				}
+				if (!ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true)) return;
+
+				ViewModel.ActualWidth = ActualWidth;
+				timer.Stop();
 			};
 			timer.Start();
 
