@@ -166,7 +166,7 @@
                                   VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollMode="Disabled"
                                   HorizontalScrollBarVisibility="Hidden"
-                                  VerticalSnapPointsType="Mandatory"
+                                  VerticalSnapPointsType="Optional"
                                   IsHorizontalRailEnabled="False"
                                   IsHorizontalScrollChainingEnabled="False">
 						<ItemsPresenter/>

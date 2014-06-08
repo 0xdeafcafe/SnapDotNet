@@ -116,13 +116,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			AllUpdates = allUpdates;
 
-			// TODO: Recode this
-			//if (AllUpdates == null)
-			//{
-			//	AllUpdates = allUpdates;
-			//	return;
-			//}
-
 			//// we got some house keeping to do
 			//foreach (var newSnap in account.Snaps)
 			//{
@@ -185,14 +178,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#region Actions:Save
 
-		public void Save()
+		public async void Save()
 		{
-			SaveAccountData();
+			await SaveAccountDataAsync();
 			
 			// All done b
 		}
 
-		public async void SaveAccountData()
+		public async Task SaveAccountDataAsync()
 		{
 			// Seralize the Account model and save as json string in Isolated Storage
 			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(AllUpdates)));
@@ -231,28 +224,18 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			await Endpoints.GetAllUpdatesAsync();
 			hidependingUiAction();
-			//DownloadSnaps(settings);
 		}
 
-		private void DownloadSnaps(ApplicationSettings settings)
+		public async Task DownloadSnapsAsync()
 		{
-			// Never check
-			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Never) return;
-
-			// No Cellular check
-			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Cellular &&
-				!NetworkInformationHelper.OnCellularDataConnection()) return;
-
-			// No Wifi check
-			if (settings.SnapAutoDownloadMode == SnapAutoDownloadMode.Wifi &&
-				!NetworkInformationHelper.OnWifiConnection()) return;
+			// Note: Auto-download settings is moved to the app
 
 			//foreach (var conversation in AllUpdates.ConversationResponse)
 			//	foreach (var snap in conversation.ConversationMessages.Messages.Where(m => m.Snap != null))
 			//		await snap.DownloadSnapBlobAsync(this);
 
 			// yea son
-			SaveAccountData();
+			await SaveAccountDataAsync();
 		}
 
 		#endregion

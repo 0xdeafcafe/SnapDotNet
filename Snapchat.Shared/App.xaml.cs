@@ -10,6 +10,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Core.Snapchat.Api;
+using Snapchat.ViewModels;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 
 namespace Snapchat
 {
@@ -144,13 +146,23 @@ namespace Snapchat
 		#region Snapchat Data Helpers
 		// TODO: Do this in a much nicer way
 
-		public static async void UpdateSnapchatData()
+		public static async void UpdateSnapchatDataAsync()
 		{
 			// show update ui
 			await ProgressHelper.ShowStatusBarAsync(Strings.GetString("StatusUpdating"));
 
 			// update data, and hide ui
 			await SnapchatManager.UpdateAllAsync(ProgressHelper.HideStatusBar);
+
+			// Automatically download snaps if enabled
+			var downloadMode = AppSettings.Get<AutomaticallyDownloadSnapsMode>("AutomaticallyDownloadSnapsMode", defaultValue: AutomaticallyDownloadSnapsMode.WiFi);
+			bool shouldDownloadSnaps =
+				(downloadMode == AutomaticallyDownloadSnapsMode.Always) ||
+				(downloadMode == AutomaticallyDownloadSnapsMode.WiFi && !NetworkInformationHelper.OnWifiConnection());
+			if (shouldDownloadSnaps)
+			{
+				await SnapchatManager.DownloadSnapsAsync();
+			}
 		}
 
 		#endregion
