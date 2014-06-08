@@ -1,8 +1,12 @@
 ﻿using Snapchat.ViewModels.PageContents;
+using System;
+using Windows.Foundation;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -36,29 +40,34 @@ namespace Snapchat.Pages.PageContents
 		{
 			var grid = sender as Grid;
 			if (grid == null) return;
-			var indicator = grid.Children[0] as Grid;
+
 			var cumX = e.Cumulative.Translation.X;
-			if (indicator == null) return;
-			indicator.Width = cumX > 0 ? cumX : 0;
-			e.Handled = true;
+			if (cumX < 0) cumX = 0;
+			if (cumX > 55) cumX = 55;
+			cumX = cumX > 0 ? cumX : 0;
+
+			var translateTransform = grid.RenderTransform as TranslateTransform;
+			if (translateTransform == null) return;
+			translateTransform.X = cumX;
 		}
 
 		private void Grid_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
 		{
-			var container = sender as Grid;
-			if (container == null) return;
-			var indicator = container.Children[0] as Grid;
-			if (indicator == null) return;
+			var grid = sender as Grid;
+			if (grid == null) return;
 
-			if (indicator.ActualWidth == indicator.MaxWidth)
+			var translateTransform = grid.RenderTransform as TranslateTransform;
+			if (translateTransform == null) return;
+
+			if (translateTransform.X >= 55)
 			{
-				// TODO: Make main page ScrollViewer scroll to the newly available individual chat page.
+				// TODO: Scroll to one-on-one chat page
 			}
-			else
-			{
-				// TODO: Go back to 0 with easing (invoke storyboard or something?)
-				indicator.Width = 0;
-			}
+
+			// Translate the item back to its original state.
+			var storyboard = grid.Resources["CloseChatPeekIndicatorStoryboard"] as Storyboard;
+			if (storyboard == null) return;
+			storyboard.Begin();
 		}
 	}
 }
