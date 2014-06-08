@@ -19,9 +19,9 @@ namespace Snapchat.Converters.Conversations
 			if (lastInteractionTime.Year != now.Year || lastInteractionTime.Month != now.Month)
 				return String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.ToOrdinal());
 			if (lastInteractionTime.Day == now.Day)
-				return String.Format("{0} {1:HH:mm tt}", "Today", lastInteractionTime);
+				return String.Format("{0} {1:HH:mm tt}", App.Strings.GetString("SnapTimeToday"), lastInteractionTime);
 			return lastInteractionTime.Day == now.Day - 1
-				? String.Format("{0} {1:HH:mm tt}", "Yesterday", lastInteractionTime)
+				? String.Format("{0} {1:HH:mm tt}", App.Strings.GetString("SnapTimeYesterday"), lastInteractionTime)
 				: String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.ToOrdinal());
 		}
 

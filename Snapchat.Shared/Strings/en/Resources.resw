@@ -276,6 +276,12 @@
   <data name="SignUpPagePasswordBox.Header" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="SnapTimeToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="SnapTimeYesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
   <data name="StatusLoggingIn" xml:space="preserve">
     <value>Logging into Snapchat...</value>
   </data>
