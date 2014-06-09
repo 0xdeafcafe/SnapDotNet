@@ -162,6 +162,9 @@
   <data name="FlipCameraAppBarButtonLabel" xml:space="preserve">
     <value>flip camera</value>
   </data>
+  <data name="FriendsPageTitleTextBlock.Text" xml:space="preserve">
+    <value>My Friends</value>
+  </data>
   <data name="ImportPictureAppBarButtonLabel" xml:space="preserve">
     <value>select photo...</value>
   </data>

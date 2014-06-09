@@ -28,6 +28,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapIconConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\CaseConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\EmptyGroupToColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IntegerConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extentions\StringExtentions.cs" />

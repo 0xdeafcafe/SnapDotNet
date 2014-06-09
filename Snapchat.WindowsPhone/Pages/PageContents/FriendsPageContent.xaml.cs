@@ -1,6 +1,5 @@
 ﻿using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
 using Snapchat.ViewModels.PageContents;
 
 namespace Snapchat.Pages.PageContents
@@ -13,7 +12,6 @@ namespace Snapchat.Pages.PageContents
 		{
 			InitializeComponent();
 			DataContext = ViewModel = new FriendsViewModel();
-			((CollectionViewSource) Resources["SortedFriends"]).Source = ViewModel.Account.SortedFriends;
 
 			HardwareButtons.CameraPressed += delegate
 			{

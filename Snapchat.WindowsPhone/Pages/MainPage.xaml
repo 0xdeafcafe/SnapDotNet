@@ -166,7 +166,7 @@
 			</Grid>
 
 			<Grid Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<!--<pageContents:FriendsPageContent />-->
+				<pageContents:FriendsPageContent />
 			</Grid>
 
 			<Grid Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">

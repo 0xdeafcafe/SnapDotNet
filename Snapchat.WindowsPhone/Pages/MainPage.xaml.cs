@@ -290,6 +290,7 @@ namespace Snapchat.Pages
 					case "Conversations":
 						secondaryCommands.Add(_downloadAllSnapsAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
 						break;
 
 					case "Camera":
@@ -301,14 +302,17 @@ namespace Snapchat.Pages
 
 						secondaryCommands.Add(_importPictureAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Compact;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
 						break;
 
 					case "Friends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x9b, 0x55, 0xa0));
 						break;
 
 					case "AddFriends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						appBar.Background = new SolidColorBrush(Colors.Orange);
 						break;
 				}
 			}
