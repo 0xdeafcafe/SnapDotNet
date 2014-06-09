@@ -33,10 +33,11 @@ namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 		/// Create a list of AlphaGroup with keys set by a SortedLocaleGrouping.
 		/// </summary>
 		/// <param name="slg">The </param>
+		/// <param name="useCaps">Use capital letters for the friends list.</param>
 		/// <returns>Theitems source for a LongListSelector</returns>
-		private static List<AlphaKeyGroup<T>> CreateGroups(IEnumerable<CharacterGrouping> slg)
+		private static List<AlphaKeyGroup<T>> CreateGroups(IEnumerable<CharacterGrouping> slg, bool useCaps)
 		{
-			return (from key in slg where string.IsNullOrWhiteSpace(key.Label) == false select new AlphaKeyGroup<T>(key.Label)).ToList();
+			return (from key in slg where string.IsNullOrWhiteSpace(key.Label) == false select new AlphaKeyGroup<T>(useCaps ? key.Label.ToUpperInvariant() : key.Label)).ToList();
 		}
 
 		/// <summary>
@@ -46,19 +47,18 @@ namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 		/// <param name="ci">The CultureInfo to group and sort by.</param>
 		/// <param name="getKey">A delegate to get the key from an item.</param>
 		/// <param name="sort">Will sort the data if true.</param>
+		/// <param name="useCaps">Use capital letters for the friends list.</param>
 		/// <returns>An items source for a LongListSelector</returns>
-		public static ObservableCollection<AlphaKeyGroup<T>> CreateGroups(IEnumerable<T> items, CultureInfo ci, GetKeyDelegate getKey, bool sort)
+		public static ObservableCollection<AlphaKeyGroup<T>> CreateGroups(IEnumerable<T> items, CultureInfo ci, GetKeyDelegate getKey, bool sort, bool useCaps)
 		{
 			var slg = new CharacterGroupings();
-			var list = CreateGroups(slg);
+			var list = CreateGroups(slg, useCaps);
 
 			foreach (var item in items)
 			{
 				var index = slg.Lookup(getKey(item));
 				if (string.IsNullOrEmpty(index) == false)
-				{
-					list.Find(a => a.Key == index).Add(item);
-				}
+					list.Find(a => a.Key == (useCaps ? index.ToUpperInvariant() : index)).Add(item);
 			}
 
 			if (!sort) 
