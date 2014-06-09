@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Converters.Json;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Models;
 using UnixDateTimeConverter = SnapDotNet.Core.Snapchat.Converters.Json.UnixDateTimeConverter;
 
@@ -11,14 +13,30 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	public class StoriesResponse
 		: NotifyPropertyChangedBase
 	{
+		public StoriesResponse()
+		{
+			_friendStories.CollectionChanged += (sender, args) => NotifyPropertyChanged("FriendStories");
+			_myStories.CollectionChanged += (sender, args) => NotifyPropertyChanged("MyStories");
+		}
+
 		[DataMember(Name = "friend_stories")]
-		public FriendStory[] FriendStories { get; set; }
+		public ObservableCollection<FriendStory> FriendStories
+		{
+			get { return _friendStories; }
+			set { SetField(ref _friendStories, value); }
+		}
+		private ObservableCollection<FriendStory> _friendStories = new ObservableCollection<FriendStory>();
 
 		[DataMember(Name = "mature_content_text")]
 		public MatureContentText MatureContentText { get; set; }
-		
+
 		[DataMember(Name = "story_extras")]
-		public MyStory[] MyStories { get; set; }
+		public ObservableCollection<MyStory> MyStories
+		{
+			get { return _myStories; }
+			set { SetField(ref _myStories, value); }
+		}
+		private ObservableCollection<MyStory> _myStories = new ObservableCollection<MyStory>();
 
 		// TODO: map out 'my_group_stories'
 	}
@@ -54,24 +72,73 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	public class MyStory
 		: NotifyPropertyChangedBase
 	{
+		public MyStory()
+		{
+			_storyNotes.CollectionChanged += (sender, args) => NotifyPropertyChanged("StoryNotes");
+		}
+
 		[DataMember(Name = "story")]
 		public Story Story { get; set; }
 
-		// TODO: map out 'story_notes'
-
+		[DataMember(Name = "story_notes")]
+		public ObservableCollection<StoryNote> StoryNotes
+		{
+			get { return _storyNotes; }
+			set { SetField(ref _storyNotes, value); }
+		}
+		private ObservableCollection<StoryNote> _storyNotes = new ObservableCollection<StoryNote>();
+			
 		[DataMember(Name = "story_extras")]
 		public StoryExtras StoryExtras { get; set; }
+	}
+
+	[DataContract]
+	public class StoryNote
+		: NotifyPropertyChangedBase
+	{
+		public StoryNote()
+		{
+			_storyPointer.CollectionChanged += (sender, args) => NotifyPropertyChanged("StoryPointer");
+		}
+
+		[DataMember(Name = "screenshotted")]
+		public Boolean ScreenShotted { get; set; }
+
+		[DataMember(Name = "storypointer")]
+		public ObservableDictionary<string, string> StoryPointer
+		{
+			get { return _storyPointer; }
+			set { SetField(ref _storyPointer, value); }
+		}
+		private ObservableDictionary<string, string> _storyPointer = new ObservableDictionary<string, string>();
+		
+		[DataMember(Name = "timestamp")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
+		public DateTime Timestamp { get; set; }
+
+		[DataMember(Name = "viewer")]
+		public String Viewer { get; set; }
 	}
 
 	[DataContract]
 	public class FriendStory
 		: NotifyPropertyChangedBase
 	{
+		public FriendStory()
+		{
+			_stories.CollectionChanged += (sender, args) => NotifyPropertyChanged("Stories");
+		}
+
 		[DataMember(Name = "mature_content")]
 		public Boolean MatureContent { get; set; }
 
 		[DataMember(Name = "stories")]
-		public Story[] Stories { get; set; }
+		public ObservableCollection<Story> Stories
+		{
+			get { return _stories; }
+			set { SetField(ref _stories, value); }
+		}
+		private ObservableCollection<Story> _stories = new ObservableCollection<Story>();
 
 		[DataMember(Name = "username")]
 		public String Username { get; set; }
