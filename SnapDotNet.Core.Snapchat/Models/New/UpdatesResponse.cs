@@ -69,7 +69,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		[IgnoreDataMember]
 		public ObservableCollection<AlphaKeyGroup<Friend>> SortedFriends
 		{
-			get { return AlphaKeyGroup<Friend>.CreateGroups(Friends, new CultureInfo("en"), f => f.FriendlyName, true); }
+			get { return AlphaKeyGroup<Friend>.CreateGroups(Friends, new CultureInfo("en"), f => f.FriendlyName, true, false); }
 		}
 			
 		[DataMember(Name = "last_replayed_snap_timestamp")]
