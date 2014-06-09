@@ -200,7 +200,7 @@
 						<GridView Background="#AAFFFFFF"
 								  ItemsSource="{Binding Source={StaticResource SortedFriends}, Path=CollectionGroups}"
 								  ItemTemplate="{StaticResource FriendsListJumpTemplate}"
-								  VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+								  VerticalContentAlignment="Top" HorizontalContentAlignment="Center">
 						</GridView>
 					</SemanticZoom.ZoomedOutView>
 				</SemanticZoom>
