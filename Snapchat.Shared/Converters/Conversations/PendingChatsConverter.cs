@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Converters.Conversations
@@ -18,15 +17,15 @@ namespace Snapchat.Converters.Conversations
 
 			// get the snap object
 			if (conversation.PendingChatsFor == null)
-				return new SolidColorBrush(Colors.Transparent);
+				return Visibility.Collapsed;
 
 			var hasPendingChats = false;
 			foreach (var pendingChat in conversation.PendingChatsFor.Where(pendingChat => pendingChat == App.SnapchatManager.AllUpdates.UpdatesResponse.Username))
 				hasPendingChats = true;
 
 			return hasPendingChats
-				? new SolidColorBrush(Colors.White)
-				: new SolidColorBrush(Colors.Transparent);
+				? Visibility.Visible
+				: Visibility.Collapsed;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, string language)

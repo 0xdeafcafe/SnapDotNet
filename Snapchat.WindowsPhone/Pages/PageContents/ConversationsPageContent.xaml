@@ -2,17 +2,16 @@
 				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				xmlns:controls="using:Snapchat.Controls"
-				xmlns:viewModels="using:Snapchat.ViewModels.PageContents"
 				xmlns:conversations="using:Snapchat.Converters.Conversations" 
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:converters="using:Snapchat.Converters"
 				mc:Ignorable="d"
 				
 				Background="White">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
-
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../../Controls/StateTextBlock.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
@@ -32,7 +31,6 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<Grid Background="#FF3cb2e2" Grid.Row="0" Margin="0,0,-0.167,0">
-
 			<controls:StateTextBlock x:Uid="ConvosPageTitleStateTextBlock"
 									 PrimaryText="coldsnap" 
 									 SecondaryText="{Binding Account.FriendlyRatio, FallbackValue=69 | 69}"
@@ -206,10 +204,15 @@
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<ContentControl Grid.Column="0" VerticalAlignment="Center" Width="55"
-											Template="{Binding Converter={StaticResource SnapIconConverter}}" />
+							<Grid Grid.Column="0" VerticalAlignment="Center">
+								<ContentControl Width="55"
+												Template="{Binding Converter={StaticResource SnapIconConverter}}" />
+								<ContentControl Width="55"
+												Template="{StaticResource recieved_message}"
+												Visibility="{Binding Converter={StaticResource PendingChatsConverter}}"/>
+							</Grid>
 
-							<StackPanel Grid.Column="2" VerticalAlignment="Center">
+							<StackPanel Grid.Column="1" VerticalAlignment="Center">
 								<TextBlock x:Name="SnapUser" Text="{Binding Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
 											FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
 									<TextBlock.RenderTransform>
