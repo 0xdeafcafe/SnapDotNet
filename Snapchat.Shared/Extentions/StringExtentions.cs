@@ -2,7 +2,7 @@
 {
 	public static class StringExtentions
 	{
-		public static string ToOrdinal(this int number)
+		public static string GetOrdinal(this int number)
 		{
 			if (number == 11 || number == 12 || number == 13) return "th";
 			switch (number % 10)
