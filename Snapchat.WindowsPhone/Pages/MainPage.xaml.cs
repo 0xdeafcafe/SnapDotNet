@@ -143,6 +143,13 @@ namespace Snapchat.Pages
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
+			string destination = e.Parameter as string ?? "";
+			if (e.NavigationMode == NavigationMode.Back && App.PreviousPage == typeof(ConversationPage))
+				destination = "Conversations";
+
+			if (string.IsNullOrEmpty(destination))
+				ConversationsPage.Opacity = 0;
+
 			// Keep trying to change the ScrollViewer's view until it succeeds.
 			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
 			timer.Tick += delegate
@@ -152,6 +159,14 @@ namespace Snapchat.Pages
 				ViewModel.ActualWidth = ActualWidth;
 				ConversationsPage.Opacity = 1;
 				timer.Stop();
+
+				
+				switch (destination)
+				{
+					case "Conversations":
+						ScrollViewer.ChangeView(0, null, null, true);
+						break;
+				}
 			};
 			timer.Start();
 

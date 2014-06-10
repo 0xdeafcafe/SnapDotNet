@@ -40,5 +40,11 @@ namespace Snapchat.Pages.PageContents
 		{
 			((sender as FrameworkElement).Resources["ConvoItemDetailPeekStoryboard"] as Storyboard).Begin();
 		}
+
+		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+		{
+			var element = sender as FrameworkElement;
+			App.RootFrame.Navigate(typeof(ConversationPage), element.DataContext);
+		}
 	}
 }

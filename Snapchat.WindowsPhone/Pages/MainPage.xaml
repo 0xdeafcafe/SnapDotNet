@@ -78,7 +78,7 @@
 		</i:Interaction.Behaviors>
 
 		<StackPanel x:Name="PagesContainer" Orientation="Horizontal">
-			<Grid x:Name="ConversationsPage" Opacity="0" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
+			<Grid x:Name="ConversationsPage" Opacity="1" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
 				<!-- workaround for the dumb exception is in the codebehind <pageContents:ConversationsPageContent /> -->
 			</Grid>
 

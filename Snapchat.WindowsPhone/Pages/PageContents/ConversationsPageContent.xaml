@@ -209,7 +209,8 @@
 			</ItemsControl.Template>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}" Tapped="ConvoItem_Tapped">
+					<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
+							Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped">
 						
 						<Button.Resources>
 							<Storyboard x:Key="ConvoItemDetailPeekStoryboard" AutoReverse="True">

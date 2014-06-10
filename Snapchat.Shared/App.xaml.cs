@@ -45,6 +45,7 @@ namespace Snapchat
 		}
 
 		public static Frame RootFrame { get; private set; }
+		public static Type PreviousPage { get; set; }
 
 		/// <summary>
 		/// Invoked when the application is launched normally by the end user.  Other entry points
@@ -66,7 +67,7 @@ namespace Snapchat
 			if (RootFrame == null)
 			{
 				// Create a Frame to act as the navigation context and navigate to the first page
-				RootFrame = new Frame { CacheSize = 2 };
+				RootFrame = new Frame { CacheSize = 3 };
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{

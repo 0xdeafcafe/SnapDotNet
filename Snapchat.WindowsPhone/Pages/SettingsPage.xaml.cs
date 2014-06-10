@@ -30,12 +30,14 @@ namespace Snapchat.Pages
 
 		private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
 		{
+			App.PreviousPage = typeof(SettingsPage);
 			App.RootFrame.GoBack();
 			e.Handled = true;
 		}
 
 		private void HardwareButtons_CameraPressed(object sender, CameraEventArgs e)
 		{
+			App.PreviousPage = typeof(SettingsPage);
 			App.RootFrame.GoBack();
 		}
 	}
