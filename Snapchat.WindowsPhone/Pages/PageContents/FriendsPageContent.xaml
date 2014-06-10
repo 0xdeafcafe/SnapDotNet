@@ -55,7 +55,7 @@
 		</Grid.RowDefinitions>
 		<Grid Background="#FF9b55a0" Grid.Row="0">
 			<TextBlock x:Uid="FriendsPageTitleTextBlock"
-					   Text="My Friends"
+					   Text="my friends"
 					   VerticalAlignment="Bottom" HorizontalAlignment="Left"
 					   Margin="18,0,0,0" FontWeight="Light"
 					   FontFamily="Segoe WP" FontSize="40" />

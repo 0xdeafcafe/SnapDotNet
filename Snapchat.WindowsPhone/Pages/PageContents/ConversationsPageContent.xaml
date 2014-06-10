@@ -6,6 +6,8 @@
 				xmlns:conversations="using:Snapchat.Converters.Conversations" 
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:i="using:Microsoft.Xaml.Interactivity"
+				xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 				mc:Ignorable="d"
 				
 				Background="White">
@@ -21,6 +23,39 @@
 			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
 			<conversations:FriendlySnapTimeConverter x:Key="FriendlySnapTimeConverter" />
 			<conversations:SnapStatusConverter x:Key="SnapStatusConverter" />
+
+			<Style x:Key="ConvoListItemStyle" TargetType="Button">
+				<Setter Property="Background" Value="Transparent"/>
+				<Setter Property="BorderThickness" Value="0,0,0,1"/>
+				<Setter Property="Padding" Value="0"/>
+				<Setter Property="Margin" Value="0"/>
+				<Setter Property="HorizontalAlignment" Value="Left"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="Button">
+							<Grid x:Name="Grid" Background="Transparent" Height="60">
+								<VisualStateManager.VisualStateGroups>
+									<VisualStateGroup x:Name="CommonStates">
+										<VisualState x:Name="Normal"/>
+										<VisualState x:Name="PointerOver"/>
+										<VisualState x:Name="Pressed">
+											<Storyboard>
+												<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+													<!--<DiscreteObjectKeyFrame KeyTime="0" Value="#FF3cb2e2"/>-->
+												</ObjectAnimationUsingKeyFrames>
+											</Storyboard>
+										</VisualState>
+									</VisualStateGroup>
+								</VisualStateManager.VisualStateGroups>
+								<Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="0">
+									<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+								</Border>
+							</Grid>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
 
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -176,30 +211,28 @@
 			</ItemsControl.Template>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1">
-						<Border.Resources>
-							<Storyboard x:Name="RevealDetailStoryboard">
+					<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}" Tapped="ConvoItem_Tapped">
+						
+						<Button.Resources>
+							<Storyboard x:Key="ConvoItemDetailPeekStoryboard" AutoReverse="True">
 								<DoubleAnimation Duration="0:0:0.3" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
-								<DoubleAnimation Duration="0:0:0.3" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SnapUser" d:IsOptimized="True"/>
-								<DoubleAnimation Duration="0:0:0.3" To="-12" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SnapUser" d:IsOptimized="True"/>
-								<DoubleAnimation Duration="0:0:0.3" To="8" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
+								<DoubleAnimation Duration="0:0:0.3" To="-8" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SnapUser" d:IsOptimized="True">
+									<DoubleAnimation.EasingFunction>
+										<CubicEase EasingMode="EaseOut"/>
+									</DoubleAnimation.EasingFunction>
+								</DoubleAnimation>
+								<DoubleAnimation Duration="0:0:0.3" To="6" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True">
+									<DoubleAnimation.EasingFunction>
+										<CubicEase EasingMode="EaseOut"/>
+									</DoubleAnimation.EasingFunction>
+								</DoubleAnimation>
+
+								<!-- delay the end of the storyboard before AutoReverse fires -->
+								<DoubleAnimation BeginTime="0:0:0.8" Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
 							</Storyboard>
-						</Border.Resources>
-
-						<Grid Background="White">
-							<Grid.RenderTransform>
-								<TranslateTransform x:Name="ConvoItemTranslateTransform" X="0"/>
-							</Grid.RenderTransform>
-
-							<Grid.Resources>
-								<Storyboard x:Name="CloseChatPeekIndicatorStoryboard">
-									<DoubleAnimation Storyboard.TargetName="ConvoItemTranslateTransform" Storyboard.TargetProperty="X" To="0" SpeedRatio="2.0">
-										<DoubleAnimation.EasingFunction>
-											<CubicEase/>
-										</DoubleAnimation.EasingFunction>
-									</DoubleAnimation>
-								</Storyboard>
-							</Grid.Resources>
+						</Button.Resources>
+						
+						<Grid x:Name="ConvoItemGrid">
 
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="Auto" />
@@ -209,17 +242,17 @@
 							<ContentControl Grid.Column="0" VerticalAlignment="Center" Width="55"
 											Template="{Binding Converter={StaticResource SnapIconConverter}}" />
 
-							<StackPanel Grid.Column="2" VerticalAlignment="Center">
+							<StackPanel Grid.Column="1" VerticalAlignment="Center">
 								<TextBlock x:Name="SnapUser" Text="{Binding Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
-											FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+											FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
 									<TextBlock.RenderTransform>
-										<CompositeTransform/>
+										<CompositeTransform TranslateY="7"/>
 									</TextBlock.RenderTransform>
 								</TextBlock>
 
-								<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FFA8A8A8" FontSize="14" VerticalAlignment="Center" Opacity="0" RenderTransformOrigin="0.5,0.5">
+								<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FFA8A8A8" FontSize="14" Opacity="0" RenderTransformOrigin="0.5,0.5">
 									<TextBlock.RenderTransform>
-										<CompositeTransform/>
+										<CompositeTransform TranslateX="0" TranslateY="0"/>
 									</TextBlock.RenderTransform>
 									<Run Text="{Binding Converter={StaticResource FriendlySnapTimeConverter}}" />
 									<Run Text="-" />
@@ -227,7 +260,7 @@
 								</TextBlock>
 							</StackPanel>
 						</Grid>
-					</Border>
+					</Button>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>

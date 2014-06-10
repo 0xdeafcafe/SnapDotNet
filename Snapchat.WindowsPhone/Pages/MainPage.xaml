@@ -87,8 +87,8 @@
 					<EventTrigger RoutedEvent="Grid.Loaded">
 						<BeginStoryboard>
 							<Storyboard>
-								<DoubleAnimation Storyboard.TargetName="NavButtonsContainer" Storyboard.TargetProperty="Opacity" To="1" BeginTime="00:00:00.8" Duration="00:00:00.5"/>
-								<DoubleAnimation Storyboard.TargetName="NavButtonsTranslateTransform" Storyboard.TargetProperty="Y" To="0" BeginTime="00:00:00.9" Duration="00:00:00.5">
+								<DoubleAnimation Storyboard.TargetName="NavButtonsContainer" Storyboard.TargetProperty="Opacity" To="1" BeginTime="00:00:00.5" Duration="00:00:00.5"/>
+								<DoubleAnimation Storyboard.TargetName="NavButtonsTranslateTransform" Storyboard.TargetProperty="Y" To="0" BeginTime="00:00:00.6" Duration="00:00:00.5">
 									<DoubleAnimation.EasingFunction>
 										<BackEase EasingMode="EaseOut"/>
 									</DoubleAnimation.EasingFunction>

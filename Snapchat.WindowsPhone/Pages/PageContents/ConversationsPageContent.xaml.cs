@@ -35,5 +35,10 @@ namespace Snapchat.Pages.PageContents
 		{
 			MainPage.Singleton.RestoreBottomAppBar();
 		}
+
+		private void ConvoItem_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			((sender as FrameworkElement).Resources["ConvoItemDetailPeekStoryboard"] as Storyboard).Begin();
+		}
 	}
 }
