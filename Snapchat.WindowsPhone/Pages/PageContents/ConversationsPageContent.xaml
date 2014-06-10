@@ -19,7 +19,8 @@
 			<conversations:SnapStatusConverter x:Key="SnapStatusConverter" />
 
 			<Style x:Key="ConvoListItemStyle" TargetType="Button">
-				<Setter Property="Background" Value="#eeeeee"/>
+				<Setter Property="BorderBrush" Value="#eeeeee"/>
+				<Setter Property="Background" Value="Transparent"/>
 				<Setter Property="BorderThickness" Value="0,0,0,1"/>
 				<Setter Property="Padding" Value="0"/>
 				<Setter Property="Margin" Value="0"/>
