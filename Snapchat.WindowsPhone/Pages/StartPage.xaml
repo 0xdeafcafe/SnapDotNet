@@ -92,25 +92,25 @@
 			<VisualStateGroup>
 				<VisualState x:Name="StartPortrait">
 					<Storyboard>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridPortrait">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPagePortraitGrid">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
 
-						<DoubleAnimation Storyboard.TargetName="LogInPageGridTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
+						<DoubleAnimation Storyboard.TargetName="LogInPagePortraitGridTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
 							<DoubleAnimation.EasingFunction>
 								<QuadraticEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
-						<DoubleAnimation Storyboard.TargetName="SignUpPageTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
+						<DoubleAnimation Storyboard.TargetName="SignUpPagePortraitTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
 							<DoubleAnimation.EasingFunction>
 								<QuadraticEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
 
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPageGrid" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPagePortraitGrid" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPageGrid" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPagePortraitGrid" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
@@ -121,36 +121,36 @@
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
 
-						<DoubleAnimation Storyboard.TargetName="LogInPageGridTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
+						<DoubleAnimation Storyboard.TargetName="LogInPageLandscapeGridTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
 							<DoubleAnimation.EasingFunction>
 								<QuadraticEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
-						<DoubleAnimation Storyboard.TargetName="SignUpPageTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
+						<DoubleAnimation Storyboard.TargetName="SignUpPageLandscapeTranslate" Storyboard.TargetProperty="Y" To="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.2">
 							<DoubleAnimation.EasingFunction>
 								<QuadraticEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
 
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPageGrid" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPageLandscapeGrid" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPageGrid" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPageLandscapeGrid" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
 				</VisualState>
-				<VisualState x:Name="LogIn">
+				<VisualState x:Name="LogInPortrait">
 					<Storyboard>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPageGrid">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPagePortraitGrid">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
-						<DoubleAnimation Storyboard.TargetName="LogInPageGridTranslate" Storyboard.TargetProperty="Y" To="0" From="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.25">
+						<DoubleAnimation Storyboard.TargetName="LogInPagePortraitGridTranslate" Storyboard.TargetProperty="Y" To="0" From="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.25">
 							<DoubleAnimation.EasingFunction>
 								<CircleEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridPortrait" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPagePortraitGrid" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridLandscape" BeginTime="00:00:00.3">
@@ -158,17 +158,53 @@
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
 				</VisualState>
-				<VisualState x:Name="SignUp">
+				<VisualState x:Name="LogInLandscape">
 					<Storyboard>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPageGrid">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="LogInPageLandscapeGrid">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
-						<DoubleAnimation Storyboard.TargetName="SignUpPageTranslate" Storyboard.TargetProperty="Y" To="0" From="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.25">
+						<DoubleAnimation Storyboard.TargetName="LogInPageLandscapeGridTranslate" Storyboard.TargetProperty="Y" To="0" From="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.25">
 							<DoubleAnimation.EasingFunction>
 								<CircleEase EasingMode="EaseOut"/>
 							</DoubleAnimation.EasingFunction>
 						</DoubleAnimation>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridPortrait" BeginTime="00:00:00.3">
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPagePortraitGrid" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridLandscape" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="SignUpPortrait">
+					<Storyboard>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPagePortraitGrid">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+						<DoubleAnimation Storyboard.TargetName="SignUpPagePortraitTranslate" Storyboard.TargetProperty="Y" To="0" From="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.25">
+							<DoubleAnimation.EasingFunction>
+								<CircleEase EasingMode="EaseOut"/>
+							</DoubleAnimation.EasingFunction>
+						</DoubleAnimation>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPagePortraitGrid" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridLandscape" BeginTime="00:00:00.3">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="SignUpLandscape">
+					<Storyboard>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="SignUpPageLandscapeGrid">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+						<DoubleAnimation Storyboard.TargetName="SignUpPageLandscapeTranslate" Storyboard.TargetProperty="Y" To="0" From="{Binding ActualHeight, ElementName=PageContainer}" Duration="00:00:00.25">
+							<DoubleAnimation.EasingFunction>
+								<CircleEase EasingMode="EaseOut"/>
+							</DoubleAnimation.EasingFunction>
+						</DoubleAnimation>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPagePortraitGrid" BeginTime="00:00:00.3">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="StartPageGridLandscape" BeginTime="00:00:00.3">
@@ -181,7 +217,7 @@
 
 
 		<!-- Start Page -->
-		<Grid x:Name="StartPageGridPortrait" Visibility="Collapsed" Background="{StaticResource PageBackgroundBrush}">
+		<Grid x:Name="StartPagePortraitGrid" Visibility="Collapsed" Background="{StaticResource PageBackgroundBrush}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
@@ -189,7 +225,7 @@
 			</Grid.RowDefinitions>
 
 			<!-- Hovering Ghost -->
-			<Image x:Name="LogoPortrait"
+			<Image x:Name="PortraitLogo"
                     Source="ms-appx:///Assets/Ghost.png"
                     VerticalAlignment="Top"
                     Stretch="None" Height="275" Margin="15,0">
@@ -197,11 +233,11 @@
 					<EventTrigger RoutedEvent="Image.Loaded">
 						<BeginStoryboard>
 							<Storyboard>
-								<DoubleAnimation Storyboard.TargetName="LogoPortrait"
+								<DoubleAnimation Storyboard.TargetName="PortraitLogo"
                                                 Storyboard.TargetProperty="Opacity"
                                                 To="1" From="0"
                                                 Duration="00:00:00.9"/>
-								<DoubleAnimation Storyboard.TargetName="LogoPortraitTranslate"
+								<DoubleAnimation Storyboard.TargetName="PortraitLogoTranslate"
                                                 Storyboard.TargetProperty="Y"
                                                 To="0"
                                                 From="-25"
@@ -217,7 +253,7 @@
 					</EventTrigger>
 				</Image.Triggers>
 				<Image.RenderTransform>
-					<TranslateTransform x:Name="LogoPortraitTranslate" Y="-25"/>
+					<TranslateTransform x:Name="PortraitLogoTranslate" Y="-25"/>
 				</Image.RenderTransform>
 			</Image>
 
@@ -228,14 +264,14 @@
 			<Button x:Uid="LogInButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FFF36136" Content="LOG IN">
 				<i:Interaction.Behaviors>
 					<core:EventTriggerBehavior EventName="Tapped">
-						<core:GoToStateAction StateName="LogIn"/>
+						<core:GoToStateAction StateName="LogInPortrait"/>
 					</core:EventTriggerBehavior>
 				</i:Interaction.Behaviors>
 			</Button>
 			<Button x:Uid="SignUpButton" Style="{StaticResource BigButtonStyle}" Grid.Row="2" Background="#FF00A2FF" Content="SIGN UP">
 				<i:Interaction.Behaviors>
 					<core:EventTriggerBehavior EventName="Tapped">
-						<core:GoToStateAction StateName="SignUp"/>
+						<core:GoToStateAction StateName="SignUpPortrait"/>
 					</core:EventTriggerBehavior>
 				</i:Interaction.Behaviors>
 			</Button>
@@ -252,7 +288,7 @@
 			</Grid.ColumnDefinitions>
 
 			<!-- Hovering Ghost -->
-			<Image x:Name="LogoLandscape" Grid.ColumnSpan="2"
+			<Image x:Name="LandscapeLogo" Grid.ColumnSpan="2"
                     Source="ms-appx:///Assets/Ghost.png"
                     VerticalAlignment="Top"
                     Stretch="None" Height="275" Margin="15,-15">
@@ -260,11 +296,11 @@
 					<EventTrigger RoutedEvent="Image.Loaded">
 						<BeginStoryboard>
 							<Storyboard>
-								<DoubleAnimation Storyboard.TargetName="LogoLandscape"
+								<DoubleAnimation Storyboard.TargetName="LandscapeLogo"
                                                 Storyboard.TargetProperty="Opacity"
                                                 To="1" From="0"
                                                 Duration="00:00:00.9"/>
-								<DoubleAnimation Storyboard.TargetName="LogoLandscapeTranslate"
+								<DoubleAnimation Storyboard.TargetName="LandscapeLogoTranslate"
                                                 Storyboard.TargetProperty="Y"
                                                 To="0"
                                                 From="-25"
@@ -280,7 +316,7 @@
 					</EventTrigger>
 				</Image.Triggers>
 				<Image.RenderTransform>
-					<TranslateTransform x:Name="LogoLandscapeTranslate" Y="-25"/>
+					<TranslateTransform x:Name="LandscapeLogoTranslate" Y="-25"/>
 				</Image.RenderTransform>
 			</Image>
 
@@ -291,24 +327,23 @@
 			<Button x:Uid="LogInButton" Style="{StaticResource BigButtonStyle}" Grid.Row="2" Grid.Column="0" Background="#FFF36136" Content="LOG IN">
 				<i:Interaction.Behaviors>
 					<core:EventTriggerBehavior EventName="Tapped">
-						<core:GoToStateAction StateName="LogIn"/>
+						<core:GoToStateAction StateName="LogInLandscape"/>
 					</core:EventTriggerBehavior>
 				</i:Interaction.Behaviors>
 			</Button>
 			<Button x:Uid="SignUpButton" Style="{StaticResource BigButtonStyle}" Grid.Row="2" Grid.Column="1" Background="#FF00A2FF" Content="SIGN UP">
 				<i:Interaction.Behaviors>
 					<core:EventTriggerBehavior EventName="Tapped">
-						<core:GoToStateAction StateName="SignUp"/>
+						<core:GoToStateAction StateName="SignUpLandscape"/>
 					</core:EventTriggerBehavior>
 				</i:Interaction.Behaviors>
 			</Button>
 		</Grid>
 
-
 		<!-- Log In Page -->
-		<Grid x:Name="LogInPageGrid" Background="#FFF36136" Visibility="Collapsed">
+		<Grid x:Name="LogInPagePortraitGrid" Background="#FFF36136" Visibility="Collapsed">
 			<Grid.RenderTransform>
-				<TranslateTransform x:Name="LogInPageGridTranslate" Y="0"/>
+				<TranslateTransform x:Name="LogInPagePortraitGridTranslate" Y="0"/>
 			</Grid.RenderTransform>
 
 			<Grid.RowDefinitions>
@@ -317,8 +352,8 @@
 			</Grid.RowDefinitions>
 
 			<StackPanel Grid.Row="0" Margin="10,0,10,0">
-				<TextBox x:Uid="LogInPageEmailUsernameTextBox" x:Name="LogInPageEmailUsernameTextBox" Header="Username or email" InputScope="EmailSmtpAddress" KeyDown="LogInPageEmailUsernameTextBox_KeyDown" Text="{Binding CurrentUsername, Mode=TwoWay}"/>
-				<PasswordBox x:Uid="LogInPagePasswordBox" x:Name="LogInPagePasswordBox" Header="Password" KeyDown="LogInPagePasswordBox_KeyDown" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
+				<TextBox x:Uid="LogInPageEmailUsernameTextBox" x:Name="LogInPageEmailUsernamePortraitTextBox" Header="Username or email" InputScope="EmailSmtpAddress" KeyDown="LogInPageEmailUsernamePortraitTextBox_KeyDown" Text="{Binding CurrentUsername, Mode=TwoWay}"/>
+				<PasswordBox x:Uid="LogInPagePasswordBox" x:Name="LogInPagePortraitPasswordBox" Header="Password" KeyDown="LogInPagePortraitPasswordBox_KeyDown" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
 				<HyperlinkButton x:Uid="ForgotPasswordButton"
                                  NavigateUri="http://support.snapchat.com/password-reset-request"
                                  HorizontalAlignment="Right"
@@ -327,14 +362,11 @@
                                  Style="{StaticResource PivotTitleContentControlStyle}"/>
 			</StackPanel>
 
-			<Button x:Uid="LogInButton" x:Name="LogInPageLoginButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FFFF7C55" Content="LOG IN" Command="{Binding LogInCommand}"/>
+			<Button x:Uid="LogInButton" x:Name="LogInPageLoginPortraitButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FFFF7C55" Content="LOG IN" Command="{Binding LogInCommand}"/>
 		</Grid>
-
-
-		<!-- Sign Up Page -->
-		<Grid x:Name="SignUpPageGrid" Background="#FF00A2FF" Visibility="Collapsed">
+		<Grid x:Name="LogInPageLandscapeGrid" Background="#FFF36136" Visibility="Collapsed">
 			<Grid.RenderTransform>
-				<TranslateTransform x:Name="SignUpPageTranslate" Y="0"/>
+				<TranslateTransform x:Name="LogInPageLandscapeGridTranslate" Y="0"/>
 			</Grid.RenderTransform>
 
 			<Grid.RowDefinitions>
@@ -343,9 +375,58 @@
 			</Grid.RowDefinitions>
 
 			<StackPanel Grid.Row="0" Margin="10,0,10,0">
-				<TextBox x:Uid="SignUpPageEmailTextBox" x:Name="SignUpPageEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" KeyDown="SignUpPageEmailTextBox_KeyDown"/>
-				<PasswordBox x:Uid="SignUpPagePasswordBox" x:Name="SignUpPagePasswordBox" Header="Password" KeyDown="SignUpPagePasswordBox_KeyDown"/>
-				<DatePicker x:Uid="SignUpPageBirthdayDatePicker" x:Name="SignUpPageBirthdayDatePicker" Header="Birthday" Margin="0,10,0,0"/>
+				<TextBox x:Uid="LogInPageEmailUsernameTextBox" x:Name="LogInPageEmailUsernameLandscapeTextBox" Header="Username or email" InputScope="EmailSmtpAddress" KeyDown="LogInPageEmailUsernameLandscapeTextBox_KeyDown" Text="{Binding CurrentUsername, Mode=TwoWay}"/>
+				<PasswordBox x:Uid="LogInPagePasswordBox" x:Name="LogInPageLandscapePasswordBox" Header="Password" KeyDown="LogInPageLandscapePasswordBox_KeyDown" Password="{Binding CurrentPassword, Mode=TwoWay}"/>
+				<HyperlinkButton x:Uid="ForgotPasswordButton"
+                                 NavigateUri="http://support.snapchat.com/password-reset-request"
+                                 HorizontalAlignment="Right"
+                                 Margin="2"
+                                 Content="forgot password?"
+                                 Style="{StaticResource PivotTitleContentControlStyle}"/>
+			</StackPanel>
+
+			<Button x:Uid="LogInButton" x:Name="LogInPageLoginLandscapeButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FFFF7C55" Content="LOG IN" Command="{Binding LogInCommand}"/>
+		</Grid>
+
+		<!-- Sign Up Page -->
+		<Grid x:Name="SignUpPagePortraitGrid" Background="#FF00A2FF" Visibility="Collapsed">
+			<Grid.RenderTransform>
+				<TranslateTransform x:Name="SignUpPagePortraitTranslate" Y="0"/>
+			</Grid.RenderTransform>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<StackPanel Grid.Row="0" Margin="10,0,10,0">
+				<TextBox x:Uid="SignUpPageEmailTextBox" x:Name="SignUpPageEmailPortraitTextBox" Header="Email" InputScope="EmailSmtpAddress" KeyDown="SignUpPageEmailPortraitTextBox_KeyDown"/>
+				<PasswordBox x:Uid="SignUpPagePasswordBox" x:Name="SignUpPagePortraitPasswordBox" Header="Password" KeyDown="SignUpPagePortraitPasswordBox_KeyDown"/>
+				<DatePicker x:Uid="SignUpPageBirthdayDatePicker" x:Name="SignUpPageBirthdayPortraitDatePicker" Header="Birthday" Margin="0,10,0,0"/>
+			</StackPanel>
+
+			<Button x:Uid="SignUpButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FF54C1FF" Content="SIGN UP">
+				<i:Interaction.Behaviors>
+					<core:EventTriggerBehavior EventName="Tapped">
+
+					</core:EventTriggerBehavior>
+				</i:Interaction.Behaviors>
+			</Button>
+		</Grid>
+		<Grid x:Name="SignUpPageLandscapeGrid" Background="#FF00A2FF" Visibility="Collapsed">
+			<Grid.RenderTransform>
+				<TranslateTransform x:Name="SignUpPageLandscapeTranslate" Y="0"/>
+			</Grid.RenderTransform>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<StackPanel Grid.Row="0" Margin="10,0,10,0">
+				<TextBox x:Uid="SignUpPageEmailTextBox" x:Name="SignUpPageEmailLandscapeTextBox" Header="Email" InputScope="EmailSmtpAddress" KeyDown="SignUpPageEmailLandscapeTextBox_KeyDown"/>
+				<PasswordBox x:Uid="SignUpPagePasswordBox" x:Name="SignUpPageLandscapePasswordBox" Header="Password" KeyDown="SignUpPageLandscapePasswordBox_KeyDown"/>
+				<DatePicker x:Uid="SignUpPageBirthdayDatePicker" x:Name="SignUpPageBirthdayLandscapeDatePicker" Header="Birthday" Margin="0,10,0,0"/>
 			</StackPanel>
 
 			<Button x:Uid="SignUpButton" Style="{StaticResource BigButtonStyle}" Grid.Row="1" Background="#FF54C1FF" Content="SIGN UP">

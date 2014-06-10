@@ -46,14 +46,31 @@ namespace Snapchat.Pages
 
 	    private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
 		{
-			// Exit the app if it's at the start screen.
-			if (VisualStateManager.GetVisualStateGroups(PageContainer).First().CurrentState.Name == "Start")
-				return;
+			switch (DisplayInformation.GetForCurrentView().CurrentOrientation)
+			{
+				case DisplayOrientations.Portrait:
+				case DisplayOrientations.PortraitFlipped:
+					// Exit the app if it's at the start screen.
+					if (VisualStateManager.GetVisualStateGroups(PageContainer).First().CurrentState.Name == "StartPortrait")
+						return;
 
-			// Otherwise, go back to the start screen.
-			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(PageContainer), "Start", false);
-			e.Handled = true;
-			
+					// Otherwise, go back to the start screen.
+					VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(PageContainer), "StartPortrait", false);
+					e.Handled = true;
+					break;
+
+				case DisplayOrientations.Landscape:
+				case DisplayOrientations.LandscapeFlipped:
+					// Exit the app if it's at the start screen.
+					if (VisualStateManager.GetVisualStateGroups(PageContainer).First().CurrentState.Name == "StartLandscape")
+						return;
+
+					// Otherwise, go back to the start screen.
+					VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(PageContainer), "StartLandscape", false);
+					e.Handled = true;
+					break;
+			}
+
 			if (_accelerometer != null)
 				_accelerometer.ReadingChanged -= CalculateDeviceRotation;
 		}
@@ -67,53 +84,99 @@ namespace Snapchat.Pages
 		{
 			switch (DisplayInformation.GetForCurrentView().CurrentOrientation)
 			{
-
 				case DisplayOrientations.Portrait:
 				case DisplayOrientations.PortraitFlipped:
 					if (StartPageGridLandscape.Visibility == Visibility.Visible)
 					{
-						StartPageGridPortrait.Visibility = Visibility.Visible;
+						StartPagePortraitGrid.Visibility = Visibility.Visible;
 						StartPageGridLandscape.Visibility = Visibility.Collapsed;
+					}
+					if (LogInPageLandscapeGrid.Visibility == Visibility.Visible)
+					{
+						LogInPagePortraitGrid.Visibility = Visibility.Visible;
+						LogInPageLandscapeGrid.Visibility = Visibility.Collapsed;
+					}
+					if (SignUpPageLandscapeGrid.Visibility == Visibility.Visible)
+					{
+						SignUpPagePortraitGrid.Visibility = Visibility.Visible;
+						SignUpPageLandscapeGrid.Visibility = Visibility.Collapsed;
 					}
 					break;
 
 				case DisplayOrientations.Landscape:
 				case DisplayOrientations.LandscapeFlipped:
 				default:
-					if (StartPageGridPortrait.Visibility == Visibility.Visible)
+					if (StartPagePortraitGrid.Visibility == Visibility.Visible)
 					{
 						StartPageGridLandscape.Visibility = Visibility.Visible;
-						StartPageGridPortrait.Visibility = Visibility.Collapsed;
+						StartPagePortraitGrid.Visibility = Visibility.Collapsed;
+					}
+					if (LogInPagePortraitGrid.Visibility == Visibility.Visible)
+					{
+						LogInPageLandscapeGrid.Visibility = Visibility.Visible;
+						LogInPagePortraitGrid.Visibility = Visibility.Collapsed;
+					}
+					if (SignUpPagePortraitGrid.Visibility == Visibility.Visible)
+					{
+						SignUpPageLandscapeGrid.Visibility = Visibility.Visible;
+						SignUpPagePortraitGrid.Visibility = Visibility.Collapsed;
 					}
 					break;
 			}
 		}
 
-		private void LogInPageEmailUsernameTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		private void LogInPageEmailUsernamePortraitTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
 	    {
 			if (e.Key == Windows.System.VirtualKey.Enter)
-				LogInPagePasswordBox.Focus(FocusState.Keyboard);
+				LogInPagePortraitPasswordBox.Focus(FocusState.Keyboard);
 	    }
 
-	    private void LogInPagePasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
-	    {
-		    if (e.Key == Windows.System.VirtualKey.Enter)
-		    {
-				LogInPageLoginButton.Focus(FocusState.Programmatic);
-				LogInPageLoginButton.Command.Execute(null);
-		    }
-	    }
-
-		private void SignUpPageEmailTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		private void LogInPageEmailUsernameLandscapeTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
 		{
 			if (e.Key == Windows.System.VirtualKey.Enter)
-				SignUpPagePasswordBox.Focus(FocusState.Keyboard);
+				LogInPageLandscapePasswordBox.Focus(FocusState.Keyboard);
 		}
 
-		private void SignUpPagePasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		private void LogInPagePortraitPasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
 		{
 			if (e.Key == Windows.System.VirtualKey.Enter)
-				SignUpPageBirthdayDatePicker.Focus(FocusState.Programmatic);
+			{
+				LogInPageLoginPortraitButton.Focus(FocusState.Programmatic);
+				LogInPageLoginPortraitButton.Command.Execute(null);
+			}
+		}
+
+		private void LogInPageLandscapePasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+			{
+				LogInPageLoginLandscapeButton.Focus(FocusState.Programmatic);
+				LogInPageLoginLandscapeButton.Command.Execute(null);
+			}
+		}
+
+		private void SignUpPageEmailPortraitTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				SignUpPagePortraitPasswordBox.Focus(FocusState.Keyboard);
+		}
+
+		private void SignUpPageEmailLandscapeTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				SignUpPageLandscapePasswordBox.Focus(FocusState.Keyboard);
+		}
+
+		private void SignUpPagePortraitPasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				SignUpPageBirthdayPortraitDatePicker.Focus(FocusState.Programmatic);
+		}
+
+		private void SignUpPageLandscapePasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == Windows.System.VirtualKey.Enter)
+				SignUpPageBirthdayLandscapeDatePicker.Focus(FocusState.Programmatic);
 		}
     }
 }
