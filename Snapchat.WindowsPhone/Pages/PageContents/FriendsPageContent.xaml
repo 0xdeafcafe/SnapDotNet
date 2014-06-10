@@ -57,7 +57,7 @@
 			<TextBlock x:Uid="FriendsPageTitleTextBlock"
 					   Text="my friends"
 					   VerticalAlignment="Bottom" HorizontalAlignment="Left"
-					   Margin="18,0,0,0" FontWeight="Light"
+					   Margin="15,0,0,0" FontWeight="Light"
 					   FontFamily="Segoe WP" FontSize="40" />
 		</Grid>
 		

@@ -23,20 +23,25 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlyFriendNameConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlySnapTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingChatsConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapIconConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CaseConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\FriendlyFriendNameConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\MessageOwnerColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\EmptyGroupToColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DebugConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\FriendlyTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IntegerConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extentions\StringExtentions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\MediaCaptureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\ConversationThreadMessageTypeTemplateSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\ConversationThreadTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConversationViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
@@ -61,8 +66,8 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\SmallLogo.scale-240.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\SplashScreen.scale-240.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Square71x71Logo.scale-240.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\StoreLogo.scale-240.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\WideLogo.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Common\StoreLogo.scale-240.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Assets\Vectors\SnapStatusIcons.xaml">

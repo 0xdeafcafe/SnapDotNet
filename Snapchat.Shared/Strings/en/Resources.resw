@@ -306,12 +306,6 @@
   <data name="SnapStatusTapLoad" xml:space="preserve">
     <value>Tap to load</value>
   </data>
-  <data name="SnapTimeToday" xml:space="preserve">
-    <value>Today</value>
-  </data>
-  <data name="SnapTimeYesterday" xml:space="preserve">
-    <value>Yesterday</value>
-  </data>
   <data name="StatusLoggingIn" xml:space="preserve">
     <value>Logging into Snapchat...</value>
   </data>
@@ -326,6 +320,12 @@
   </data>
   <data name="StoryPrivacyFriends.Content" xml:space="preserve">
     <value>Friends</value>
+  </data>
+  <data name="TimeToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="TimeYesterday" xml:space="preserve">
+    <value>Yesterday</value>
   </data>
   <data name="ToggleFlashAppBarButtonLabel" xml:space="preserve">
     <value>toggle flash</value>

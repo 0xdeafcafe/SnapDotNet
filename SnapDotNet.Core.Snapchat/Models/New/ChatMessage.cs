@@ -10,7 +10,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 {
 	[DataContract]
 	public class ChatMessage
-		: NotifyPropertyChangedBase
+		: NotifyPropertyChangedBase, IConversationItem
 	{
 		public ChatMessage()
 		{
@@ -81,6 +81,23 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _type, value); }
 		}
 		private String _type;
+
+		#region Helpers
+
+		[IgnoreDataMember]
+		public String Sender
+		{
+			get { return Header.From; }
+		}
+
+		#endregion
+	}
+
+	public enum MessageBodyType
+	{
+		Text,
+		Screenshot,
+		Media
 	}
 
 	[DataContract]
@@ -96,12 +113,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		private String _text;
 
 		[DataMember(Name = "type")]
-		public String Type
+		public MessageBodyType Type
 		{
 			get { return _type; }
 			set { SetField(ref _type, value); }
 		}
-		private String _type;
+		private MessageBodyType _type;
 	}
 
 	[DataContract]

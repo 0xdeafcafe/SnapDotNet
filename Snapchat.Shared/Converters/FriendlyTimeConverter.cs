@@ -1,27 +1,22 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 using Snapchat.Extentions;
-using SnapDotNet.Core.Snapchat.Models.New;
 
-namespace Snapchat.Converters.Conversations
+namespace Snapchat.Converters
 {
-	public class FriendlySnapTimeConverter : IValueConverter
+	public class FriendlyTimeConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			var conversation = (ConversationResponse)value;
-			if (conversation == null)
-				return null;
-
-			var lastInteractionTime = conversation.LastInteraction;
+			var lastInteractionTime = (DateTime)value;
 			var now = DateTime.Now;
 
 			if (lastInteractionTime.Year != now.Year || lastInteractionTime.Month != now.Month)
 				return String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.GetOrdinal());
 			if (lastInteractionTime.Day == now.Day)
-				return String.Format("{0} {1:hh:mm tt}", App.Strings.GetString("SnapTimeToday"), lastInteractionTime);
+				return String.Format("{0} {1:hh:mm tt}", App.Strings.GetString("TimeToday"), lastInteractionTime);
 			return lastInteractionTime.Day == now.Day - 1
-				? String.Format("{0} {1:HH:mm tt}", App.Strings.GetString("SnapTimeYesterday"), lastInteractionTime)
+				? String.Format("{0} {1:HH:mm tt}", App.Strings.GetString("TimeYesterday"), lastInteractionTime)
 				: String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.GetOrdinal());
 		}
 

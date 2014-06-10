@@ -10,15 +10,18 @@ namespace Snapchat.Converters.Conversations
 	{
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			var conversation = (ConversationResponse) value;
-			if (conversation == null)
+			var snap = value as Snap;
+			if (snap == null)
+			{
+
+				var conversation = (ConversationResponse) value;
+				if (conversation != null)
+					snap = conversation.LastSnap;
+			}
+			if (snap == null) 
 				return null;
 
-			// get the snap object
-			if (conversation.LastSnap == null)
-				return null;
-
-			return conversation.LastSnap.IsImage
+			return snap.IsImage
 				? new SolidColorBrush(Color.FromArgb(0xFF, 0xE9, 0x27, 0x54))
 				: new SolidColorBrush(Color.FromArgb(0xFF, 0x9B, 0x55, 0xA0));
 		}

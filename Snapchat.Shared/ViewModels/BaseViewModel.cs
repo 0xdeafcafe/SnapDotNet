@@ -47,7 +47,7 @@ namespace Snapchat.ViewModels
 
 				var pendingCount =
 					updates.ConversationResponse.Sum(
-						conversation => conversation.PendingChatsFor.Length + conversation.PendingReceivedSnaps.Length);
+						conversation => conversation.PendingChatsFor.Count + conversation.PendingReceivedSnaps.Count);
 
 				return pendingCount <= 0
 					? ":("

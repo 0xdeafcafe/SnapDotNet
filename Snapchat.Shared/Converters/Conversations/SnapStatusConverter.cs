@@ -8,20 +8,20 @@ namespace Snapchat.Converters.Conversations
 	{
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			var conversation = (ConversationResponse) value;
-			if (conversation == null)
+			var snap = value as Snap;
+			if (snap == null)
+			{
+				var conversation = (ConversationResponse) value;
+				if (conversation != null)
+					snap = conversation.LastSnap;
+			}
+			if (snap == null)
 				return null;
 
-			// get the snap object
-			var lastSnap = conversation.LastSnap;
-			if (lastSnap == null)
-				return String.Empty;
-
-
-			if (lastSnap.IsIncoming)
+			if (snap.IsIncoming)
 			{
 				// You recieved this
-				switch (lastSnap.Status)
+				switch (snap.Status)
 				{
 					case SnapStatus.Delivered:
 						return App.Strings.GetString("SnapStatusTapLoad");
@@ -42,7 +42,7 @@ namespace Snapchat.Converters.Conversations
 			}
 
 			// You sent this
-			switch (lastSnap.Status)
+			switch (snap.Status)
 			{
 				case SnapStatus.Delivered:
 				case SnapStatus.Sent:

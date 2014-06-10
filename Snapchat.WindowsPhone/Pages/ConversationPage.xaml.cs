@@ -1,6 +1,10 @@
 ﻿using Windows.Phone.UI.Input;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Attributes;
+using Snapchat.ViewModels;
+using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages
 {
@@ -11,9 +15,13 @@ namespace Snapchat.Pages
 	[RequiresAuthentication]
 	public sealed partial class ConversationPage
 	{
+		public ConversationViewModel ViewModel { get; private set; }
+
 		public ConversationPage()
 		{
 			InitializeComponent();
+
+			//var data = App.SnapchatManager.AllUpdates.ConversationResponse[0].ConversationMessages.SortedMessages;
 		}
 
 		/// <summary>
@@ -24,7 +32,8 @@ namespace Snapchat.Pages
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-			DataContext = e.Parameter;
+			DataContext = ViewModel = new ConversationViewModel((ConversationResponse) e.Parameter);
+			SetStatusBar();
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -37,6 +46,16 @@ namespace Snapchat.Pages
 			App.PreviousPage = typeof(ConversationPage);
 			App.RootFrame.GoBack();
 			e.Handled = true;
+		}
+
+		private static void SetStatusBar()
+		{
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+
+			var statusBar = StatusBar.GetForCurrentView();
+			statusBar.BackgroundOpacity = 0.0f;
+			statusBar.BackgroundColor = Colors.Transparent;
+			statusBar.ForegroundColor = Colors.White;
 		}
 	}
 }

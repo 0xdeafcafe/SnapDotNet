@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
+using SnapDotNet.Core.Snapchat.Models.AppSpecific;
 
 namespace SnapDotNet.Core.Snapchat.Models.New
 {
@@ -107,17 +109,21 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	{
 		public ConversationMessages()
 		{
-			_messages.CollectionChanged += (sender, args) => NotifyPropertyChanged("Messages");
+			_messages.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Messages"); NotifyPropertyChanged("SortedMessages"); };
 		}
 
 		[DataMember(Name = "messages")]
 		public ObservableCollection<MessageContainer> Messages
 		{
 			get { return _messages; }
-			set { SetField(ref _messages, value); }
+			set
+			{
+				SetField(ref _messages, value);
+				NotifyPropertyChanged("SortedMessages");
+			}
 		}
 		private ObservableCollection<MessageContainer> _messages = new ObservableCollection<MessageContainer>();
-
+		
 		[DataMember(Name = "messaging_auth")]
 		public MessagingAuthentication MessagingAuthentication
 		{
@@ -125,6 +131,56 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _messagingAuthentication, value); }
 		}
 		private MessagingAuthentication _messagingAuthentication;
+
+		#region Helpers
+
+		[IgnoreDataMember]
+		public ObservableCollection<IConversationThreadItem> SortedMessages
+		{
+			get
+			{
+				string lastUsername = null;
+				var lastItemDateTime = new DateTime(1994, 08, 18);
+				var conversationThread = new ObservableCollection<IConversationThreadItem>();
+				UserHeader currentUserData = null;
+
+				foreach (var message in Messages.Reverse())
+				{
+					var messageMeta = message.MessageMetaData;
+					var senderName = messageMeta.Sender.ToLowerInvariant();
+
+					// Check if time has changed
+					if (lastItemDateTime.Year != messageMeta.PostedAt.Year ||
+					    lastItemDateTime.Month != messageMeta.PostedAt.Month ||
+					    lastItemDateTime.Day != messageMeta.PostedAt.Day)
+						// New Time!
+						conversationThread.Add(new TimeSeperator(lastItemDateTime = messageMeta.PostedAt));
+
+					if (lastUsername == null ||
+						lastUsername != senderName)
+					{
+						// Add User
+						if (currentUserData != null)
+							conversationThread.Add(currentUserData);
+
+						currentUserData = new UserHeader
+						{
+							User = lastUsername = senderName,
+							Messages = new ObservableCollection<MessageContainer>()
+						};
+					}
+
+					currentUserData.Messages.Add(message);
+				}
+
+				if (currentUserData != null && currentUserData.Messages.Any())
+					conversationThread.Add(currentUserData);
+
+				return conversationThread;
+			}
+		}
+
+		#endregion
 	}
 
 	[DataContract]
@@ -154,6 +210,15 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _iterToken, value); }
 		}
 		private String _iterToken;
+
+		#region Helper
+		
+		public IConversationItem MessageMetaData
+		{
+			get { return (IConversationItem)Snap ?? (IConversationItem)ChatMessage; }
+		}
+
+		#endregion
 	}
 
 	[DataContract]

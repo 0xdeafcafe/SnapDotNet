@@ -55,8 +55,10 @@
     <Compile Include="Helpers\Events.cs" />
     <Compile Include="Helpers\Timestamps.cs" />
     <Compile Include="Helpers\Tokens.cs" />
+    <Compile Include="Models\AppSpecific\ConversationThread.cs" />
     <Compile Include="Models\New\ChatMessage.cs" />
     <Compile Include="Models\New\ConversationResponse.cs" />
+    <Compile Include="Models\New\IConversationItem.cs" />
     <Compile Include="Models\New\MessagingGatewayInfo.cs" />
     <Compile Include="Models\New\Snap.cs" />
     <Compile Include="Models\New\StoriesResponse.cs" />
