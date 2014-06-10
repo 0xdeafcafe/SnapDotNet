@@ -1,11 +1,7 @@
 ﻿using Snapchat.ViewModels.PageContents;
-using System;
-using Windows.Foundation;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
 namespace Snapchat.Pages.PageContents
@@ -38,7 +34,10 @@ namespace Snapchat.Pages.PageContents
 
 		private void ConvoItem_Tapped(object sender, TappedRoutedEventArgs e)
 		{
-			((sender as FrameworkElement).Resources["ConvoItemDetailPeekStoryboard"] as Storyboard).Begin();
+			var frameworkElement = sender as FrameworkElement;
+			if (frameworkElement == null) return;
+			var storyboard = frameworkElement.Resources["ConvoItemDetailPeekStoryboard"] as Storyboard;
+			if (storyboard != null) storyboard.Begin();
 		}
 
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

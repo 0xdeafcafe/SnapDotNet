@@ -32,41 +32,44 @@
 	</ControlTemplate>
 
 	<ControlTemplate x:Key="sent_screenshotted">
-		<Grid>
-			<Path Width="22" Height="22" Stroke="{Binding Converter={StaticResource SnapColourConverter}, FallbackValue=#e92754}" 
-				Fill="White" StrokeLineJoin="Round" Margin="-8,0,0,0"
-				Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" RenderTransformOrigin="0.5,0.5" StrokeThickness="1.5" >
+		<Grid Width="18" Height="18" Margin="2,2,0,0">
+			<Path Width="18" Height="18" Stroke="{Binding Converter={StaticResource SnapColourConverter}, FallbackValue=#e92754}" 
+				  Fill="White" StrokeLineJoin="Round"
+				  Data="M 1,1 L 16,8 1,15 A 16,15 10 0 0 1,1 L 16,8" RenderTransformOrigin="0.5,0.5" StrokeThickness="1.5" UseLayoutRounding="False"
+				  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-4,0,0,0">
 				<Path.RenderTransform>
 					<CompositeTransform ScaleX="-1.0" ScaleY="1.0"/>
 				</Path.RenderTransform>
 			</Path>
-			<Path Width="22" Height="22" Stroke="White" 
-				Fill="White" StrokeLineJoin="Round"
-				Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" RenderTransformOrigin="0.5,0.5" StrokeThickness="1.5" >
+			<Path Width="18" Height="18" Stroke="White" 
+				  Fill="White" StrokeLineJoin="Round"
+				  Data="M 1,1 L 16,8 1,15 A 16,15 10 0 0 1,1 L 16,8" RenderTransformOrigin="0.5,0.5" StrokeThickness="1.5" UseLayoutRounding="False"
+				  VerticalAlignment="Center" HorizontalAlignment="Center">
 				<Path.RenderTransform>
 					<CompositeTransform ScaleX="1.2" ScaleY="1.2"/>
 				</Path.RenderTransform>
 			</Path>
-			<Path Width="22" Height="22" Stroke="{Binding Converter={StaticResource SnapColourConverter}, FallbackValue=#e92754}" 
-				Fill="White" StrokeLineJoin="Round"
-				Data="M 2,2 L 20,11 L 2,20 A 20,20 10 0 0 2,2 L 20,11" StrokeThickness="1.5" />
+			<Path Width="18" Height="18" Stroke="{Binding Converter={StaticResource SnapColourConverter}, FallbackValue=#e92754}" 
+				  Fill="White" StrokeLineJoin="Round"
+				  Data="M 1,1 L 16,8 1,15 A 16,15 10 0 0 1,1 L 16,8" StrokeThickness="1.5" UseLayoutRounding="False"
+				  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-0.3,-0.4,0,0" />
 		</Grid>
 	</ControlTemplate>
 	
 	<ControlTemplate x:Key="recieved_message">
 		<Path x:Name="path" Width="21" Height="25" Stroke="#FF3cb2e2" StrokeThickness="2" Margin="0,5,0,0"
 			  Fill="#FF3cb2e2" StrokeLineJoin="Round"
-			  Data="M 1,1 L 20,1 20,23 14,19 1,19 1,1 20,1">
+			  Data="M 1,1 L 19,1 19,23 13,19 1,19 1,1 19,1">
 			<Path.Triggers>
 				<EventTrigger RoutedEvent="Path.Loaded">
 					<BeginStoryboard>
 						<Storyboard>
 							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" RepeatBehavior="Forever" Storyboard.TargetName="path">
 								<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-								<EasingDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
-								<EasingDoubleKeyFrame KeyTime="0:0:2" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:1.4" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:2.1" Value="0"/>
 								<EasingDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
-								<EasingDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
 							</DoubleAnimationUsingKeyFrames>
 						</Storyboard>
 					</BeginStoryboard>

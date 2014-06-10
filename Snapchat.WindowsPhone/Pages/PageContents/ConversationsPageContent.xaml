@@ -5,13 +5,8 @@
 				xmlns:conversations="using:Snapchat.Converters.Conversations" 
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-				xmlns:converters="using:Snapchat.Converters"
-				xmlns:i="using:Microsoft.Xaml.Interactivity"
-				xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-				mc:Ignorable="d"
+				mc:Ignorable="d" Background="White">
 				
-				Background="White">
-
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -24,7 +19,7 @@
 			<conversations:SnapStatusConverter x:Key="SnapStatusConverter" />
 
 			<Style x:Key="ConvoListItemStyle" TargetType="Button">
-				<Setter Property="Background" Value="Transparent"/>
+				<Setter Property="Background" Value="#eeeeee"/>
 				<Setter Property="BorderThickness" Value="0,0,0,1"/>
 				<Setter Property="Padding" Value="0"/>
 				<Setter Property="Margin" Value="0"/>
@@ -62,7 +57,6 @@
 	<Grid Background="White">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="80" />
-			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<Grid Background="#FF3cb2e2" Grid.Row="0" Margin="0,0,-0.167,0">
@@ -74,8 +68,10 @@
 									 FontFamily="Segoe WP" FontSize="40" />
 		</Grid>
 
+		<ScrollViewer Grid.Row="1">
+			<StackPanel>
 		<!-- Search box -->
-		<Border Grid.Row="1">
+				<Border>
 			<Grid>
 				<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
 					<TextBox.Resources>
@@ -192,19 +188,10 @@
 		</Border>
 
 		<!-- le items -->
-		<ItemsControl ItemsSource="{Binding Conversations}" MinHeight="10" Grid.Row="2">
+				<ItemsControl ItemsSource="{Binding Conversations}" MinHeight="10">
 			<ItemsControl.Template>
 				<ControlTemplate TargetType="ItemsControl">
-					<ScrollViewer x:Name="ItemsControlScrollViewer"
-								  VerticalScrollMode="Auto"
-								  VerticalScrollBarVisibility="Auto"
-								  HorizontalScrollMode="Disabled"
-								  HorizontalScrollBarVisibility="Hidden"
-								  VerticalSnapPointsType="Optional"
-								  IsHorizontalRailEnabled="False"
-								  IsHorizontalScrollChainingEnabled="False">
 						<ItemsPresenter Margin="0,0,0,30"/>
-					</ScrollViewer>
 				</ControlTemplate>
 			</ItemsControl.Template>
 			<ItemsControl.ItemTemplate>
@@ -214,25 +201,30 @@
 						
 						<Button.Resources>
 							<Storyboard x:Key="ConvoItemDetailPeekStoryboard" AutoReverse="True">
-								<DoubleAnimation Duration="0:0:0.3" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
-								<DoubleAnimation Duration="0:0:0.3" To="-8" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SnapUser" d:IsOptimized="True">
+										<DoubleAnimation Duration="0:0:0.3" To="1" 
+														 Storyboard.TargetProperty="(UIElement.Opacity)"
+														 Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
+										<DoubleAnimation Duration="0:0:0.3" To="-2" 
+														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+														 Storyboard.TargetName="SnapUser" d:IsOptimized="True">
 									<DoubleAnimation.EasingFunction>
 										<CubicEase EasingMode="EaseOut"/>
 									</DoubleAnimation.EasingFunction>
 								</DoubleAnimation>
-								<DoubleAnimation Duration="0:0:0.3" To="6" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True">
+										<DoubleAnimation Duration="0:0:0.3" To="2" 
+														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+														 Storyboard.TargetName="SnapDetails" d:IsOptimized="True">
 										<DoubleAnimation.EasingFunction>
 										<CubicEase EasingMode="EaseOut"/>
 										</DoubleAnimation.EasingFunction>
 									</DoubleAnimation>
 
 								<!-- delay the end of the storyboard before AutoReverse fires -->
-								<DoubleAnimation BeginTime="0:0:0.8" Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
+										<DoubleAnimation BeginTime="0:0:1.5" Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
 								</Storyboard>
 						</Button.Resources>
 						
 						<Grid x:Name="ConvoItemGrid">
-
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="*" />
@@ -254,10 +246,12 @@
 									</TextBlock.RenderTransform>
 								</TextBlock>
 
-								<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FFA8A8A8" FontSize="14" Opacity="0" RenderTransformOrigin="0.5,0.5">
+										<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" 
+												   Foreground="#FFA8A8A8" FontSize="14" Opacity="0" RenderTransformOrigin="0.5,0.5">
 									<TextBlock.RenderTransform>
 										<CompositeTransform TranslateX="0" TranslateY="0"/>
 									</TextBlock.RenderTransform>
+									
 									<Run Text="{Binding Converter={StaticResource FriendlySnapTimeConverter}}" />
 									<Run Text="-" />
 									<Run Text="{Binding Converter={StaticResource SnapStatusConverter}}" />
@@ -268,5 +262,7 @@
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
+			</StackPanel>
+		</ScrollViewer>
 	</Grid>
 </UserControl>

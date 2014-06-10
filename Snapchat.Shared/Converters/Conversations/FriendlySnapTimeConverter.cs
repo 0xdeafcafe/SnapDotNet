@@ -17,12 +17,12 @@ namespace Snapchat.Converters.Conversations
 			var now = DateTime.Now;
 
 			if (lastInteractionTime.Year != now.Year || lastInteractionTime.Month != now.Month)
-				return String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.ToOrdinal());
+				return String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.GetOrdinal());
 			if (lastInteractionTime.Day == now.Day)
 				return String.Format("{0} {1:hh:mm tt}", App.Strings.GetString("SnapTimeToday"), lastInteractionTime);
 			return lastInteractionTime.Day == now.Day - 1
 				? String.Format("{0} {1:HH:mm tt}", App.Strings.GetString("SnapTimeYesterday"), lastInteractionTime)
-				: String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.ToOrdinal());
+				: String.Format("{0:MMMM d}{1}", lastInteractionTime, lastInteractionTime.Day.GetOrdinal());
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, string language)
