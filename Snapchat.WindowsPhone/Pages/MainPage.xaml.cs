@@ -54,7 +54,7 @@ namespace Snapchat.Pages
 			Command = new RelayCommand(async () =>
 			{
 				await MediaCaptureManager.ToggleCameraAsync();
-				MainPage.Singleton.UpdateBottomAppBar();
+				Singleton.UpdateBottomAppBar();
 			})
 		};
 
@@ -113,7 +113,7 @@ namespace Snapchat.Pages
 			ConversationsPage.Children.Add(new ConversationsPageContent());
 
 			// Delete the camera button tip if necessary.
-			if (AppSettings.Get<bool>("FirstTime", defaultValue: true))
+			if (AppSettings.Get("FirstTime", true))
 			{
 				AppSettings.Set("FirstTime", false);
 			}
@@ -174,7 +174,9 @@ namespace Snapchat.Pages
 			if (!DesignMode.DesignModeEnabled)
 			{
 				await MediaCaptureManager.StartPreviewAsync(CapturePreview);
-				(CapturePreview.Resources["FadeInStoryboard"] as Storyboard).Begin();
+				var storyboard = CapturePreview.Resources["FadeInStoryboard"] as Storyboard;
+				if (storyboard != null)
+					storyboard.Begin();
 			}
 
 			// Load data
