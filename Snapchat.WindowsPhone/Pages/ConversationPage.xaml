@@ -36,7 +36,7 @@
 				</Grid>
 			</DataTemplate>
 			<DataTemplate x:Key="UserHeaderDataTemplate">
-				<StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,10">
+				<StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,15">
 					<TextBlock HorizontalAlignment="Left"
 							   FontFamily="Segoe WP" FontWeight="Normal" Margin="10,0,0,3" FontSize="13"
 							   Foreground="{Binding Path=User, Converter={StaticResource MessageOwnerColourConverter}}"
@@ -61,7 +61,7 @@
 							</ContentControl.RenderTransform>
 						</ContentControl>
 						
-						<TextBlock FontSize="15" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF636363" Margin="5,0,0,0"
+						<TextBlock FontSize="16" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF636363" Margin="5,0,0,0"
 							   Text="{Binding Path=Snap, Converter={StaticResource SnapStatusConverter}}" />
 					</StackPanel>
 				</Border>
@@ -95,7 +95,7 @@
 									  Data="M 1,1 L 16,8 1,15 A 16,15 10 0 0 1,1 L 16,8" StrokeThickness="1.5" UseLayoutRounding="False"
 									  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-0.3,-0.4,0,0" />
 						</Grid>
-						<TextBlock x:Uid="ConversationScreenshotMessage" FontSize="15" FontFamily="Segoe WP" FontWeight="Normal" 
+						<TextBlock x:Uid="ConversationScreenshotMessage" FontSize="16" FontFamily="Segoe WP" FontWeight="Normal" 
 								   Foreground="#FF636363" Margin="5,0,0,0" Text="SCREENSHOT!" />
 					</StackPanel>
 				</Border>
@@ -103,7 +103,7 @@
 			<DataTemplate x:Key="MessageChatDataTemplate">
 				<Border HorizontalAlignment="Stretch" Padding="5,3,0,3" Margin="10,0,0,0" BorderThickness="1,0,0,0" 
 						BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
-					<TextBlock FontSize="15" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF636363" 
+					<TextBlock FontSize="16" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF636363" 
 							   Text="{Binding Path=ChatMessage.Body.Text}" />
 				</Border>
 			</DataTemplate>
