@@ -138,6 +138,27 @@
   <data name="AutomaticallyDownloadSnapsWifi.Content" xml:space="preserve">
     <value>Wi-Fi</value>
   </data>
+  <data name="ChatSnapStatusDelivered" xml:space="preserve">
+    <value>DELIVERED</value>
+  </data>
+  <data name="ChatSnapStatusDownloading" xml:space="preserve">
+    <value>DOWNLOADING</value>
+  </data>
+  <data name="ChatSnapStatusNone" xml:space="preserve">
+    <value>Urm...</value>
+  </data>
+  <data name="ChatSnapStatusOpened" xml:space="preserve">
+    <value>OPENED</value>
+  </data>
+  <data name="ChatSnapStatusScreenshot" xml:space="preserve">
+    <value>SCREENSHOT!</value>
+  </data>
+  <data name="ChatSnapStatusTapLoad" xml:space="preserve">
+    <value>TAP TO LOAD</value>
+  </data>
+  <data name="ConversationScreenshotMessage.Text" xml:space="preserve">
+    <value>SCREENSHOT!</value>
+  </data>
   <data name="ConvosPageTitleStateTextBlock.PrimaryText" xml:space="preserve">
     <value>coldsnap</value>
   </data>
@@ -295,10 +316,10 @@
     <value>Downloading</value>
   </data>
   <data name="SnapStatusNone" xml:space="preserve">
-    <value>No Status, this shouldn't happen. Oops</value>
+    <value>Urm...</value>
   </data>
   <data name="SnapStatusOpened" xml:space="preserve">
-    <value>Swipe right to chat</value>
+    <value>Double tap to chat</value>
   </data>
   <data name="SnapStatusScreenshot" xml:space="preserve">
     <value>Screenshot!</value>

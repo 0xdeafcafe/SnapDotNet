@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using SnapDotNet.Core.Snapchat.Models.New;
 
@@ -14,13 +15,22 @@ namespace Snapchat.Selectors
 		{
 			var messageContainer = (MessageContainer) item;
 
-			var selectedDataTemplate = (messageContainer.ChatMessage == null)
-				? MessageSnapDataTemplate
-				: messageContainer.ChatMessage.Body.Type == MessageBodyType.Screenshot
-					? MessageChatScreenshotDataTemplate
-					: MessageChatDataTemplate;
+			if (messageContainer.Snap != null)
+				return MessageSnapDataTemplate;
 
-			return selectedDataTemplate;
+			if (messageContainer.ChatMessage != null)
+			{
+				switch (messageContainer.ChatMessage.Body.Type)
+				{
+					case MessageBodyType.Text:
+						return MessageChatDataTemplate;
+
+					case MessageBodyType.Screenshot:
+						return MessageChatScreenshotDataTemplate;
+				}
+			}
+
+			throw new ArgumentOutOfRangeException("item");
 		}
 	}
 }

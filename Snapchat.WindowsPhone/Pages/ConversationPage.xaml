@@ -18,14 +18,14 @@
 	
 	<Page.Resources>
 		<ResourceDictionary>
+			<conversation:SnapStatusConverter x:Key="SnapStatusConverter" />
+			<conversation:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
 			<conversation:MessageOwnerColourConverter x:Key="MessageOwnerColourConverter" />
 			<conversation:FriendlyFriendNameConverter OutputLowercase="True" x:Key="LowercaseFriendlyFriendNameConverter" />
 			<conversation:FriendlyFriendNameConverter OutputLowercase="False" x:Key="UppercaseFriendlyFriendNameConverter" />
 			
-			<conversations:SnapStatusConverter x:Key="SnapStatusConverter" />
 			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
-			
-			<converters:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
+
 			<converters:DebugConverter x:Key="DebugConverter" />
 			
 			<DataTemplate x:Key="TimeSeperatorDataTemplate">
@@ -95,8 +95,8 @@
 									  Data="M 1,1 L 16,8 1,15 A 16,15 10 0 0 1,1 L 16,8" StrokeThickness="1.5" UseLayoutRounding="False"
 									  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-0.3,-0.4,0,0" />
 						</Grid>
-						<TextBlock FontSize="15" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF636363" Margin="5,0,0,0"
-							   Text="SCREENSHOT!" />
+						<TextBlock x:Uid="ConversationScreenshotMessage" FontSize="15" FontFamily="Segoe WP" FontWeight="Normal" 
+								   Foreground="#FF636363" Margin="5,0,0,0" Text="SCREENSHOT!" />
 					</StackPanel>
 				</Border>
 			</DataTemplate>
