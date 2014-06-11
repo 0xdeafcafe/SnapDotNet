@@ -117,7 +117,7 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<Grid Background="#FF3cb2e2" Grid.Row="0">
+		<Grid Background="#FFE73B45" Grid.Row="0">
 			<TextBlock	Text="{Binding Conversation.Participants[1], Converter={StaticResource LowercaseFriendlyFriendNameConverter}, FallbackValue=matty}"
 						TextWrapping="NoWrap"
 						TextTrimming="CharacterEllipsis"

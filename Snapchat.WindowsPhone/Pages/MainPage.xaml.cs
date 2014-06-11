@@ -355,7 +355,7 @@ namespace Snapchat.Pages
 
 						secondaryCommands.Add(_importPictureAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Compact;
-						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0x33, 0x33, 0x33, 0x33));
 						break;
 
 					case "Friends":
@@ -376,7 +376,7 @@ namespace Snapchat.Pages
 
 					case "Conversation":
 						displayMode = AppBarClosedDisplayMode.Compact;
-						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xE7, 0x3B, 0x45));
 						break;
 				}
 			}
