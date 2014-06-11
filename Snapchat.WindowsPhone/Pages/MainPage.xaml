@@ -78,9 +78,8 @@
 		</i:Interaction.Behaviors>
 
 		<StackPanel x:Name="PagesContainer" Orientation="Horizontal">
-			<Grid x:Name="ConversationsPage" Opacity="1" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-			</Grid>
-
+			<pageContents:ConversationsPageContent x:Name="ConversationsPage" Opacity="1" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
+			
 			<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
 				<Grid.Triggers>
 					<EventTrigger RoutedEvent="Grid.Loaded">
@@ -96,7 +95,7 @@
 						</BeginStoryboard>
 					</EventTrigger>
 				</Grid.Triggers>
-				
+
 				<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0">
 					<CaptureElement.Resources>
 						<Storyboard x:Key="FadeInStoryboard">
@@ -108,65 +107,63 @@
 				<StackPanel x:Name="FirstRunPrompt" VerticalAlignment="Bottom" Margin="0,0,0,180" Height="100">
 					<Grid Height="80" Background="#AA000000">
 						<TextBlock FontFamily="Segoe WP" FontSize="22" TextAlignment="Center" TextWrapping="Wrap" Margin="50,0" VerticalAlignment="Center">
-							<Run x:Uid="FirstRunPromptTap" Text="Tap" Foreground="Orange" />
-							<Run x:Uid="FirstRunPromptPhoto" Text="to take a photo." />
-							<Run x:Uid="FirstRunPromptHold" Text="Hold" Foreground="Orange" />
-							<Run x:Uid="FirstRunPromptVideo" Text="to take a video." />
+								<Run x:Uid="FirstRunPromptTap" Text="Tap " Foreground="Orange" />
+								<Run x:Uid="FirstRunPromptPhoto" Text="to take a photo. " />
+								<Run x:Uid="FirstRunPromptHold" Text="Hold " Foreground="Orange" />
+								<Run x:Uid="FirstRunPromptVideo" Text="to take a video." />
 						</TextBlock>
 					</Grid>
 					<Path Fill="#AA000000" HorizontalAlignment="Center" Width="40" Height="20"
-							Data="M 0,0 L 40,0 20,20 0,0" />
+								Data="M 0,0 L 40,0 20,20 0,0" />
 				</StackPanel>
-				
+
 				<Ellipse	x:Name="CapturePhotoButton"
-							Tapped="CapturePhotoButton_Tapped"
-							Holding="CapturePhotoButton_Holding"
-							PointerPressed="CapturePhotoButton_PointerPressed"
-							VerticalAlignment="Bottom" Margin="0,0,0,90" 
-							HorizontalAlignment="Center" 
-							Width="90" Height="90"
-							Fill="#66FFFFFF"
-							Stroke="White" StrokeThickness="4">
+								Tapped="CapturePhotoButton_Tapped"
+								Holding="CapturePhotoButton_Holding"
+								PointerPressed="CapturePhotoButton_PointerPressed"
+								VerticalAlignment="Bottom" Margin="0,0,0,90" 
+								HorizontalAlignment="Center" 
+								Width="90" Height="90"
+								Fill="#66FFFFFF"
+								Stroke="White" StrokeThickness="4">
 				</Ellipse>
 
 				<Grid x:Name="NavButtonsContainer" VerticalAlignment="Bottom" Height="70" Margin="0,0,0,55" Opacity="0">
 					<Grid.RenderTransform>
 						<TranslateTransform x:Name="NavButtonsTranslateTransform" Y="30"/>
 					</Grid.RenderTransform>
-					
+
 					<!-- Outer borders for both icons provide a bigger touch sensitive region for better UX -->
 					<Button HorizontalAlignment="Left" VerticalAlignment="Center"
-								Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
-								Command="{Binding GoToConversationsCommand}">
+									Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
+									Command="{Binding GoToConversationsCommand}">
 						<Border Margin="0,0,0,0" Width="32" Height="32"
-									HorizontalAlignment="Center" VerticalAlignment="Center"
-									BorderBrush="{Binding Path=Helpers.PendingConversationCountButtonBorder, FallbackValue='White'}" BorderThickness="2"
-									Background="{Binding Path=Helpers.PendingConversationCountButtonBackground, FallbackValue='Transparent'}"
-									CornerRadius="4">
+										HorizontalAlignment="Center" VerticalAlignment="Center"
+										BorderBrush="{Binding Path=Helpers.PendingConversationCountButtonBorder, FallbackValue='White'}" BorderThickness="2"
+										Background="{Binding Path=Helpers.PendingConversationCountButtonBackground, FallbackValue='Transparent'}"
+										CornerRadius="4">
 							<TextBlock Text="{Binding Path=Helpers.FriendlyPendingConversationCount, FallbackValue=''}"
-										   FontSize="17" FontFamily="Segoe WP" 
-										   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+											   FontSize="17" FontFamily="Segoe WP" 
+											   VerticalAlignment="Center" HorizontalAlignment="Center"/>
 						</Border>
 					</Button>
 
 					<Button HorizontalAlignment="Right" VerticalAlignment="Center"
-								Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
-								Command="{Binding GoToFriendsCommand}">
+									Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
+									Command="{Binding GoToFriendsCommand}">
 						<Path Margin="0,0,0,0" Width="32" Height="32"
-								  HorizontalAlignment="Center" VerticalAlignment="Center"
-								  Fill="White"
-								  Data="M 2,4 L 30,4 30,6 2,6 Z
-										M 2,14 L 30,14 30,16 2,16 Z
-										M 2,24 L 30,24 30,26 2,26 Z">
+									  HorizontalAlignment="Center" VerticalAlignment="Center"
+									  Fill="White"
+									  Data="M 2,4 L 30,4 30,6 2,6 Z
+											M 2,14 L 30,14 30,16 2,16 Z
+											M 2,24 L 30,24 30,26 2,26 Z">
 						</Path>
 					</Button>
 				</Grid>
 			</Grid>
 
-			<Grid x:Name="FriendsPage" Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				
-			</Grid>
-
+			<pageContents:FriendsPageContent x:Name="FriendsPage" Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
+			
 			<Grid Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
 				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Adding Friends Goes Here</TextBlock>
 			</Grid>

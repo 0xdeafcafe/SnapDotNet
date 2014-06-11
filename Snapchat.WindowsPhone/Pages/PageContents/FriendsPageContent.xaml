@@ -4,10 +4,6 @@
 				xmlns:viewModels="using:Snapchat.ViewModels.PageContents"
 				xmlns:converters="using:Snapchat.Converters">
 
-	<UserControl.DataContext>
-		<viewModels:FriendsViewModel />
-	</UserControl.DataContext>
-
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<converters:CaseConverter x:Key="UpperCaseConverter" SelectedCase="Uppercase" />

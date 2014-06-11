@@ -26,7 +26,7 @@
 		<settingsConverters:NumberOfBestFriendsToIndexConverter x:Key="NumberOfBestFriendsToIndexConverter"/>
 	</Page.Resources>
 
-	<Pivot>
+	<Pivot Background="Black">
 		<PivotItem x:Uid="SettingsProfileGroup" Header="profile">
 			<ScrollViewer>
 				<Grid>

@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Snapchat.ViewModels.PageContents;
 
 namespace Snapchat.Pages
 {
@@ -119,8 +120,8 @@ namespace Snapchat.Pages
 			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
 
 			// fixes some weird design-time exception regarding primitive types
-			FriendsPage.Children.Add(new FriendsPageContent());
-			ConversationsPage.Children.Add(new ConversationsPageContent());
+			//FriendsPage.Children.Add(new FriendsPageContent());
+			//ConversationsPage.Children.Add(new ConversationsPageContent());
 		}
 
 		public static MainPage Singleton { get; private set; }
@@ -195,6 +196,8 @@ namespace Snapchat.Pages
 
 			// Set the status bar
 			SetStatusBar();
+
+			ConversationsPage.ConversationsItemsControl.ItemsSource = (ConversationsPage.DataContext as ConversationsViewModel).Conversations;
 		}
 
 		protected async override void OnNavigatedFrom(NavigationEventArgs e)
