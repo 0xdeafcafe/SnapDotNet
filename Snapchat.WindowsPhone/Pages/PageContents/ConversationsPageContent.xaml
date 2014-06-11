@@ -190,7 +190,7 @@
 				</Border>
 
 				<!-- le items -->
-				<ItemsControl x:Name="ConversationsItemsControl" x:FieldModifier="Public" MinHeight="10">
+				<ItemsControl ItemsSource="{Binding Conversations}" MinHeight="10">
 					<ItemsControl.Template>
 						<ControlTemplate TargetType="ItemsControl">
 							<ItemsPresenter Margin="0,0,0,30"/>

@@ -1,30 +1,21 @@
-﻿<Page	x:Class="Snapchat.Pages.SettingsPage"
-		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:i="using:Microsoft.Xaml.Interactivity"
-		xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-		xmlns:viewModels="using:Snapchat.ViewModels"
-		xmlns:converters="using:Snapchat.Converters"
-		xmlns:settingsConverters="using:Snapchat.Converters.Settings">
-
-	<Page.BottomAppBar>
-		<CommandBar>
-			<AppBarButton x:Uid="LogOutAppBarButton" Label="log out" Icon="Remote">
-				<i:Interaction.Behaviors>
-					<core:EventTriggerBehavior EventName="Click">
-						<core:NavigateToPageAction TargetPage="Snapchat.Pages.StartPage"/>
-					</core:EventTriggerBehavior>
-				</i:Interaction.Behaviors>
-			</AppBarButton>
-		</CommandBar>
-	</Page.BottomAppBar>
-
-	<Page.Resources>
+﻿<UserControl
+    x:Class="Snapchat.Pages.PageContents.SettingsPageContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Snapchat.Pages.PageContents"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:viewModels="using:Snapchat.ViewModels"
+	xmlns:converters="using:Snapchat.Converters"
+	xmlns:settingsConverters="using:Snapchat.Converters.Settings"
+    mc:Ignorable="d">
+	
+	<UserControl.Resources>
 		<converters:IntegerConverter x:Key="StoryPrivacyConverter"/>
 		<converters:IntegerConverter x:Key="MessagePrivacyConverter"/>
 		<converters:IntegerConverter x:Key="DownloadSnapsModeConverter"/>
 		<settingsConverters:NumberOfBestFriendsToIndexConverter x:Key="NumberOfBestFriendsToIndexConverter"/>
-	</Page.Resources>
+	</UserControl.Resources>
 
 	<Pivot Background="Black">
 		<PivotItem x:Uid="SettingsProfileGroup" Header="profile">
@@ -128,4 +119,4 @@
 			</ScrollViewer>
 		</PivotItem>
 	</Pivot>
-</Page>
+</UserControl>

@@ -45,8 +45,7 @@ namespace Snapchat.Pages
 			Label = App.Strings.GetString("SettingsAppBarButtonLabel"),
 			Command = new RelayCommand(() =>
 			{
-				var frame = Window.Current.Content as Frame;
-				if (frame != null) frame.Navigate(typeof (SettingsPage));
+				// TODO: Change visual state to settings page
 			})
 		};
 
@@ -118,10 +117,6 @@ namespace Snapchat.Pages
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
 			ScrollViewer.ViewChanging += ScrollViewer_ViewChanging;
 			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
-
-			// fixes some weird design-time exception regarding primitive types
-			//FriendsPage.Children.Add(new FriendsPageContent());
-			//ConversationsPage.Children.Add(new ConversationsPageContent());
 		}
 
 		public static MainPage Singleton { get; private set; }
@@ -196,8 +191,6 @@ namespace Snapchat.Pages
 
 			// Set the status bar
 			SetStatusBar();
-
-			ConversationsPage.ConversationsItemsControl.ItemsSource = (ConversationsPage.DataContext as ConversationsViewModel).Conversations;
 		}
 
 		protected async override void OnNavigatedFrom(NavigationEventArgs e)

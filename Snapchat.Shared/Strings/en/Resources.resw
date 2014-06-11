@@ -210,7 +210,7 @@
   <data name="LogInPagePasswordBox.Header" xml:space="preserve">
     <value>Password</value>
   </data>
-  <data name="LogOutAppBarButton.Label" xml:space="preserve">
+  <data name="LogOutAppBarButtonLabel" xml:space="preserve">
     <value>logout</value>
   </data>
   <data name="MessagePrivacyEveryone.Content" xml:space="preserve">
