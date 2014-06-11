@@ -27,6 +27,9 @@ namespace Snapchat.Selectors
 
 					case MessageBodyType.Screenshot:
 						return MessageChatScreenshotDataTemplate;
+
+					case MessageBodyType.Media:
+						return MessageSnapDataTemplate;
 				}
 			}
 

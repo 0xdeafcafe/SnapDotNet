@@ -2,6 +2,7 @@
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Attributes;
+using Snapchat.ViewModels;
 
 namespace Snapchat.Pages
 {
@@ -9,7 +10,7 @@ namespace Snapchat.Pages
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
 	[RequiresAuthentication]
-	public sealed partial class SettingsPage : Page
+	public sealed partial class SettingsPage : Windows.UI.Xaml.Controls.Page
 	{
 		public SettingsPage()
 		{
@@ -20,6 +21,8 @@ namespace Snapchat.Pages
 		{
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 			HardwareButtons.CameraPressed += HardwareButtons_CameraPressed;
+
+			DataContext = new SettingsViewModel();
 		}
 
 		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)

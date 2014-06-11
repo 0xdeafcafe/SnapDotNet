@@ -194,6 +194,11 @@
 							<ListView.GroupStyle>
 								<GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource FriendsListGroupHeaderTemplate}"/>
 							</ListView.GroupStyle>
+							<ListView.ItemsPanel>
+								<ItemsPanelTemplate>
+									<VirtualizingStackPanel/>
+								</ItemsPanelTemplate>
+							</ListView.ItemsPanel>
 						</ListView>
 					</SemanticZoom.ZoomedInView>
 					<SemanticZoom.ZoomedOutView>

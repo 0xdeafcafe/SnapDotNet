@@ -17,6 +17,8 @@ using Snapchat.Pages.PageContents;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using System.Threading.Tasks;
+using Windows.UI.Core;
 
 namespace Snapchat.Pages
 {
@@ -98,19 +100,8 @@ namespace Snapchat.Pages
 			InitializeComponent();
 			Singleton = this;
 
-			// Horrible UI Design Time cleanup
-			CameraPreviewImage.Visibility = Visibility.Collapsed;
-
 			// Setup ALL the datas :D
 			DataContext = ViewModel = new MainViewModel(ScrollViewer);
-
-			// Set up the scroll viewer
-			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
-			ScrollViewer.ViewChanging += ScrollViewer_ViewChanging;
-			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
-
-			// Workaround h4x to avoid some weird exception about some primitive control
-			ConversationsPage.Children.Add(new ConversationsPageContent());
 
 			// Delete the camera button tip if necessary.
 			if (AppSettings.Get("FirstTime", true))
@@ -121,6 +112,15 @@ namespace Snapchat.Pages
 			{
 				CameraPage.Children.Remove(FirstRunPrompt);
 			}
+
+			// Set up the scroll viewer
+			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
+			ScrollViewer.ViewChanging += ScrollViewer_ViewChanging;
+			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
+
+			// fixes some weird design-time exception regarding primitive types
+			FriendsPage.Children.Add(new FriendsPageContent());
+			ConversationsPage.Children.Add(new ConversationsPageContent());
 		}
 
 		public static MainPage Singleton { get; private set; }
@@ -151,7 +151,7 @@ namespace Snapchat.Pages
 				ConversationsPage.Opacity = 0;
 
 			// Keep trying to change the ScrollViewer's view until it succeeds.
-			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
 			timer.Tick += delegate
 			{
 				if (!ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true)) return;
@@ -165,6 +165,8 @@ namespace Snapchat.Pages
 				{
 					case "Conversations":
 						ScrollViewer.ChangeView(0, null, null, true);
+						UpdateBottomAppBar();
+						BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 						break;
 				}
 			};
@@ -173,7 +175,11 @@ namespace Snapchat.Pages
 			// Start the camera.
 			if (!DesignMode.DesignModeEnabled)
 			{
-				await MediaCaptureManager.StartPreviewAsync(CapturePreview);
+				try
+				{
+					await MediaCaptureManager.StartPreviewAsync(CapturePreview);
+				}
+				catch { }
 				var storyboard = CapturePreview.Resources["FadeInStoryboard"] as Storyboard;
 				if (storyboard != null)
 					storyboard.Begin();

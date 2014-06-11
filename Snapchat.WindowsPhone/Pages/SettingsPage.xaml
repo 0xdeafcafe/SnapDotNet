@@ -7,10 +7,6 @@
 		xmlns:converters="using:Snapchat.Converters"
 		xmlns:settingsConverters="using:Snapchat.Converters.Settings">
 
-	<Page.DataContext>
-		<viewModels:SettingsViewModel/>
-	</Page.DataContext>
-
 	<Page.BottomAppBar>
 		<CommandBar>
 			<AppBarButton x:Uid="LogOutAppBarButton" Label="log out" Icon="Remote">

@@ -67,7 +67,7 @@ namespace Snapchat
 			if (RootFrame == null)
 			{
 				// Create a Frame to act as the navigation context and navigate to the first page
-				RootFrame = new Frame { CacheSize = 3 };
+				RootFrame = new Frame { CacheSize = 1 };
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{

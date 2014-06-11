@@ -79,7 +79,6 @@
 
 		<StackPanel x:Name="PagesContainer" Orientation="Horizontal">
 			<Grid x:Name="ConversationsPage" Opacity="1" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<!-- workaround for the dumb exception is in the codebehind <pageContents:ConversationsPageContent /> -->
 			</Grid>
 
 			<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
@@ -98,7 +97,6 @@
 					</EventTrigger>
 				</Grid.Triggers>
 				
-				<Image x:Name="CameraPreviewImage" Source="ms-appx:///Assets/camera_background_testing.jpg" Stretch="UniformToFill" />
 				<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0">
 					<CaptureElement.Resources>
 						<Storyboard x:Key="FadeInStoryboard">
@@ -165,8 +163,8 @@
 				</Grid>
 			</Grid>
 
-			<Grid Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<pageContents:FriendsPageContent />
+			<Grid x:Name="FriendsPage" Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
+				
 			</Grid>
 
 			<Grid Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
