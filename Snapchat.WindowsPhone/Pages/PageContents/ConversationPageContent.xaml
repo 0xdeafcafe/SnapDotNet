@@ -132,10 +132,15 @@
 			<ItemsControl.Template>
 				<ControlTemplate TargetType="ItemsControl">
 					<ScrollViewer>
-						<ItemsPresenter Margin="0,0,0,30"/>
+						<ItemsPresenter Margin="0,0,0,60"/>
 					</ScrollViewer>
 				</ControlTemplate>
 			</ItemsControl.Template>
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<VirtualizingStackPanel/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
 		</ItemsControl>
 	</Grid>
 </UserControl>
