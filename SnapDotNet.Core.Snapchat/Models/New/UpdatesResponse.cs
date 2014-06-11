@@ -77,7 +77,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public DateTime LastReplayedSnap { get; set; }
 
 		[DataMember(Name = "logged")]
-		public Boolean Logged { get; set; }
+		public Boolean Logged
+		{
+			get { return _logged; }
+			set { SetField(ref _logged, value); }
+		}
+		private Boolean _logged;
 		
 		[DataMember(Name = "mobile")]
 		public String Mobile { get; set; }
@@ -89,7 +94,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public String NotificationSoundSetting { get; set; }
 
 		[DataMember(Name = "number_of_best_friends")]
-		public Int32 NumberOfBestFriends { get; set; }
+		public Int32 NumberOfBestFriends
+		{
+			get { return _numberOfBestFriends; }
+			set { SetField(ref _numberOfBestFriends, value); }
+		}
+		private Int32 _numberOfBestFriends;
 
 		[DataMember(Name = "received")]
 		public Int32 RecievedSnaps

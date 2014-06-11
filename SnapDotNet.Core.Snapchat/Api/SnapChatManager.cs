@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Models.New;
@@ -188,7 +187,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public async Task SaveAccountDataAsync()
 		{
 			// Seralize the Account model and save as json string in Isolated Storage
-			IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(AllUpdates)));
+			await IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(AllUpdates)));
 		}
 
 		#endregion

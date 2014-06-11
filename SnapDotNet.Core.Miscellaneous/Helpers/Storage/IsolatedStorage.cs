@@ -10,12 +10,11 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 	{
 		#region Write
 
-		public static async void WriteFileAsync(string fileName, string content)
+		public static async Task WriteFileAsync(string fileName, string content)
 		{
 			try
 			{
-				var file =
-					await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
 				using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
 					await writer.WriteAsync(content);
 			}
@@ -29,7 +28,7 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
 
 				using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
 				{
@@ -84,7 +83,9 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 			try
 			{
 				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
-				return file == null ? null : await FileIO.ReadTextAsync(file);
+				if (file == null) return null;
+				using (var reader = new StreamReader(await file.OpenStreamForReadAsync()))
+					return await reader.ReadToEndAsync();
 			}
 			catch (Exception)
 			{
