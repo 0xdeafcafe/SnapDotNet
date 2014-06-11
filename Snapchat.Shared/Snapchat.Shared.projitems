@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\FriendlyTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\MessageOwnerColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\SnapStatusConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\DivisionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\EmptyGroupToColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DebugConverter.cs" />

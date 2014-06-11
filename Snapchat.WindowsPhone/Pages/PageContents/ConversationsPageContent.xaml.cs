@@ -1,4 +1,5 @@
 ﻿using Snapchat.ViewModels.PageContents;
+using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
@@ -43,7 +44,7 @@ namespace Snapchat.Pages.PageContents
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
 		{
 			var element = sender as FrameworkElement;
-			App.RootFrame.Navigate(typeof(ConversationPage), element.DataContext);
+			MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
 		}
 	}
 }

@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Media.Animation;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Snapchat.ViewModels.PageContents;
+using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages
 {
@@ -45,7 +46,7 @@ namespace Snapchat.Pages
 			Label = App.Strings.GetString("SettingsAppBarButtonLabel"),
 			Command = new RelayCommand(() =>
 			{
-				// TODO: Change visual state to settings page
+				VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(Singleton.ScrollViewer), "Settings", true);
 			})
 		};
 
@@ -85,6 +86,16 @@ namespace Snapchat.Pages
 		{
 			Icon = new SymbolIcon {Symbol = Symbol.Send},
 			Label = App.Strings.GetString("SendCommentAppBarButtonLabel")
+		};
+
+		private readonly AppBarButton _logoutAppBarButton = new AppBarButton
+		{
+			Icon = new SymbolIcon { Symbol = Symbol.LeaveChat },
+			Label = App.Strings.GetString("LogOutAppBarButtonLabel"),
+			Command = new RelayCommand(() =>
+			{
+				App.RootFrame.Navigate(typeof(StartPage));
+			})
 		};
 
 		#endregion
@@ -137,11 +148,17 @@ namespace Snapchat.Pages
 			_hiddenCommandBar = null;
 		}
 
+		public void ShowConversation(ConversationResponse conversation)
+		{
+			ConvoPage.DataContext = new ConversationViewModel(conversation);
+			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Conversation", true);
+		}
+
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			string destination = e.Parameter as string ?? "";
-			if (e.NavigationMode == NavigationMode.Back && App.PreviousPage == typeof(ConversationPage))
-				destination = "Conversations";
+			//if (e.NavigationMode == NavigationMode.Back)
+			//	destination = "Conversations";
 
 			if (string.IsNullOrEmpty(destination))
 				ConversationsPage.Opacity = 0;
@@ -245,6 +262,22 @@ namespace Snapchat.Pages
 					ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false); // go to friends
 					e.Handled = true;
 					break;
+
+				case "Conversation":
+				case "Settings":
+					// Determine the page that's currently in view.
+					var pageIndex = (int) Math.Round(ScrollViewer.HorizontalOffset / CameraPage.ActualWidth);
+					var frameworkElement = PagesContainer.Children[pageIndex] as FrameworkElement;
+					if (frameworkElement != null)
+					{
+						var currentPage = frameworkElement.Tag.ToString();
+
+						// Change visual state to current page.
+						VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), currentPage, true);
+					}
+					UpdateBottomAppBar();
+					e.Handled = true;
+					break;
 			}
 		}
 
@@ -301,9 +334,10 @@ namespace Snapchat.Pages
 			var secondaryCommands = new Collection<ICommandBarElement>();
 			var displayMode = appBar.ClosedDisplayMode;
 
+			string currentState = null;
 			if (PagesVisualStateGroup.CurrentState != null)
 			{
-				var currentState = PagesVisualStateGroup.CurrentState.Name;
+				currentState = PagesVisualStateGroup.CurrentState.Name;
 				switch (currentState)
 				{
 					case "Conversations":
@@ -333,12 +367,26 @@ namespace Snapchat.Pages
 						displayMode = AppBarClosedDisplayMode.Minimal;
 						appBar.Background = new SolidColorBrush(Colors.Orange);
 						break;
+
+					case "Settings":
+						primaryCommands.Add(_logoutAppBarButton);
+						displayMode = AppBarClosedDisplayMode.Compact;
+						appBar.Background = new SolidColorBrush(Colors.Black);
+						break;
+
+					case "Conversation":
+						displayMode = AppBarClosedDisplayMode.Compact;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
+						break;
 				}
 			}
 
 			// Add global commands.
-			secondaryCommands.Add(_refreshAppBarButton);
-			secondaryCommands.Add(_settingsAppBarButton);
+			if (currentState != "Settings")
+			{
+				secondaryCommands.Add(_refreshAppBarButton);
+				secondaryCommands.Add(_settingsAppBarButton);
+			}
 
 			// Update the app bar if commands have changed (to avoid animation glitches).
 			bool updatePrimary = (primaryCommands.Count == 0), updateSecondary = (secondaryCommands.Count == 0);

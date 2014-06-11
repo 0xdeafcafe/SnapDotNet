@@ -85,11 +85,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Pages\ConversationPage.xaml.cs">
-      <DependentUpon>ConversationPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageContents\ConversationPageContent.xaml.cs">
+      <DependentUpon>ConversationPageContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageContents\ConversationsPageContent.xaml.cs">
       <DependentUpon>ConversationsPageContent.xaml</DependentUpon>
@@ -115,11 +115,11 @@
     <Content Include="StoreManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Pages\ConversationPage.xaml">
+    <Page Include="Pages\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\MainPage.xaml">
+    <Page Include="Pages\PageContents\ConversationPageContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

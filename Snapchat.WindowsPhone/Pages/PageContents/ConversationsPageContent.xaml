@@ -63,6 +63,7 @@
 		</Grid.RowDefinitions>
 		<Grid Background="#FF3cb2e2" Grid.Row="0">
 			<controls:StateTextBlock x:Uid="ConvosPageTitleStateTextBlock"
+									 x:Name="ConvosPageTitleStateTextBlock"
 									 PrimaryText="coldsnap" 
 									 SecondaryText="{Binding Account.FriendlyRatio, FallbackValue=69 | 69}"
 									 VerticalAlignment="Bottom" HorizontalAlignment="Left"
