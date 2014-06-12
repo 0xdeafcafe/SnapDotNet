@@ -169,13 +169,12 @@
 
 				<pageContents:FriendsPageContent x:Name="FriendsPage" Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
 
-				<Grid Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
-					<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Adding Friends Goes Here</TextBlock>
-				</Grid>
+				<pageContents:AddFriendsPage x:Name="AddFriendsPage" Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
 			</StackPanel>
 
 		</ScrollViewer>
 		
+		<!-- for a better fade-in/fade-out animation with the settings page -->
 		<Rectangle x:Name="PageColorCover" Fill="Black" Opacity="0" IsHitTestVisible="False"/>
 
 		<pageContents:SettingsPageContent x:Name="SettingsPage" Visibility="Collapsed">

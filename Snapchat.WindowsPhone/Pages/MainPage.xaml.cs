@@ -154,6 +154,17 @@ namespace Snapchat.Pages
 			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Conversation", true);
 		}
 
+		public void GoToAddFriendsPage()
+		{
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
+			timer.Tick += delegate
+			{
+				if (!ScrollViewer.ChangeView(CameraPage.ActualWidth * 3, null, null, false)) return;
+				timer.Stop();
+			};
+			timer.Start();
+		}
+
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			string destination = e.Parameter as string ?? "";
@@ -365,7 +376,7 @@ namespace Snapchat.Pages
 
 					case "AddFriends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
-						appBar.Background = new SolidColorBrush(Colors.Orange);
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x80, 0x00));
 						break;
 
 					case "Settings":

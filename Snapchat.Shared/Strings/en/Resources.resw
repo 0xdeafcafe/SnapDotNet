@@ -126,6 +126,9 @@
   <data name="AboutDevelopersGroup.Text" xml:space="preserve">
     <value>Developers</value>
   </data>
+  <data name="AddFriendsPageTitleTextBlock.Text" xml:space="preserve">
+    <value>add friends</value>
+  </data>
   <data name="AppNameTextBlock.Text" xml:space="preserve">
     <value>ColdSnap</value>
   </data>

@@ -29,5 +29,10 @@ namespace Snapchat.Pages.PageContents
 		{
 			MainPage.Singleton.RestoreBottomAppBar();
 		}
+
+		private void AddFriendsIcon_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+		{
+			MainPage.Singleton.GoToAddFriendsPage();
+		}
 	}
 }
