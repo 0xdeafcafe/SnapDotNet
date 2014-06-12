@@ -5,14 +5,11 @@
 		xmlns:i="using:Microsoft.Xaml.Interactivity"
 		xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 		xmlns:pageContents="using:Snapchat.Pages.PageContents"
-		Background="White">
+		xmlns:converters="using:Snapchat.Converters"
+		Background="Black">
 	<Page.Resources>
-		<Style x:Key="PlaceholderOverlayTextblockStyle" TargetType="TextBlock">
-			<Setter Property="VerticalAlignment" Value="Center" />
-			<Setter Property="HorizontalAlignment" Value="Center" />
-			<Setter Property="FontSize" Value="25" />
-		</Style>
-
+		<converters:DivisionConverter x:Key="DivisionConverter"/>
+		
 		<Style x:Key="EmptyButtonStyle" TargetType="Button">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Padding" Value="0"/>
@@ -46,7 +43,7 @@
 									<VisualState x:Name="Pressed">
 										<Storyboard>
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Grid">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="#FF00A2FF"/>
+												<DiscreteObjectKeyFrame KeyTime="0" Value="#FF3cb2e2"/>
 											</ObjectAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualState>
@@ -65,95 +62,460 @@
 			</Setter>
 		</Style>
 	</Page.Resources>
+	
+	<Grid>
+		<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
+					  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
+					  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
+					  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
+					  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
+			<i:Interaction.Behaviors>
+				<core:EventTriggerBehavior EventName="Loaded">
+					<core:GoToStateAction StateName="Chat"/>
+				</core:EventTriggerBehavior>
+			</i:Interaction.Behaviors>
 
-	<ScrollViewer x:Name="ScrollViewer" VerticalScrollBarVisibility="Hidden" 
-				  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
-				  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
-				  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
-				  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
-		<i:Interaction.Behaviors>
-			<core:EventTriggerBehavior EventName="Loaded">
-				<core:GoToStateAction StateName="Chat"/>
-			</core:EventTriggerBehavior>
-		</i:Interaction.Behaviors>
+			<StackPanel x:Name="PagesContainer" Orientation="Horizontal">
+				<pageContents:ConversationsPageContent x:Name="ConversationsPage" Opacity="1" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
 
-		<StackPanel x:Name="PagesContainer" Orientation="Horizontal">
-			<Grid Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<pageContents:ConversationsPageContent />
-			</Grid>
+				<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
+					<Grid.Triggers>
+						<EventTrigger RoutedEvent="Grid.Loaded">
+							<BeginStoryboard>
+								<Storyboard>
+									<DoubleAnimation Storyboard.TargetName="NavButtonsContainer" Storyboard.TargetProperty="Opacity" To="1" BeginTime="00:00:00.5" Duration="00:00:00.5"/>
+									<DoubleAnimation Storyboard.TargetName="NavButtonsTranslateTransform" Storyboard.TargetProperty="Y" To="0" BeginTime="00:00:00.6" Duration="00:00:00.5">
+										<DoubleAnimation.EasingFunction>
+											<BackEase EasingMode="EaseOut"/>
+										</DoubleAnimation.EasingFunction>
+									</DoubleAnimation>
+								</Storyboard>
+							</BeginStoryboard>
+						</EventTrigger>
+					</Grid.Triggers>
 
-			<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
-				<Grid>
-					<Image x:Name="CameraPreviewImage" Source="ms-appx:///Assets/camera_background_testing.jpg" Stretch="UniformToFill" />
-					<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill"/>
+					<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0">
+						<CaptureElement.Resources>
+							<Storyboard x:Key="FadeInStoryboard">
+								<DoubleAnimation To="1" Storyboard.TargetName="CapturePreview" Storyboard.TargetProperty="Opacity" Duration="00:00:00.3"/>
+							</Storyboard>
+						</CaptureElement.Resources>
+					</CaptureElement>
 
 					<StackPanel x:Name="FirstRunPrompt" VerticalAlignment="Bottom" Margin="0,0,0,180" Height="100">
 						<Grid Height="80" Background="#AA000000">
 							<TextBlock FontFamily="Segoe WP" FontSize="22" TextAlignment="Center" TextWrapping="Wrap" Margin="50,0" VerticalAlignment="Center">
-								<Run x:Uid="FirstRunPromptTap" Text="Tap" Foreground="Orange" />
-								<Run x:Uid="FirstRunPromptPhoto" Text="to take a photo." />
-								<Run x:Uid="FirstRunPromptHold" Text="Hold" Foreground="Orange" />
+								<Run x:Uid="FirstRunPromptTap" Text="Tap " Foreground="Orange" />
+								<Run x:Uid="FirstRunPromptPhoto" Text="to take a photo. " />
+								<Run x:Uid="FirstRunPromptHold" Text="Hold " Foreground="Orange" />
 								<Run x:Uid="FirstRunPromptVideo" Text="to take a video." />
 							</TextBlock>
 						</Grid>
 						<Path Fill="#AA000000" HorizontalAlignment="Center" Width="40" Height="20"
-							  Data="M 0,0 L 40,0 20,20 0,0" />
+								Data="M 0,0 L 40,0 20,20 0,0" />
 					</StackPanel>
 
-					<Ellipse VerticalAlignment="Bottom" Margin="0,0,0,90" 
-							 HorizontalAlignment="Center" 
-							 Width="90" Height="90"
-							 Fill="#66FFFFFF"
-							 Stroke="White" StrokeThickness="4">
+					<Ellipse	x:Name="CapturePhotoButton"
+								Tapped="CapturePhotoButton_Tapped"
+								Holding="CapturePhotoButton_Holding"
+								PointerPressed="CapturePhotoButton_PointerPressed"
+								VerticalAlignment="Bottom" Margin="0,0,0,90" 
+								HorizontalAlignment="Center" 
+								Width="90" Height="90"
+								Fill="#66FFFFFF"
+								Stroke="White" StrokeThickness="4">
 					</Ellipse>
 
-					<Grid VerticalAlignment="Bottom" Height="70" Margin="0,0,0,60">
+					<Grid x:Name="NavButtonsContainer" VerticalAlignment="Bottom" Height="70" Margin="0,0,0,58" Opacity="0">
+						<Grid.RenderTransform>
+							<TranslateTransform x:Name="NavButtonsTranslateTransform" Y="30"/>
+						</Grid.RenderTransform>
+
 						<!-- Outer borders for both icons provide a bigger touch sensitive region for better UX -->
 						<Button HorizontalAlignment="Left" VerticalAlignment="Center"
-								Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
-								Command="{Binding GoToConversationsCommand}">
+									Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
+									Command="{Binding GoToConversationsCommand}">
 							<Border Margin="0,0,0,0" Width="32" Height="32"
-									HorizontalAlignment="Center" VerticalAlignment="Center"
-									BorderBrush="{Binding Path=Helpers.PendingConversationCountButtonBorder, FallbackValue='White'}" BorderThickness="2"
-									Background="{Binding Path=Helpers.PendingConversationCountButtonBackground, FallbackValue='Transparent'}"
-									CornerRadius="4">
+										HorizontalAlignment="Center" VerticalAlignment="Center"
+										BorderBrush="{Binding Path=Helpers.PendingConversationCountButtonBorder, FallbackValue='White'}" BorderThickness="2"
+										Background="{Binding Path=Helpers.PendingConversationCountButtonBackground, FallbackValue='Transparent'}"
+										CornerRadius="4">
 								<TextBlock Text="{Binding Path=Helpers.FriendlyPendingConversationCount, FallbackValue=''}"
-										   FontSize="17" FontFamily="Segoe WP" 
-										   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+											   FontSize="17" FontFamily="Segoe WP" 
+											   VerticalAlignment="Center" HorizontalAlignment="Center"/>
 							</Border>
 						</Button>
 
 						<Button HorizontalAlignment="Right" VerticalAlignment="Center"
-								Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
-								Command="{Binding GoToFriendsCommand}">
+									Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
+									Command="{Binding GoToFriendsCommand}">
 							<Path Margin="0,0,0,0" Width="32" Height="32"
-								  HorizontalAlignment="Center" VerticalAlignment="Center"
-								  Fill="White"
-								  Data="M 2,4 L 30,4 30,6 2,6 Z
-										M 2,14 L 30,14 30,16 2,16 Z
-										M 2,24 L 30,24 30,26 2,26 Z">
+									  HorizontalAlignment="Center" VerticalAlignment="Center"
+									  Fill="White"
+									  Data="M 2,4 L 30,4 30,6 2,6 Z
+											M 2,14 L 30,14 30,16 2,16 Z
+											M 2,24 L 30,24 30,26 2,26 Z">
 							</Path>
 						</Button>
 					</Grid>
 				</Grid>
-			</Grid>
 
-			<Grid Tag="Stories" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Yellow">
-				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Stories Goes Here</TextBlock>
-			</Grid>
+				<pageContents:FriendsPageContent x:Name="FriendsPage" Tag="Friends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
 
-			<Grid Tag="ManageFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}" Background="Orange">
-				<TextBlock Style="{StaticResource PlaceholderOverlayTextblockStyle}">Friend Management Goes Here</TextBlock>
-			</Grid>
-		</StackPanel>
+				<pageContents:AddFriendsPage x:Name="AddFriendsPage" Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
+			</StackPanel>
+		</ScrollViewer>
+		
+		<!-- for a better fade-in/fade-out animation with the settings page -->
+		<Rectangle x:Name="PageColorCover" Fill="Black" Opacity="0" IsHitTestVisible="False"/>
+
+		<pageContents:SettingsPageContent x:Name="SettingsPage" Visibility="Collapsed">
+			<pageContents:SettingsPageContent.RenderTransform>
+				<TranslateTransform/>
+			</pageContents:SettingsPageContent.RenderTransform>
+			<pageContents:SettingsPageContent.Projection>
+				<PlaneProjection/>
+			</pageContents:SettingsPageContent.Projection>
+		</pageContents:SettingsPageContent>
+
+		<pageContents:ConversationPageContent x:Name="ConvoPage" Visibility="Collapsed">
+			<pageContents:ConversationPageContent.RenderTransform>
+				<TranslateTransform/>
+			</pageContents:ConversationPageContent.RenderTransform>
+			<pageContents:ConversationPageContent.Projection>
+				<PlaneProjection/>
+			</pageContents:ConversationPageContent.Projection>
+		</pageContents:ConversationPageContent>
 
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
-				<VisualState x:Name="Conversations"/>
-				<VisualState x:Name="Camera"/>
-				<VisualState x:Name="Stories"/>
-				<VisualState x:Name="ManageFriends"/>
+				<!-- Can't use transitions because it makes the app bar update AFTER the animation, not DURING -->
+				<VisualState x:Name="Conversations">
+					<Storyboard>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="Camera">
+					<Storyboard>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="Friends">
+					<Storyboard>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="AddFriends">
+					<Storyboard>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				
+				<VisualState x:Name="Settings">
+					<Storyboard>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="-200"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				
+				<VisualState x:Name="Conversation">
+					<Storyboard>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="-200"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
-	</ScrollViewer>
+	</Grid>
 </Page>

@@ -1,8 +1,9 @@
 ﻿using Snapchat.ViewModels.PageContents;
+using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -13,7 +14,7 @@ namespace Snapchat.Pages.PageContents
 		public ConversationsPageContent()
 		{
 			InitializeComponent();
-			ViewModel = DataContext as ConversationsViewModel;
+			DataContext = ViewModel = new ConversationsViewModel();
 
 			HardwareButtons.CameraPressed += delegate
 			{
@@ -32,33 +33,18 @@ namespace Snapchat.Pages.PageContents
 			MainPage.Singleton.RestoreBottomAppBar();
 		}
 
-		private void Grid_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+		private void ConvoItem_Tapped(object sender, TappedRoutedEventArgs e)
 		{
-			var grid = sender as Grid;
-			if (grid == null) return;
-			var indicator = grid.Children[0] as Grid;
-			var cumX = e.Cumulative.Translation.X;
-			if (indicator == null) return;
-			indicator.Width = cumX > 0 ? cumX : 0;
-			e.Handled = true;
+			var frameworkElement = sender as FrameworkElement;
+			if (frameworkElement == null) return;
+			var storyboard = frameworkElement.Resources["ConvoItemDetailPeekStoryboard"] as Storyboard;
+			if (storyboard != null) storyboard.Begin();
 		}
 
-		private void Grid_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
 		{
-			var container = sender as Grid;
-			if (container == null) return;
-			var indicator = container.Children[0] as Grid;
-			if (indicator == null) return;
-
-			if (indicator.ActualWidth == indicator.MaxWidth)
-			{
-				// TODO: Make main page ScrollViewer scroll to the newly available individual chat page.
-			}
-			else
-			{
-				// TODO: Go back to 0 with easing (invoke storyboard or something?)
-				indicator.Width = 0;
-			}
+			var element = sender as FrameworkElement;
+			MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
 		}
 	}
 }

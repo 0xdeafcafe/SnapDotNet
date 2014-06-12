@@ -44,7 +44,7 @@ namespace Snapchat.ViewModels
 		/// </summary>
 		public bool LiveTileEnabled
 		{
-			get { return AppSettings.Get<bool>("LiveTileEnabled", defaultValue: true); }
+			get { return AppSettings.Get("LiveTileEnabled", true); }
 			set
 			{
 				AppSettings.Set("LiveTileEnabled", value);
@@ -57,7 +57,7 @@ namespace Snapchat.ViewModels
 		/// </summary>
 		public bool ToastsEnabled
 		{
-			get { return AppSettings.Get<bool>("ToastsEnabled", defaultValue: true); }
+			get { return AppSettings.Get("ToastsEnabled", true); }
 			set
 			{
 				AppSettings.Set("ToastsEnabled", value);
@@ -96,7 +96,7 @@ namespace Snapchat.ViewModels
 		/// </summary>
 		public bool FrontCameraMirrorEffect
 		{
-			get { return AppSettings.Get<bool>("FrontCameraMirrorEffect", defaultValue: true); }
+			get { return AppSettings.Get("FrontCameraMirrorEffect", true); }
 			set
 			{
 				AppSettings.Set("FrontCameraMirrorEffect", value);
@@ -106,7 +106,7 @@ namespace Snapchat.ViewModels
 
 		public AutomaticallyDownloadSnapsMode DownloadSnapsMode
 		{
-			get { return AppSettings.Get<AutomaticallyDownloadSnapsMode>("AutomaticallyDownloadSnapsMode", defaultValue: AutomaticallyDownloadSnapsMode.WiFi); }
+			get { return AppSettings.Get("AutomaticallyDownloadSnapsMode", AutomaticallyDownloadSnapsMode.WiFi); }
 			set
 			{
 				AppSettings.Set("AutomaticallyDownloadSnapsMode", (int) value);
@@ -124,7 +124,21 @@ namespace Snapchat.ViewModels
 			{
 				Account.NumberOfBestFriends = value;
 				OnNotifyPropertyChanged();
+
+				UpdateBff(value);
 			}
+		}
+
+		private async void UpdateBff(int value)
+		{
+			// Tell UI we're updating
+			await ProgressHelper.ShowStatusBarAsync("Updating...");
+
+			// Update
+			await App.SnapchatManager.Endpoints.SetBestFriendCountAsync(value);
+
+			// Hide Updating UI
+			await ProgressHelper.HideStatusBarAsync();
 		}
 
 		/// <summary>

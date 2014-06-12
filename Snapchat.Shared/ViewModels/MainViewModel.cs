@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using Windows.System.Threading;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Snapchat.Common;
 
@@ -49,7 +48,7 @@ namespace Snapchat.ViewModels
 		}
 		private void GoToFriends()
 		{
-			ScrollToPage(Page.ManageFriends);
+			ScrollToPage(Page.AddFriends);
 		}
 
 		public void ScrollToPage(Page page)
@@ -66,16 +65,16 @@ namespace Snapchat.ViewModels
 								width = ActualWidth * 0;
 								break;
 
+							//case Page.Camera:
 							default:
-							case Page.Camera:
 								width = ActualWidth * 1;
 								break;
 
-							case Page.Stories:
+							case Page.Friends:
 								width = ActualWidth * 2;
 								break;
 
-							case Page.ManageFriends:
+							case Page.AddFriends:
 								width = ActualWidth * 3;
 								break;
 						}
@@ -91,7 +90,7 @@ namespace Snapchat.ViewModels
 	{
 		Conversation,
 		Camera,
-		Stories,
-		ManageFriends
+		Friends,
+		AddFriends
 	}
 }

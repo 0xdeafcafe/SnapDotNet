@@ -35,7 +35,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 	[DataContract]
 	public class Snap
-		: NotifyPropertyChangedBase, IComparable, IComparable<Snap>
+		: NotifyPropertyChangedBase, IConversationItem, IComparable, IComparable<Snap>
 	{
 		public Snap()
 		{
@@ -98,12 +98,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 		[DataMember(Name = "sts")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime SentTimestamp
+		public DateTime PostedAt
 		{
-			get { return _sentTimestamp; }
-			set { SetField(ref _sentTimestamp, value); }
+			get { return _postedAt; }
+			set { SetField(ref _postedAt, value); }
 		}
-		private DateTime _sentTimestamp;
+		private DateTime _postedAt;
 
 		[DataMember(Name = "ts")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
@@ -128,13 +128,19 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			get { return (MediaType == MediaType.Image || MediaType == MediaType.FriendRequestImage); }
 		}
 
+		[IgnoreDataMember]
+		public String Sender
+		{
+			get { return SenderName ?? ContentId.Split('~')[0]; }
+		}
+
 		#endregion
 
 		#region IComparable<Snap> Members
 
 		public int CompareTo(Snap other)
 		{
-			return Convert.ToInt32((SentTimestamp - other.SentTimestamp).TotalSeconds);
+			return Convert.ToInt32((PostedAt - other.PostedAt).TotalSeconds);
 		}
 
 		#endregion
@@ -143,7 +149,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 		public int CompareTo(object obj)
 		{
-			return Convert.ToInt32((SentTimestamp - ((Snap) obj).SentTimestamp).TotalSeconds);
+			return Convert.ToInt32((PostedAt - ((Snap)obj).PostedAt).TotalSeconds);
 		}
 
 		#endregion

@@ -14,6 +14,14 @@ namespace Snapchat.Helpers
 #endif
 		}
 
+		public static void ShowStatusBar(string status)
+		{
+#if WINDOWS_PHONE_APP
+			StatusBar.GetForCurrentView().ProgressIndicator.Text = status;
+			StatusBar.GetForCurrentView().ProgressIndicator.ShowAsync();
+#endif
+		}
+
 		public static async Task HideStatusBarAsync()
 		{
 #if WINDOWS_PHONE_APP

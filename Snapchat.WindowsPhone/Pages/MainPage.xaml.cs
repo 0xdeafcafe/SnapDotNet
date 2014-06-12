@@ -13,6 +13,14 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Helpers;
 using Snapchat.ViewModels;
+using Snapchat.Pages.PageContents;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media.Animation;
+using System.Threading.Tasks;
+using Windows.UI.Core;
+using Snapchat.ViewModels.PageContents;
+using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages
 {
@@ -38,21 +46,30 @@ namespace Snapchat.Pages
 			Label = App.Strings.GetString("SettingsAppBarButtonLabel"),
 			Command = new RelayCommand(() =>
 			{
-				var frame = Window.Current.Content as Frame;
-				if (frame != null) frame.Navigate(typeof (SettingsPage));
+				VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(Singleton.ScrollViewer), "Settings", true);
 			})
 		};
 
 		private readonly AppBarButton _flipCameraAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png") },
-			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel")
+			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel"),
+			Command = new RelayCommand(async () =>
+			{
+				await MediaCaptureManager.ToggleCameraAsync();
+				Singleton.UpdateBottomAppBar();
+			})
 		};
 
 		private readonly AppBarButton _toggleFlashAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon { UriSource = FlashOnUri },
 			Label = App.Strings.GetString("ToggleFlashAppBarButtonLabel"),
+			Command = new RelayCommand(() =>
+			{
+				MediaCaptureManager.IsFlashEnabled = !MediaCaptureManager.IsFlashEnabled;
+				// TODO: Change icon
+			})
 		};
 
 		private readonly AppBarButton _downloadAllSnapsAppBarButton = new AppBarButton
@@ -71,7 +88,19 @@ namespace Snapchat.Pages
 			Label = App.Strings.GetString("SendCommentAppBarButtonLabel")
 		};
 
+		private readonly AppBarButton _logoutAppBarButton = new AppBarButton
+		{
+			Icon = new SymbolIcon { Symbol = Symbol.LeaveChat },
+			Label = App.Strings.GetString("LogOutAppBarButtonLabel"),
+			Command = new RelayCommand(() =>
+			{
+				App.RootFrame.Navigate(typeof(StartPage));
+			})
+		};
+
 		#endregion
+
+		private static readonly SolidColorBrush AppBarBackgroundBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
 
 		private double _previousScrollViewerOffset;
 		private bool _goingToCamera;
@@ -82,28 +111,23 @@ namespace Snapchat.Pages
 			InitializeComponent();
 			Singleton = this;
 
-			// Horrible UI Design Time cleanup
-			CameraPreviewImage.Visibility = Visibility.Collapsed;
-
 			// Setup ALL the datas :D
 			DataContext = ViewModel = new MainViewModel(ScrollViewer);
 
+			// Delete the camera button tip if necessary.
+			if (AppSettings.Get("FirstTime", true))
+			{
+				AppSettings.Set("FirstTime", false);
+			}
+			else
+			{
+				CameraPage.Children.Remove(FirstRunPrompt);
+			}
+
+			// Set up the scroll viewer
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
 			ScrollViewer.ViewChanging += ScrollViewer_ViewChanging;
-
 			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
-
-			_toggleFlashAppBarButton.Command = new RelayCommand(() =>
-			{
-				MediaCaptureManager.IsFlashEnabled = !MediaCaptureManager.IsFlashEnabled;
-				// TODO: Change icon
-			});
-
-			_flipCameraAppBarButton.Command = new RelayCommand(async () =>
-			{
-				await MediaCaptureManager.ToggleCameraAsync();
-				UpdateBottomAppBar();
-			});
 		}
 
 		public static MainPage Singleton { get; private set; }
@@ -124,22 +148,66 @@ namespace Snapchat.Pages
 			_hiddenCommandBar = null;
 		}
 
+		public void ShowConversation(ConversationResponse conversation)
+		{
+			ConvoPage.DataContext = new ConversationViewModel(conversation);
+			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Conversation", true);
+		}
+
+		public void GoToAddFriendsPage()
+		{
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
+			timer.Tick += delegate
+			{
+				if (!ScrollViewer.ChangeView(CameraPage.ActualWidth * 3, null, null, false)) return;
+				timer.Stop();
+			};
+			timer.Start();
+		}
+
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
+			string destination = e.Parameter as string ?? "";
+			//if (e.NavigationMode == NavigationMode.Back)
+			//	destination = "Conversations";
+
+			if (string.IsNullOrEmpty(destination))
+				ConversationsPage.Opacity = 0;
+
 			// Keep trying to change the ScrollViewer's view until it succeeds.
-			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
+			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
 			timer.Tick += delegate
 			{
 				if (!ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, true)) return;
 
 				ViewModel.ActualWidth = ActualWidth;
+				ConversationsPage.Opacity = 1;
 				timer.Stop();
+
+				
+				switch (destination)
+				{
+					case "Conversations":
+						ScrollViewer.ChangeView(0, null, null, true);
+						UpdateBottomAppBar();
+						BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+						break;
+				}
 			};
 			timer.Start();
 
 			// Start the camera.
 			if (!DesignMode.DesignModeEnabled)
-				await MediaCaptureManager.StartPreviewAsync(CapturePreview);
+			{
+				try
+				{
+					await MediaCaptureManager.StartPreviewAsync(CapturePreview);
+				}
+				catch { }
+				var storyboard = CapturePreview.Resources["FadeInStoryboard"] as Storyboard;
+				if (storyboard != null)
+					storyboard.Begin();
+			}
 
 			// Load data
 			if (!App.SnapchatManager.Loaded)
@@ -195,14 +263,30 @@ namespace Snapchat.Pages
 					// exit the app
 					break;
 
-				case "Stories":
+				case "Friends":
 					ScrollViewer.HorizontalSnapPointsType = SnapPointsType.None;
 					ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
 					e.Handled = true;
 					break;
 
-				case "ManageFriends":
-					ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false); // go to stories
+				case "AddFriends":
+					ScrollViewer.ChangeView(CameraPage.ActualWidth * 2, null, null, false); // go to friends
+					e.Handled = true;
+					break;
+
+				case "Conversation":
+				case "Settings":
+					// Determine the page that's currently in view.
+					var pageIndex = (int) Math.Round(ScrollViewer.HorizontalOffset / CameraPage.ActualWidth);
+					var frameworkElement = PagesContainer.Children[pageIndex] as FrameworkElement;
+					if (frameworkElement != null)
+					{
+						var currentPage = frameworkElement.Tag.ToString();
+
+						// Change visual state to current page.
+						VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), currentPage, true);
+					}
+					UpdateBottomAppBar();
 					e.Handled = true;
 					break;
 			}
@@ -253,7 +337,7 @@ namespace Snapchat.Pages
 		private void UpdateBottomAppBar()
 		{
 			if (BottomAppBar == null)
-				BottomAppBar = new CommandBar { Opacity = 0.5f };
+				BottomAppBar = new CommandBar { Background = AppBarBackgroundBrush };
 			var appBar = BottomAppBar as CommandBar;
 			if (appBar == null) return;
 
@@ -261,14 +345,16 @@ namespace Snapchat.Pages
 			var secondaryCommands = new Collection<ICommandBarElement>();
 			var displayMode = appBar.ClosedDisplayMode;
 
+			string currentState = null;
 			if (PagesVisualStateGroup.CurrentState != null)
 			{
-				var currentState = PagesVisualStateGroup.CurrentState.Name;
+				currentState = PagesVisualStateGroup.CurrentState.Name;
 				switch (currentState)
 				{
 					case "Conversations":
 						secondaryCommands.Add(_downloadAllSnapsAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
 						break;
 
 					case "Camera":
@@ -280,21 +366,38 @@ namespace Snapchat.Pages
 
 						secondaryCommands.Add(_importPictureAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Compact;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x33, 0x33, 0x33));
 						break;
 
-					case "Stories":
+					case "Friends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x9b, 0x55, 0xa0));
 						break;
 
-					case "ManageFriends":
+					case "AddFriends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xFF, 0x80, 0x00));
+						break;
+
+					case "Settings":
+						primaryCommands.Add(_logoutAppBarButton);
+						displayMode = AppBarClosedDisplayMode.Compact;
+						appBar.Background = new SolidColorBrush(Colors.Black);
+						break;
+
+					case "Conversation":
+						displayMode = AppBarClosedDisplayMode.Compact;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xE7, 0x3B, 0x45));
 						break;
 				}
 			}
 
 			// Add global commands.
-			secondaryCommands.Add(_refreshAppBarButton);
-			secondaryCommands.Add(_settingsAppBarButton);
+			if (currentState != "Settings")
+			{
+				secondaryCommands.Add(_refreshAppBarButton);
+				secondaryCommands.Add(_settingsAppBarButton);
+			}
 
 			// Update the app bar if commands have changed (to avoid animation glitches).
 			bool updatePrimary = (primaryCommands.Count == 0), updateSecondary = (secondaryCommands.Count == 0);
@@ -317,6 +420,21 @@ namespace Snapchat.Pages
 					appBar.SecondaryCommands.Add(command);
 			}
 			appBar.ClosedDisplayMode = displayMode;
+		}
+
+		private void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			// TODO: Take snapshot
+		}
+
+		private void CapturePhotoButton_Holding(object sender, HoldingRoutedEventArgs e)
+		{
+			// Play storyboard that shows a red ring circling the capture button
+		}
+
+		private void CapturePhotoButton_PointerPressed(object sender, PointerRoutedEventArgs e)
+		{
+			// TODO: Start recording
 		}
 	}
 }

@@ -2,19 +2,13 @@
 using Windows.UI.Xaml.Data;
 using SnapDotNet.Core.Snapchat.Models.New;
 
-namespace Snapchat.Converters.Conversations
+namespace Snapchat.Converters.Conversation
 {
 	public class SnapStatusConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
 			var snap = value as Snap;
-			if (snap == null)
-			{
-				var conversation = (ConversationResponse) value;
-				if (conversation != null)
-					snap = conversation.LastSnap;
-			}
 			if (snap == null)
 				return null;
 
@@ -24,20 +18,20 @@ namespace Snapchat.Converters.Conversations
 				switch (snap.Status)
 				{
 					case SnapStatus.Delivered:
-						return App.Strings.GetString("SnapStatusTapLoad");
+						return App.Strings.GetString("ChatSnapStatusTapLoad"); // TAP TO LOAD
 
 					case SnapStatus.Downloading:
-						return App.Strings.GetString("SnapStatusDownloading");
+						return App.Strings.GetString("ChatSnapStatusDownloading"); // DOWNLOADING
 
 					//case SnapStatus.None:
 					default:
-						return App.Strings.GetString("SnapStatusNone");
+						return App.Strings.GetString("ChatSnapStatusNone"); // oops
 
 					case SnapStatus.Opened:
-						return App.Strings.GetString("SnapStatusOpened");
+						return App.Strings.GetString("ChatSnapStatusOpened"); // OPENED
 
 					case SnapStatus.Screenshotted:
-						return App.Strings.GetString("SnapStatusScreenshot");
+						return App.Strings.GetString("ChatSnapStatusScreenshot"); // SCREENSHOT!
 				}
 			}
 
@@ -46,17 +40,17 @@ namespace Snapchat.Converters.Conversations
 			{
 				case SnapStatus.Delivered:
 				case SnapStatus.Sent:
-					return App.Strings.GetString("SnapStatusDelivered");
+					return App.Strings.GetString("ChatSnapStatusDelivered"); // DELIVERED
 
 				//case SnapStatus.None:
 				default:
-					return App.Strings.GetString("SnapStatusNone");
+					return App.Strings.GetString("ChatSnapStatusNone"); // oops
 
 				case SnapStatus.Opened:
-					return App.Strings.GetString("SnapStatusOpened");
+					return App.Strings.GetString("ChatSnapStatusOpened"); // OPENED
 
 				case SnapStatus.Screenshotted:
-					return App.Strings.GetString("SnapStatusScreenshot");
+					return App.Strings.GetString("ChatSnapStatusScreenshot"); // SCREENSHOT!
 			}
 		}
 

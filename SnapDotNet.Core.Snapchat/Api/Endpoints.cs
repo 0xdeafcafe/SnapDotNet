@@ -949,41 +949,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		//#endregion
 
-		//#region Set Number of BFFs
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="numberOfBestFriends"> Must be 3, 5, or 7.</param>
-		///// <returns></returns>
-		//public async Task<BestFriends> SetBestFriendCountAsync(int numberOfBestFriends)
-		//{
-		//	if (numberOfBestFriends != 3 && numberOfBestFriends != 5 && numberOfBestFriends != 7)
-		//		throw new InvalidParameterException("numberOfBestFriends must be 3, 5, or 7.");
-
-		//	var timestamp = Timestamps.GenerateRetardedTimestamp();
-		//	var postData = new Dictionary<string, string>
-		//	{
-		//		{"username", GetAuthedUsername()},
-		//		{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
-		//		{"num_best_friends", numberOfBestFriends.ToString()},
-		//	};
-
-		//	var response =
-		//		await
-		//			_webConnect.PostToGenericAsync<BestFriends>(BestFriendCountEndpointUrl, postData, _snapchatManager.AuthToken,
-		//				timestamp.ToString(CultureInfo.InvariantCulture));
-
-		//	return response;
-		//}
-
-		//public BestFriends SetBestFriendCount(int numberOfBestFriends)
-		//{
-		//	return SetBestFriendCountAsync(numberOfBestFriends).Result;
-		//}
-
-		//#endregion
-
 		//#endregion
 
 		//#region Public Activity
@@ -1232,6 +1197,47 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			return GetAllUpdatesAsync().Result;
 		}
+
+		#endregion
+
+		#region Settings
+
+		#region Set Number of BFFs
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newBestFriendCount"> Must be 3, 5, or 7.</param>
+		/// <returns></returns>
+		public async Task<BestFriends> SetBestFriendCountAsync(int newBestFriendCount)
+		{
+			if (newBestFriendCount != 3 &&
+				newBestFriendCount != 5 &&
+				newBestFriendCount != 7)
+				throw new InvalidParameterException("numberOfBestFriends must be 3, 5, or 7.");
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"num_best_friends", newBestFriendCount.ToString()},
+			};
+
+			var response =
+				await
+					_webConnect.PostToGenericAsync<BestFriends>(BestFriendCountEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return response;
+		}
+
+		public BestFriends SetBestFriendCount(int numberOfBestFriends)
+		{
+			return SetBestFriendCountAsync(numberOfBestFriends).Result;
+		}
+
+		#endregion
 
 		#endregion
 

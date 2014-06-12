@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
@@ -12,8 +14,20 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	public class UpdatesResponse
 		: NotifyPropertyChangedBase
 	{
+		public UpdatesResponse()
+		{
+			_addedFriends.CollectionChanged += (sender, args) => NotifyPropertyChanged("AddedFriends");
+			_friends.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Friends"); NotifyPropertyChanged("SortedFriends"); };
+			_recentFriends.CollectionChanged += (sender, args) => NotifyPropertyChanged("RecentFriends");
+		}
+
 		[DataMember(Name = "added_friends")]
-		public ObservableCollection<AddedFriend> AddedFriends { get; set; }
+		public ObservableCollection<AddedFriend> AddedFriends
+		{
+			get { return _addedFriends; }
+			set { SetField(ref _addedFriends, value); }
+		}
+		private ObservableCollection<AddedFriend> _addedFriends = new ObservableCollection<AddedFriend>();
 		
 		[DataMember(Name = "added_friends_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
@@ -45,14 +59,30 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public FeatureSettings FeatureSettings { get; set; }
 
 		[DataMember(Name = "friends")]
-		public ObservableCollection<Friend> Friends { get; set; }
+		public ObservableCollection<Friend> Friends
+		{
+			get { return _friends; }
+			set { SetField(ref _friends, value); }
+		}
+		private ObservableCollection<Friend> _friends = new ObservableCollection<Friend>();
 
+		[IgnoreDataMember]
+		public ObservableCollection<AlphaKeyGroup<Friend>> SortedFriends
+		{
+			get { return AlphaKeyGroup<Friend>.CreateGroups(Friends, new CultureInfo("en"), f => f.FriendlyName, true, false); }
+		}
+			
 		[DataMember(Name = "last_replayed_snap_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime LastReplayedSnap { get; set; }
 
 		[DataMember(Name = "logged")]
-		public Boolean Logged { get; set; }
+		public Boolean Logged
+		{
+			get { return _logged; }
+			set { SetField(ref _logged, value); }
+		}
+		private Boolean _logged;
 		
 		[DataMember(Name = "mobile")]
 		public String Mobile { get; set; }
@@ -64,7 +94,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public String NotificationSoundSetting { get; set; }
 
 		[DataMember(Name = "number_of_best_friends")]
-		public Int32 NumberOfBestFriends { get; set; }
+		public Int32 NumberOfBestFriends
+		{
+			get { return _numberOfBestFriends; }
+			set { SetField(ref _numberOfBestFriends, value); }
+		}
+		private Int32 _numberOfBestFriends;
 
 		[DataMember(Name = "received")]
 		public Int32 RecievedSnaps
@@ -79,7 +114,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		private Int32 _recievedSnaps;
 
 		[DataMember(Name = "recents")]
-		public String[] RecentFriends { get; set; }
+		public ObservableCollection<String> RecentFriends
+		{
+			get { return _recentFriends; }
+			set { SetField(ref _recentFriends, value); }
+		}
+		private ObservableCollection<String> _recentFriends = new ObservableCollection<String>();
 
 		[DataMember(Name = "requests")]
 		public ObservableCollection<string> Requests { get; set; }

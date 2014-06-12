@@ -9,22 +9,23 @@ namespace Snapchat.Converters.Conversations
 	{
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			var conversation = (ConversationResponse) value;
-			if (conversation == null)
+			var snap = value as Snap;
+			if (snap == null)
+			{
+				var conversation = (ConversationResponse) value;
+				if (conversation != null)
+					snap = conversation.LastSnap;
+			}
+
+			if (snap == null) 
 				return null;
 
-			// get the snap object
-			if (conversation.LastSnap == null)
-				return null; // TODO: Create a pending xaml icon
-
-			// Workpad
-			// {direction}_{status}
-
-			var lastSnap = conversation.LastSnap;
 			try
 			{
-				return Application.Current.Resources[String.Format("{0}_{1}", lastSnap.IsIncoming ? "recieved" : "sent",
-					lastSnap.Status.ToString().ToLowerInvariant())];
+				// Workpad
+				// {direction}_{status}
+				return Application.Current.Resources[String.Format("{0}_{1}", snap.IsIncoming ? "recieved" : "sent",
+					snap.Status.ToString().ToLowerInvariant())];
 			}
 			catch
 			{
