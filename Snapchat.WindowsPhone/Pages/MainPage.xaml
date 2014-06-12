@@ -10,13 +10,6 @@
 	<Page.Resources>
 		<converters:DivisionConverter x:Key="DivisionConverter"/>
 		
-		
-		<Style x:Key="PlaceholderOverlayTextblockStyle" TargetType="TextBlock">
-			<Setter Property="VerticalAlignment" Value="Center" />
-			<Setter Property="HorizontalAlignment" Value="Center" />
-			<Setter Property="FontSize" Value="25" />
-		</Style>
-
 		<Style x:Key="EmptyButtonStyle" TargetType="Button">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Padding" Value="0"/>
@@ -72,10 +65,10 @@
 	
 	<Grid>
 		<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
-				  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
-				  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
-				  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
-				  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
+					  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
+					  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
+					  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
+					  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
 			<i:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="Loaded">
 					<core:GoToStateAction StateName="Chat"/>
@@ -171,7 +164,6 @@
 
 				<pageContents:AddFriendsPage x:Name="AddFriendsPage" Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
 			</StackPanel>
-
 		</ScrollViewer>
 		
 		<!-- for a better fade-in/fade-out animation with the settings page -->
@@ -195,12 +187,9 @@
 			</pageContents:ConversationPageContent.Projection>
 		</pageContents:ConversationPageContent>
 
-
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
-				
 				<!-- Can't use transitions because it makes the app bar update AFTER the animation, not DURING -->
-				
 				<VisualState x:Name="Conversations">
 					<Storyboard>
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
@@ -233,7 +222,6 @@
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
-
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
 							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
@@ -530,5 +518,4 @@
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
 	</Grid>
-	
 </Page>
