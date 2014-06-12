@@ -87,8 +87,10 @@ namespace Snapchat.Helpers
 			_currentVideoDevice = _currentVideoDevice == 0 ? 1 : 0;
 
 			await InitializeCameraAsync();
-			if (IsPreviewing && PreviewElement != null)
+			if (!IsPreviewing && PreviewElement != null)
+			{
 				await StartPreviewAsync(PreviewElement);
+			}
 		}
 
 		public static async Task InitializeCameraAsync()
@@ -107,6 +109,7 @@ namespace Snapchat.Helpers
 			{
 				VideoDeviceId =  _cameraInfoCollection[_currentVideoDevice].Id,
 				PhotoCaptureSource = PhotoCaptureSource.VideoPreview,
+				//AudioDeviceId = _cameraInfoCollection[_currentAudioDevice].Id,
 				StreamingCaptureMode = StreamingCaptureMode.Video
 			});
 			_isInitialized = true;
