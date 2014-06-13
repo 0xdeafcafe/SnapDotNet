@@ -141,14 +141,15 @@
 										Background="{Binding Path=Helpers.PendingConversationCountButtonBackground, FallbackValue='Transparent'}"
 										CornerRadius="4">
 								<TextBlock Text="{Binding Path=Helpers.FriendlyPendingConversationCount, FallbackValue=''}"
-											   FontSize="17" FontFamily="Segoe WP" 
+											   FontSize="17" FontFamily="Segoe WP" Foreground="White"
 											   VerticalAlignment="Center" HorizontalAlignment="Center"/>
 							</Border>
 						</Button>
 
 						<Button HorizontalAlignment="Right" VerticalAlignment="Center"
 									Width="70" Height="70" Style="{StaticResource EmptyButtonStyle}"
-									Command="{Binding GoToFriendsCommand}">
+									Command="{Binding GoToFriendsCommand}"
+									Foreground="White">
 							<Path Margin="0,0,0,0" Width="32" Height="32"
 									  HorizontalAlignment="Center" VerticalAlignment="Center"
 									  Fill="White"
@@ -167,7 +168,7 @@
 		</ScrollViewer>
 		
 		<!-- for a better fade-in/fade-out animation with the settings page -->
-		<Rectangle x:Name="PageColorCover" Fill="Black" Opacity="0" IsHitTestVisible="False"/>
+		<Rectangle x:Name="PageColorCover" Fill="{ThemeResource PhoneBackgroundBrush}" Opacity="0" IsHitTestVisible="False"/>
 
 		<pageContents:SettingsPageContent x:Name="SettingsPage" Visibility="Collapsed">
 			<pageContents:SettingsPageContent.RenderTransform>

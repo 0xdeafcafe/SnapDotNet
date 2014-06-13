@@ -121,7 +121,7 @@
 			<TextBlock	Text="{Binding Conversation.Participants[1], Converter={StaticResource LowercaseFriendlyFriendNameConverter}, FallbackValue=matty}"
 						TextWrapping="NoWrap"
 						TextTrimming="CharacterEllipsis"
-						VerticalAlignment="Bottom" HorizontalAlignment="Left"
+						Foreground="White" VerticalAlignment="Bottom" HorizontalAlignment="Left"
 						Margin="15,0,0,0" FontWeight="Light"
 						FontFamily="Segoe WP" FontSize="40" />
 		</Grid>

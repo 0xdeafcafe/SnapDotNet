@@ -339,6 +339,8 @@ namespace Snapchat.Pages
 			var appBar = BottomAppBar as CommandBar;
 			if (appBar == null) return;
 
+			appBar.Foreground = new SolidColorBrush(Colors.White);
+
 			var primaryCommands = new Collection<ICommandBarElement>();
 			var secondaryCommands = new Collection<ICommandBarElement>();
 			var displayMode = appBar.ClosedDisplayMode;

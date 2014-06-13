@@ -15,9 +15,10 @@
 		<converters:IntegerConverter x:Key="MessagePrivacyConverter"/>
 		<converters:IntegerConverter x:Key="DownloadSnapsModeConverter"/>
 		<settingsConverters:NumberOfBestFriendsToIndexConverter x:Key="NumberOfBestFriendsToIndexConverter"/>
+		
 	</UserControl.Resources>
 
-	<Pivot Background="Black">
+	<Pivot Background="{ThemeResource PhoneBackgroundBrush}">
 		<PivotItem x:Uid="SettingsProfileGroup" Header="profile">
 			<ScrollViewer>
 				<Grid>
@@ -82,7 +83,7 @@
 			<ScrollViewer>
 				<Grid>
 					<StackPanel>
-						<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}" Foreground="#FFFFFFFF">ColdSnap</TextBlock>
+						<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
 						<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
 
 						<!-- Street creds -->
@@ -109,11 +110,11 @@
 
 						<!-- Spanish -->
 						<TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
-						<TextBlock>Pablo Cortez</TextBlock>
+						<TextBlock>name here</TextBlock>
 
 						<!-- German -->
 						<TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
-						<TextBlock>Mr. Volkswagen</TextBlock>
+						<TextBlock>name here</TextBlock>
 					</StackPanel>
 				</Grid>
 			</ScrollViewer>

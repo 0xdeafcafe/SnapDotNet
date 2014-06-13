@@ -108,6 +108,7 @@
 			<controls:StateTextBlock x:Uid="ConvosPageTitleStateTextBlock"
 									 x:Name="ConvosPageTitleStateTextBlock"
 									 PrimaryText="coldsnap" 
+									 Foreground="White" 
 									 SecondaryText="{Binding Account.FriendlyRatio, FallbackValue=69 | 69}"
 									 VerticalAlignment="Bottom" HorizontalAlignment="Left"
 									 Margin="15,0,0,0" FontWeight="Light"
@@ -119,7 +120,7 @@
 				<!-- Search box -->
 				<Border>
 					<Grid>
-						<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
+						<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
 							<TextBox.Resources>
 								<x:Double x:Key="TextControlThemeMinWidth">51</x:Double>
 								<x:Double x:Key="TextControlThemeMinHeight">33</x:Double>
