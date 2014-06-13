@@ -280,8 +280,9 @@
 									</Grid.ColumnDefinitions>
 
 									<Grid Grid.Column="0" VerticalAlignment="Center">
-										<ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
-										<ContentControl Width="55"
+										<ContentControl Width="55" Content="{Binding}" VerticalAlignment="Top" Margin="0,5,0,0"
+														ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
+										<ContentControl Width="55" VerticalAlignment="Top" Margin="1,0,0,0"
 														Template="{StaticResource recieved_message}"
 														Visibility="{Binding Converter={StaticResource PendingChatsConverter}}"/>
 									</Grid>

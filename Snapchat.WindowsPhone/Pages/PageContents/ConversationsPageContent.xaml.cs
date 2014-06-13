@@ -45,7 +45,7 @@ namespace Snapchat.Pages.PageContents
 			if (conversation == null) return;
 			var pendingSnaps = conversation.PendingReceivedSnaps;
 			if (pendingSnaps == null || !pendingSnaps.Any()) return;
-			await pendingSnaps[0].DownloadSnapBlobAsync(App.SnapchatManager, conversation);
+			await pendingSnaps[0].DownloadSnapBlobAsync(App.SnapchatManager);
 		}
 
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
