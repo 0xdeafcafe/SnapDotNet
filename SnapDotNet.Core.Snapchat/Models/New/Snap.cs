@@ -148,13 +148,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		//	}
 		//}
 
-		public async Task DownloadSnapBlobAsync(SnapchatManager manager, ConversationResponse conversationResponse)
+		public async Task DownloadSnapBlobAsync(SnapchatManager manager)
 		{
 			if (Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
 
 			// Set snap to IsDownloading
 			Status = SnapStatus.Downloading;
-			conversationResponse.NotifyPropertyChanged("");
 
 			// Start the download
 			try
@@ -168,7 +167,6 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 				if (exception.Message == "Gone")
 				{
 					Status = SnapStatus.Opened;
-					conversationResponse.NotifyPropertyChanged("");
 					return;
 				}
 
@@ -181,7 +179,6 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 			// Set snap to delivered again, but this time with media
 			Status = SnapStatus.Delivered;
-			conversationResponse.NotifyPropertyChanged("");
 		}
 
 		#endregion
