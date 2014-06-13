@@ -252,27 +252,46 @@
 							<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
 									Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding">
 								<Button.Resources>
-									<Storyboard x:Key="ConvoItemDetailPeekStoryboard" AutoReverse="True">
+									<Storyboard x:Key="ConvoItemDetailPeekStoryboard">
 										<DoubleAnimation Duration="0:0:0.3" To="1" 
 														 Storyboard.TargetProperty="(UIElement.Opacity)"
-														 Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
+														 Storyboard.TargetName="SnapDetails"/>
 										<DoubleAnimation Duration="0:0:0.3" To="-2" 
 														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
-														 Storyboard.TargetName="SnapUser" d:IsOptimized="True">
+														 Storyboard.TargetName="SnapUser">
 											<DoubleAnimation.EasingFunction>
 												<CubicEase EasingMode="EaseOut"/>
 											</DoubleAnimation.EasingFunction>
 										</DoubleAnimation>
 										<DoubleAnimation Duration="0:0:0.3" To="2" 
 														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
-														 Storyboard.TargetName="SnapDetails" d:IsOptimized="True">
+														 Storyboard.TargetName="SnapDetails">
 											<DoubleAnimation.EasingFunction>
 												<CubicEase EasingMode="EaseOut"/>
 											</DoubleAnimation.EasingFunction>
 										</DoubleAnimation>
-
-										<!-- delay the end of the storyboard before AutoReverse fires -->
-										<DoubleAnimation BeginTime="0:0:1.5" Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
+										<DoubleAnimation BeginTime="0:0:2" To="0" 
+														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" 
+														 Storyboard.TargetName="SnapDetails"/>
+									</Storyboard>
+									<Storyboard x:Key="ConvoItemDetailCloseStoryboard">
+										<DoubleAnimation Duration="0:0:0.3" To="0"
+														 Storyboard.TargetProperty="(UIElement.Opacity)"
+														 Storyboard.TargetName="SnapDetails"/>
+										<DoubleAnimation Duration="0:0:0.3" To="7" 
+														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+														 Storyboard.TargetName="SnapUser">
+											<DoubleAnimation.EasingFunction>
+												<CubicEase EasingMode="EaseOut"/>
+											</DoubleAnimation.EasingFunction>
+										</DoubleAnimation>
+										<DoubleAnimation Duration="0:0:0.3" To="0" 
+														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+														 Storyboard.TargetName="SnapDetails">
+											<DoubleAnimation.EasingFunction>
+												<CubicEase EasingMode="EaseOut"/>
+											</DoubleAnimation.EasingFunction>
+										</DoubleAnimation>
 									</Storyboard>
 								</Button.Resources>
 								<Grid x:Name="ConvoItemGrid" Height="50">
