@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Phone.UI.Input;
-using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Microsoft.Xaml.Interactivity;
@@ -165,7 +164,7 @@ namespace Snapchat.Pages
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
-			string destination = e.Parameter as string ?? "";
+			var destination = e.Parameter as string ?? "";
 			//if (e.NavigationMode == NavigationMode.Back)
 			//	destination = "Conversations";
 
@@ -188,7 +187,7 @@ namespace Snapchat.Pages
 					case "Conversations":
 						ScrollViewer.ChangeView(0, null, null, true);
 						UpdateBottomAppBar();
-						BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+						if (BottomAppBar != null) BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
 						break;
 				}
 			};

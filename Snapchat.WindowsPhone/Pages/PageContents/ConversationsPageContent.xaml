@@ -17,6 +17,7 @@
 			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
 			<conversations:PendingChatsConverter x:Key="PendingChatsConverter" />
 			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
+			<conversations:FriendlySnapCountConverter x:Key="FriendlySnapCountConverter" />
 			<converters:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
 			<conversations:SnapStatusConverter x:Key="SnapStatusConverter" />
 
@@ -274,21 +275,29 @@
 										<DoubleAnimation BeginTime="0:0:1.5" Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
 									</Storyboard>
 								</Button.Resources>
-								<Grid x:Name="ConvoItemGrid">
+								<Grid x:Name="ConvoItemGrid" Height="50">
 									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="0" />
+										<ColumnDefinition Width="15" />
+										<ColumnDefinition Width="40" />
+										<ColumnDefinition Width="15" />
 										<ColumnDefinition Width="*" />
 									</Grid.ColumnDefinitions>
 
-									<Grid Grid.Column="0" VerticalAlignment="Center">
-										<ContentControl Width="55" Content="{Binding}" VerticalAlignment="Top" Margin="0,5,0,0"
+									<TextBlock Grid.Column="1"
+											   Text="{Binding Path=PendingSnapCount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
+											   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
+											   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
+
+									<Grid Grid.Column="2" VerticalAlignment="Center">
+										<ContentControl Content="{Binding}" VerticalAlignment="Center" Margin="0,0,0,0"
 														ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
-										<ContentControl Width="55" VerticalAlignment="Top" Margin="1,0,0,0"
+										<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
 														Template="{StaticResource recieved_message}"
-														Visibility="{Binding Converter={StaticResource PendingChatsConverter}}"/>
+														Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>
 									</Grid>
 
-									<StackPanel Grid.Column="1" VerticalAlignment="Center">
+									<StackPanel Grid.Column="4" VerticalAlignment="Center">
 										<TextBlock x:Name="SnapUser" Text="{Binding Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
 												   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
 											<TextBlock.RenderTransform>

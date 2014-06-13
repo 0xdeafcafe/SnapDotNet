@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlyFriendNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingChatsConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlySnapCountConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapIconConverter.cs" />
