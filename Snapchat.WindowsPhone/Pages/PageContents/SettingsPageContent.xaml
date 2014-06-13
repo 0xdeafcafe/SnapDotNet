@@ -27,12 +27,13 @@
 						<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Email, Mode=TwoWay}"/>
 						<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Phone, Mode=TwoWay}"/>
 						<ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends"
+								  Margin="0,7,0,0"
 								  SelectedIndex="{Binding NumberOfBestFriends, Converter={StaticResource NumberOfBestFriendsToIndexConverter}, Mode=TwoWay}">
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
 						</ComboBox>
-						<TextBlock x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
+						<TextBlock Margin="0,7,0,0" x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
 						<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
 					</StackPanel>
 				</Grid>
