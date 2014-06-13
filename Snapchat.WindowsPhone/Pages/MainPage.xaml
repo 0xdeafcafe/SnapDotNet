@@ -168,7 +168,7 @@
 		</ScrollViewer>
 		
 		<!-- for a better fade-in/fade-out animation with the settings page -->
-		<Rectangle x:Name="PageColorCover" Fill="Black" Opacity="0" IsHitTestVisible="False"/>
+		<Rectangle x:Name="PageColorCover" Fill="{ThemeResource PhoneBackgroundBrush}" Opacity="0" IsHitTestVisible="False"/>
 
 		<pageContents:SettingsPageContent x:Name="SettingsPage" Visibility="Collapsed">
 			<pageContents:SettingsPageContent.RenderTransform>
