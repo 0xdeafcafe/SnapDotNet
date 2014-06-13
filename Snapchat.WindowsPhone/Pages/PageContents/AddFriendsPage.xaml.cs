@@ -23,5 +23,15 @@ namespace Snapchat.Pages.PageContents
 		{
 			this.InitializeComponent();
 		}
+
+		private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+		{
+			MainPage.Singleton.HideBottomAppBar();
+		}
+
+		private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+		{
+			MainPage.Singleton.RestoreBottomAppBar();
+		}
 	}
 }
