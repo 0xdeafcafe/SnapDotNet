@@ -18,7 +18,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		{
 			_participants.CollectionChanged += (sender, args) => NotifyPropertyChanged("Participants");
 			_pendingChatsFor.CollectionChanged += (sender, args) => NotifyPropertyChanged("PendingChatsFor");
-			_pendingReceivedSnaps.CollectionChanged += (sender, args) => { NotifyPropertyChanged("PendingReceivedSnaps"); NotifyPropertyChanged("LastPendingSnap"); };
+			_pendingReceivedSnaps.CollectionChanged += (sender, args) =>
+			{
+				NotifyPropertyChanged("PendingReceivedSnaps"); 
+				NotifyPropertyChanged("LastPendingSnap"); 
+				NotifyPropertyChanged("PendingSnapCount");
+			};
 		}
 
 		[DataMember(Name = "conversation_messages")]
@@ -102,27 +107,18 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			{
 				SetField(ref _pendingReceivedSnaps, value);
 				NotifyPropertyChanged("LastPendingSnap");
+				NotifyPropertyChanged("PendingSnapCount");
 			}
 		}
 		private ObservableCollection<Snap> _pendingReceivedSnaps = new ObservableCollection<Snap>();
 
 		#region Helpers
 
-		/// <summary>
-		/// The <see cref="PendingReceivedSnaps"/> value reversed, so in the order to be viewed, not the order recieved.
-		/// </summary>
-		public Snap LastPendingSnap
-		{
-			get { return PendingReceivedSnaps.Reverse().First(); }
-		}
+		public Snap LastPendingSnap { get { return PendingReceivedSnaps.Reverse().First(); } }
 
-		public Boolean HasPendingSnaps
-		{
-			get
-			{
-				return (PendingReceivedSnaps != null && PendingReceivedSnaps.Any());
-			}
-		}
+		public Int32 PendingSnapCount { get { return PendingReceivedSnaps.Count; } }
+
+		public Boolean HasPendingSnaps { get { return (PendingReceivedSnaps != null && PendingReceivedSnaps.Any()); } }
 
 		#endregion
 	}
