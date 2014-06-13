@@ -11,11 +11,11 @@
 
 	<Page.Resources>
 		<!--<LinearGradientBrush x:Key="PageBackgroundBrush" EndPoint="0,1" StartPoint="1,0">
-            <GradientStop Color="#FF222222" Offset="0.1"/>
-            <GradientStop Color="#FF444444" Offset="0.1"/>
-            <GradientStop Color="#FF444444" Offset="0.55"/>
-            <GradientStop Color="#FF222222" Offset="0.55"/>
-        </LinearGradientBrush>-->
+			<GradientStop Color="#FF222222" Offset="0.1"/>
+			<GradientStop Color="#FF444444" Offset="0.1"/>
+			<GradientStop Color="#FF444444" Offset="0.55"/>
+			<GradientStop Color="#FF222222" Offset="0.55"/>
+		</LinearGradientBrush>-->
 		<SolidColorBrush x:Key="PageBackgroundBrush" Color="#FF1A1A1A"/>
 
 		<SolidColorBrush x:Key="ButtonPressedBackgroundBrush" Color="#FF3A3A3A"/>
@@ -81,13 +81,11 @@
 	</Page.Resources>
 
 	<Grid x:Name="PageContainer">
-
 		<i:Interaction.Behaviors>
 			<core:EventTriggerBehavior EventName="Loaded">
 				<core:GoToStateAction StateName="StartPortrait"/>
 			</core:EventTriggerBehavior>
 		</i:Interaction.Behaviors>
-
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup>
 				<VisualState x:Name="StartPortrait">

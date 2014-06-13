@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Models;
+using SnapDotNet.Core.Snapchat.Api;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Converters.Json;
+using SnapDotNet.Core.Snapchat.Helpers;
 
 namespace SnapDotNet.Core.Snapchat.Models.New
 {
@@ -134,6 +139,64 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			get { return SenderName ?? ContentId.Split('~')[0]; }
 		}
 
+		[IgnoreDataMember]
+		public bool IsDownloading
+		{
+			get { return _isDownloading; }
+			set
+			{
+				SetField(ref _isDownloading, value);
+				NotifyPropertyChanged("Status");
+				NotifyPropertyChanged("Id");
+			}
+		}
+		private bool _isDownloading;
+
+		//[IgnoreDataMember]
+		//public bool HasMedia
+		//{
+		//	get
+		//	{
+		//		return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(Id, BlobType.Snap));
+		//	}
+		//}
+
+		public async Task DownloadSnapBlobAsync(SnapchatManager manager)
+		{
+			if (IsDownloading || Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
+
+			// Set snap to IsDownloading
+			IsDownloading = true;
+			Status = SnapStatus.Downloading;
+
+			// Start the download
+			try
+			{
+				await Blob.DeleteBlobFromStorageAsync(Id, BlobType.Snap);
+				var mediaBlob = await manager.Endpoints.GetSnapBlobAsync(Id);
+				await Blob.SaveBlobToStorageAsync(mediaBlob, Id, BlobType.Snap);
+			}
+			catch (InvalidHttpResponseException exception)
+			{
+				if (exception.Message == "Gone")
+				{
+					IsDownloading = false;
+					Status = SnapStatus.Opened;
+					return;
+				}
+
+				SnazzyDebug.WriteLine(exception);
+			}
+			catch (Exception exception)
+			{
+				SnazzyDebug.WriteLine(exception);
+			}
+
+			// Set snap to delivered again, but this time with media
+			IsDownloading = false;
+			Status = SnapStatus.Delivered;
+		}
+
 		#endregion
 
 		#region IComparable<Snap> Members
@@ -154,4 +217,6 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 		#endregion
 	}
+
+
 }

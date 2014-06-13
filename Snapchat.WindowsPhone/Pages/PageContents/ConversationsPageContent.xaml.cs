@@ -1,4 +1,5 @@
-﻿using Snapchat.ViewModels.PageContents;
+﻿using System.Linq;
+using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
@@ -33,18 +34,25 @@ namespace Snapchat.Pages.PageContents
 			MainPage.Singleton.RestoreBottomAppBar();
 		}
 
-		private void ConvoItem_Tapped(object sender, TappedRoutedEventArgs e)
+		private async void ConvoItem_Tapped(object sender, TappedRoutedEventArgs e)
 		{
 			var frameworkElement = sender as FrameworkElement;
 			if (frameworkElement == null) return;
 			var storyboard = frameworkElement.Resources["ConvoItemDetailPeekStoryboard"] as Storyboard;
 			if (storyboard != null) storyboard.Begin();
+
+			var conversation = frameworkElement.DataContext as ConversationResponse;
+			if (conversation == null) return;
+			var pendingSnaps = conversation.PendingReceivedSnaps;
+			if (pendingSnaps == null || !pendingSnaps.Any()) return;
+			await pendingSnaps[0].DownloadSnapBlobAsync(App.SnapchatManager);
 		}
 
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
 		{
 			var element = sender as FrameworkElement;
-			MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
+			if (element != null) 
+				MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
 		}
 	}
 }

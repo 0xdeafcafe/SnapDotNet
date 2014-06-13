@@ -33,6 +33,17 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 		}
 
+		public String Username
+		{
+			get
+			{
+				if (AllUpdates != null && AllUpdates.UpdatesResponse != null)
+					return AllUpdates.UpdatesResponse.Username;
+
+				return null;
+			}
+		}
+
 		public StoriesResponse Stories
 		{
 			get { return AllUpdates.StoriesResponse; }

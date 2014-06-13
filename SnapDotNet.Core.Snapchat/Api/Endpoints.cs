@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using SnapDotNet.Core.Miscellaneous.Crypto;
+using SnapDotNet.Core.Miscellaneous.Helpers.Compression;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
@@ -413,75 +416,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 		//public Account GetUpdates()
 		//{
 		//	return GetUpdatesAsync().Result;
-		//}
-
-		//#endregion
-		
-		//#region Blob
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="storyInstance"></param>
-		///// <returns></returns>
-		//public byte[] GetStoryThumbnailBlob(Story storyInstance)
-		//{
-		//	return GetStoryBlob(new Uri(storyInstance.ThumbnailUrl), storyInstance.MediaKey, storyInstance.ThumbnailIv, 
-		//		false);
-		//}
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="storyInstance"></param>
-		///// <returns></returns>
-		//public byte[] GetStoryMediaBlob(Story storyInstance)
-		//{
-		//	return GetStoryBlob(new Uri(storyInstance.MediaUrl), storyInstance.MediaKey, storyInstance.MediaIv,
-		//		storyInstance.Zipped);
-		//}
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="blobPath"></param>
-		///// <param name="key"></param>
-		///// <param name="iv"></param>
-		///// <param name="zipped"></param>
-		///// <returns></returns>
-		//public byte[] GetStoryBlob(Uri blobPath, string key, string iv, bool zipped)
-		//{
-		//	var data = _webConnect.GetBytes(blobPath);
-		//	if (data == null) return null;
-		//	var decompressedData = zipped ? Gzip.Decompress(data) : data;
-
-		//	var decryptedData = Aes.DecryptDataWithIv(decompressedData, Convert.FromBase64String(key),
-		//		Convert.FromBase64String(iv));
-
-		//	return decryptedData;
-		//}
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="snapId"></param>
-		///// <returns></returns>
-		//public async Task<byte[]> GetSnapBlobAsync(string snapId)
-		//{
-		//	var timestamp = Timestamps.GenerateRetardedTimestamp();
-		//	var postData = new Dictionary<string, string>
-		//	{
-		//		{"username", GetAuthedUsername()},
-		//		{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
-		//		{"id", snapId}
-		//	};
-
-		//	var data =
-		//		await
-		//			_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
-		//				timestamp.ToString(CultureInfo.InvariantCulture));
-
-		//	return Blob.ValidateMediaBlob(data) ? data : Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
 		//}
 
 		//#endregion
@@ -1238,6 +1172,77 @@ namespace SnapDotNet.Core.Snapchat.Api
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Blob
+
+		///// <summary>
+		///// 
+		///// </summary>
+		///// <param name="storyInstance"></param>
+		///// <returns></returns>
+		//public byte[] GetStoryThumbnailBlob(Story storyInstance)
+		//{
+		//	return GetStoryBlob(new Uri(storyInstance.ThumbnailUrl), storyInstance.MediaKey, storyInstance.ThumbnailIv,
+		//		false);
+		//}
+
+		///// <summary>
+		///// 
+		///// </summary>
+		///// <param name="storyInstance"></param>
+		///// <returns></returns>
+		//public byte[] GetStoryMediaBlob(Story storyInstance)
+		//{
+		//	return GetStoryBlob(new Uri(storyInstance.MediaUrl), storyInstance.MediaKey, storyInstance.MediaIv,
+		//		storyInstance.Zipped);
+		//}
+
+		///// <summary>
+		///// 
+		///// </summary>
+		///// <param name="blobPath"></param>
+		///// <param name="key"></param>
+		///// <param name="iv"></param>
+		///// <param name="zipped"></param>
+		///// <returns></returns>
+		//public byte[] GetStoryBlob(Uri blobPath, string key, string iv, bool zipped)
+		//{
+		//	var data = _webConnect.GetBytes(blobPath);
+		//	if (data == null) return null;
+		//	var decompressedData = zipped ? Gzip.Decompress(data) : data;
+
+		//	var decryptedData = Aes.DecryptDataWithIv(decompressedData, Convert.FromBase64String(key),
+		//		Convert.FromBase64String(iv));
+
+		//	return decryptedData;
+		//}
+
+		/// <summary>
+		/// Downloads the blob data the snap contains
+		/// </summary>
+		/// <param name="snapId">The Id of the snap to download</param>
+		/// <returns></returns>
+		public async Task<byte[]> GetSnapBlobAsync(string snapId)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"id", snapId}
+			};
+
+			var data =
+				await
+					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return Blob.ValidateMediaBlob(data)
+				? data
+				: Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
+		}
 
 		#endregion
 
