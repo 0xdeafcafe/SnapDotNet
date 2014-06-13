@@ -101,6 +101,18 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _pendingReceivedSnaps, value); }
 		}
 		private ObservableCollection<Snap> _pendingReceivedSnaps = new ObservableCollection<Snap>();
+
+		#region Helpers
+
+		public Boolean HasPendingSnaps
+		{
+			get
+			{
+				return (PendingReceivedSnaps != null && PendingReceivedSnaps.Any());
+			}
+		}
+
+		#endregion
 	}
 
 	[DataContract]

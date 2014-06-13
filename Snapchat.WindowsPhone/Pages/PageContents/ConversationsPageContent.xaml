@@ -6,6 +6,7 @@
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				xmlns:converters="using:Snapchat.Converters"
+				xmlns:selectorsConversations="using:Snapchat.Selectors.Conversations"
 				mc:Ignorable="d" Background="White">
 				
 	<UserControl.Resources>
@@ -36,7 +37,9 @@
 										<VisualState x:Name="PointerOver"/>
 										<VisualState x:Name="Pressed">
 											<Storyboard>
-												<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+												<!-- Commenting this gets rid of the tilting -->
+												<!--<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>-->
+												
 												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
 													<!--<DiscreteObjectKeyFrame KeyTime="0" Value="#FF3cb2e2"/>-->
 												</ObjectAnimationUsingKeyFrames>
@@ -52,6 +55,46 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
+
+			<DataTemplate x:Key="PendingSnapIconDataTemplate">
+				<ContentControl Width="55"
+								Template="{Binding Path=PendingReceivedSnaps[0], 
+												   UpdateSourceTrigger=PropertyChanged, 
+												   Converter={StaticResource SnapIconConverter}}" />
+			</DataTemplate>
+			<DataTemplate x:Key="HistoricSnapIconDataTemplate">
+				<ContentControl Width="55"
+								Template="{Binding Path=LastSnap, 
+												   UpdateSourceTrigger=PropertyChanged, 
+												   Converter={StaticResource SnapIconConverter}}" />
+			</DataTemplate>
+			<selectorsConversations:SnapTemplateSelector x:Key="SnapIconTemplateSelector"
+														 PendingSnapDataTemplate="{StaticResource PendingSnapIconDataTemplate}"
+														 HistoricSnapDataTemplate="{StaticResource HistoricSnapIconDataTemplate}"/>
+			
+			<DataTemplate x:Key="PendingSnapInfoDataTemplate">
+				<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" 
+						   Foreground="#FFA8A8A8" FontSize="14">
+					<Run Text="{Binding Path=LastInteraction, Converter={StaticResource FriendlyTimeConverter}}" />
+					<Run Text="-" />
+					<Run Text="{Binding Path=PendingReceivedSnaps[0], 
+										UpdateSourceTrigger=PropertyChanged,
+										Converter={StaticResource SnapStatusConverter}}" />
+				</TextBlock>
+			</DataTemplate>
+			<DataTemplate x:Key="HistoricSnapInfoDataTemplate">
+				<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" 
+						   Foreground="#FFA8A8A8" FontSize="14">
+					<Run Text="{Binding Path=LastInteraction, Converter={StaticResource FriendlyTimeConverter}}" />
+					<Run Text="-" />
+					<Run Text="{Binding Path=LastSnap, 
+										UpdateSourceTrigger=PropertyChanged,
+										Converter={StaticResource SnapStatusConverter}}" />
+				</TextBlock>
+			</DataTemplate>
+			<selectorsConversations:SnapTemplateSelector x:Key="SnapInfoTemplateSelector"
+														 PendingSnapDataTemplate="{StaticResource PendingSnapInfoDataTemplate}"
+														 HistoricSnapDataTemplate="{StaticResource HistoricSnapInfoDataTemplate}"/>
 
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -230,7 +273,6 @@
 										<DoubleAnimation BeginTime="0:0:1.5" Duration="0:0:0.1" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SnapDetails" d:IsOptimized="True"/>
 									</Storyboard>
 								</Button.Resources>
-						
 								<Grid x:Name="ConvoItemGrid">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="Auto" />
@@ -238,8 +280,7 @@
 									</Grid.ColumnDefinitions>
 
 									<Grid Grid.Column="0" VerticalAlignment="Center">
-										<ContentControl Width="55"
-													Template="{Binding Converter={StaticResource SnapIconConverter}}" />
+										<ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
 										<ContentControl Width="55"
 														Template="{StaticResource recieved_message}"
 														Visibility="{Binding Converter={StaticResource PendingChatsConverter}}"/>
@@ -253,16 +294,13 @@
 											</TextBlock.RenderTransform>
 										</TextBlock>
 
-										<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" 
-												   Foreground="#FFA8A8A8" FontSize="14" Opacity="0" RenderTransformOrigin="0.5,0.5">
-											<TextBlock.RenderTransform>
+										<ContentControl x:Name="SnapDetails" Content="{Binding}" Opacity="0"
+														ContentTemplateSelector="{StaticResource SnapInfoTemplateSelector}" 
+														RenderTransformOrigin="0.5,0.5">
+											<ContentControl.RenderTransform>
 												<CompositeTransform TranslateX="0" TranslateY="0"/>
-											</TextBlock.RenderTransform>
-									
-											<Run Text="{Binding Path=LastInteraction, Converter={StaticResource FriendlyTimeConverter}}" />
-											<Run Text="-" />
-											<Run Text="{Binding Converter={StaticResource SnapStatusConverter}}" />
-										</TextBlock>
+											</ContentControl.RenderTransform>
+										</ContentControl>
 									</StackPanel>
 								</Grid>
 							</Button>

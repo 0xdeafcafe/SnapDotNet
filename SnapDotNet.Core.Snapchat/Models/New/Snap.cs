@@ -139,19 +139,6 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			get { return SenderName ?? ContentId.Split('~')[0]; }
 		}
 
-		[IgnoreDataMember]
-		public bool IsDownloading
-		{
-			get { return _isDownloading; }
-			set
-			{
-				SetField(ref _isDownloading, value);
-				NotifyPropertyChanged("Status");
-				NotifyPropertyChanged("Id");
-			}
-		}
-		private bool _isDownloading;
-
 		//[IgnoreDataMember]
 		//public bool HasMedia
 		//{
@@ -161,13 +148,13 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		//	}
 		//}
 
-		public async Task DownloadSnapBlobAsync(SnapchatManager manager)
+		public async Task DownloadSnapBlobAsync(SnapchatManager manager, ConversationResponse conversationResponse)
 		{
-			if (IsDownloading || Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
+			if (Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
 
 			// Set snap to IsDownloading
-			IsDownloading = true;
 			Status = SnapStatus.Downloading;
+			conversationResponse.NotifyPropertyChanged("");
 
 			// Start the download
 			try
@@ -180,8 +167,8 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			{
 				if (exception.Message == "Gone")
 				{
-					IsDownloading = false;
 					Status = SnapStatus.Opened;
+					conversationResponse.NotifyPropertyChanged("");
 					return;
 				}
 
@@ -193,8 +180,8 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			}
 
 			// Set snap to delivered again, but this time with media
-			IsDownloading = false;
 			Status = SnapStatus.Delivered;
+			conversationResponse.NotifyPropertyChanged("");
 		}
 
 		#endregion

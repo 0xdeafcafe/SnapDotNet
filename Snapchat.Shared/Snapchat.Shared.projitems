@@ -43,6 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\MediaCaptureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\Conversations\SnapTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\ConversationThreadMessageTypeTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\ConversationThreadTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
