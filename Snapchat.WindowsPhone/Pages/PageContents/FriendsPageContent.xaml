@@ -52,11 +52,12 @@
 		<Grid Background="#FF9b55a0" Grid.Row="0">
 			<TextBlock x:Uid="FriendsPageTitleTextBlock"
 					   Text="my friends"
+					   Foreground="White" 
 					   VerticalAlignment="Bottom" HorizontalAlignment="Left"
 					   Margin="15,0,0,0" FontWeight="Light"
 					   FontFamily="Segoe WP" FontSize="40" />
 
-			<SymbolIcon HorizontalAlignment="Right" Symbol="AddFriend" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Tapped="AddFriendsIcon_Tapped">
+			<SymbolIcon Foreground="White" HorizontalAlignment="Right" Symbol="AddFriend" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Tapped="AddFriendsIcon_Tapped">
 				<SymbolIcon.RenderTransform>
 					<CompositeTransform TranslateX="-15" TranslateY="-10" ScaleX="1.5" ScaleY="1.5"/>
 				</SymbolIcon.RenderTransform>
@@ -68,7 +69,7 @@
 				<!-- Search box -->
 				<Border>
 					<Grid>
-						<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
+						<TextBox Background="White" x:Name="SearchBox" x:Uid="ConvosSearchBox" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
 							<TextBox.Resources>
 								<x:Double x:Key="TextControlThemeMinWidth">51</x:Double>
 								<x:Double x:Key="TextControlThemeMinHeight">33</x:Double>
