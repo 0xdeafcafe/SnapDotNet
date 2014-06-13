@@ -10,6 +10,7 @@
 	<Page.Resources>
 		<converters:DivisionConverter x:Key="DivisionConverter"/>
 		
+		
 		<Style x:Key="PlaceholderOverlayTextblockStyle" TargetType="TextBlock">
 			<Setter Property="VerticalAlignment" Value="Center" />
 			<Setter Property="HorizontalAlignment" Value="Center" />
