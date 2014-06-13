@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Phone.UI.Input;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Microsoft.Xaml.Interactivity;
@@ -13,13 +14,10 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Helpers;
 using Snapchat.ViewModels;
-using Snapchat.Pages.PageContents;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
-using System.Threading.Tasks;
-using Windows.UI.Core;
-using Snapchat.ViewModels.PageContents;
+using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages
@@ -436,5 +434,38 @@ namespace Snapchat.Pages
 		{
 			// TODO: Start recording
 		}
+
+		#region Snap Media Viewer
+
+		public async void ShowSnapMedia(Snap snap)
+		{
+			// Check if we have the snap blob in storage
+			if (!snap.HasMedia || snap.Status != SnapStatus.Delivered || !snap.IsIncoming) return;
+
+			// Set Snap Media
+			if (snap.IsImage)
+				SnapMediaImage.Source = (await snap.OpenSnapBlobAsync()).ToBitmapImage();
+			else
+			{
+				SnapMediaVideo.SetSource((await (await snap.OpenSnapBlobAsync()).ToInMemoryRandomAccessStream()), "video/mp4");
+				SnapMediaVideo.Play();
+			}
+
+			// Reveal (hue) UI
+			SnapMediaOverlayGrid.Visibility = Visibility.Visible;
+			HideBottomAppBar();
+		}
+
+		public void HideSnapMedia()
+		{
+			if (SnapMediaOverlayGrid.Visibility != Visibility.Visible) return;
+
+			// Snap is visible, lets clean up
+			SnapMediaImage.Source = null;
+			SnapMediaOverlayGrid.Visibility = Visibility.Collapsed;
+			RestoreBottomAppBar();
+		}
+
+		#endregion
 	}
 }

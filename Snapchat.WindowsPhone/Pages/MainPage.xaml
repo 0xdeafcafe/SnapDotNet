@@ -187,6 +187,13 @@
 			</pageContents:ConversationPageContent.Projection>
 		</pageContents:ConversationPageContent>
 
+		<!-- Snap Media Overlay -->
+		<Grid x:Name="SnapMediaOverlayGrid" Background="Black" Visibility="Collapsed">
+			<!-- -->
+			<Image x:Name="SnapMediaImage" />
+			<MediaElement x:Name="SnapMediaVideo" />
+		</Grid>
+		
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
 				<!-- Can't use transitions because it makes the app bar update AFTER the animation, not DURING -->

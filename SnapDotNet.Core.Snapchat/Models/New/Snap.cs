@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Helpers;
+using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
@@ -139,18 +140,18 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			get { return SenderName ?? ContentId.Split('~')[0]; }
 		}
 
-		//[IgnoreDataMember]
-		//public bool HasMedia
-		//{
-		//	get
-		//	{
-		//		return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(Id, BlobType.Snap));
-		//	}
-		//}
+		[IgnoreDataMember]
+		public bool HasMedia
+		{
+			get
+			{
+				return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(Id, BlobType.Snap));
+			}
+		}
 
 		public async Task DownloadSnapBlobAsync(SnapchatManager manager)
 		{
-			if (Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
+			if (HasMedia || Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
 
 			// Set snap to IsDownloading
 			Status = SnapStatus.Downloading;
@@ -179,6 +180,11 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 			// Set snap to delivered again, but this time with media
 			Status = SnapStatus.Delivered;
+		}
+
+		public async Task<byte[]> OpenSnapBlobAsync()
+		{
+			return await Blob.ReadBlobFromStorageAsync(Id, BlobType.Snap);
 		}
 
 		#endregion

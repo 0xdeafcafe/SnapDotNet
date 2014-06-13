@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Windows.UI.Input;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Phone.UI.Input;
@@ -45,7 +46,7 @@ namespace Snapchat.Pages.PageContents
 			if (conversation == null) return;
 			var pendingSnaps = conversation.PendingReceivedSnaps;
 			if (pendingSnaps == null || !pendingSnaps.Any()) return;
-			await pendingSnaps[0].DownloadSnapBlobAsync(App.SnapchatManager);
+			await conversation.LastPendingSnap.DownloadSnapBlobAsync(App.SnapchatManager);
 		}
 
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
@@ -53,6 +54,22 @@ namespace Snapchat.Pages.PageContents
 			var element = sender as FrameworkElement;
 			if (element != null) 
 				MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
+		}
+
+		private void ConvoItem_OnHolding(object sender, HoldingRoutedEventArgs e)
+		{
+			var element = sender as FrameworkElement;
+			if (element == null) return;
+			var conversation = element.DataContext as ConversationResponse;
+			if (conversation == null) return;
+
+			if (e.HoldingState == HoldingState.Started)
+			{
+				if (conversation.HasPendingSnaps)
+					MainPage.Singleton.ShowSnapMedia(conversation.PendingReceivedSnaps.Last()); // TODO: Pass in the scroll viewer element, and disable it
+			}
+			else
+				MainPage.Singleton.HideSnapMedia();
 		}
 	}
 }

@@ -24,8 +24,10 @@ namespace Snapchat.Converters.Conversations
 			{
 				// Workpad
 				// {direction}_{status}
-				return Application.Current.Resources[String.Format("{0}_{1}", snap.IsIncoming ? "recieved" : "sent",
-					snap.Status.ToString().ToLowerInvariant())];
+				var resourceName = String.Format("{0}_{1}", snap.IsIncoming ? "recieved" : "sent",
+					snap.Status.ToString().ToLowerInvariant());
+
+				return Application.Current.Resources[resourceName];
 			}
 			catch
 			{

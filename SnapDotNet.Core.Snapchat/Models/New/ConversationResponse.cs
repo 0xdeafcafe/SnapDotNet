@@ -18,7 +18,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		{
 			_participants.CollectionChanged += (sender, args) => NotifyPropertyChanged("Participants");
 			_pendingChatsFor.CollectionChanged += (sender, args) => NotifyPropertyChanged("PendingChatsFor");
-			_pendingReceivedSnaps.CollectionChanged += (sender, args) => NotifyPropertyChanged("PendingReceivedSnaps");
+			_pendingReceivedSnaps.CollectionChanged += (sender, args) => { NotifyPropertyChanged("PendingReceivedSnaps"); NotifyPropertyChanged("LastPendingSnap"); };
 		}
 
 		[DataMember(Name = "conversation_messages")]
@@ -98,11 +98,23 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public ObservableCollection<Snap> PendingReceivedSnaps
 		{
 			get { return _pendingReceivedSnaps; }
-			set { SetField(ref _pendingReceivedSnaps, value); }
+			set
+			{
+				SetField(ref _pendingReceivedSnaps, value);
+				NotifyPropertyChanged("LastPendingSnap");
+			}
 		}
 		private ObservableCollection<Snap> _pendingReceivedSnaps = new ObservableCollection<Snap>();
 
 		#region Helpers
+
+		/// <summary>
+		/// The <see cref="PendingReceivedSnaps"/> value reversed, so in the order to be viewed, not the order recieved.
+		/// </summary>
+		public Snap LastPendingSnap
+		{
+			get { return PendingReceivedSnaps.Reverse().First(); }
+		}
 
 		public Boolean HasPendingSnaps
 		{
