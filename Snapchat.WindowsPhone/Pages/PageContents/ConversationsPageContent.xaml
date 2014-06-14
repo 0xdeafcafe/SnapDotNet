@@ -116,7 +116,7 @@
 									 FontFamily="Segoe WP" FontSize="40" />
 		</Grid>
 
-		<ScrollViewer Grid.Row="1">
+		<ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
 			<StackPanel>
 				<!-- Search box -->
 				<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
@@ -246,7 +246,8 @@
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
-									Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding">
+									Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding"
+									>
 								<Button.Resources>
 									<Storyboard x:Key="ConvoItemDetailPeekStoryboard">
 										<DoubleAnimation Duration="0:0:0.3" To="1" 

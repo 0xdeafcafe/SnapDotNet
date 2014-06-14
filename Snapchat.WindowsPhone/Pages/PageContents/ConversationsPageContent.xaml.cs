@@ -6,8 +6,6 @@ using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.System.Threading;
-using System;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -43,10 +41,13 @@ namespace Snapchat.Pages.PageContents
 			if (frameworkElement == null) return;
 			var storyboard = frameworkElement.Resources["ConvoItemDetailPeekStoryboard"] as Storyboard;
 			if (storyboard != null) storyboard.Begin();
-			storyboard.Completed += delegate
-			{
-				(frameworkElement.Resources["ConvoItemDetailCloseStoryboard"] as Storyboard).Begin();
-			};
+			if (storyboard != null)
+				storyboard.Completed += delegate
+				{
+					var storyboardClose = frameworkElement.Resources["ConvoItemDetailCloseStoryboard"] as Storyboard;
+					if (storyboardClose != null)
+						storyboardClose.Begin();
+				};
 
 			var conversation = frameworkElement.DataContext as ConversationResponse;
 			if (conversation == null) return;
@@ -58,19 +59,18 @@ namespace Snapchat.Pages.PageContents
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
 		{
 			var element = sender as FrameworkElement;
-			if (element != null)
+			if (element == null) return;
+			MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
+			var storyboard = element.Resources["ConvoItemDetailPeekStoryboard"] as Storyboard;
+			if (storyboard == null) return;
+
+			storyboard.Completed += delegate
 			{
-				MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
-				var storyboard = element.Resources["ConvoItemDetailPeekStoryboard"] as Storyboard;
-				if (storyboard != null)
-				{
-					storyboard.Completed += delegate
-					{
-						(element.Resources["ConvoItemDetailCloseStoryboard"] as Storyboard).Begin();
-					};
-					storyboard.SkipToFill();
-				}
-			}
+				var storyboardClose = element.Resources["ConvoItemDetailCloseStoryboard"] as Storyboard;
+				if (storyboardClose != null)
+					storyboardClose.Begin();
+			};
+			storyboard.SkipToFill();
 		}
 
 		private void ConvoItem_OnHolding(object sender, HoldingRoutedEventArgs e)
@@ -83,10 +83,16 @@ namespace Snapchat.Pages.PageContents
 			if (e.HoldingState == HoldingState.Started)
 			{
 				if (conversation.HasPendingSnaps)
-					MainPage.Singleton.ShowSnapMedia(conversation.PendingReceivedSnaps.Last()); // TODO: Pass in the scroll viewer element, and disable it
+				{
+					MainPage.Singleton.ShowSnapMedia(conversation.PendingReceivedSnaps.Last());
+					ScrollViewer.IsEnabled = false;
+				}
 			}
 			else
+			{
 				MainPage.Singleton.HideSnapMedia();
+				ScrollViewer.IsEnabled = true;
+			}
 		}
 	}
 }
