@@ -12,7 +12,7 @@ namespace Snapchat.Pages.PageContents
 {
 	public sealed partial class ConversationsPageContent
 	{
-		public ConversationsViewModel ViewModel { get; private set; }
+		private readonly DispatcherTimer _holdTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
 
 		public ConversationsPageContent()
 		{
@@ -45,6 +45,8 @@ namespace Snapchat.Pages.PageContents
 			};
 			dispatcherTimer.Start();
 		}
+
+		public ConversationsViewModel ViewModel { get; private set; }
 
 		private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 		{
@@ -119,6 +121,7 @@ namespace Snapchat.Pages.PageContents
 			_isInDeep = true;
 			_selectedConversation = conversation;
 		}
+
 		private void DetatchConvoData()
 		{
 			_isInDeep = false;
@@ -146,10 +149,12 @@ namespace Snapchat.Pages.PageContents
 				timer.Stop();
 				if (!_isInDeep || _selectedConversation == null) return;
 
-				Debug.WriteLine("we holdin, showin sext snap");
+				//ScrollViewer.IsEnabled = false;
+				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
+				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
+				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
 
-				MainPage.Singleton.ShowSnapMedia(_selectedConversation.PendingReceivedSnaps.Last());
-				ScrollViewer.IsEnabled = false;
+				Debug.WriteLine("we holdin");
 			};
 			timer.Start();
 		}
@@ -174,17 +179,18 @@ namespace Snapchat.Pages.PageContents
 
 		private void UIElement_OnPointerMoved(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerMoved");
+			//Debug.WriteLine("UIElement_OnPointerMoved");
 		}
 
 		private void UIElement_OnPointerPressed(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerPressed");
 		}
 
 		private void UIElement_OnPointerReleased(object sender, PointerRoutedEventArgs e)
 		{
 			Debug.WriteLine("UIElement_OnPointerReleased");
+			_holdTimer.Stop();
+			Debug.WriteLine("Ending _holdTimer");
 		}
 	}
 }
