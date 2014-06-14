@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using Windows.UI.Input;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Phone.UI.Input;
@@ -80,19 +81,92 @@ namespace Snapchat.Pages.PageContents
 			var conversation = element.DataContext as ConversationResponse;
 			if (conversation == null) return;
 
-			if (e.HoldingState == HoldingState.Started)
+			//if (e.HoldingState == HoldingState.Started)
+			//{
+			//	if (!conversation.HasPendingSnaps) return;
+			//	MainPage.Singleton.ShowSnapMedia(conversation.PendingReceivedSnaps.Last());
+			//	ScrollViewer.IsEnabled = false;
+			//}
+			//else
+			//{
+			//	MainPage.Singleton.HideSnapMedia();
+			//	ScrollViewer.IsEnabled = true;
+			//}
+		}
+
+		private void SetupSnapData(ConversationResponse conversation)
+		{
+			_isInDeep = true;
+			_selectedConversation = conversation;
+		}
+		private void DetatchConvoData()
+		{
+			_isInDeep = false;
+			_selectedConversation = null;
+		}
+
+		private bool _isInDeep;
+		private ConversationResponse _selectedConversation;
+		private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("UIElement_OnPointerEntered");
+
+			var element = sender as FrameworkElement;
+			if (element == null) return;
+			var conversation = element.DataContext as ConversationResponse;
+			if (conversation == null) return;
+			SetupSnapData(conversation);
+
+			var timer = new DispatcherTimer
 			{
-				if (conversation.HasPendingSnaps)
-				{
-					MainPage.Singleton.ShowSnapMedia(conversation.PendingReceivedSnaps.Last());
-					ScrollViewer.IsEnabled = false;
-				}
-			}
-			else
+				Interval = new TimeSpan(0, 0, 0, 0, 300)
+			};
+			timer.Tick += (o, o1) =>
 			{
-				MainPage.Singleton.HideSnapMedia();
-				ScrollViewer.IsEnabled = true;
-			}
+				timer.Stop();
+				if (!_isInDeep || _selectedConversation == null) return;
+
+				//ScrollViewer.IsEnabled = false;
+				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
+				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
+				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
+
+				Debug.WriteLine("we holdin");
+			};
+			timer.Start();
+		}
+
+		private void UIElement_OnPointerCanceled(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("UIElement_OnPointerCanceled");
+			DetatchConvoData();
+		}
+
+		private void UIElement_OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("UIElement_OnPointerCaptureLost");
+			DetatchConvoData();
+		}
+
+		private void UIElement_OnPointerExited(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("UIElement_OnPointerExited");
+			DetatchConvoData();
+		}
+
+		private void UIElement_OnPointerMoved(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("UIElement_OnPointerMoved");
+		}
+
+		private void UIElement_OnPointerPressed(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("UIElement_OnPointerPressed");
+		}
+
+		private void UIElement_OnPointerReleased(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("UIElement_OnPointerReleased");
 		}
 	}
 }
