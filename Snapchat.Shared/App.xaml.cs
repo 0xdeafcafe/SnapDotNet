@@ -71,7 +71,7 @@ namespace Snapchat
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{
-
+					
 				}
 
 				// Place the frame in the current Window

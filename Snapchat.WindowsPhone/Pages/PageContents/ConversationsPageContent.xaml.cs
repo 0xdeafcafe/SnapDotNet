@@ -24,6 +24,26 @@ namespace Snapchat.Pages.PageContents
 				// Remove focus from SearchBox
 				Focus(FocusState.Programmatic);
 			};
+			HardwareButtons.BackPressed += (sender, args) =>
+			{
+				if (!_isInDeep) return;
+
+				DetatchConvoData();
+				args.Handled = true;
+			};
+
+			// this is haky
+			var dispatcherTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 2)};
+			dispatcherTimer.Tick += (sender, o) =>
+			{
+				dispatcherTimer.Stop();
+
+				// Testin
+				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
+				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
+				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
+			};
+			dispatcherTimer.Start();
 		}
 
 		private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
@@ -114,7 +134,7 @@ namespace Snapchat.Pages.PageContents
 			var element = sender as FrameworkElement;
 			if (element == null) return;
 			var conversation = element.DataContext as ConversationResponse;
-			if (conversation == null) return;
+			if (conversation == null || !conversation.HasPendingSnaps) return;
 			SetupSnapData(conversation);
 
 			var timer = new DispatcherTimer
@@ -126,12 +146,10 @@ namespace Snapchat.Pages.PageContents
 				timer.Stop();
 				if (!_isInDeep || _selectedConversation == null) return;
 
-				//ScrollViewer.IsEnabled = false;
-				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
-				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
-				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
+				Debug.WriteLine("we holdin, showin sext snap");
 
-				Debug.WriteLine("we holdin");
+				MainPage.Singleton.ShowSnapMedia(_selectedConversation.PendingReceivedSnaps.Last());
+				ScrollViewer.IsEnabled = false;
 			};
 			timer.Start();
 		}
