@@ -12,7 +12,7 @@ namespace Snapchat.Pages.PageContents
 {
 	public sealed partial class ConversationsPageContent
 	{
-		public ConversationsViewModel ViewModel { get; private set; }
+		private DispatcherTimer _holdTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
 
 		public ConversationsPageContent()
 		{
@@ -24,7 +24,22 @@ namespace Snapchat.Pages.PageContents
 				// Remove focus from SearchBox
 				Focus(FocusState.Programmatic);
 			};
+
+			_holdTimer.Tick += (o, o1) =>
+			{
+				_holdTimer.Stop();
+				if (!_isInDeep || _selectedConversation == null) return;
+
+				//ScrollViewer.IsEnabled = false;
+				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
+				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
+				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
+
+				Debug.WriteLine("we holdin");
+			};
 		}
+
+		public ConversationsViewModel ViewModel { get; private set; }
 
 		private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 		{
@@ -99,6 +114,7 @@ namespace Snapchat.Pages.PageContents
 			_isInDeep = true;
 			_selectedConversation = conversation;
 		}
+
 		private void DetatchConvoData()
 		{
 			_isInDeep = false;
@@ -117,23 +133,8 @@ namespace Snapchat.Pages.PageContents
 			if (conversation == null) return;
 			SetupSnapData(conversation);
 
-			var timer = new DispatcherTimer
-			{
-				Interval = new TimeSpan(0, 0, 0, 0, 300)
-			};
-			timer.Tick += (o, o1) =>
-			{
-				timer.Stop();
-				if (!_isInDeep || _selectedConversation == null) return;
-
-				//ScrollViewer.IsEnabled = false;
-				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
-				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
-				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
-
-				Debug.WriteLine("we holdin");
-			};
-			timer.Start();
+			_holdTimer.Start();
+			Debug.WriteLine("Starting _holdTimer");
 		}
 
 		private void UIElement_OnPointerCanceled(object sender, PointerRoutedEventArgs e)
@@ -156,17 +157,18 @@ namespace Snapchat.Pages.PageContents
 
 		private void UIElement_OnPointerMoved(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerMoved");
+			//Debug.WriteLine("UIElement_OnPointerMoved");
 		}
 
 		private void UIElement_OnPointerPressed(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerPressed");
 		}
 
 		private void UIElement_OnPointerReleased(object sender, PointerRoutedEventArgs e)
 		{
 			Debug.WriteLine("UIElement_OnPointerReleased");
+			_holdTimer.Stop();
+			Debug.WriteLine("Ending _holdTimer");
 		}
 	}
 }
