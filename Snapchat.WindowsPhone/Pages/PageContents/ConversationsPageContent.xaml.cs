@@ -12,7 +12,9 @@ namespace Snapchat.Pages.PageContents
 {
 	public sealed partial class ConversationsPageContent
 	{
-		private readonly DispatcherTimer _holdTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+		private bool _isFingerDown;
+		private ConversationResponse _selectedConversation;
+		private readonly DispatcherTimer _holdingTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
 
 		public ConversationsPageContent()
 		{
@@ -26,9 +28,8 @@ namespace Snapchat.Pages.PageContents
 			};
 			HardwareButtons.BackPressed += (sender, args) =>
 			{
-				if (!_isInDeep) return;
-
 				DetatchConvoData();
+				TryHideMediaContent();
 				args.Handled = true;
 			};
 
@@ -44,6 +45,18 @@ namespace Snapchat.Pages.PageContents
 				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
 			};
 			dispatcherTimer.Start();
+
+			_holdingTimer.Tick += (o, o1) =>
+			{
+				_holdingTimer.Stop();
+				if (!_isFingerDown || _selectedConversation == null) return;
+
+				// show nudes
+				MainPage.Singleton.ShowSnapMedia(_selectedConversation.PendingReceivedSnaps.Last());
+				ScrollViewer.IsEnabled = false;
+
+				Debug.WriteLine("we holdin");
+			};
 		}
 
 		public ConversationsViewModel ViewModel { get; private set; }
@@ -98,11 +111,11 @@ namespace Snapchat.Pages.PageContents
 
 		private void ConvoItem_OnHolding(object sender, HoldingRoutedEventArgs e)
 		{
-			var element = sender as FrameworkElement;
-			if (element == null) return;
-			var conversation = element.DataContext as ConversationResponse;
-			if (conversation == null) return;
-
+			//var element = sender as FrameworkElement;
+			//if (element == null) return;
+			//var conversation = element.DataContext as ConversationResponse;
+			//if (conversation == null) return;
+			//
 			//if (e.HoldingState == HoldingState.Started)
 			//{
 			//	if (!conversation.HasPendingSnaps) return;
@@ -118,18 +131,24 @@ namespace Snapchat.Pages.PageContents
 
 		private void SetupSnapData(ConversationResponse conversation)
 		{
-			_isInDeep = true;
+			_isFingerDown = true;
 			_selectedConversation = conversation;
 		}
 
 		private void DetatchConvoData()
 		{
-			_isInDeep = false;
+			_isFingerDown = false;
 			_selectedConversation = null;
+			ScrollViewer.IsEnabled = true;
+			_holdingTimer.Stop();
 		}
 
-		private bool _isInDeep;
-		private ConversationResponse _selectedConversation;
+		private void TryHideMediaContent()
+		{
+			MainPage.Singleton.HideSnapMedia();
+			ScrollViewer.IsEnabled = true;
+		}
+
 		private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
 		{
 			Debug.WriteLine("UIElement_OnPointerEntered");
@@ -139,24 +158,7 @@ namespace Snapchat.Pages.PageContents
 			var conversation = element.DataContext as ConversationResponse;
 			if (conversation == null || !conversation.HasPendingSnaps) return;
 			SetupSnapData(conversation);
-
-			var timer = new DispatcherTimer
-			{
-				Interval = new TimeSpan(0, 0, 0, 0, 300)
-			};
-			timer.Tick += (o, o1) =>
-			{
-				timer.Stop();
-				if (!_isInDeep || _selectedConversation == null) return;
-
-				//ScrollViewer.IsEnabled = false;
-				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
-				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
-				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
-
-				Debug.WriteLine("we holdin");
-			};
-			timer.Start();
+			_holdingTimer.Start();
 		}
 
 		private void UIElement_OnPointerCanceled(object sender, PointerRoutedEventArgs e)
@@ -179,18 +181,21 @@ namespace Snapchat.Pages.PageContents
 
 		private void UIElement_OnPointerMoved(object sender, PointerRoutedEventArgs e)
 		{
-			//Debug.WriteLine("UIElement_OnPointerMoved");
+			Debug.WriteLine("UIElement_OnPointerMoved");
 		}
 
 		private void UIElement_OnPointerPressed(object sender, PointerRoutedEventArgs e)
 		{
+			Debug.WriteLine("UIElement_OnPointerPressed");
 		}
 
 		private void UIElement_OnPointerReleased(object sender, PointerRoutedEventArgs e)
 		{
 			Debug.WriteLine("UIElement_OnPointerReleased");
-			_holdTimer.Stop();
+			DetatchConvoData();
+			TryHideMediaContent();
 			Debug.WriteLine("Ending _holdTimer");
 		}
 	}
 }
+

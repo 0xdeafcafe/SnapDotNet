@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Phone.UI.Input;
 using Windows.UI;
@@ -248,6 +249,14 @@ namespace Snapchat.Pages
 			if (PagesVisualStateGroup.CurrentState == null)
 				return;
 
+			if (SnapMediaOverlayGrid.Visibility == Visibility.Visible)
+			{
+				// Enable scrollviewer Snap, then handle
+				e.Handled = true;
+				ScrollViewer.IsEnabled = true;
+				return;
+			}
+
 			var currentState = PagesVisualStateGroup.CurrentState.Name;
 			switch (currentState)
 			{
@@ -455,6 +464,12 @@ namespace Snapchat.Pages
 			// Reveal (hue) UI
 			SnapMediaOverlayGrid.Visibility = Visibility.Visible;
 			HideBottomAppBar();
+
+			// Block ScrollViewer
+			ScrollViewer.IsEnabled = false;
+			ScrollViewer.PointerReleased += delegate { Debug.WriteLine("MainPageScrollViewer_PointerReleased"); };
+			ScrollViewer.PointerCaptureLost += delegate { Debug.WriteLine("MainPageScrollViewer_PointerCaptureLost"); };
+			ScrollViewer.PointerExited += delegate { Debug.WriteLine("MainPageScrollViewer_PointerExited"); };
 		}
 
 		public void HideSnapMedia()
@@ -465,6 +480,9 @@ namespace Snapchat.Pages
 			SnapMediaImage.Source = null;
 			SnapMediaOverlayGrid.Visibility = Visibility.Collapsed;
 			RestoreBottomAppBar();
+
+			// Un-Block ScrollViewer
+			ScrollViewer.IsEnabled = true;
 		}
 
 		#endregion
