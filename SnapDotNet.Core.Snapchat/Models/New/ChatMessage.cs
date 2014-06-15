@@ -20,7 +20,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	{
 		public ChatMessage()
 		{
-			_savedState.CollectionChanged += (sender, args) => NotifyPropertyChanged("SavedState");
+			_savedStates.MapChanged += (sender, args) => NotifyPropertyChanged("SavedStates");
 		}
 
 		[DataMember(Name = "body")]
@@ -56,12 +56,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		private String _id;
 
 		[DataMember(Name = "saved_state")]
-		public ObservableDictionary<string, SavedState> SavedState
+		public ObservableDictionary<string, SavedState> SavedStates
 		{
-			get { return _savedState; }
-			set { SetField(ref _savedState, value); }
+			get { return _savedStates; }
+			set { SetField(ref _savedStates, value); }
 		}
-		private ObservableDictionary<string, SavedState> _savedState = new ObservableDictionary<string, SavedState>();
+		private ObservableDictionary<string, SavedState> _savedStates = new ObservableDictionary<string, SavedState>();
 		
 		[DataMember(Name = "seq_num")]
 		public String SequenceNumber

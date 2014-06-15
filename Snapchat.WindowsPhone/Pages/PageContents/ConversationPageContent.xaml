@@ -102,7 +102,8 @@
 				</Border>
 			</DataTemplate>
 			<DataTemplate x:Key="MessageChatDataTemplate">
-				<Grid Background="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToBackgroundConverter}}">
+				<Grid Background="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToBackgroundConverter}}"
+					  IsHitTestVisible="True" Tapped="ChatContent_OnTapped">
 					<Border HorizontalAlignment="Stretch" Padding="5,3,0,3" Margin="10,0,0,0" 
 							BorderThickness="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToThicknessConverter}}" 
 							BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
@@ -112,7 +113,8 @@
 				</Grid>
 			</DataTemplate>
 			<DataTemplate x:Key="MessageChatMediaDataTemplate">
-				<Grid Background="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToBackgroundConverter}}">
+				<Grid Background="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToBackgroundConverter}}"
+					  IsHitTestVisible="True" Tapped="ChatContent_OnTapped">
 					<Border HorizontalAlignment="Stretch" Padding="5,3,20,3" Margin="10,0,0,0" 
 							BorderThickness="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToThicknessConverter}}" 
 							BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
@@ -142,21 +144,20 @@
 						Margin="15,0,0,0" FontWeight="Light"
 						FontFamily="Segoe WP" FontSize="40" />
 		</Grid>
-		<ItemsControl Grid.Row="1"
-					  ItemsSource="{Binding Path=ConversationThread}"
-					  ItemTemplateSelector="{StaticResource ConversationThreadTemplateSelector}">
+		<ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
+			<ItemsControl ItemsSource="{Binding Path=ConversationThread}"
+						  ItemTemplateSelector="{StaticResource ConversationThreadTemplateSelector}">
 			<ItemsControl.Template>
 				<ControlTemplate TargetType="ItemsControl">
-					<ScrollViewer>
-						<ItemsPresenter Margin="0,0,0,60"/>
-					</ScrollViewer>
+					<ItemsPresenter Margin="0,0,0,60"/>
 				</ControlTemplate>
 			</ItemsControl.Template>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<VirtualizingStackPanel VirtualizationMode="Recycling"/>
+					<VirtualizingStackPanel VirtualizationMode="Standard"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
-		</ItemsControl>
+			</ItemsControl>
+		</ScrollViewer>
 	</Grid>
 </UserControl>

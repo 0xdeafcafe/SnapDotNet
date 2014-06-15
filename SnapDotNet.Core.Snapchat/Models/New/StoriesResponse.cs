@@ -98,7 +98,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	{
 		public StoryNote()
 		{
-			_storyPointer.CollectionChanged += (sender, args) => NotifyPropertyChanged("StoryPointer");
+			_storyPointer.MapChanged += (sender, args) => NotifyPropertyChanged("StoryPointer");
 		}
 
 		[DataMember(Name = "screenshotted")]

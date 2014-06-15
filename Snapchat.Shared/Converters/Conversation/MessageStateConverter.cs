@@ -14,8 +14,8 @@ namespace Snapchat.Converters.Conversation
 			var chatMessage = value as ChatMessage;
 			if (chatMessage == null) return null;
 
-			var isSaved = chatMessage.SavedState.ContainsKey(App.SnapchatManager.Username) && 
-						  chatMessage.SavedState[App.SnapchatManager.Username].Saved;
+			var isSaved = chatMessage.SavedStates.ContainsKey(App.SnapchatManager.Username) && 
+						  chatMessage.SavedStates[App.SnapchatManager.Username].Saved;
 
 			if (IsForBorderThickness)
 				return new Thickness(isSaved ? 2 : 1, 0, 0, 0);

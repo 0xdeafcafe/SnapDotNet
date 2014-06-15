@@ -1,144 +1,118 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using SnapDotNet.Core.Miscellaneous.Models;
+using Windows.Foundation.Collections;
 
 namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 {
-	public class ObservableKeyValuePair<TKey, TValue> : NotifyPropertyChangedBase
+	public class ObservableDictionary<TKey, TValue> 
+		: IObservableMap<TKey, TValue>
 	{
-		#region Properties
-
-		public TKey Key
+		private class ObservableDictionaryChangedEventArgs 
+			: IMapChangedEventArgs<TKey>
 		{
-			get { return _key; }
-			set { SetField(ref _key, value); }
+			public ObservableDictionaryChangedEventArgs(CollectionChange change, TKey key)
+			{
+				CollectionChange = change;
+				Key = key;
+			}
+			public CollectionChange CollectionChange { get; private set; }
+			public TKey Key { get; private set; }
 		}
 
-		private TKey _key;
+		private readonly Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
+		public event MapChangedEventHandler<TKey, TValue> MapChanged;
 
-		public TValue Value
+		private void InvokeMapChanged(CollectionChange change, TKey key)
 		{
-			get { return _value; }
-			set { SetField(ref _value, value); }
+			var eventHandler = MapChanged;
+			if (eventHandler != null)
+				eventHandler(this, new ObservableDictionaryChangedEventArgs(change, key));
 		}
-		private TValue _value;
-
-		#endregion
-	}
-
-	public class ObservableDictionary<TKey, TValue> : ObservableCollection<ObservableKeyValuePair<TKey, TValue>>, IDictionary<TKey, TValue>
-	{
-
-		#region IDictionary<TKey,TValue> Members
 
 		public void Add(TKey key, TValue value)
 		{
-			if (ContainsKey(key))
-			{
-				throw new ArgumentException("The dictionary already contains the key");
-			}
-			Add(new ObservableKeyValuePair<TKey, TValue> { Key = key, Value = value });
+			_dictionary.Add(key, value);
+			InvokeMapChanged(CollectionChange.ItemInserted, key);
 		}
-
-		public bool ContainsKey(TKey key)
-		{
-			//var m=base.FirstOrDefault((i) => i.Key == key);
-			var r = ThisAsCollection().FirstOrDefault(i => Equals(key, i.Key));
-
-			return !Equals(default(ObservableKeyValuePair<TKey, TValue>), r);
-		}
-
-		static bool Equals<TKey>(TKey a, TKey b)
-		{
-			return EqualityComparer<TKey>.Default.Equals(a, b);
-		}
-
-		private ObservableCollection<ObservableKeyValuePair<TKey, TValue>> ThisAsCollection()
-		{
-			return this;
-		}
-
-		public ICollection<TKey> Keys
-		{
-			get { return (from i in ThisAsCollection() select i.Key).ToList(); }
-		}
-
-		public bool Remove(TKey key)
-		{
-			var remove = ThisAsCollection().Where(pair => Equals(key, pair.Key)).ToList();
-			foreach (var pair in remove)
-			{
-				ThisAsCollection().Remove(pair);
-			}
-			return remove.Count > 0;
-		}
-
-		public bool TryGetValue(TKey key, out TValue value)
-		{
-			value = default(TValue);
-			var r = GetKvpByTheKey(key);
-			if (Equals(r, default(ObservableKeyValuePair<TKey, TValue>)))
-			{
-				return false;
-			}
-			value = r.Value;
-			return true;
-		}
-
-		private ObservableKeyValuePair<TKey, TValue> GetKvpByTheKey(TKey key)
-		{
-			return ThisAsCollection().FirstOrDefault(i => i.Key.Equals(key));
-		}
-
-		public ICollection<TValue> Values
-		{
-			get { return (from i in ThisAsCollection() select i.Value).ToList(); }
-		}
-
-		public TValue this[TKey key]
-		{
-			get
-			{
-				TValue result;
-				if (!TryGetValue(key, out result))
-				{
-					throw new ArgumentException("Key not found");
-				}
-				return result;
-			}
-			set
-			{
-				if (ContainsKey(key))
-				{
-					GetKvpByTheKey(key).Value = value;
-				}
-				else
-				{
-					Add(key, value);
-				}
-			}
-		}
-
-		#endregion
-
-		#region ICollection<KeyValuePair<TKey,TValue>> Members
 
 		public void Add(KeyValuePair<TKey, TValue> item)
 		{
 			Add(item.Key, item.Value);
 		}
 
-		public bool Contains(KeyValuePair<TKey, TValue> item)
+		public bool Remove(TKey key)
 		{
-			var r = GetKvpByTheKey(item.Key);
-			return !Equals(r, default(ObservableKeyValuePair<TKey, TValue>)) && Equals(r.Value, item.Value);
+			if (_dictionary.Remove(key))
+			{
+				InvokeMapChanged(CollectionChange.ItemRemoved, key);
+				return true;
+			}
+			return false;
 		}
 
-		public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		public bool Remove(KeyValuePair<TKey, TValue> item)
 		{
-			throw new NotImplementedException();
+			TValue currentValue;
+			if (_dictionary.TryGetValue(item.Key, out currentValue) &&
+				Equals(item.Value, currentValue) && _dictionary.Remove(item.Key))
+			{
+				InvokeMapChanged(CollectionChange.ItemRemoved, item.Key);
+				return true;
+			}
+			return false;
+		}
+
+		public TValue this[TKey key]
+		{
+			get
+			{
+				return _dictionary[key];
+			}
+			set
+			{
+				_dictionary[key] = value;
+				InvokeMapChanged(CollectionChange.ItemChanged, key);
+			}
+		}
+
+		public void Clear()
+		{
+			var priorKeys = _dictionary.Keys.ToArray();
+			_dictionary.Clear();
+			foreach (var key in priorKeys)
+			{
+				InvokeMapChanged(CollectionChange.ItemRemoved, key);
+			}
+		}
+
+		public ICollection<TKey> Keys
+		{
+			get { return _dictionary.Keys; }
+		}
+
+		public bool ContainsKey(TKey key)
+		{
+			return _dictionary.ContainsKey(key);
+		}
+
+		public bool TryGetValue(TKey key, out TValue value)
+		{
+			return _dictionary.TryGetValue(key, out value);
+		}
+
+		public ICollection<TValue> Values
+		{
+			get { return _dictionary.Values; }
+		}
+
+		public bool Contains(KeyValuePair<TKey, TValue> item)
+		{
+			return _dictionary.Contains(item);
+		}
+
+		public int Count
+		{
+			get { return _dictionary.Count; }
 		}
 
 		public bool IsReadOnly
@@ -146,25 +120,24 @@ namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 			get { return false; }
 		}
 
-		public bool Remove(KeyValuePair<TKey, TValue> item)
+		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
 		{
-			var r = GetKvpByTheKey(item.Key);
-			if (Equals(r, default(ObservableKeyValuePair<TKey, TValue>)))
+			return _dictionary.GetEnumerator();
+		}
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return _dictionary.GetEnumerator();
+		}
+
+		public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		{
+			var arraySize = array.Length;
+			foreach (var pair in _dictionary)
 			{
-				return false;
+				if (arrayIndex >= arraySize) break;
+				array[arrayIndex++] = pair;
 			}
-			return Equals(r.Value, item.Value) && ThisAsCollection().Remove(r);
 		}
-
-		#endregion
-
-		#region IEnumerable<KeyValuePair<TKey,TValue>> Members
-
-		public new IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-		{
-			return (from i in ThisAsCollection() select new KeyValuePair<TKey, TValue>(i.Key, i.Value)).ToList().GetEnumerator();
-		}
-
-		#endregion
 	}
 }

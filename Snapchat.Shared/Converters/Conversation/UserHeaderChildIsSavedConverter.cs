@@ -13,8 +13,8 @@ namespace Snapchat.Converters.Conversation
 			var firstChatMessage = value as ChatMessage;
 			if (firstChatMessage == null) return null;
 
-			var isSaved = firstChatMessage.SavedState.ContainsKey(App.SnapchatManager.Username) &&
-						  firstChatMessage.SavedState[App.SnapchatManager.Username].Saved;
+			var isSaved = firstChatMessage.SavedStates.ContainsKey(App.SnapchatManager.Username) &&
+						  firstChatMessage.SavedStates[App.SnapchatManager.Username].Saved;
 
 			return new SolidColorBrush(
 				isSaved ? new Color { A = 0xFF, R = 0xF3, G = 0xF3, B = 0xF3 } : Colors.White);

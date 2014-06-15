@@ -269,15 +269,15 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public ConversationState()
 		{
 			// User Chat Releases Inpc
-			_userChatReleases.CollectionChanged += (sender, args) => NotifyPropertyChanged("UserChatReleases");
-			foreach (var userChatRelease in _userChatReleases.Values) userChatRelease.CollectionChanged += (sender, args) => NotifyPropertyChanged("UserChatReleases");
+			_userChatReleases.MapChanged += (sender, args) => NotifyPropertyChanged("UserChatReleases");
+			foreach (var userChatRelease in _userChatReleases.Values) userChatRelease.MapChanged += (sender, args) => NotifyPropertyChanged("UserChatReleases");
 
 			// User Sequences Inpc
-			_userSequences.CollectionChanged += (sender, args) => NotifyPropertyChanged("UserSequences");
+			_userSequences.MapChanged += (sender, args) => NotifyPropertyChanged("UserSequences");
 
 			// User Snap Releases Inpc
-			_userSnapReleases.CollectionChanged += (sender, args) => NotifyPropertyChanged("UserSnapReleases");
-			foreach (var userSnapRelease in _userSnapReleases.Values) userSnapRelease.CollectionChanged += (sender, args) => NotifyPropertyChanged("UserSnapReleases");
+			_userSnapReleases.MapChanged += (sender, args) => NotifyPropertyChanged("UserSnapReleases");
+			foreach (var userSnapRelease in _userSnapReleases.Values) userSnapRelease.MapChanged += (sender, args) => NotifyPropertyChanged("UserSnapReleases");
 		}
 
 		[DataMember(Name = "user_chat_releases")]
