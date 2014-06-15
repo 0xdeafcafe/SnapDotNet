@@ -12,7 +12,7 @@ namespace Snapchat.Pages.PageContents
 			InitializeComponent();
 		}
 
-		private async void Image_Loaded(object sender, RoutedEventArgs e)
+		private async void ChatMediaImage_Loaded(object sender, RoutedEventArgs e)
 		{
 			var imageElement = sender as Image;
 			if (imageElement == null) return;
@@ -20,7 +20,16 @@ namespace Snapchat.Pages.PageContents
 			if (chatMessage == null) return;
 			var media = chatMessage.Body.Media;
 			if (!media.HasMedia) await media.DownloadSnapBlobAsync(App.SnapchatManager);
-			imageElement.Source = (await media.OpenSnapBlobAsync()).ToBitmapImage();
+			var imageData = await media.OpenSnapBlobAsync();
+			if (imageData == null)
+			{
+				// Connection is down or something bad happened, display error
+				
+			}
+			else
+			{
+				imageElement.Source = imageData.ToBitmapImage();
+			}
 		}
 	}
 }

@@ -32,6 +32,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\FriendlyFriendNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\FriendlyTimeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\MessageOwnerColourConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\UserHeaderChildIsSavedConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\MessageStateConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\SnapStatusConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DivisionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\EmptyGroupToColourConverter.cs" />

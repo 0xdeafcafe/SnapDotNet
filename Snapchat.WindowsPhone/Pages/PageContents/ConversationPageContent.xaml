@@ -19,6 +19,10 @@
 			<conversation:FriendlyFriendNameConverter OutputLowercase="True" x:Key="LowercaseFriendlyFriendNameConverter" />
 			<conversation:FriendlyFriendNameConverter OutputLowercase="False" x:Key="UppercaseFriendlyFriendNameConverter" />
 
+			<conversation:MessageStateConverter x:Key="MessageStateToThicknessConverter" IsForBorderThickness="True" />
+			<conversation:MessageStateConverter x:Key="MessageStateToBackgroundConverter" IsForBorderThickness="False" />
+			<conversation:UserHeaderChildIsSavedConverter x:Key="UserHeaderChildIsSavedConverter" />
+			
 			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
 
 			<converters:DebugConverter x:Key="DebugConverter" />
@@ -32,11 +36,13 @@
 			</DataTemplate>
 			<DataTemplate x:Key="UserHeaderDataTemplate">
 				<StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,15">
-					<TextBlock HorizontalAlignment="Left"
-							   FontFamily="Segoe WP" FontWeight="Normal" Margin="10,0,0,3" FontSize="13"
-							   Foreground="{Binding Path=User, Converter={StaticResource MessageOwnerColourConverter}}"
-							   Text="{Binding Path=User, Converter={StaticResource UppercaseFriendlyFriendNameConverter}}" />
-
+					<Grid Background="{Binding Path=Messages[0].ChatMessage, Converter={StaticResource UserHeaderChildIsSavedConverter}}">
+						<TextBlock HorizontalAlignment="Left"
+								   FontFamily="Segoe WP" FontWeight="Normal" Margin="10,0,0,3" FontSize="13"
+								   Foreground="{Binding Path=User, Converter={StaticResource MessageOwnerColourConverter}}"
+								   Text="{Binding Path=User, Converter={StaticResource UppercaseFriendlyFriendNameConverter}}" />
+					</Grid>
+					
 					<ItemsControl ItemsSource="{Binding Path=Messages}"
 								  ItemTemplateSelector="{StaticResource ConversationThreadMessageTypeTemplateSelector}">
 					</ItemsControl>
@@ -96,17 +102,23 @@
 				</Border>
 			</DataTemplate>
 			<DataTemplate x:Key="MessageChatDataTemplate">
-				<Border HorizontalAlignment="Stretch" Padding="5,3,0,3" Margin="10,0,0,0" BorderThickness="1,0,0,0" 
-						BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
-					<TextBlock FontSize="16" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF636363" 
-							   Text="{Binding Path=ChatMessage.Body.Text}" />
-				</Border>
+				<Grid Background="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToBackgroundConverter}}">
+					<Border HorizontalAlignment="Stretch" Padding="5,3,0,3" Margin="10,0,0,0" 
+							BorderThickness="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToThicknessConverter}}" 
+							BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
+						<TextBlock FontSize="16" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF636363" 
+								   Text="{Binding Path=ChatMessage.Body.Text}" />
+					</Border>
+				</Grid>
 			</DataTemplate>
 			<DataTemplate x:Key="MessageChatMediaDataTemplate">
-				<Border HorizontalAlignment="Stretch" Padding="5,3,20,3" Margin="10,0,0,0" BorderThickness="1,0,0,0" 
-						BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
-					<Image DataContext="{Binding Path=ChatMessage}" HorizontalAlignment="Stretch" Loaded="Image_Loaded" />
-				</Border>
+				<Grid Background="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToBackgroundConverter}}">
+					<Border HorizontalAlignment="Stretch" Padding="5,3,20,3" Margin="10,0,0,0" 
+							BorderThickness="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToThicknessConverter}}" 
+							BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
+						<Image DataContext="{Binding Path=ChatMessage}" HorizontalAlignment="Stretch" Loaded="ChatMediaImage_Loaded" />
+					</Border>
+				</Grid>
 			</DataTemplate>
 			<selectors:ConversationThreadMessageTypeTemplateSelector x:Key="ConversationThreadMessageTypeTemplateSelector"
 																	 MessageSnapDataTemplate="{StaticResource MessageSnapDataTemplate}"
@@ -130,7 +142,6 @@
 						Margin="15,0,0,0" FontWeight="Light"
 						FontFamily="Segoe WP" FontSize="40" />
 		</Grid>
-
 		<ItemsControl Grid.Row="1"
 					  ItemsSource="{Binding Path=ConversationThread}"
 					  ItemTemplateSelector="{StaticResource ConversationThreadTemplateSelector}">
