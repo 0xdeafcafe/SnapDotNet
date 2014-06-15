@@ -16,7 +16,6 @@
 			<conversation:SnapStatusConverter x:Key="SnapStatusConverter" />
 			<conversation:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
 			<conversation:MessageOwnerColourConverter x:Key="MessageOwnerColourConverter" />
-			<conversation:MessageMediaToImageConverter x:Key="MessageMediaToImageConverter" />
 			<conversation:FriendlyFriendNameConverter OutputLowercase="True" x:Key="LowercaseFriendlyFriendNameConverter" />
 			<conversation:FriendlyFriendNameConverter OutputLowercase="False" x:Key="UppercaseFriendlyFriendNameConverter" />
 
