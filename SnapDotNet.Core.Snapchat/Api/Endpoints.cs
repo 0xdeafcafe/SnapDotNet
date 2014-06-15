@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using SnapDotNet.Core.Miscellaneous.Crypto;
+using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
@@ -1052,7 +1053,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public Response Authenticate(string username, string password)
 		{
-			return AuthenticateAsync(username, password).Result;
+			return AsyncHelpers.RunSync(() => AuthenticateAsync(username, password));
 		}
 
 		#endregion
@@ -1089,7 +1090,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public Response Logout()
 		{
-			return LogoutAsync().Result;
+			return AsyncHelpers.RunSync(LogoutAsync);
 		}
 
 		#endregion
@@ -1129,7 +1130,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public AllUpdatesResponse GetAllUpdates()
 		{
-			return GetAllUpdatesAsync().Result;
+			return AsyncHelpers.RunSync(GetAllUpdatesAsync);
 		}
 
 		#endregion
@@ -1168,7 +1169,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public BestFriends SetBestFriendCount(int numberOfBestFriends)
 		{
-			return SetBestFriendCountAsync(numberOfBestFriends).Result;
+			return AsyncHelpers.RunSync(() => SetBestFriendCountAsync(numberOfBestFriends));
 		}
 
 		#endregion
@@ -1244,6 +1245,16 @@ namespace SnapDotNet.Core.Snapchat.Api
 				: Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
 		}
 
+		/// <summary>
+		/// Downloads the blob data the snap contains
+		/// </summary>
+		/// <param name="snapId">The Id of the snap to download</param>
+		/// <returns></returns>
+		public byte[] GetSnapBlob(string snapId)
+		{
+			return AsyncHelpers.RunSync(() => GetSnapBlobAsync(snapId));
+		}
+
 		#endregion
 
 		#region Chat Media
@@ -1282,7 +1293,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns></returns>
 		public byte[] GetChatMedia(string chatMediaId, string iv, string key)
 		{
-			return GetChatMediaAsync(chatMediaId, iv, key).Result;
+			return AsyncHelpers.RunSync(() => GetChatMediaAsync(chatMediaId, iv, key));
 		}
 
 		#endregion
