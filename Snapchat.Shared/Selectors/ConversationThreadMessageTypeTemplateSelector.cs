@@ -10,6 +10,7 @@ namespace Snapchat.Selectors
 		public DataTemplate MessageSnapDataTemplate { get; set; }
 		public DataTemplate MessageChatDataTemplate { get; set; }
 		public DataTemplate MessageChatScreenshotDataTemplate { get; set; }
+		public DataTemplate MessageChatMediaDataTemplate { get; set; }
 
 		protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
 		{
@@ -29,7 +30,7 @@ namespace Snapchat.Selectors
 						return MessageChatScreenshotDataTemplate;
 
 					case MessageBodyType.Media:
-						return MessageSnapDataTemplate;
+						return MessageChatMediaDataTemplate;
 				}
 			}
 

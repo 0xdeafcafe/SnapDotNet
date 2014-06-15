@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using SnapDotNet.Core.Miscellaneous.Crypto;
-using SnapDotNet.Core.Miscellaneous.Helpers.Compression;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
@@ -21,6 +20,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		private const string BestsEndpointUrl =				"bests";
 		private const string SnapBlobEndpointUrl =			"blob";
+		private const string ChatMediaEndpointUrl =			"chat_media";
 		private const string ClearFeedEndpointUrl =			"clear";
 		private const string FindFriendEndpointUrl =		"find_friends";
 		private const string FriendEndpointUrl =			"friend";
@@ -1242,6 +1242,47 @@ namespace SnapDotNet.Core.Snapchat.Api
 			return Blob.ValidateMediaBlob(data)
 				? data
 				: Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
+		}
+
+		#endregion
+
+		#region Chat Media
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="chatMediaId">The Id of the chat media.</param>
+		/// <param name="iv"></param>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public async Task<byte[]> GetChatMediaAsync(string chatMediaId, string iv, string key)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"id", chatMediaId},
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			var response = Aes.DecryptDataWithIv(
+				(await
+					_webConnect.PostToByteArrayAsync(ChatMediaEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture))), Convert.FromBase64String(key), Convert.FromBase64String(iv));
+
+			return response;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="chatMediaId">The Id of the chat media.</param>
+		/// <param name="iv"></param>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		public byte[] GetChatMedia(string chatMediaId, string iv, string key)
+		{
+			return GetChatMediaAsync(chatMediaId, iv, key).Result;
 		}
 
 		#endregion

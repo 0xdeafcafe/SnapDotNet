@@ -112,6 +112,14 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		}
 		private String _text;
 
+		[DataMember(Name = "media")]
+		public BodyMedia Media
+		{
+			get { return _media; }
+			set { SetField(ref _media, value); }
+		}
+		private BodyMedia _media;
+
 		[DataMember(Name = "type")]
 		public MessageBodyType Type
 		{
@@ -119,6 +127,35 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _type, value); }
 		}
 		private MessageBodyType _type;
+	}
+
+	[DataContract]
+	public class BodyMedia
+		: NotifyPropertyChangedBase
+	{
+		[DataMember(Name = "iv")]
+		public String Iv
+		{
+			get { return _iv; }
+			set { SetField(ref _iv, value); }
+		}
+		private String _iv;
+
+		[DataMember(Name = "key")]
+		public String Key
+		{
+			get { return _key; }
+			set { SetField(ref _key, value); }
+		}
+		private String _key;
+
+		[DataMember(Name = "media_id")]
+		public String MediaId
+		{
+			get { return _mediaId; }
+			set { SetField(ref _mediaId, value); }
+		}
+		private String _mediaId;
 	}
 
 	[DataContract]

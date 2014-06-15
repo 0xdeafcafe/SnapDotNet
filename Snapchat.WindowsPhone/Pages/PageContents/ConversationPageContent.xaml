@@ -2,10 +2,8 @@
     x:Class="Snapchat.Pages.PageContents.ConversationPageContent"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Snapchat.Pages.PageContents"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:viewModels="using:Snapchat.ViewModels"
     xmlns:selectors="using:Snapchat.Selectors"
     xmlns:converters="using:Snapchat.Converters"
     xmlns:conversation="using:Snapchat.Converters.Conversation"
@@ -18,6 +16,7 @@
 			<conversation:SnapStatusConverter x:Key="SnapStatusConverter" />
 			<conversation:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
 			<conversation:MessageOwnerColourConverter x:Key="MessageOwnerColourConverter" />
+			<conversation:MessageMediaToImageConverter x:Key="MessageMediaToImageConverter" />
 			<conversation:FriendlyFriendNameConverter OutputLowercase="True" x:Key="LowercaseFriendlyFriendNameConverter" />
 			<conversation:FriendlyFriendNameConverter OutputLowercase="False" x:Key="UppercaseFriendlyFriendNameConverter" />
 
@@ -104,10 +103,17 @@
 							   Text="{Binding Path=ChatMessage.Body.Text}" />
 				</Border>
 			</DataTemplate>
+			<DataTemplate x:Key="MessageChatMediaDataTemplate">
+				<Border HorizontalAlignment="Stretch" Padding="5,3,20,3" Margin="10,0,0,0" BorderThickness="1,0,0,0" 
+						BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
+					<Image Source="{Binding Path=ChatMessage, Converter={StaticResource MessageMediaToImageConverter}}" HorizontalAlignment="Stretch" />
+				</Border>
+			</DataTemplate>
 			<selectors:ConversationThreadMessageTypeTemplateSelector x:Key="ConversationThreadMessageTypeTemplateSelector"
 																	 MessageSnapDataTemplate="{StaticResource MessageSnapDataTemplate}"
 																	 MessageChatDataTemplate="{StaticResource MessageChatDataTemplate}" 
-																	 MessageChatScreenshotDataTemplate="{StaticResource MessageChatScreenshotDataTemplate}"/>
+																	 MessageChatScreenshotDataTemplate="{StaticResource MessageChatScreenshotDataTemplate}"
+																	 MessageChatMediaDataTemplate="{StaticResource MessageChatMediaDataTemplate}"/>
 		</ResourceDictionary>
 	</UserControl.Resources>
 
@@ -138,7 +144,7 @@
 			</ItemsControl.Template>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<VirtualizingStackPanel/>
+					<VirtualizingStackPanel VirtualizationMode="Recycling"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</ItemsControl>
