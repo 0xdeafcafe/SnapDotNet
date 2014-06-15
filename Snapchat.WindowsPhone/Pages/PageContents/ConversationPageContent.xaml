@@ -106,7 +106,7 @@
 			<DataTemplate x:Key="MessageChatMediaDataTemplate">
 				<Border HorizontalAlignment="Stretch" Padding="5,3,20,3" Margin="10,0,0,0" BorderThickness="1,0,0,0" 
 						BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
-					<Image Source="{Binding Path=ChatMessage, Converter={StaticResource MessageMediaToImageConverter}}" HorizontalAlignment="Stretch" />
+					<Image DataContext="{Binding Path=ChatMessage}" HorizontalAlignment="Stretch" Loaded="Image_Loaded" />
 				</Border>
 			</DataTemplate>
 			<selectors:ConversationThreadMessageTypeTemplateSelector x:Key="ConversationThreadMessageTypeTemplateSelector"

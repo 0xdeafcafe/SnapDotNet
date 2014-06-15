@@ -1,27 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+using SnapDotNet.Core.Miscellaneous.Extensions;
+using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages.PageContents
 {
-	public sealed partial class ConversationPageContent : UserControl
+	public sealed partial class ConversationPageContent
 	{
 		public ConversationPageContent()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
+		}
+
+		private async void Image_Loaded(object sender, RoutedEventArgs e)
+		{
+			var imageElement = sender as Image;
+			if (imageElement == null) return;
+			var chatMessage = imageElement.DataContext as ChatMessage;
+			if (chatMessage == null) return;
+			var media = chatMessage.Body.Media;
+			if (!media.HasMedia) await media.DownloadSnapBlobAsync(App.SnapchatManager);
+			imageElement.Source = (await media.OpenSnapBlobAsync()).ToBitmapImage();
 		}
 	}
 }

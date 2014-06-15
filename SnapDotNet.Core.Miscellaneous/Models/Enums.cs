@@ -9,6 +9,7 @@
 	public enum BlobType
 	{
 		Snap,
-		Story
+		Story,
+		ChatMessageMedia
 	}
 }

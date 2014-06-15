@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
+using SnapDotNet.Core.Miscellaneous.Helpers;
+using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Miscellaneous.Models;
+using SnapDotNet.Core.Snapchat.Api;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Converters.Json;
+using SnapDotNet.Core.Snapchat.Helpers;
 
 namespace SnapDotNet.Core.Snapchat.Models.New
 {
@@ -156,6 +162,50 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _mediaId, value); }
 		}
 		private String _mediaId;
+
+		#region Helpers
+
+		[IgnoreDataMember]
+		public bool HasMedia
+		{
+			get
+			{
+				return AsyncHelpers.RunSync(() => Blob.StorageContainsBlobAsync(MediaId, BlobType.ChatMessageMedia));
+			}
+		}
+
+		public async Task DownloadSnapBlobAsync(SnapchatManager manager)
+		{
+			if (HasMedia) return;
+
+			// Start the download
+			try
+			{
+				await Blob.DeleteBlobFromStorageAsync(MediaId, BlobType.ChatMessageMedia);
+				var mediaBlob = await manager.Endpoints.GetChatMediaAsync(MediaId, Iv, Key);
+				await Blob.SaveBlobToStorageAsync(mediaBlob, MediaId, BlobType.ChatMessageMedia);
+			}
+			catch (InvalidHttpResponseException exception)
+			{
+				if (exception.Message == "Gone")
+				{
+					return;
+				}
+
+				SnazzyDebug.WriteLine(exception);
+			}
+			catch (Exception exception)
+			{
+				SnazzyDebug.WriteLine(exception);
+			}
+		}
+
+		public async Task<byte[]> OpenSnapBlobAsync()
+		{
+			return await Blob.ReadBlobFromStorageAsync(MediaId, BlobType.ChatMessageMedia);
+		}
+
+		#endregion
 	}
 
 	[DataContract]

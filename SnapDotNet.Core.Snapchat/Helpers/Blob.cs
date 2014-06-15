@@ -35,7 +35,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		/// <param name="blobType"></param>
 		public async static Task SaveBlobToStorageAsync(byte[] blob, string blobId, BlobType blobType)
 		{
-			await IsolatedStorage.WriteFileAsync(await GetStoryFile(blobId, blobType), blob);
+			await IsolatedStorage.WriteFileAsync(await GetStorageBlobAsync(blobId, blobType), blob);
 		}
 
 		#endregion
@@ -49,7 +49,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		/// <param name="blobType"></param>
 		public static async Task<byte[]> ReadBlobFromStorageAsync(string blobId, BlobType blobType)
 		{
-			return await IsolatedStorage.ReadFileToBytesAsync(await GetStoryFile(blobId, blobType));
+			return await IsolatedStorage.ReadFileToBytesAsync(await GetStorageBlobAsync(blobId, blobType));
 		}
 
 		#endregion
@@ -63,7 +63,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		/// <param name="blobType"></param>
 		public static async Task DeleteBlobFromStorageAsync(string blobId, BlobType blobType)
 		{
-			await IsolatedStorage.DeleteFileAsync(await GetStoryFile(blobId, blobType));
+			await IsolatedStorage.DeleteFileAsync(await GetStorageBlobAsync(blobId, blobType));
 		}
 
 		#endregion
@@ -78,7 +78,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		/// <returns></returns>
 		public static async Task<bool> StorageContainsBlobAsync(string blobId, BlobType blobType)
 		{
-			var file = await GetStoryFile(blobId, blobType);
+			var file = await GetStorageBlobAsync(blobId, blobType);
 			if (file == null)
 				return false;
 
@@ -95,7 +95,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		[Deprecated("This is actually broken, don't use it", DeprecationType.Deprecate, 0)]
 		public static bool StorageContainsBlob(string blobId, BlobType blobType)
 		{
-			var file = GetStoryFile(blobId, blobType).Result;
+			var file = GetStorageBlobAsync(blobId, blobType).Result;
 			if (file == null)
 				return false;
 
@@ -111,7 +111,7 @@ namespace SnapDotNet.Core.Snapchat.Helpers
 		/// <param name="blobId"></param>
 		/// <param name="blobType"></param>
 		/// <returns></returns>
-		private static async Task<StorageFile> GetStoryFile(string blobId, BlobType blobType)
+		private static async Task<StorageFile> GetStorageBlobAsync(string blobId, BlobType blobType)
 		{
 			var blobFolder =
 				await ApplicationData.Current.LocalFolder.CreateFolderAsync("BlobStorage", CreationCollisionOption.OpenIfExists);
