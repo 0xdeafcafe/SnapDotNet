@@ -1,6 +1,11 @@
-﻿using Windows.Phone.UI.Input;
+﻿using System.Linq;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Snapchat.Controls;
+using Snapchat.Helpers;
 using Snapchat.ViewModels.PageContents;
+using WinRTXamlToolkit.Controls.Extensions;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -33,6 +38,23 @@ namespace Snapchat.Pages.PageContents
 		private void AddFriendsIcon_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
 		{
 			MainPage.Singleton.GoToAddFriendsPage();
+		}
+
+		private void ExpanderView_OnExpanded(object sender, bool e)
+		{
+			var expander = sender as ExpanderView;
+			if (expander == null) return;
+
+			// Hide the others
+			foreach (
+				var itemExpander in
+					FriendsListView.Items.Select(
+						item =>
+							VariousHelpers.FindVisualChild<ExpanderView>(FriendsListView.ItemContainerGenerator.ContainerFromItem(item))))
+			{
+				if (itemExpander.Tag == expander.Tag) continue;
+				itemExpander.Contract();
+			}
 		}
 	}
 }

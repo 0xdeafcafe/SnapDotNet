@@ -220,6 +220,9 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		[IgnoreDataMember]
 		public String FriendlyName { get { return String.IsNullOrWhiteSpace(Display) ? Name : Display; } }
 
+		[IgnoreDataMember]
+		public Boolean HasFriendlyName { get { return FriendlyName == Display; } }
+
 		[DataMember(Name = "name")]
 		public String Name { get; set; }
 

@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\RequiresAuthenticationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlyFriendNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingChatsConverter.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\MediaCaptureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\VariousHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\Conversations\SnapTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\ConversationThreadMessageTypeTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\ConversationThreadTemplateSelector.cs" />
@@ -78,6 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Assets\Vectors\SnapStatusIcons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
