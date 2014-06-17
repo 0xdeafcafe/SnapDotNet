@@ -42,10 +42,7 @@ namespace Snapchat.Pages
 		private readonly AppBarButton _settingsAppBarButton = new AppBarButton
 		{
 			Label = App.Strings.GetString("SettingsAppBarButtonLabel"),
-			Command = new RelayCommand(() =>
-			{
-				VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(Singleton.ScrollViewer), "Settings", true);
-			})
+			Command = new RelayCommand(() => VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(Singleton.ScrollViewer), "Settings", true))
 		};
 
 		private readonly AppBarButton _flipCameraAppBarButton = new AppBarButton
@@ -90,10 +87,7 @@ namespace Snapchat.Pages
 		{
 			Icon = new SymbolIcon { Symbol = Symbol.LeaveChat },
 			Label = App.Strings.GetString("LogOutAppBarButtonLabel"),
-			Command = new RelayCommand(() =>
-			{
-				App.RootFrame.Navigate(typeof(StartPage));
-			})
+			Command = new RelayCommand(() => App.RootFrame.Navigate(typeof(StartPage)))
 		};
 
 		#endregion
@@ -394,7 +388,7 @@ namespace Snapchat.Pages
 						break;
 
 					case "Conversation":
-						displayMode = AppBarClosedDisplayMode.Compact;
+						displayMode = AppBarClosedDisplayMode.Minimal;
 						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xE7, 0x3B, 0x45));
 						break;
 				}

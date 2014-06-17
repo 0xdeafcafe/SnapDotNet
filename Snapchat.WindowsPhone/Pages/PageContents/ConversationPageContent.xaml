@@ -134,6 +134,8 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="80" />
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="55"/>
+			<RowDefinition Height="23" x:Name="AppBarPaddingRowDefinition"/>
 		</Grid.RowDefinitions>
 
 		<Grid Background="#FFE73B45" Grid.Row="0">
@@ -144,6 +146,7 @@
 						Margin="15,0,0,0" FontWeight="Light"
 						FontFamily="Segoe WP" FontSize="40" />
 		</Grid>
+		
 		<ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
 			<ItemsControl ItemsSource="{Binding Path=ConversationThread}"
 						  ItemTemplateSelector="{StaticResource ConversationThreadTemplateSelector}">
@@ -159,5 +162,138 @@
 			</ItemsControl.ItemsPanel>
 			</ItemsControl>
 		</ScrollViewer>
+
+		<Border Grid.Row="2" BorderBrush="#eeeeee" BorderThickness="0,1">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.9*" />
+					<ColumnDefinition Width="0.25*" />
+				</Grid.ColumnDefinitions>
+			
+				<TextBox PlaceholderText="Send a chat" Grid.Column="0" IsSpellCheckEnabled="True" InputScope="Chat">
+					<TextBox.Resources>
+						<x:Double x:Key="TextControlThemeMinWidth">51</x:Double>
+						<x:Double x:Key="TextControlThemeMinHeight">33</x:Double>
+						<Thickness x:Key="TextControlBorderThemeThickness">2.5001</Thickness>
+						<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
+						<x:Double x:Key="ContentControlFontSize">20.26</x:Double>
+						<Thickness x:Key="TextControlThemePadding">7,2.5,8,4</Thickness>
+						<Style x:Key="MessageContentTextBox" TargetType="TextBox">
+							<Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
+							<Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}"/>
+							<Setter Property="Foreground" Value="#FF333333"/>
+							<Setter Property="SelectionHighlightColor" Value="{ThemeResource TextSelectionHighlightColorThemeBrush}"/>
+							<Setter Property="Background" Value="{ThemeResource TextBoxBackgroundThemeBrush}"/>
+							<Setter Property="BorderBrush" Value="{ThemeResource TextBoxBorderThemeBrush}"/>
+							<Setter Property="BorderThickness" Value="{ThemeResource TextControlBorderThemeThickness}"/>
+							<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}"/>
+							<Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}"/>
+							<Setter Property="TextWrapping" Value="NoWrap"/>
+							<Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
+							<Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto"/>
+							<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+							<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+							<Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
+							<Setter Property="Padding" Value="{ThemeResource TextControlThemePadding}"/>
+							<Setter Property="Margin" Value="0"/>
+							<Setter Property="VerticalAlignment" Value="Center"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="TextBox">
+										<Grid>
+											<Grid.RowDefinitions>
+												<RowDefinition Height="Auto"/>
+												<RowDefinition Height="*"/>
+											</Grid.RowDefinitions>
+											<VisualStateManager.VisualStateGroups>
+												<VisualStateGroup x:Name="CommonStates">
+													<VisualState x:Name="Normal">
+														<Storyboard>
+															<DoubleAnimation Duration="0" To="{ThemeResource TextControlBackgroundThemeOpacity}" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BackgroundElement"/>
+														</Storyboard>
+													</VisualState>
+													<VisualState x:Name="Focused">
+														<Storyboard>
+															<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PlaceholderTextContentPresenter"/>
+														</Storyboard>
+													</VisualState>
+												</VisualStateGroup>
+											</VisualStateManager.VisualStateGroups>
+											<Border x:Name="BackgroundElement" Background="{TemplateBinding Background}" Margin="{TemplateBinding BorderThickness}" Grid.Row="1"/>
+											<ScrollViewer x:Name="ContentElement" AutomationProperties.AccessibilityView="Raw" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" IsTabStop="False" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" Margin="{TemplateBinding BorderThickness}" MinHeight="{ThemeResource TextControlThemeMinHeight}" Padding="{TemplateBinding Padding}" Grid.Row="1" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
+											<ContentControl x:Name="PlaceholderTextContentPresenter" 
+															Content="{TemplateBinding PlaceholderText}" 
+															Foreground="{ThemeResource TextBoxPlaceholderTextThemeBrush}"
+															FontStyle="Italic" FontWeight="SemiLight"
+															FontSize="{ThemeResource ContentControlFontSize}" IsTabStop="False" 
+															Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" 
+															Grid.Row="1"/>
+										</Grid>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</TextBox.Resources>
+					<TextBox.Style>
+						<StaticResource ResourceKey="MessageContentTextBox"/>
+					</TextBox.Style>
+				</TextBox>
+				<Button Grid.Column="1" x:Name="SendSnapButton" Content="send" 
+						Margin="4"
+						VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+					<Button.Resources>
+						<Style x:Key="SendSnapButton" TargetType="Button">
+							<Setter Property="Background" Value="#FFF6E100"/>
+							<Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+							<Setter Property="MinHeight" Value="0" />
+							<Setter Property="MinWidth" Value="0" />
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="Button">
+										<Grid x:Name="Grid" Background="Transparent">
+											<VisualStateManager.VisualStateGroups>
+												<VisualStateGroup x:Name="CommonStates">
+													<VisualStateGroup.Transitions>
+														<VisualTransition From="Pressed" To="PointerOver">
+															<Storyboard>
+																<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+															</Storyboard>
+														</VisualTransition>
+														<VisualTransition From="PointerOver" To="Normal">
+															<Storyboard>
+																<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+															</Storyboard>
+														</VisualTransition>
+														<VisualTransition From="Pressed" To="Normal">
+															<Storyboard>
+																<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+															</Storyboard>
+														</VisualTransition>
+													</VisualStateGroup.Transitions>
+													<VisualState x:Name="Normal"/>
+													<VisualState x:Name="PointerOver"/>
+													<VisualState x:Name="Pressed" />
+													<VisualState x:Name="Disabled" />
+												</VisualStateGroup>
+											</VisualStateManager.VisualStateGroups>
+											<Border x:Name="Border"
+													CornerRadius="6"
+													BorderThickness="0" 
+													Background="{TemplateBinding Background}">
+												<Ellipse VerticalAlignment="Center" StrokeThickness="4" Stroke="White"
+														 HorizontalAlignment="Center" Width="30" Height="30" />
+											</Border>
+										</Grid>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Button.Resources>
+					<Button.Style>
+						<StaticResource ResourceKey="SendSnapButton"/>
+					</Button.Style>
+				</Button>
+			</Grid>
+		</Border>
 	</Grid>
 </UserControl>
