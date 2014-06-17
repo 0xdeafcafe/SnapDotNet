@@ -143,6 +143,7 @@ namespace Snapchat.Pages
 		public void ShowConversation(ConversationResponse conversation)
 		{
 			ConvoPage.DataContext = new ConversationViewModel(conversation);
+			ConvoPage.Load();
 			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Conversation", true);
 		}
 

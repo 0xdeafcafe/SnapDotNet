@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using SnapDotNet.Core.Miscellaneous.Extensions;
@@ -11,12 +12,17 @@ namespace Snapchat.Pages.PageContents
 		public ConversationPageContent()
 		{
 			InitializeComponent();
+		}
 
-			Loaded += delegate
+		public void Load()
+		{
+			var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 200) };
+			timer.Tick += delegate
 			{
-				// TODO: Fix this?
-				//ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ActualHeight);
+				timer.Stop();
+				ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight);
 			};
+			timer.Start();
 		}
 
 		private async void ChatMediaImage_Loaded(object sender, RoutedEventArgs e)
