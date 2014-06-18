@@ -61,6 +61,7 @@
     <Compile Include="Models\New\ConversationResponse.cs" />
     <Compile Include="Models\New\IConversationItem.cs" />
     <Compile Include="Models\New\MessagingGatewayInfo.cs" />
+    <Compile Include="Models\New\Responses\PublicActivity.cs" />
     <Compile Include="Models\New\Snap.cs" />
     <Compile Include="Models\New\StoriesResponse.cs" />
     <Compile Include="Models\New\AllUpdatesResponse.cs" />

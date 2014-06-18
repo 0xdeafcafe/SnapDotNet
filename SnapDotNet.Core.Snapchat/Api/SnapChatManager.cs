@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
+using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Models.New;
+using SnapDotNet.Core.Snapchat.Models.New.Responses;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
@@ -89,8 +93,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		}
 
 		#endregion
-
-
+		
 		#region Setters
 
 		public async Task<bool> Logout()
@@ -167,8 +170,23 @@ namespace SnapDotNet.Core.Snapchat.Api
 			AllUpdates.UpdatesResponse.Username = username;
 		}
 
-		#endregion
+		public void UpdatePublicActivities(ObservableDictionary<string, PublicActivity> publicActivities)
+		{
+			foreach (var friend in AllUpdates.UpdatesResponse.Friends)
+			{
+				if (friend.PublicActivity == null)
+					friend.PublicActivity = new PublicActivity();
 
+				if (!publicActivities.ContainsKey(friend.Name)) continue;
+
+				var publicActivity = publicActivities[friend.Name];
+
+				friend.PublicActivity.Score = publicActivity.Score;
+				friend.PublicActivity.BestFriends = publicActivity.BestFriends;
+			}
+		}
+
+		#endregion
 
 		#region Cool Functions
 
@@ -182,8 +200,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		}
 
 		#endregion
-
-
+		
 		#region Actions
 
 		#region Actions:Save
@@ -233,6 +250,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public async Task UpdateAllAsync(Action hidependingUiAction)
 		{
 			await Endpoints.GetAllUpdatesAsync();
+
+			// Public Activity API only takes in 30 at a time, so we gotta get chunky
+			foreach (var chunk in AllUpdates.UpdatesResponse.Friends.Chunk(30))
+				await Endpoints.GetPublicActivityAsync(chunk.Select(f => f.Name).ToArray());
+
 			hidependingUiAction();
 		}
 

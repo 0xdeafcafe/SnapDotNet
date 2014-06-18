@@ -62,6 +62,9 @@
 			<converters:EmptyGroupToColourConverter x:Key="EmptyGroupToColourConverterBackground"
 													TrueBrush="#FF9b55a0" FalseBrush="#AA9b55a0"/>
 			
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+			<converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
+			
 			<CollectionViewSource x:Key="SortedFriends" 
 								  Source="{Binding Path=Account.SortedFriends}"
 								  IsSourceGrouped="True"/>
@@ -88,9 +91,7 @@
 						<controls:ExpanderView.AdditionalHeaderContentTemplate>
 							<DataTemplate>
 								<Grid VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,30,0">
-									<Button Style="{StaticResource EmptyButtonStyle}" Click="EditFriendButton_OnClick">
-										
-									</Button>
+									<Button Style="{StaticResource EmptyButtonStyle}" Click="EditFriendButton_OnClick" />
 								</Grid>
 							</DataTemplate>
 						</controls:ExpanderView.AdditionalHeaderContentTemplate>
@@ -98,30 +99,32 @@
 							<DataTemplate>
 								<Grid Background="#eeeeee">
 									<StackPanel Margin="18,4,0,0">
-										<TextBlock Foreground="Black" Text="Score: 69" FontSize="15.5" />
-										<StackPanel Margin="0,2,0,4">
-											<StackPanel Orientation="Horizontal">
-												<Viewbox Height="15" Width="17" Margin="0,1,0,0">
-													<Path Fill="#FFFED41B" 
-													  Data="F1 M 145.637,174.227L 127.619,110.39L 180.809,70.7577L 114.528,68.1664L 93.2725,5.33333L 70.3262,67.569L 4,68.3681L 56.0988,109.423L 36.3629,172.75L 91.508,135.888L 145.637,174.227 Z"/>
-												</Viewbox>
-												<TextBlock Foreground="Black" Text="matty" Margin="6,0,0,0" FontSize="14" VerticalAlignment="Center" />
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<Viewbox Height="15" Width="17" Margin="0,1,0,0">
-													<Path Fill="#FFFED41B" 
-													  Data="F1 M 145.637,174.227L 127.619,110.39L 180.809,70.7577L 114.528,68.1664L 93.2725,5.33333L 70.3262,67.569L 4,68.3681L 56.0988,109.423L 36.3629,172.75L 91.508,135.888L 145.637,174.227 Z"/>
-												</Viewbox>
-												<TextBlock Foreground="Black" Text="matty" Margin="6,0,0,0" FontSize="14" VerticalAlignment="Center" />
-											</StackPanel>
-											<StackPanel Orientation="Horizontal">
-												<Viewbox Height="15" Width="17" Margin="0,1,0,0">
-													<Path Fill="#FFFED41B" 
-													  Data="F1 M 145.637,174.227L 127.619,110.39L 180.809,70.7577L 114.528,68.1664L 93.2725,5.33333L 70.3262,67.569L 4,68.3681L 56.0988,109.423L 36.3629,172.75L 91.508,135.888L 145.637,174.227 Z"/>
-												</Viewbox>
-												<TextBlock Foreground="Black" Text="matty" Margin="6,0,0,0" FontSize="14" VerticalAlignment="Center" />
-											</StackPanel>
-										</StackPanel>
+										<StackPanel.Resources>
+											<!-- Best Friends stuff xox -->
+										</StackPanel.Resources>
+										<TextBlock Foreground="Black" FontSize="15.5">
+											<Run x:Uid="FriendsScore" Text="Score:" />
+											<Run Text="{Binding Path=PublicActivity.Score, FallbackValue=-1, UpdateSourceTrigger=PropertyChanged}" />
+										</TextBlock>
+										<ItemsControl Margin="0,2,0,4" ItemsSource="{Binding Path=PublicActivity.BestFriends, UpdateSourceTrigger=PropertyChanged}" 
+													  Visibility="{Binding Path=PublicActivity.HasBestFriends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel Orientation="Horizontal">
+														<Viewbox Height="15" Width="17" Margin="0,1,0,0">
+															<Path Fill="#FFFED41B" 
+																  Data="F1 M 145.637,174.227L 127.619,110.39L 180.809,70.7577L 114.528,68.1664L 93.2725,5.33333L 70.3262,67.569L 4,68.3681L 56.0988,109.423L 36.3629,172.75L 91.508,135.888L 145.637,174.227 Z"/>
+														</Viewbox>
+														<TextBlock Foreground="Black" FontWeight="Light" Text="{Binding}" Margin="6,0,0,0" FontSize="14" VerticalAlignment="Center" />
+													</StackPanel>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+										<TextBlock x:Name="FriendHasNoBestFriends" 
+												   Visibility="{Binding Path=PublicActivity.HasBestFriends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
+												   Text="No Best Friends &#x1f602;"
+												   Foreground="Black" Margin="0,2,0,0" FontSize="16"
+												   FontWeight="Light" />
 									</StackPanel>
 								</Grid>
 							</DataTemplate>

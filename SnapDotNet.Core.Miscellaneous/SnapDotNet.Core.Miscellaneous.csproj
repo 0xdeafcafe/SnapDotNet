@@ -47,6 +47,7 @@
     <Compile Include="CustomTypes\ObservableDictionary.cs" />
     <Compile Include="Extensions\ByteArrayExtensions.cs" />
     <Compile Include="Extensions\IntegerExtentions.cs" />
+    <Compile Include="Extensions\ListExtentions.cs" />
     <Compile Include="Helpers\ApplicationSettings.cs" />
     <Compile Include="Helpers\Async\AsyncHelpers.cs" />
     <Compile Include="Helpers\Async\TaskCompletionNotifier.cs" />

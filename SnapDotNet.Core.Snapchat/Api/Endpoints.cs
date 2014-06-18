@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.Crypto;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
 using SnapDotNet.Core.Snapchat.Models;
 using SnapDotNet.Core.Snapchat.Models.New;
+using SnapDotNet.Core.Snapchat.Models.New.Responses;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
@@ -886,44 +892,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		//#endregion
 
-		//#region Public Activity
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="requestedUsernames"></param>
-		///// <returns></returns>
-		//public async Task<ObservableDictionary<string, PublicActivity>> GetPublicActivityAsync(string[] requestedUsernames = null)
-		//{
-		//	if (requestedUsernames == null)
-		//		requestedUsernames = _snapchatManager.Account.Friends.Select(friend => friend.Name).ToArray();
-
-		//	var timestamp = Timestamps.GenerateRetardedTimestamp();
-		//	var postData = new Dictionary<string, string>
-		//	{
-		//		{"username", GetAuthedUsername()},
-		//		{"friend_usernames", JsonConvert.SerializeObject(requestedUsernames)},
-		//		{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
-		//	};
-
-		//	var publicActivities =
-		//		await
-		//			_webConnect.PostToGenericAsync<ObservableDictionary<string, PublicActivity>>(BestsEndpointUrl, postData, _snapchatManager.AuthToken,
-		//				timestamp.ToString(CultureInfo.InvariantCulture));
-
-		//	_snapchatManager.UpdatePublicActivities(publicActivities);
-		//	_snapchatManager.Save();
-
-		//	return publicActivities;
-		//}
-
-		//public ObservableDictionary<string, PublicActivity> GetPublicActivity(string[] requestedUsernames = null)
-		//{
-		//	return GetPublicActivityAsync(requestedUsernames).Result;
-		//}
-
-		//#endregion
-
 		//#region Find Friends
 
 		///// <summary>
@@ -1131,6 +1099,51 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public AllUpdatesResponse GetAllUpdates()
 		{
 			return AsyncHelpers.RunSync(GetAllUpdatesAsync);
+		}
+
+		#endregion
+
+		#region Public Activity
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="requestedUsernames"></param>
+		/// <returns></returns>
+		public async Task<ObservableDictionary<string, PublicActivity>> GetPublicActivityAsync(string[] requestedUsernames = null)
+		{
+			if (requestedUsernames == null)
+				requestedUsernames =
+					_snapchatManager.AllUpdates.UpdatesResponse.Friends.Select(friend => friend.Name).Take(30).ToArray();
+
+			if (requestedUsernames.Count() > 30)
+			{
+				SnazzyDebug.WriteLine(new IndexOutOfRangeException("You can only request 30 usernames at a time. snapchat is stupid."));
+				requestedUsernames = requestedUsernames.Take(30).ToArray();
+			}
+
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"friend_usernames", JsonConvert.SerializeObject(requestedUsernames)},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			var publicActivities =
+				await
+					_webConnect.PostToGenericAsync<ObservableDictionary<string, PublicActivity>>(BestsEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			_snapchatManager.UpdatePublicActivities(publicActivities);
+			_snapchatManager.Save();
+
+			return publicActivities;
+		}
+
+		public ObservableDictionary<string, PublicActivity> GetPublicActivity(string[] requestedUsernames = null)
+		{
+			return AsyncHelpers.RunSync(() => GetPublicActivityAsync(requestedUsernames));
 		}
 
 		#endregion

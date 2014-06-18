@@ -7,6 +7,7 @@ using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Miscellaneous.Models;
 using SnapDotNet.Core.Snapchat.Converters.Json;
+using SnapDotNet.Core.Snapchat.Models.New.Responses;
 
 namespace SnapDotNet.Core.Snapchat.Models.New
 {
@@ -207,7 +208,6 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	public class Friend
 		: NotifyPropertyChangedBase
 	{
-
 		[DataMember(Name = "can_see_custom_stories")]
 		public Boolean CanSeeCustomStories { get; set; }
 
@@ -228,6 +228,14 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 		[DataMember(Name = "type")]
 		public FriendRequestState Type { get; set; }
+
+		[DataMember(Name = "public_activity")]
+		public PublicActivity PublicActivity
+		{
+			get { return _publicActivity; }
+			set { SetField(ref _publicActivity, value); }
+		}
+		private PublicActivity _publicActivity = new PublicActivity();
 	}
 
 	[DataContract]

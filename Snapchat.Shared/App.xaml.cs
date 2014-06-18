@@ -42,6 +42,7 @@ namespace Snapchat
 
 			Suspending += OnSuspending;
 			UnhandledException += OnUnhandledException;
+			Resuming += OnResuming;
 		}
 
 		public static Frame RootFrame { get; private set; }
@@ -106,8 +107,19 @@ namespace Snapchat
 					throw new Exception("Failed to create initial page");
 				}
 			}
-
+			
+			// yolo rite
 			Window.Current.Activate();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="o"></param>
+		private static void OnResuming(object sender, object o)
+		{
+			UpdateSnapchatDataAsync();
 		}
 
 		/// <summary>
@@ -138,17 +150,19 @@ namespace Snapchat
 
 			deferral.Complete();
 		}
-
+		
 		private static async void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			await MediaCaptureManager.CleanupCaptureResourcesAsync();
 		}
 
 		#region Snapchat Data Helpers
-		// TODO: Do this in a much nicer way
 
+		// TODO: Do this in a much nicer way
 		public static async void UpdateSnapchatDataAsync()
 		{
+			// TODO: check if we're signed in, if not skip this shit
+
 			// show update ui
 			await ProgressHelper.ShowStatusBarAsync(Strings.GetString("StatusUpdating"));
 
@@ -157,13 +171,10 @@ namespace Snapchat
 
 			// Automatically download snaps if enabled
 			var downloadMode = AppSettings.Get<AutomaticallyDownloadSnapsMode>("AutomaticallyDownloadSnapsMode", defaultValue: AutomaticallyDownloadSnapsMode.WiFi);
-			bool shouldDownloadSnaps =
+			var shouldDownloadSnaps =
 				(downloadMode == AutomaticallyDownloadSnapsMode.Always) ||
 				(downloadMode == AutomaticallyDownloadSnapsMode.WiFi && !NetworkInformationHelper.OnWifiConnection());
-			if (shouldDownloadSnaps)
-			{
-				await SnapchatManager.DownloadSnapsAsync();
-			}
+			if (shouldDownloadSnaps) await SnapchatManager.DownloadSnapsAsync();
 		}
 
 		#endregion

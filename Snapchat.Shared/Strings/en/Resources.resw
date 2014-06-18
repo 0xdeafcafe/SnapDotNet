@@ -192,8 +192,15 @@
   <data name="FlipCameraAppBarButtonLabel" xml:space="preserve">
     <value>flip camera</value>
   </data>
+  <data name="FriendHasNoBestFriends.Text" xml:space="preserve">
+    <value>No Best Friends &amp;#x1f602;</value>
+    <comment>html hex code for crying emoticon xox</comment>
+  </data>
   <data name="FriendsPageTitleTextBlock.Text" xml:space="preserve">
     <value>my friends</value>
+  </data>
+  <data name="FriendsScore.Text" xml:space="preserve">
+    <value>Score:</value>
   </data>
   <data name="ImportPictureAppBarButtonLabel" xml:space="preserve">
     <value>select photo...</value>
