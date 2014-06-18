@@ -35,6 +35,8 @@
 					<controls:ExpanderView Tag="{Binding Path=Name}" HeaderText="{Binding Path=FriendlyName, FallbackValue='Alex Reed'}"
 										   SubHeaderText="{Binding Path=Name, FallbackValue='alexerax'}"
 										   ShowSubHeader="{Binding Path=HasFriendlyName}"
+										   HeaderHeight="60"
+										   ContentHeight="70"
 										   Expanded="ExpanderView_OnExpanded">
 						<controls:ExpanderView.ExpandableContentTemplate>
 							<DataTemplate>

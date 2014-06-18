@@ -8,11 +8,11 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<Grid Background="Transparent" IsHitTestVisible="True">
-						<Grid.Resources>
+					<StackPanel Background="Transparent" IsHitTestVisible="True">
+						<StackPanel.Resources>
 							<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 							<converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
-						</Grid.Resources>
+						</StackPanel.Resources>
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="CommonStates">
 								<VisualState x:Name="Disabled" />
@@ -20,37 +20,33 @@
 								<VisualState x:Name="Pressed" />
 								<VisualState x:Name="Expanded">
 									<Storyboard>
-										<DoubleAnimation Duration="0:0:0.15" To="70" Storyboard.TargetProperty="Height" Storyboard.TargetName="ContentGrid" />
-										<DoubleAnimation Duration="0:0:0.15" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
-
 										<DoubleAnimation Duration="0:0:0.15" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SubHeaderTextBlock" />
 										<DoubleAnimation Duration="0:0:0.15" To="-14" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock" />
+										
+										<DoubleAnimation Duration="0:0:0.15" To="{Binding ContentHeight, RelativeSource={RelativeSource TemplatedParent}}" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="ContentGrid" />
+										<!--<DoubleAnimation Duration="0:0:0.15" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />-->
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="Contracted">
 									<Storyboard>
-										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="Height" Storyboard.TargetName="ContentGrid" />
-										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
-										
 										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SubHeaderTextBlock" />
 										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock" />
+										
+										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(Grid.Height)" Storyboard.TargetName="ContentGrid" />
+										<!--<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />-->
 									</Storyboard>
 								</VisualState>
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="60" />
-							<RowDefinition Height="Auto"/>
-						</Grid.RowDefinitions>
 
-						<Grid Grid.Row="0" 
+						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}"
 									Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
 							<TextBlock FontWeight="Normal" Margin="18,0,0,0"
 									   Text="{Binding HeaderText, RelativeSource={RelativeSource TemplatedParent}}"
 									   FontSize="20" Foreground="Black" VerticalAlignment="Center" />
 						</Grid>
 
-						<Grid Grid.Row="0"
+						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}"
 									Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}">
 							<TextBlock x:Name="HeaderTextBlock" FontWeight="Normal" Margin="18,0,0,0"
 									   Text="{Binding HeaderText, RelativeSource={RelativeSource TemplatedParent}}"
@@ -71,7 +67,7 @@
 							</TextBlock>
 						</Grid>
 
-						<Grid Grid.Row="1" x:Name="ContentGrid" RenderTransformOrigin="0.5,0">
+						<Grid x:Name="ContentGrid" Height="{Binding ContentHeight, RelativeSource={RelativeSource TemplatedParent}}" RenderTransformOrigin="0.5,0">
 							<Grid.RenderTransform>
 								<CompositeTransform TranslateX="0" TranslateY="0" />
 							</Grid.RenderTransform>
@@ -80,7 +76,7 @@
 											VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
 											HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
 						</Grid>
-					</Grid>
+					</StackPanel>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>

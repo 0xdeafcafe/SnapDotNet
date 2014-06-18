@@ -10,6 +10,8 @@ namespace Snapchat.Controls
 		public static DependencyProperty SubHeaderTextDependencyProperty;
 		public static DependencyProperty ShowSubHeaderDependencyProperty;
 		public static DependencyProperty ExpandableContentTemplateDependencyProperty;
+		public static DependencyProperty HeaderHeightDependencyProperty;
+		public static DependencyProperty ContentHeightDependencyProperty;
 
 		public bool IsExpanded { get; private set; }
 
@@ -25,6 +27,9 @@ namespace Snapchat.Controls
 			ShowSubHeaderDependencyProperty = DependencyProperty.Register("ShowSubHeader", typeof(Boolean), typeof(ExpanderView), new PropertyMetadata(false));
 
 			ExpandableContentTemplateDependencyProperty = DependencyProperty.Register("ExpandableContentTemplate", typeof(DataTemplate), typeof(ExpanderView), new PropertyMetadata(null));
+
+			HeaderHeightDependencyProperty = DependencyProperty.Register("HeaderHeight", typeof(int), typeof(ExpanderView), new PropertyMetadata(60));
+			ContentHeightDependencyProperty = DependencyProperty.Register("ContentHeight", typeof(int), typeof(ExpanderView), new PropertyMetadata(70));
 		}
 
 		/// <summary>
@@ -121,6 +126,24 @@ namespace Snapchat.Controls
 		{
 			get { return (DataTemplate) GetValue(ExpandableContentTemplateDependencyProperty); }
 			set { SetValue(ExpandableContentTemplateDependencyProperty, value); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int HeaderHeight
+		{
+			get { return (int) GetValue(HeaderHeightDependencyProperty); }
+			set { SetValue(HeaderHeightDependencyProperty, value); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public int ContentHeight
+		{
+			get { return (int) GetValue(ContentHeightDependencyProperty); }
+			set { SetValue(ContentHeightDependencyProperty, value); }
 		}
 
 		#endregion
