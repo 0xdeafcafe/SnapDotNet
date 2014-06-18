@@ -18,8 +18,10 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public UpdatesResponse()
 		{
 			_addedFriends.CollectionChanged += (sender, args) => NotifyPropertyChanged("AddedFriends");
+			_bestFriends.CollectionChanged += (sender, args) => NotifyPropertyChanged("BestFriends");
 			_friends.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Friends"); NotifyPropertyChanged("SortedFriends"); };
 			_recentFriends.CollectionChanged += (sender, args) => NotifyPropertyChanged("RecentFriends");
+			_requests.CollectionChanged += (sender, args) => NotifyPropertyChanged("Requests");
 		}
 
 		[DataMember(Name = "added_friends")]
@@ -29,35 +31,80 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _addedFriends, value); }
 		}
 		private ObservableCollection<AddedFriend> _addedFriends = new ObservableCollection<AddedFriend>();
-		
+
 		[DataMember(Name = "added_friends_timestamp")]
-		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime AddedFriendsTimestamp { get; set; }
+		[JsonConverter(typeof (UnixDateTimeConverter))]
+		public DateTime AddedFriendsTimestamp
+		{
+			get { return _addedFriendsTimestamp; }
+			set { SetField(ref _addedFriendsTimestamp, value); }
+		}
+		private DateTime _addedFriendsTimestamp;
 
 		[DataMember(Name = "auth_token")]
-		public String AuthToken { get; set; }
+		public String AuthToken
+		{
+			get { return _authToken; }
+			set { SetField(ref _authToken, value); }
+		}
+		private String _authToken;
 
 		[DataMember(Name = "bests")]
-		public String[] BestFriends { get; set; }
+		public ObservableCollection<String> BestFriends
+		{
+			get { return _bestFriends; }
+			set { SetField(ref _bestFriends, value); }
+		}
+		private ObservableCollection<String> _bestFriends = new ObservableCollection<String>();
 
 		[DataMember(Name = "can_view_mature_content")]
-		public Boolean CanViewMatureContent { get; set; }
+		public Boolean CanViewMatureContent
+		{
+			get { return _canViewMatureContent; }
+			set { SetField(ref _canViewMatureContent, value); }
+		}
+		private Boolean _canViewMatureContent;
 
 		[DataMember(Name = "country_code")]
-		public String CountryCode { get; set; }
+		public String CountryCode
+		{
+			get { return _countryCode; }
+			set { SetField(ref _countryCode, value); }
+		}
+		private String _countryCode;
 
 		[DataMember(Name = "current_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime CurrentTimestamp { get; set; }
+		public DateTime CurrentTimestamp
+		{
+			get { return _currentTimestamp; }
+			set { SetField(ref _currentTimestamp, value); }
+		}
+		private DateTime _currentTimestamp;
 
 		[DataMember(Name = "device_token")]
-		public String DeviceToken { get; set; }
+		public String DeviceToken
+		{
+			get { return _deviceToken; }
+			set { SetField(ref _deviceToken, value); }
+		}
+		private String _deviceToken;
 
 		[DataMember(Name = "email")]
-		public String Email { get; set; }
+		public String Email
+		{
+			get { return _email; }
+			set { SetField(ref _email, value); }
+		}
+		private String _email;
 
 		[DataMember(Name = "feature_settings")]
-		public FeatureSettings FeatureSettings { get; set; }
+		public FeatureSettings FeatureSettings
+		{
+			get { return _featureSettings; }
+			set { SetField(ref _featureSettings, value); }
+		}
+		private FeatureSettings _featureSettings;
 
 		[DataMember(Name = "friends")]
 		public ObservableCollection<Friend> Friends
@@ -75,7 +122,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			
 		[DataMember(Name = "last_replayed_snap_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime LastReplayedSnap { get; set; }
+		public DateTime LastReplayedSnap
+		{
+			get { return _lastReplayedSnap; }
+			set { SetField(ref _lastReplayedSnap, value); }
+		}
+		private DateTime _lastReplayedSnap;
 
 		[DataMember(Name = "logged")]
 		public Boolean Logged
@@ -86,13 +138,28 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		private Boolean _logged;
 		
 		[DataMember(Name = "mobile")]
-		public String Mobile { get; set; }
+		public String Mobile
+		{
+			get { return _mobile; }
+			set { SetField(ref _mobile, value); }
+		}
+		private String _mobile;
 
 		[DataMember(Name = "mobile_verification_key")]
-		public String MobileVerificationKey { get; set; }
+		public String MobileVerificationKey
+		{
+			get { return _mobileVerificationKey; }
+			set { SetField(ref _mobileVerificationKey, value); }
+		}
+		private String _mobileVerificationKey;
 
 		[DataMember(Name = "notification_sound_setting")]
-		public String NotificationSoundSetting { get; set; }
+		public String NotificationSoundSetting
+		{
+			get { return _notificationSoundSetting; }
+			set { SetField(ref _notificationSoundSetting, value); }
+		}
+		private String _notificationSoundSetting;
 
 		[DataMember(Name = "number_of_best_friends")]
 		public Int32 NumberOfBestFriends
@@ -123,7 +190,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		private ObservableCollection<String> _recentFriends = new ObservableCollection<String>();
 
 		[DataMember(Name = "requests")]
-		public ObservableCollection<string> Requests { get; set; }
+		public ObservableCollection<String> Requests
+		{
+			get { return _requests; }
+			set { SetField(ref _requests, value); }
+		}
+		private ObservableCollection<String> _requests = new ObservableCollection<String>();
 
 		[DataMember(Name = "score")]
 		public Int32 Score
@@ -147,7 +219,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		}
 
 		[DataMember(Name = "searchable_by_phone_number")]
-		public Boolean SearchableByPhoneNumber { get; set; }
+		public Boolean SearchableByPhoneNumber
+		{
+			get { return _searchableByPhoneNumber; }
+			set { SetField(ref _searchableByPhoneNumber, value); }
+		}
+		private Boolean _searchableByPhoneNumber;
 
 		[DataMember(Name = "sent")]
 		public Int32 SentSnaps
@@ -162,22 +239,52 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		private Int32 _sentSnaps;
 
 		[DataMember(Name = "should_call_to_verify_number")]
-		public Boolean ShouldCallToVerifyNumber { get; set; }
+		public Boolean ShouldCallToVerifyNumber
+		{
+			get { return _shouldCallToVerifyNumber; }
+			set { SetField(ref _shouldCallToVerifyNumber, value); }
+		}
+		private Boolean _shouldCallToVerifyNumber;
 
 		[DataMember(Name = "should_send_text_to_verify_number")]
-		public Boolean ShouldSendTextToVerifyNumber { get; set; }
+		public Boolean ShouldSendTextToVerifyNumber
+		{
+			get { return _shouldSendTextToVerifyNumber; }
+			set { SetField(ref _shouldSendTextToVerifyNumber, value); }
+		}
+		private Boolean _shouldSendTextToVerifyNumber;
 
 		[DataMember(Name = "snap_p")]
-		public AccountPrivacy AccountPrivacy { get; set; }
+		public AccountPrivacy AccountPrivacy
+		{
+			get { return _accountPrivacy; }
+			set { SetField(ref _accountPrivacy, value); }
+		}
+		private AccountPrivacy _accountPrivacy;
 
 		[DataMember(Name = "snapchat_phone_number")]
-		public String SnapchatPhoneNumber { get; set; }
+		public String SnapchatPhoneNumber
+		{
+			get { return _snapchatPhoneNumber; }
+			set { SetField(ref _snapchatPhoneNumber, value); }
+		}
+		private String _snapchatPhoneNumber;
 
 		[DataMember(Name = "story_privacy")]
-		public StoryPrivacy StoryPrivacy { get; set; }
+		public StoryPrivacy StoryPrivacy
+		{
+			get { return _storyPrivacy; }
+			set { SetField(ref _storyPrivacy, value); }
+		}
+		private StoryPrivacy _storyPrivacy;
 
 		[DataMember(Name = "username")]
-		public String Username { get; set; }
+		public String Username
+		{
+			get { return _username; }
+			set { SetField(ref _username, value); }
+		}
+		private String _username;
 	}
 
 	[DataContract]
@@ -185,23 +292,52 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		: NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "direction")]
-		public String Direction { get; set; }
+		public String Direction
+		{
+			get { return _direction; }
+			set { SetField(ref _direction, value); }
+		}
+		private String _direction;
 
 		[DataMember(Name = "display")]
-		public String Display { get; set; }
+		public String Display
+		{
+			get { return _display; }
+			set { SetField(ref _display, value); }
+		}
+		private String _display;
+
+		[DataMember(Name = "name")]
+		public String Name
+		{
+			get { return _name; }
+			set { SetField(ref _name, value); }
+		}
+		private String _name;
+
+		[DataMember(Name = "ts")]
+		[JsonConverter(typeof(UnixDateTimeConverter))]
+		public DateTime AddedAt
+		{
+			get { return _addedAt; }
+			set { SetField(ref _addedAt, value); }
+		}
+		private DateTime _addedAt;
+
+		[DataMember(Name = "type")]
+		public FriendRequestState Type
+		{
+			get { return _type; }
+			set { SetField(ref _type, value); }
+		}
+		private FriendRequestState _type;
+
+		#region Helpers
 
 		[IgnoreDataMember]
 		public String FriendlyName { get { return String.IsNullOrWhiteSpace(Display) ? Name : Display; } }
 
-		[DataMember(Name = "name")]
-		public String Name { get; set; }
-
-		[DataMember(Name = "ts")]
-		[JsonConverter(typeof(UnixDateTimeConverter))]
-		public DateTime AddedAt { get; set; }
-
-		[DataMember(Name = "type")]
-		public FriendRequestState Type { get; set; }
+		#endregion
 	}
 
 	[DataContract]
@@ -209,25 +345,44 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		: NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "can_see_custom_stories")]
-		public Boolean CanSeeCustomStories { get; set; }
+		public Boolean CanSeeCustomStories
+		{
+			get { return _canSeeCustomStories; }
+			set { SetField(ref _canSeeCustomStories, value); }
+		}
+		private Boolean _canSeeCustomStories;
 
 		[DataMember(Name = "direction")]
-		public String Direction { get; set; }
+		public String Direction
+		{
+			get { return _direction; }
+			set { SetField(ref _direction, value); }
+		}
+		private String _direction;
 
 		[DataMember(Name = "display")]
-		public String Display { get; set; }
-
-		[IgnoreDataMember]
-		public String FriendlyName { get { return String.IsNullOrWhiteSpace(Display) ? Name : Display; } }
-
-		[IgnoreDataMember]
-		public Boolean HasFriendlyName { get { return FriendlyName == Display; } }
-
+		public String Display
+		{
+			get { return _display; }
+			set { SetField(ref _display, value); }
+		}
+		private String _display;
+		
 		[DataMember(Name = "name")]
-		public String Name { get; set; }
+		public String Name
+		{
+			get { return _name; }
+			set { SetField(ref _name, value); }
+		}
+		private String _name;
 
 		[DataMember(Name = "type")]
-		public FriendRequestState Type { get; set; }
+		public FriendRequestState Type
+		{
+			get { return _type; }
+			set { SetField(ref _type, value); }
+		}
+		private FriendRequestState _type;
 
 		[DataMember(Name = "public_activity")]
 		public PublicActivity PublicActivity
@@ -236,6 +391,16 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _publicActivity, value); }
 		}
 		private PublicActivity _publicActivity = new PublicActivity();
+
+		#region Helpers
+
+		[IgnoreDataMember]
+		public String FriendlyName { get { return String.IsNullOrWhiteSpace(Display) ? Name : Display; } }
+
+		[IgnoreDataMember]
+		public Boolean HasFriendlyName { get { return FriendlyName == Display; } }
+
+		#endregion
 	}
 
 	[DataContract]
@@ -243,19 +408,44 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		: NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "font_facing_flash")]
-		public Boolean FrontFacingFlash { get; set; }
+		public Boolean FrontFacingFlash
+		{
+			get { return _frontFacingFlash; }
+			set { SetField(ref _frontFacingFlash, value); }
+		}
+		private Boolean _frontFacingFlash;
 
 		[DataMember(Name = "replay_snaps")]
-		public Boolean ReplaySnaps { get; set; }
+		public Boolean ReplaySnaps
+		{
+			get { return _replaySnaps; }
+			set { SetField(ref _replaySnaps, value); }
+		}
+		private Boolean _replaySnaps;
 
 		[DataMember(Name = "smart_filters")]
-		public Boolean SmartFilters { get; set; }
+		public Boolean SmartFilters
+		{
+			get { return _smartFilters; }
+			set { SetField(ref _smartFilters, value); }
+		}
+		private Boolean _smartFilters;
 
 		[DataMember(Name = "special_text")]
-		public Boolean SpecialText { get; set; }
+		public Boolean SpecialText
+		{
+			get { return _specialText; }
+			set { SetField(ref _specialText, value); }
+		}
+		private Boolean _specialText;
 
 		[DataMember(Name = "visual_filters")]
-		public Boolean VisualFilters { get; set; }
+		public Boolean VisualFilters
+		{
+			get { return _visualFilters; }
+			set { SetField(ref _visualFilters, value); }
+		}
+		private Boolean _visualFilters;
 	}
 
 	/// <summary>

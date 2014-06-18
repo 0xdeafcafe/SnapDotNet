@@ -127,7 +127,81 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public void Update(AllUpdatesResponse allUpdates)
 		{
-			AllUpdates = allUpdates;
+			// lets get messy ya'll
+			if (AllUpdates == null)
+				AllUpdates = new AllUpdatesResponse();
+
+			#region Update Updates
+
+			if (AllUpdates.UpdatesResponse == null)
+				AllUpdates.UpdatesResponse = new UpdatesResponse();
+			var updates = AllUpdates.UpdatesResponse;
+			var newUpdates = allUpdates.UpdatesResponse;
+
+			updates.AccountPrivacy = newUpdates.AccountPrivacy;
+			updates.AddedFriendsTimestamp = newUpdates.AddedFriendsTimestamp;
+			updates.AuthToken = newUpdates.AuthToken;
+			updates.CanViewMatureContent = newUpdates.CanViewMatureContent;
+			updates.CountryCode = newUpdates.CountryCode;
+			updates.CurrentTimestamp = newUpdates.CurrentTimestamp;
+			updates.DeviceToken = newUpdates.DeviceToken;
+			updates.Email = newUpdates.Email;
+			updates.FeatureSettings = newUpdates.FeatureSettings;
+			updates.LastReplayedSnap = newUpdates.LastReplayedSnap;
+			updates.Logged = newUpdates.Logged;
+			updates.Mobile = newUpdates.Mobile;
+			updates.MobileVerificationKey = newUpdates.MobileVerificationKey;
+			updates.NotificationSoundSetting = newUpdates.NotificationSoundSetting;
+			updates.NumberOfBestFriends = newUpdates.NumberOfBestFriends;
+			updates.RecievedSnaps = newUpdates.RecievedSnaps;
+			updates.Score = newUpdates.Score;
+			updates.SearchableByPhoneNumber = newUpdates.SearchableByPhoneNumber;
+			updates.SentSnaps = newUpdates.SentSnaps;
+			updates.ShouldCallToVerifyNumber = newUpdates.ShouldCallToVerifyNumber;
+			updates.ShouldSendTextToVerifyNumber = newUpdates.ShouldSendTextToVerifyNumber;
+			updates.SnapchatPhoneNumber = newUpdates.SnapchatPhoneNumber;
+			updates.StoryPrivacy = newUpdates.StoryPrivacy;
+			updates.Username = newUpdates.Username;
+
+			// Update Added Friends
+			if (updates.AddedFriends == null) updates.AddedFriends = new ObservableCollection<AddedFriend>();
+			updates.AddedFriends.Clear();
+			foreach (var addedFriend in newUpdates.AddedFriends)
+				updates.AddedFriends.Add(addedFriend);
+
+			// Update Best Friends
+			if (updates.BestFriends == null) updates.BestFriends = new ObservableCollection<String>();
+			updates.BestFriends.Clear();
+			foreach (var bestFriend in newUpdates.BestFriends)
+				updates.BestFriends.Add(bestFriend);
+
+			// Update Friends
+			if (updates.Friends == null) updates.Friends = new ObservableCollection<Friend>();
+			updates.Friends.Clear();
+			foreach (var friend in newUpdates.Friends)
+				updates.Friends.Add(friend);
+
+			// Recent Friends
+			if (updates.RecentFriends == null) updates.RecentFriends = new ObservableCollection<String>();
+			updates.RecentFriends.Clear();
+			foreach (var recentfriend in newUpdates.RecentFriends)
+				updates.RecentFriends.Add(recentfriend);
+
+			// Requests
+			if (updates.Requests == null) updates.Requests = new ObservableCollection<String>();
+			updates.Requests.Clear();
+			foreach (var requestedFriend in newUpdates.Requests)
+				updates.Requests.Add(requestedFriend);
+
+			#endregion
+
+			// TODO: finish this
+			AllUpdates.BackgroundFetchSecretKey = allUpdates.BackgroundFetchSecretKey;
+			AllUpdates.ConversationResponse = allUpdates.ConversationResponse;
+			AllUpdates.MessagingGatewayInfo = allUpdates.MessagingGatewayInfo;
+			AllUpdates.StoriesResponse = allUpdates.StoriesResponse;
+
+			//AllUpdates = allUpdates;
 
 			//// we got some house keeping to do
 			//foreach (var newSnap in account.Snaps)
@@ -249,11 +323,15 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		public async Task UpdateAllAsync(Action hidependingUiAction)
 		{
+			// Get all the updates fo stuff
 			await Endpoints.GetAllUpdatesAsync();
 
 			// Public Activity API only takes in 30 at a time, so we gotta get chunky
 			foreach (var chunk in AllUpdates.UpdatesResponse.Friends.Chunk(30))
 				await Endpoints.GetPublicActivityAsync(chunk.Select(f => f.Name).ToArray());
+
+			// Save data to IsolatedStorage
+			Save();
 
 			hidependingUiAction();
 		}
