@@ -144,6 +144,21 @@
   <data name="BlockFriend" xml:space="preserve">
     <value>Block</value>
   </data>
+  <data name="ChangeFriendDisplayNameDialog.PrimaryButtonText" xml:space="preserve">
+    <value>change</value>
+  </data>
+  <data name="ChangeFriendDisplayNameDialog.SecondaryButtonText" xml:space="preserve">
+    <value>cancel</value>
+  </data>
+  <data name="ChangeFriendDisplayNameDialog.Title" xml:space="preserve">
+    <value>CHANGE DISPLAY NAME</value>
+  </data>
+  <data name="ChangeFriendDisplayNameErrorContent" xml:space="preserve">
+    <value>Unable to connect to snapchat and update {0}'s Display Name. Sorry about this ;_;</value>
+  </data>
+  <data name="ChangeFriendDisplayNameErrorTitle" xml:space="preserve">
+    <value>Unable to update Display Name</value>
+  </data>
   <data name="ChangeFriendsDisplay" xml:space="preserve">
     <value>Change display name</value>
   </data>
@@ -173,6 +188,18 @@
   </data>
   <data name="ConvosSearchBox.PlaceholderText" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="DisplayChangeWarningRun1.Text" xml:space="preserve">
+    <value>Changing this will change how your friend's name displayed in the application. It will not change his account in anyway.</value>
+  </data>
+  <data name="DisplayChangeWarningRun2.Text" xml:space="preserve">
+    <value>To remove a display name, just change it to an empty name.</value>
+  </data>
+  <data name="DisplayChangeWarningRun3.Text" xml:space="preserve">
+    <value>This can be un-done or changed at any time.</value>
+  </data>
+  <data name="DisplyNameTextBox.Header" xml:space="preserve">
+    <value>New Display Name</value>
   </data>
   <data name="DownloadAllSnapsAppBarButtonLabel" xml:space="preserve">
     <value>download all snaps</value>
@@ -345,6 +372,9 @@
   </data>
   <data name="SnapStatusTapLoad" xml:space="preserve">
     <value>Tap to load</value>
+  </data>
+  <data name="StatusBarChangeDisplay" xml:space="preserve">
+    <value>Changing Display Name...</value>
   </data>
   <data name="StatusLoggingIn" xml:space="preserve">
     <value>Logging into Snapchat...</value>

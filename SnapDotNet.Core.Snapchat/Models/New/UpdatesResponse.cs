@@ -364,7 +364,13 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public String Display
 		{
 			get { return _display; }
-			set { SetField(ref _display, value); }
+			set
+			{
+				SetField(ref _display, value);
+				NotifyPropertyChanged("Name");
+				NotifyPropertyChanged("FriendlyName");
+				NotifyPropertyChanged("HasFriendlyName");
+			}
 		}
 		private String _display;
 		
@@ -372,7 +378,13 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		public String Name
 		{
 			get { return _name; }
-			set { SetField(ref _name, value); }
+			set
+			{
+				SetField(ref _name, value);
+				NotifyPropertyChanged("Display");
+				NotifyPropertyChanged("FriendlyName");
+				NotifyPropertyChanged("HasFriendlyName");
+			}
 		}
 		private String _name;
 

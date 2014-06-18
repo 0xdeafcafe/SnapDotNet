@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -587,83 +586,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		//#endregion
 
-		//#region Friend Actions
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="friendUsername"></param>
-		///// <param name="action"></param>
-		///// <returns></returns>
-		//public async Task<Response> SendFriendActionAsync(string friendUsername, FriendAction action)
-		//{
-		//	var timestamp = Timestamps.GenerateRetardedTimestamp();
-		//	var postData = new Dictionary<string, string>
-		//	{
-		//		{"username", GetAuthedUsername()},
-		//		{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
-		//		{"action", action.ToString().ToLower()},
-		//		{"friend", friendUsername},
-		//	};
-
-		//	var response =
-		//		await
-		//			_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
-		//				timestamp.ToString(CultureInfo.InvariantCulture));
-
-		//	return response;
-		//}
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="friendUsername"></param>
-		///// <param name="action"></param>
-		///// <returns></returns>
-		//public Response SendFriendAction(string friendUsername, FriendAction action)
-		//{
-		//	return SendFriendActionAsync(friendUsername, action).Result;
-		//}
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="friendUsername"></param>
-		///// <param name="newDisplayName"></param>
-		///// <returns></returns>
-		//public async Task<Response> ChangeFriendDisplayNameAsync(string friendUsername, string newDisplayName)
-		//{
-		//	var timestamp = Timestamps.GenerateRetardedTimestamp();
-		//	var postData = new Dictionary<string, string>
-		//	{
-		//		{"username", GetAuthedUsername()},
-		//		{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
-		//		{"action", "display"},
-		//		{"friend", friendUsername},
-		//		{"display", newDisplayName}
-		//	};
-
-		//	var response =
-		//		await
-		//			_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
-		//				timestamp.ToString(CultureInfo.InvariantCulture));
-
-		//	return response;
-		//}
-
-		///// <summary>
-		///// 
-		///// </summary>
-		///// <param name="friendUsername"></param>
-		///// <param name="newDisplayName"></param>
-		///// <returns></returns>
-		//public Response ChangeFriendDisplayName(string friendUsername, string newDisplayName)
-		//{
-		//	return ChangeFriendDisplayNameAsync(friendUsername, newDisplayName).Result;
-		//}
-
-		//#endregion
-
 		//#region Update Settings
 
 		//#region Settings
@@ -1144,6 +1066,83 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public ObservableDictionary<string, PublicActivity> GetPublicActivity(string[] requestedUsernames = null)
 		{
 			return AsyncHelpers.RunSync(() => GetPublicActivityAsync(requestedUsernames));
+		}
+
+		#endregion
+
+		#region Friend Actions
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
+		public async Task<Response> SendFriendActionAsync(string friendUsername, FriendAction action)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"action", action.ToString().ToLower()},
+				{"friend", friendUsername},
+			};
+
+			var response =
+				await
+					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return response;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
+		public Response SendFriendAction(string friendUsername, FriendAction action)
+		{
+			return AsyncHelpers.RunSync(() => SendFriendActionAsync(friendUsername, action));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="newDisplayName"></param>
+		/// <returns></returns>
+		public async Task<Response> ChangeFriendDisplayNameAsync(string friendUsername, string newDisplayName)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"action", "display"},
+				{"friend", friendUsername},
+				{"display", newDisplayName}
+			};
+
+			var response =
+				await
+					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+						timestamp.ToString(CultureInfo.InvariantCulture));
+
+			return response;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="friendUsername"></param>
+		/// <param name="newDisplayName"></param>
+		/// <returns></returns>
+		public Response ChangeFriendDisplayName(string friendUsername, string newDisplayName)
+		{
+			return AsyncHelpers.RunSync(() => ChangeFriendDisplayNameAsync(friendUsername, newDisplayName));
 		}
 
 		#endregion

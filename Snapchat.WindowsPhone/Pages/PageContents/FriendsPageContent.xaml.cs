@@ -64,7 +64,7 @@ namespace Snapchat.Pages.PageContents
 			var flyout = new MenuFlyout();
 			if (flyout.Items == null) return;
 			flyout.Items.Add(new MenuFlyoutItem { Text = App.Strings.GetString("RemoveFriend"), CommandParameter = context }); // Command = ViewModel.RemoveFriendCommand, 
-			flyout.Items.Add(new MenuFlyoutItem { Text = App.Strings.GetString("ChangeFriendsDisplay"), CommandParameter = context }); // Command = ViewModel.ChangeDisplayNameCommand, 
+			flyout.Items.Add(new MenuFlyoutItem { Text = App.Strings.GetString("ChangeFriendsDisplay"), Command = ViewModel.ChangeFriendDisplayNameCommand, CommandParameter = context });
 			flyout.Items.Add(context.Type == FriendRequestState.Blocked
 				? new MenuFlyoutItem { Text = App.Strings.GetString("UnblockFriend"), CommandParameter = context } // Command = ViewModel.UnBlockFriendCommand, 
 				: new MenuFlyoutItem { Text = App.Strings.GetString("BlockFriend"), CommandParameter = context }); // Command = ViewModel.BlockFriendCommand, 
