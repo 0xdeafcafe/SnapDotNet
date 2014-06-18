@@ -254,9 +254,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 				if (!publicActivities.ContainsKey(friend.Name)) continue;
 
 				var publicActivity = publicActivities[friend.Name];
-
 				friend.PublicActivity.Score = publicActivity.Score;
-				friend.PublicActivity.BestFriends = publicActivity.BestFriends;
+				friend.PublicActivity.BestFriends.Clear();
+				foreach(var bestFriend in publicActivity.BestFriends.Take(3))
+					friend.PublicActivity.BestFriends.Add(bestFriend);
 			}
 		}
 
