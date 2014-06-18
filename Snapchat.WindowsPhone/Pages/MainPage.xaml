@@ -6,7 +6,6 @@
 		xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 		xmlns:pageContents="using:Snapchat.Pages.PageContents"
 		xmlns:converters="using:Snapchat.Converters"
-		xmlns:controls="using:Snapchat.Controls"
 		Background="Black">
 	<Page.Resources>
 		<converters:DivisionConverter x:Key="DivisionConverter"/>

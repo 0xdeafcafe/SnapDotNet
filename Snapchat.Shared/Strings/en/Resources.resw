@@ -141,6 +141,12 @@
   <data name="AutomaticallyDownloadSnapsWifi.Content" xml:space="preserve">
     <value>Wi-Fi</value>
   </data>
+  <data name="BlockFriend" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="ChangeFriendsDisplay" xml:space="preserve">
+    <value>Change display name</value>
+  </data>
   <data name="ChatSnapStatusDelivered" xml:space="preserve">
     <value>DELIVERED</value>
   </data>
@@ -224,6 +230,9 @@
   </data>
   <data name="RefreshAppBarButtonLabel" xml:space="preserve">
     <value>refresh</value>
+  </data>
+  <data name="RemoveFriend" xml:space="preserve">
+    <value>Remove</value>
   </data>
   <data name="SendCommentAppBarButtonLabel" xml:space="preserve">
     <value>send</value>
@@ -353,6 +362,9 @@
   </data>
   <data name="ToggleFlashAppBarButtonLabel" xml:space="preserve">
     <value>toggle flash</value>
+  </data>
+  <data name="UnblockFriend" xml:space="preserve">
+    <value>Unblock</value>
   </data>
   <data name="UpgradeToProButton.Content" xml:space="preserve">
     <value>Unlock this feature for just $1.99</value>

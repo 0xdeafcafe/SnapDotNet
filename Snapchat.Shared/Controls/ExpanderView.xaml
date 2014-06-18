@@ -24,7 +24,9 @@
 										<DoubleAnimation Duration="0:0:0.15" To="-14" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock" />
 										
 										<DoubleAnimation Duration="0:0:0.15" To="{Binding ContentHeight, RelativeSource={RelativeSource TemplatedParent}}" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="ContentGrid" />
-										<!--<DoubleAnimation Duration="0:0:0.15" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />-->
+										<DoubleAnimation Duration="0:0:0.15" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
+
+										<DoubleAnimation Duration="0:0:0.15" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="Contracted">
@@ -33,38 +35,51 @@
 										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock" />
 										
 										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(Grid.Height)" Storyboard.TargetName="ContentGrid" />
-										<!--<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />-->
+										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
+
+										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
 									</Storyboard>
 								</VisualState>
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 
-						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}"
-									Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
-							<TextBlock FontWeight="Normal" Margin="18,0,0,0"
-									   Text="{Binding HeaderText, RelativeSource={RelativeSource TemplatedParent}}"
-									   FontSize="20" Foreground="Black" VerticalAlignment="Center" />
-						</Grid>
+						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Grid Grid.Column="0" x:Name="HeaderGrid">
+								<Grid Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
+									<TextBlock FontWeight="Normal" Margin="18,0,0,0"
+											   Text="{Binding HeaderText, RelativeSource={RelativeSource TemplatedParent}}"
+											   FontSize="20" Foreground="Black" VerticalAlignment="Center" />
+								</Grid>
 
-						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}"
-									Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}">
-							<TextBlock x:Name="HeaderTextBlock" FontWeight="Normal" Margin="18,0,0,0"
-									   Text="{Binding HeaderText, RelativeSource={RelativeSource TemplatedParent}}"
-									   FontSize="20" Foreground="Black" VerticalAlignment="Center"
-									   RenderTransformOrigin="0.5,0.5">
-								<TextBlock.RenderTransform>
-									<CompositeTransform TranslateX="0" TranslateY="0" />
-								</TextBlock.RenderTransform>
-							</TextBlock>
+								<Grid Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}">
+									<TextBlock x:Name="HeaderTextBlock" FontWeight="Normal" Margin="18,0,0,0"
+											   Text="{Binding HeaderText, RelativeSource={RelativeSource TemplatedParent}}"
+											   FontSize="20" Foreground="Black" VerticalAlignment="Center"
+											   RenderTransformOrigin="0.5,0.5">
+										<TextBlock.RenderTransform>
+											<CompositeTransform TranslateX="0" TranslateY="0" />
+										</TextBlock.RenderTransform>
+									</TextBlock>
 							
-							<TextBlock x:Name="SubHeaderTextBlock" FontWeight="Normal" Margin="18,10,0,0"
-									   Text="{Binding SubHeaderText, RelativeSource={RelativeSource TemplatedParent}}"
-									   FontSize="14" Foreground="#FFCFCFCF" VerticalAlignment="Center" Opacity="0"
-									   RenderTransformOrigin="0.5,0.5">
-								<TextBlock.RenderTransform>
-									<CompositeTransform TranslateX="0" TranslateY="0" />
-								</TextBlock.RenderTransform>
-							</TextBlock>
+									<TextBlock x:Name="SubHeaderTextBlock" FontWeight="Normal" Margin="18,10,0,0"
+											   Text="{Binding SubHeaderText, RelativeSource={RelativeSource TemplatedParent}}"
+											   FontSize="14" Foreground="#FFCFCFCF" VerticalAlignment="Center" Opacity="0"
+											   RenderTransformOrigin="0.5,0.5">
+										<TextBlock.RenderTransform>
+											<CompositeTransform TranslateX="0" TranslateY="0" />
+										</TextBlock.RenderTransform>
+									</TextBlock>
+								</Grid>
+							</Grid>
+
+							<ContentControl x:Name="AdditionalHeaderContentGrid" Grid.Column="1" 
+											ContentTemplate="{Binding AdditionalHeaderContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+											VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+											HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
 						</Grid>
 
 						<Grid x:Name="ContentGrid" Height="{Binding ContentHeight, RelativeSource={RelativeSource TemplatedParent}}" RenderTransformOrigin="0.5,0">
@@ -81,5 +96,4 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-
 </ResourceDictionary>

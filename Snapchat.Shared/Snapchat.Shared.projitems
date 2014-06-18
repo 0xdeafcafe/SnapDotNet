@@ -21,7 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\RequiresAuthenticationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlyFriendNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingChatsConverter.cs" />

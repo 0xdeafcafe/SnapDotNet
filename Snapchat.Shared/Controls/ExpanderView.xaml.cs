@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Snapchat.Helpers;
 
 namespace Snapchat.Controls
 {
@@ -9,6 +10,7 @@ namespace Snapchat.Controls
 		public static DependencyProperty HeaderTextDependencyProperty;
 		public static DependencyProperty SubHeaderTextDependencyProperty;
 		public static DependencyProperty ShowSubHeaderDependencyProperty;
+		public static DependencyProperty AdditionalHeaderContentTemplateDependencyProperty;
 		public static DependencyProperty ExpandableContentTemplateDependencyProperty;
 		public static DependencyProperty HeaderHeightDependencyProperty;
 		public static DependencyProperty ContentHeightDependencyProperty;
@@ -26,6 +28,8 @@ namespace Snapchat.Controls
 			SubHeaderTextDependencyProperty = DependencyProperty.Register("SubHeaderText", typeof(String), typeof(ExpanderView), new PropertyMetadata(""));
 			ShowSubHeaderDependencyProperty = DependencyProperty.Register("ShowSubHeader", typeof(Boolean), typeof(ExpanderView), new PropertyMetadata(false));
 
+			AdditionalHeaderContentTemplateDependencyProperty = DependencyProperty.Register("AdditionalHeaderContentTemplate", typeof(DataTemplate), typeof(ExpanderView), new PropertyMetadata(null));
+
 			ExpandableContentTemplateDependencyProperty = DependencyProperty.Register("ExpandableContentTemplate", typeof(DataTemplate), typeof(ExpanderView), new PropertyMetadata(null));
 
 			HeaderHeightDependencyProperty = DependencyProperty.Register("HeaderHeight", typeof(int), typeof(ExpanderView), new PropertyMetadata(60));
@@ -38,14 +42,6 @@ namespace Snapchat.Controls
 		public ExpanderView()
 		{
 			IsExpanded = false;
-
-			Tapped += (sender, args) =>
-			{
-				if (IsExpanded)
-					Contract();
-				else
-					Expand();
-			};
 		}
 
 		#endregion
@@ -86,8 +82,16 @@ namespace Snapchat.Controls
 		protected override void OnApplyTemplate()
 		{
 			VisualStateManager.GoToState(this, "Contracted", true);
-		}
 
+			this.FindDescendantByName("HeaderGrid").Tapped += delegate
+			{
+				if (IsExpanded)
+					Contract();
+				else
+					Expand();
+			};
+		}
+		
 		#endregion
 
 		#region Getters/Setters
@@ -117,6 +121,15 @@ namespace Snapchat.Controls
 		{
 			get { return (Boolean) GetValue(ShowSubHeaderDependencyProperty); }
 			set { SetValue(ShowSubHeaderDependencyProperty, value); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public DataTemplate AdditionalHeaderContentTemplate
+		{
+			get { return (DataTemplate)GetValue(AdditionalHeaderContentTemplateDependencyProperty); }
+			set { SetValue(AdditionalHeaderContentTemplateDependencyProperty, value); }
 		}
 
 		/// <summary>
