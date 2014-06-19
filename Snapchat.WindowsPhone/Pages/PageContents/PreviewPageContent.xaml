@@ -8,9 +8,6 @@
 	mc:Ignorable="d">
 
 	<Grid Background="Black">
-		<Image x:Name="ImageMediaElement" 
-			   Height="{Binding ActualHeight, ElementName=PreviewControl}" 
-			   Width="{Binding ActualWidth, ElementName=PreviewControl}">
-		</Image>
+		<Image x:Name="ImageMediaElement" />
 	</Grid>
 </UserControl>
