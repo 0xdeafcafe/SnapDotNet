@@ -84,8 +84,12 @@ namespace Snapchat.Helpers
 				writableBitmap = new WriteableBitmap(bitmapImage.PixelWidth, bitmapImage.PixelHeight);
 				photoStream.Seek(0);
 				await writableBitmap.SetSourceAsync(photoStream);
-				//writableBitmap.Rotate(90);
 
+				// Fix image rotation
+				writableBitmap = writableBitmap.Rotate(RotationValueFromVideoRotation(VideoPreviewRotationLookup()));
+
+				// Fix image mirroring (as we only actualy mirror the preview, not the capture element)
+				if (IsMirrored) writableBitmap = writableBitmap.Flip(WriteableBitmapExtensions.FlipMode.Horizontal);
 			}
 			return writableBitmap;
 		}
@@ -147,14 +151,8 @@ namespace Snapchat.Helpers
 			});
 			IsInitialized = true;
 
-			// Crashes if enabled even inside a try/catch block :x - dicks
-			var previewMirroring = MediaCapture.GetPreviewMirroring() && IsUsingFrontCamera;
-			var counterclockwiseRotation = (previewMirroring && !IsUsingFrontCamera) ||
-				(IsUsingFrontCamera);
-
 			// Correct camera rotation
-			MediaCapture.SetPreviewRotation(VideoPreviewRotationLookup(
-				DisplayInformation.GetForCurrentView().CurrentOrientation, counterclockwiseRotation));
+			MediaCapture.SetPreviewRotation(VideoPreviewRotationLookup());
 
 			Debug.WriteLine("Initialized camera!");
 		}
@@ -224,23 +222,44 @@ namespace Snapchat.Helpers
 
 		#endregion
 
-		private static VideoRotation VideoPreviewRotationLookup(DisplayOrientations displayOrientation, bool counterclockwise)
+		private static VideoRotation VideoPreviewRotationLookup()
 		{
-			switch (displayOrientation)
+			var previewMirroring = MediaCapture.GetPreviewMirroring() && IsUsingFrontCamera;
+			var counterclockwiseRotation = (previewMirroring && !IsUsingFrontCamera) ||
+				(!previewMirroring && IsUsingFrontCamera);
+
+			switch (DisplayInformation.GetForCurrentView().CurrentOrientation)
 			{
 				case DisplayOrientations.Portrait:
-					return counterclockwise ? VideoRotation.Clockwise270Degrees : VideoRotation.Clockwise90Degrees;
+					return counterclockwiseRotation ? VideoRotation.Clockwise270Degrees : VideoRotation.Clockwise90Degrees;
 
 				case DisplayOrientations.LandscapeFlipped:
 					return VideoRotation.Clockwise180Degrees;
 
 				case DisplayOrientations.PortraitFlipped:
-					return counterclockwise ? VideoRotation.Clockwise90Degrees : VideoRotation.Clockwise270Degrees;
+					return counterclockwiseRotation ? VideoRotation.Clockwise90Degrees : VideoRotation.Clockwise270Degrees;
 
 				case DisplayOrientations.Landscape:
 				default:
 					return VideoRotation.None;
 			}
-		} 
+		}
+
+		private static int RotationValueFromVideoRotation(VideoRotation rotation)
+		{
+			switch (rotation)
+			{
+				case VideoRotation.Clockwise180Degrees:
+					return 180;
+				case VideoRotation.Clockwise270Degrees:
+					return 270;
+				case VideoRotation.Clockwise90Degrees:
+					return 90;
+
+				case VideoRotation.None:
+				default:
+					return 0;
+			}
+		}
 	}
 }
