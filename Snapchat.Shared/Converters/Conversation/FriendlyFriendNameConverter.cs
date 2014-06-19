@@ -21,9 +21,9 @@ namespace Snapchat.Converters.Conversation
 					: "TEAM SNAPCHAT";
 
 			return friend == null
-				? OutputLowercase 
-					? "unknown friend" 
-					: "UNKNOWN FRIEND"
+				? OutputLowercase
+					? name
+					: name.ToUpperInvariant()
 				: OutputLowercase
 					? friend.FriendlyName.Split(' ')[0].ToLowerInvariant()
 					: friend.FriendlyName.Split(' ')[0].ToUpperInvariant();
