@@ -385,7 +385,7 @@ namespace Snapchat.Pages
 					case "Settings":
 						primaryCommands.Add(_logoutAppBarButton);
 						displayMode = AppBarClosedDisplayMode.Minimal;
-						appBar.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x33, 0x33, 0x33));
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xD0, 0x2D, 0x01));
 						break;
 
 					case "Conversation":

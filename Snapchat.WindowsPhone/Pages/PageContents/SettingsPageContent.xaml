@@ -42,26 +42,22 @@
 			<Pivot.HeaderTemplate>
 				<StaticResource ResourceKey="DataTemplate1"/>
 			</Pivot.HeaderTemplate>
-			
+
 			<PivotItem x:Uid="SettingsProfileGroup" Header="PROFILE">
-				<ScrollViewer>
-					<Grid>
-						<StackPanel>
-							<TextBox x:Uid="SettingsUsernameTextBox" Header="Username" Text="{Binding Username, Mode=TwoWay}" InputScope="EmailSmtpAddress"/>
-							<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Email, Mode=TwoWay}"/>
-							<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Phone, Mode=TwoWay}"/>
-							<ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends"
+				<StackPanel>
+					<TextBox x:Uid="SettingsUsernameTextBox" Header="Username" Text="{Binding Username, Mode=TwoWay}" InputScope="EmailSmtpAddress"/>
+					<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Email, Mode=TwoWay}"/>
+					<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Phone, Mode=TwoWay}"/>
+					<ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends"
 									  Margin="0,7,0,0"
 									  SelectedIndex="{Binding NumberOfBestFriends, Converter={StaticResource NumberOfBestFriendsToIndexConverter}, Mode=TwoWay}">
-								<ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
-								<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
-								<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
-							</ComboBox>
-							<TextBlock Margin="0,7,0,0" x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
-						</StackPanel>
-					</Grid>
-				</ScrollViewer>
+						<ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
+						<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
+						<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
+					</ComboBox>
+					<TextBlock Margin="0,7,0,0" x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
+					<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
+				</StackPanel>
 			</PivotItem>
 
 			<PivotItem x:Uid="SettingsPrivacyGroup" Header="PRIVACY">
@@ -79,21 +75,19 @@
 			</PivotItem>
 
 			<PivotItem x:Uid="SettingsNotificationsGroup" Header="NOTIFICATIONS">
-				<Grid>
-					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Snap notifications" IsOn="{Binding SnapNotificationsEnabled, Mode=TwoWay}"/>
-						<ToggleSwitch x:Uid="SettingsChatNotifications" Header="Chat notifications" IsOn="{Binding ChatNotificationsEnabled, Mode=TwoWay}"/>
-						<ToggleSwitch x:Uid="SettingsScreenshotNotifications" Header="Screenshot notifications" IsOn="{Binding ScreenshotNotificationsEnabled, Mode=TwoWay}"/>
+				<StackPanel>
+					<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Snap notifications" IsOn="{Binding SnapNotificationsEnabled, Mode=TwoWay}"/>
+					<ToggleSwitch x:Uid="SettingsChatNotifications" Header="Chat notifications" IsOn="{Binding ChatNotificationsEnabled, Mode=TwoWay}"/>
+					<ToggleSwitch x:Uid="SettingsScreenshotNotifications" Header="Screenshot notifications" IsOn="{Binding ScreenshotNotificationsEnabled, Mode=TwoWay}"/>
 
-						<CheckBox x:Uid="SettingsInstantNotifications" IsEnabled="{Binding IsProUser}" Content="Instant notifications" IsChecked="{Binding InstantNotifications, Mode=TwoWay}"/>
-						<TextBlock x:Uid="InstantNotificationsDisclaimer" 
+					<CheckBox x:Uid="SettingsInstantNotifications" IsEnabled="{Binding IsProUser}" Content="Instant notifications" IsChecked="{Binding InstantNotifications, Mode=TwoWay}"/>
+					<TextBlock x:Uid="InstantNotificationsDisclaimer" 
 								   TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
 							If you enable instant notifications, you give us permission to store
 							your Snapchat auth token on our secure cloud service.
-						</TextBlock>
-						<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Command="{Binding UpgradeProCommand}" Content="Unlock this feature for just $1.99"/>
-					</StackPanel>
-				</Grid>
+					</TextBlock>
+					<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Command="{Binding UpgradeProCommand}" Content="Unlock this feature for just $1.99"/>
+				</StackPanel>
 			</PivotItem>
 
 			<PivotItem x:Uid="SettingsTileGroup" Header="TILE">
@@ -194,60 +188,58 @@
 			</PivotItem>
 
 			<PivotItem x:Uid="SettingsAboutGroup" Header="ABOUT" ScrollViewer.VerticalScrollMode="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
-				<ScrollViewer>
-					<Grid>
-						<ScrollViewer>
-							<StackPanel>
-								<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
-								<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
+				<Grid>
+					<ScrollViewer>
+						<StackPanel>
+							<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
+							<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
 
-								<!-- Street creds -->
-								<StackPanel>
-									<TextBlock x:Uid="AboutDevelopersGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Developers</TextBlock>
-									<TextBlock Style="{StaticResource BodyTextBlockStyle}" FontFamily="Global User Interface">
+							<!-- Street creds -->
+							<StackPanel>
+								<TextBlock x:Uid="AboutDevelopersGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Developers</TextBlock>
+								<TextBlock Style="{StaticResource BodyTextBlockStyle}" FontFamily="Global User Interface">
 										<Run>Matt Saville&#160;</Run>
 										<Hyperlink NavigateUri="https://twitter.com/mattsaville8" Foreground="#FF00A2FF">@mattsaville8</Hyperlink>
-									</TextBlock>
-									<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+								</TextBlock>
+								<TextBlock Style="{StaticResource BodyTextBlockStyle}">
 										<Run>Alex Reed&#160;</Run>
 										<Hyperlink NavigateUri="https://twitter.com/alexerax" Foreground="#FF00A2FF">@alexerax</Hyperlink>
-									</TextBlock>
-									<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+								</TextBlock>
+								<TextBlock Style="{StaticResource BodyTextBlockStyle}">
 										<Run>Collin Dillinger&#160;</Run>
 										<Hyperlink NavigateUri="https://twitter.com/cddillinger" Foreground="#FF00A2FF">@cddillinger</Hyperlink>
-									</TextBlock>
-									<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+								</TextBlock>
+								<TextBlock Style="{StaticResource BodyTextBlockStyle}">
 										<Run>Kaelan Fouwels&#160;</Run>
 										<Hyperlink NavigateUri="https://twitter.com/kfouwels" Foreground="#FF00A2FF">@kfouwels</Hyperlink>
-									</TextBlock>
-								</StackPanel>
-
-								<!-- External creds -->
-								<StackPanel>
-									<TextBlock x:Uid="AboutThanksToGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Thanks To</TextBlock>
-
-									<TextBlock Style="{StaticResource BodyTextBlockStyle}">Tim Boelaars</TextBlock>
-									<TextBlock>
-										<Hyperlink NavigateUri="http://thenounproject.com/term/gear/12185/#_=_" Foreground="#FF00A2FF">Settings Coq Icon</Hyperlink>
-									</TextBlock>
-								</StackPanel>
-
-								<!-- Localization credits -->
-								<StackPanel>
-									<TextBlock x:Uid="AboutTranslatorsGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Localization</TextBlock>
-
-									<!-- Spanish -->
-									<TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
-									<TextBlock>name here</TextBlock>
-
-									<!-- German -->
-									<TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
-									<TextBlock>name here</TextBlock>
-								</StackPanel>
+								</TextBlock>
 							</StackPanel>
-						</ScrollViewer>
-					</Grid>
-				</ScrollViewer>
+
+							<!-- External creds -->
+							<StackPanel>
+								<TextBlock x:Uid="AboutThanksToGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Special Thanks</TextBlock>
+
+								<TextBlock Style="{StaticResource BodyTextBlockStyle}">Tim Boelaars</TextBlock>
+								<TextBlock>
+										<Hyperlink NavigateUri="http://thenounproject.com/term/gear/12185/#_=_" Foreground="#FF00A2FF">Settings Cog Icon</Hyperlink>
+								</TextBlock>
+							</StackPanel>
+
+							<!-- Localization credits -->
+							<StackPanel>
+								<TextBlock x:Uid="AboutTranslatorsGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Localization</TextBlock>
+
+								<!-- Spanish -->
+								<TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
+								<TextBlock>name here</TextBlock>
+
+								<!-- German -->
+								<TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
+								<TextBlock>name here</TextBlock>
+							</StackPanel>
+						</StackPanel>
+					</ScrollViewer>
+				</Grid>
 			</PivotItem>
 		</Pivot>
 	</Grid>

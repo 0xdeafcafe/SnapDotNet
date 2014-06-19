@@ -127,7 +127,7 @@
     <value>Developers</value>
   </data>
   <data name="AboutThanksToGroup.Text" xml:space="preserve">
-    <value>Thanks To</value>
+    <value>Special Thanks</value>
   </data>
   <data name="AddFriendsPageTitleTextBlock.Text" xml:space="preserve">
     <value>add friends</value>
@@ -157,10 +157,10 @@
     <value>CHANGE DISPLAY NAME</value>
   </data>
   <data name="ChangeFriendDisplayNameErrorContent" xml:space="preserve">
-    <value>Unable to connect to snapchat and update {0}'s Display Name. Sorry about this ;_;</value>
+    <value>Unable to connect to Snapchat and update {0}'s display name. Sorry! :(</value>
   </data>
   <data name="ChangeFriendDisplayNameErrorTitle" xml:space="preserve">
-    <value>Unable to update Display Name</value>
+    <value>Unable to update display name</value>
   </data>
   <data name="ChangeFriendsDisplay" xml:space="preserve">
     <value>Change display name</value>
@@ -193,13 +193,13 @@
     <value>Search</value>
   </data>
   <data name="DisplayChangeWarningRun1.Text" xml:space="preserve">
-    <value>Changing this will change how your friend's name displayed in the application. It will not change his account in anyway.</value>
+    <value>This is how your friend's name appears to you.</value>
   </data>
   <data name="DisplayChangeWarningRun2.Text" xml:space="preserve">
-    <value>To remove a display name, just change it to an empty name.</value>
+    <value />
   </data>
   <data name="DisplayChangeWarningRun3.Text" xml:space="preserve">
-    <value>This can be un-done or changed at any time.</value>
+    <value />
   </data>
   <data name="DisplyNameTextBox.Header" xml:space="preserve">
     <value>New Display Name</value>
@@ -392,7 +392,7 @@
     <value>Tap to load</value>
   </data>
   <data name="StatusBarChangeDisplay" xml:space="preserve">
-    <value>Changing Display Name...</value>
+    <value>Changing display name...</value>
   </data>
   <data name="StatusLoggingIn" xml:space="preserve">
     <value>Logging into Snapchat...</value>
@@ -422,6 +422,6 @@
     <value>Unblock</value>
   </data>
   <data name="UpgradeToProButton.Content" xml:space="preserve">
-    <value>Unlock this feature for just $1.99</value>
+    <value>Unlock this feature</value>
   </data>
 </root>
