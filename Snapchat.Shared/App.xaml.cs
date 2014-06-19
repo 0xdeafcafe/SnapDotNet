@@ -170,7 +170,7 @@ namespace Snapchat
 			await SnapchatManager.UpdateAllAsync(ProgressHelper.HideStatusBar);
 
 			// Automatically download snaps if enabled
-			var downloadMode = AppSettings.Get<AutomaticallyDownloadSnapsMode>("AutomaticallyDownloadSnapsMode", defaultValue: AutomaticallyDownloadSnapsMode.WiFi);
+			var downloadMode = AppSettings.Get("AutomaticallyDownloadSnapsMode", AutomaticallyDownloadSnapsMode.WiFi);
 			var shouldDownloadSnaps =
 				(downloadMode == AutomaticallyDownloadSnapsMode.Always) ||
 				(downloadMode == AutomaticallyDownloadSnapsMode.WiFi && !NetworkInformationHelper.OnWifiConnection());

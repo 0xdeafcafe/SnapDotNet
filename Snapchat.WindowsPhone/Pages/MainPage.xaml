@@ -5,11 +5,8 @@
 		xmlns:i="using:Microsoft.Xaml.Interactivity"
 		xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 		xmlns:pageContents="using:Snapchat.Pages.PageContents"
-		xmlns:converters="using:Snapchat.Converters"
 		Background="Black">
 	<Page.Resources>
-		<converters:DivisionConverter x:Key="DivisionConverter"/>
-
 		<Style x:Key="EmptyButtonStyle" TargetType="Button">
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="Padding" Value="0"/>
@@ -56,6 +53,61 @@
 											  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
 											  Margin="{TemplateBinding Padding}" 
 											  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		
+		<Style x:Key="CaptureButtonStyle" BasedOn="{StaticResource EmptyButtonStyle}" TargetType="Button">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Grid x:Name="Grid" Background="Transparent">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualStateGroup.Transitions>
+										<VisualTransition From="Pressed" To="PointerOver">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="PointerOver" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+										<VisualTransition From="Pressed" To="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+											</Storyboard>
+										</VisualTransition>
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Normal"/>
+									<VisualState x:Name="PointerOver"/>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+							<Grid>
+								<Ellipse 
+									VerticalAlignment="Bottom"
+									HorizontalAlignment="Center" 
+									Width="92" Height="92"
+									Fill="Transparent"
+									Stroke="#FF000000" StrokeThickness="1">
+								</Ellipse>
+								<Ellipse Margin="1"
+									 VerticalAlignment="Center" 
+									 HorizontalAlignment="Center"
+									 Width="90" Height="90"
+									 Fill="#66FFFFFF"
+									 Stroke="#FFFFFFFF" StrokeThickness="5">
+								</Ellipse>
+							</Grid>
 						</Grid>
 					</ControlTemplate>
 				</Setter.Value>
@@ -115,16 +167,11 @@
 								Data="M 0,0 L 40,0 20,20 0,0" />
 					</StackPanel>
 
-					<Ellipse	x:Name="CapturePhotoButton"
-								Tapped="CapturePhotoButton_Tapped"
-								Holding="CapturePhotoButton_Holding"
-								PointerPressed="CapturePhotoButton_PointerPressed"
-								VerticalAlignment="Bottom" Margin="0,0,0,90" 
-								HorizontalAlignment="Center" 
-								Width="90" Height="90"
-								Fill="#66FFFFFF"
-								Stroke="White" StrokeThickness="4">
-					</Ellipse>
+					<Button Style="{StaticResource CaptureButtonStyle}"
+							Tapped="CapturePhotoButton_Tapped"
+							VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,90"
+							Width="92" Height="92" />
+					
 
 					<Grid x:Name="NavButtonsContainer" VerticalAlignment="Bottom" Height="70" Margin="0,0,0,58" Opacity="0">
 						<Grid.RenderTransform>
@@ -192,10 +239,17 @@
 			<Image x:Name="SnapMediaImage" IsHitTestVisible="False" />
 			<MediaElement x:Name="SnapMediaVideo" IsHitTestVisible="False" />
 		</Grid>
+
+		<pageContents:PreviewPageContent x:Name="PreviewPage" Visibility="Collapsed"
+										 VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+			
+		</pageContents:PreviewPageContent>
 		
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
 				<!-- Can't use transitions because it makes the app bar update AFTER the animation, not DURING -->
+				<!-- awhhh -->
+				
 				<VisualState x:Name="Conversations">
 					<Storyboard>
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
@@ -453,6 +507,22 @@
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+
+				<VisualState x:Name="Preview">
+					<Storyboard>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+							<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+								<EasingDoubleKeyFrame.EasingFunction>
+									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
+								</EasingDoubleKeyFrame.EasingFunction>
+							</EasingDoubleKeyFrame>
+						</DoubleAnimationUsingKeyFrames>
 					</Storyboard>
 				</VisualState>
 			</VisualStateGroup>

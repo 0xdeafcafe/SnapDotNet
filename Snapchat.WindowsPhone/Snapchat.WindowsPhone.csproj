@@ -103,6 +103,9 @@
     <Compile Include="Pages\PageContents\FriendsPageContent.xaml.cs">
       <DependentUpon>FriendsPageContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageContents\PreviewPageContent.xaml.cs">
+      <DependentUpon>PreviewPageContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageContents\SettingsPageContent.xaml.cs">
       <DependentUpon>SettingsPageContent.xaml</DependentUpon>
     </Compile>
@@ -142,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\PageContents\FriendsPageContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PageContents\PreviewPageContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
