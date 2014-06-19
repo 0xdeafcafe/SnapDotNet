@@ -42,6 +42,7 @@
 			<Pivot.HeaderTemplate>
 				<StaticResource ResourceKey="DataTemplate1"/>
 			</Pivot.HeaderTemplate>
+			
 			<PivotItem x:Uid="SettingsProfileGroup" Header="PROFILE">
 				<ScrollViewer>
 					<Grid>
@@ -195,40 +196,56 @@
 			<PivotItem x:Uid="SettingsAboutGroup" Header="ABOUT" ScrollViewer.VerticalScrollMode="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
 				<ScrollViewer>
 					<Grid>
-						<StackPanel>
-							<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
-							<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
+						<ScrollViewer>
+							<StackPanel>
+								<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
+								<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
 
-							<!-- Street creds -->
-							<TextBlock x:Uid="AboutDevelopersGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Developers</TextBlock>
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}" FontFamily="Global User Interface">
-								<Run>Matt Saville&#160;</Run>
-								<Hyperlink NavigateUri="https://twitter.com/mattsaville8" Foreground="#FF00A2FF">@mattsaville8</Hyperlink>
-							</TextBlock>
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}">
-								<Run>Alex Reed&#160;</Run>
-								<Hyperlink NavigateUri="https://twitter.com/alexerax" Foreground="#FF00A2FF">@alexerax</Hyperlink>
-							</TextBlock>
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}">
-								<Run>Collin Dillinger&#160;</Run>
-								<Hyperlink NavigateUri="https://twitter.com/cddillinger" Foreground="#FF00A2FF">@cddillinger</Hyperlink>
-							</TextBlock>
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}">
-								<Run>Kaelan Fouwels&#160;</Run>
-								<Hyperlink NavigateUri="https://twitter.com/kfouwels" Foreground="#FF00A2FF">@kfouwels</Hyperlink>
-							</TextBlock>
+								<!-- Street creds -->
+								<StackPanel>
+									<TextBlock x:Uid="AboutDevelopersGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Developers</TextBlock>
+									<TextBlock Style="{StaticResource BodyTextBlockStyle}" FontFamily="Global User Interface">
+										<Run>Matt Saville&#160;</Run>
+										<Hyperlink NavigateUri="https://twitter.com/mattsaville8" Foreground="#FF00A2FF">@mattsaville8</Hyperlink>
+									</TextBlock>
+									<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+										<Run>Alex Reed&#160;</Run>
+										<Hyperlink NavigateUri="https://twitter.com/alexerax" Foreground="#FF00A2FF">@alexerax</Hyperlink>
+									</TextBlock>
+									<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+										<Run>Collin Dillinger&#160;</Run>
+										<Hyperlink NavigateUri="https://twitter.com/cddillinger" Foreground="#FF00A2FF">@cddillinger</Hyperlink>
+									</TextBlock>
+									<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+										<Run>Kaelan Fouwels&#160;</Run>
+										<Hyperlink NavigateUri="https://twitter.com/kfouwels" Foreground="#FF00A2FF">@kfouwels</Hyperlink>
+									</TextBlock>
+								</StackPanel>
 
-							<!-- Localization credits -->
-							<TextBlock x:Uid="AboutTranslatorsGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Localization</TextBlock>
+								<!-- External creds -->
+								<StackPanel>
+									<TextBlock x:Uid="AboutThanksToGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Thanks To</TextBlock>
 
-							<!-- Spanish -->
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
-							<TextBlock>name here</TextBlock>
+									<TextBlock Style="{StaticResource BodyTextBlockStyle}">Tim Boelaars</TextBlock>
+									<TextBlock>
+										<Hyperlink NavigateUri="http://thenounproject.com/term/gear/12185/#_=_" Foreground="#FF00A2FF">Settings Coq Icon</Hyperlink>
+									</TextBlock>
+								</StackPanel>
 
-							<!-- German -->
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
-							<TextBlock>name here</TextBlock>
-						</StackPanel>
+								<!-- Localization credits -->
+								<StackPanel>
+									<TextBlock x:Uid="AboutTranslatorsGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Localization</TextBlock>
+
+									<!-- Spanish -->
+									<TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
+									<TextBlock>name here</TextBlock>
+
+									<!-- German -->
+									<TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
+									<TextBlock>name here</TextBlock>
+								</StackPanel>
+							</StackPanel>
+						</ScrollViewer>
 					</Grid>
 				</ScrollViewer>
 			</PivotItem>
