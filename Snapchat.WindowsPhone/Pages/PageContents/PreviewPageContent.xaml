@@ -10,7 +10,7 @@
 	<Grid Background="Black">
 		<Image x:Name="ImageMediaElement" 
 			   Height="{Binding ActualHeight, ElementName=PreviewControl}" 
-			   Width="{Binding ActualWidth, ElementName=PreviewControl}" Stretch="UniformToFill" RenderTransformOrigin="0.5,0.5" >
+			   Width="{Binding ActualWidth, ElementName=PreviewControl}">
 		</Image>
 	</Grid>
 </UserControl>

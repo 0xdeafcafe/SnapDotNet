@@ -8,6 +8,7 @@ using Windows.Media.MediaProperties;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
+using Panel = Windows.Devices.Enumeration.Panel;
 
 namespace Snapchat.Helpers
 {
@@ -26,7 +27,7 @@ namespace Snapchat.Helpers
 
 		public static bool IsUsingFrontCamera
 		{
-			get { return _currentVideoDevice == 0; }
+			get { return _cameraInfoCollection[_currentVideoDevice].EnclosureLocation.Panel == Panel.Front; }
 		}
 
 		/// <summary>
@@ -50,19 +51,15 @@ namespace Snapchat.Helpers
 		{
 			get
 			{
-				if (!IsInitialized)
-					return false;
-
-				return MediaCapture.VideoDeviceController.FlashControl.Supported;
+				return IsInitialized && MediaCapture.VideoDeviceController.FlashControl.Supported;
 			}
 		}
 
-		public static bool IsPrepared { get { return _isPrepared; } }
-		public static bool IsInitialized { get { return _isInitialized; } }
+		public static bool IsPrepared { get; private set; }
+		public static bool IsInitialized { get; private set; }
 
 		private static DeviceInformationCollection _cameraInfoCollection, _microphoneInfoCollection;
-		private static int _currentAudioDevice = 0, _currentVideoDevice;
-		private static bool _isPrepared, _isInitialized;
+		private static int _currentVideoDevice, _currentAudioDevice = 0;
 
 		public static async Task<BitmapImage> CapturePhotoAsync()
 		{
@@ -86,7 +83,7 @@ namespace Snapchat.Helpers
 		/// </summary>
 		public static async Task PrepareAsync()
 		{
-			if (_isPrepared)
+			if (IsPrepared)
 			{
 				Debug.WriteLine("Already prepared media capture manager, skipping unnecessary re-preparation");
 				return;
@@ -99,7 +96,7 @@ namespace Snapchat.Helpers
 			// Enable front camera if there's more than one camera.
 			HasFrontCamera = _cameraInfoCollection.Count >= 2;
 
-			_isPrepared = true;
+			IsPrepared = true;
 		}
 
 		public static async Task ToggleCameraAsync()
@@ -115,10 +112,10 @@ namespace Snapchat.Helpers
 
 		public static async Task InitializeCameraAsync()
 		{
-			if (!_isPrepared)
+			if (!IsPrepared)
 				await PrepareAsync();
 
-			if (_isInitialized)
+			if (IsInitialized)
 				await CleanupCaptureResourcesAsync();
 
 			Debug.WriteLine("Initializing camera");
@@ -132,12 +129,15 @@ namespace Snapchat.Helpers
 				//AudioDeviceId = _cameraInfoCollection[_currentAudioDevice].Id,
 				StreamingCaptureMode = StreamingCaptureMode.Video
 			});
-			_isInitialized = true;
+			IsInitialized = true;
+
+			var previewMirroring = MediaCapture.GetPreviewMirroring();
+			var counterclockwiseRotation = (previewMirroring && !IsUsingFrontCamera) ||
+				(!previewMirroring && IsUsingFrontCamera);
 
 			// Correct camera rotation
-			MediaCapture.SetPreviewRotation(IsUsingFrontCamera
-				? VideoRotation.Clockwise90Degrees
-				: VideoRotation.Clockwise270Degrees);
+			MediaCapture.SetPreviewRotation(VideoPreviewRotationLookup(
+				DisplayInformation.GetForCurrentView().CurrentOrientation, counterclockwiseRotation));
 
 			// Crashes if enabled even inside a try/catch block :x
 			//if (IsMirrored && IsUsingFrontCamera)
@@ -168,12 +168,12 @@ namespace Snapchat.Helpers
 				MediaCapture = null;
 			}
 
-			_isInitialized = false;
+			IsInitialized = false;
 		}
 
 		public static async Task StartPreviewAsync(CaptureElement element)
 		{
-			if (!_isInitialized)
+			if (!IsInitialized)
 			{
 				Debug.WriteLine("Camera not initialized, now initializing camera...");
 				await InitializeCameraAsync();
@@ -208,5 +208,24 @@ namespace Snapchat.Helpers
 			catch (Exception e) { }
 			IsPreviewing = false;
 		}
+
+		private static VideoRotation VideoPreviewRotationLookup(DisplayOrientations displayOrientation, bool counterclockwise)
+		{
+			switch (displayOrientation)
+			{
+				case DisplayOrientations.Portrait:
+					return counterclockwise ? VideoRotation.Clockwise270Degrees : VideoRotation.Clockwise90Degrees;
+
+				case DisplayOrientations.LandscapeFlipped:
+					return VideoRotation.Clockwise180Degrees;
+
+				case DisplayOrientations.PortraitFlipped:
+					return counterclockwise ? VideoRotation.Clockwise90Degrees : VideoRotation.Clockwise270Degrees;
+
+				case DisplayOrientations.Landscape:
+				default:
+					return VideoRotation.None;
+			}
+		} 
 	}
 }
