@@ -122,9 +122,11 @@
 										</ItemsControl>
 										<TextBlock x:Name="FriendHasNoBestFriends" 
 												   Visibility="{Binding Path=PublicActivity.HasBestFriends, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
-												   Text="No Best Friends &#x1f602;"
 												   Foreground="Black" Margin="0,2,0,0" FontSize="16"
-												   FontWeight="Light" />
+												   FontWeight="Light">
+											<Run x:Uid="FriendHasNoBestFriends" Text="No Best Friends" />
+											<Run Text="&#x1f602;" FontSize="22" />
+										</TextBlock>
 									</StackPanel>
 								</Grid>
 							</DataTemplate>
