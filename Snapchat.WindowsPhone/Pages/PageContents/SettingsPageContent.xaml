@@ -1,124 +1,237 @@
 ﻿<UserControl
-    x:Class="Snapchat.Pages.PageContents.SettingsPageContent"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Snapchat.Pages.PageContents"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:viewModels="using:Snapchat.ViewModels"
+	x:Class="Snapchat.Pages.PageContents.SettingsPageContent"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:converters="using:Snapchat.Converters"
 	xmlns:settingsConverters="using:Snapchat.Converters.Settings"
-    mc:Ignorable="d">
-	
+	mc:Ignorable="d"
+	RequestedTheme="Light">
+
 	<UserControl.Resources>
 		<converters:IntegerConverter x:Key="StoryPrivacyConverter"/>
+		<converters:CaseConverter x:Key="UpperCaseConverter" SelectedCase="Uppercase" />
 		<converters:IntegerConverter x:Key="MessagePrivacyConverter"/>
 		<converters:IntegerConverter x:Key="DownloadSnapsModeConverter"/>
 		<settingsConverters:NumberOfBestFriendsToIndexConverter x:Key="NumberOfBestFriendsToIndexConverter"/>
-		
 	</UserControl.Resources>
 
-	<Pivot Background="{ThemeResource PhoneBackgroundBrush}">
-		<PivotItem x:Uid="SettingsProfileGroup" Header="profile">
-			<ScrollViewer>
+	<Grid Background="White">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="110" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Grid Grid.Row="0" Background="#FFD02D01">
+			<TextBlock	Text="settings"
+						TextWrapping="NoWrap"
+						TextTrimming="CharacterEllipsis"
+						Foreground="#FFFFFFFF" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+						Margin="15,0,0,30" FontWeight="Light"
+						FontFamily="Segoe WP" FontSize="40" />
+		</Grid>
+		<Pivot Background="Transparent" Grid.Row="1" Margin="0,-65,0,0">
+			<Pivot.Resources>
+				<DataTemplate x:Key="DataTemplate1">
+					<Grid>
+						<TextBlock Text="{Binding Converter={StaticResource UpperCaseConverter}}" FontSize="16" FontFamily="Segoe WP" Foreground="#FFFFFFFF"
+								   Opacity="0.6" FontWeight="Bold" Margin="0,5,1000,0" />
+					</Grid>
+				</DataTemplate>
+			</Pivot.Resources>
+			<Pivot.HeaderTemplate>
+				<StaticResource ResourceKey="DataTemplate1"/>
+			</Pivot.HeaderTemplate>
+			<PivotItem x:Uid="SettingsProfileGroup" Header="PROFILE">
+				<ScrollViewer>
+					<Grid>
+						<StackPanel>
+							<TextBox x:Uid="SettingsUsernameTextBox" Header="Username" Text="{Binding Username, Mode=TwoWay}" InputScope="EmailSmtpAddress"/>
+							<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Email, Mode=TwoWay}"/>
+							<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Phone, Mode=TwoWay}"/>
+							<ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends"
+									  Margin="0,7,0,0"
+									  SelectedIndex="{Binding NumberOfBestFriends, Converter={StaticResource NumberOfBestFriendsToIndexConverter}, Mode=TwoWay}">
+								<ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
+								<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
+								<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
+							</ComboBox>
+							<TextBlock Margin="0,7,0,0" x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
+							<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
+						</StackPanel>
+					</Grid>
+				</ScrollViewer>
+			</PivotItem>
+
+			<PivotItem x:Uid="SettingsPrivacyGroup" Header="PRIVACY">
+				<StackPanel>
+					<ComboBox x:Uid="SettingsStoryPrivacy" Header="Who can see my story?" SelectedIndex="{Binding StoryPrivacy, Converter={StaticResource StoryPrivacyConverter}, Mode=TwoWay}">
+						<ComboBoxItem x:Uid="StoryPrivacyEveryone">Everyone</ComboBoxItem>
+						<ComboBoxItem x:Uid="StoryPrivacyFriends">Friends</ComboBoxItem>
+						<ComboBoxItem x:Uid="StoryPrivacyCustom">Custom</ComboBoxItem>
+					</ComboBox>
+					<ComboBox x:Uid="SettingsMessagePrivacy" Header="Who can send me snaps?" SelectedIndex="{Binding AccountPrivacy, Converter={StaticResource MessagePrivacyConverter}, Mode=TwoWay}">
+						<ComboBoxItem x:Uid="MessagePrivacyEveryone">Everyone</ComboBoxItem>
+						<ComboBoxItem x:Uid="MessagePrivacyFriends">Friends</ComboBoxItem>
+					</ComboBox>
+				</StackPanel>
+			</PivotItem>
+
+			<PivotItem x:Uid="SettingsNotificationsGroup" Header="NOTIFICATIONS">
 				<Grid>
 					<StackPanel>
-						<TextBox x:Uid="SettingsUsernameTextBox" Header="Username" Text="{Binding Username, Mode=TwoWay}" InputScope="EmailSmtpAddress"/>
-						<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Email, Mode=TwoWay}"/>
-						<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Phone, Mode=TwoWay}"/>
-						<ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends"
-								  Margin="0,7,0,0"
-								  SelectedIndex="{Binding NumberOfBestFriends, Converter={StaticResource NumberOfBestFriendsToIndexConverter}, Mode=TwoWay}">
-							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
-							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
-							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
-						</ComboBox>
-						<TextBlock Margin="0,7,0,0" x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
+						<ToggleSwitch x:Uid="SettingsToastNotifications" Header="Snap notifications" IsOn="{Binding SnapNotificationsEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsToastNotifications" Header="Chat notifications" IsOn="{Binding ChatNotificationsEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsToastNotifications" Header="Screenshot notifications" IsOn="{Binding ScreenshotNotificationsEnabled, Mode=TwoWay}"/>
+
+						<CheckBox x:Uid="SettingsInstantNotifications" IsEnabled="{Binding IsProUser}" Content="Instant notifications" IsChecked="{Binding InstantNotifications, Mode=TwoWay}"/>
+						<TextBlock x:Uid="InstantNotificationsDisclaimer" 
+								   TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
+							If you enable instant notifications, you give us permission to store
+							your Snapchat auth token on our secure cloud service.
+						</TextBlock>
+						<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Command="{Binding UpgradeProCommand}" Content="Unlock this feature for just $1.99"/>
 					</StackPanel>
 				</Grid>
-			</ScrollViewer>
-		</PivotItem>
+			</PivotItem>
 
-		<PivotItem x:Uid="SettingsPrivacyGroup" Header="privacy">
-			<StackPanel>
-				<ComboBox x:Uid="SettingsStoryPrivacy" Header="Who can see my story?" SelectedIndex="{Binding StoryPrivacy, Converter={StaticResource StoryPrivacyConverter}, Mode=TwoWay}">
-					<ComboBoxItem x:Uid="StoryPrivacyEveryone">Everyone</ComboBoxItem>
-					<ComboBoxItem x:Uid="StoryPrivacyFriends">Friends</ComboBoxItem>
-					<ComboBoxItem x:Uid="StoryPrivacyCustom">Custom</ComboBoxItem>
-				</ComboBox>
-				<ComboBox x:Uid="SettingsMessagePrivacy" Header="Who can send me snaps?" SelectedIndex="{Binding AccountPrivacy, Converter={StaticResource MessagePrivacyConverter}, Mode=TwoWay}">
-					<ComboBoxItem x:Uid="MessagePrivacyEveryone">Everyone</ComboBoxItem>
-					<ComboBoxItem x:Uid="MessagePrivacyFriends">Friends</ComboBoxItem>
-				</ComboBox>
-			</StackPanel>
-		</PivotItem>
-
-		<PivotItem x:Uid="SettingsNotificationsGroup" Header="notifications">
-			<StackPanel>
-				<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="{Binding LiveTileEnabled, Mode=TwoWay}"/>
-				<ToggleSwitch x:Uid="SettingsToastNotifications" Header="Toast notifications" IsOn="{Binding ToastsEnabled, Mode=TwoWay}"/>
-
-				<CheckBox x:Uid="SettingsInstantNotifications" IsEnabled="{Binding IsProUser}" Content="Instant notifications" IsChecked="{Binding InstantNotifications, Mode=TwoWay}"/>
-				<TextBlock x:Uid="InstantNotificationsDisclaimer" TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
-					If you enable instant notifications, you give us permission to store
-					your Snapchat auth token on our secure cloud service.
-				</TextBlock>
-				<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Command="{Binding UpgradeProCommand}" Content="Unlock this feature for just $1.99"/>
-			</StackPanel>
-		</PivotItem>
-
-		<PivotItem x:Uid="SettingsAppGroup" Header="app">
-			<StackPanel>
-				<ToggleSwitch x:Uid="SettingsHoldToViewSnap" Header="Hold to view snaps" IsOn="{Binding HoldToViewSnap, Mode=TwoWay}"/>
-				<ToggleSwitch x:Uid="SettingsFrontCameraMirrorEffect" Header="Front camera mirror effect" IsOn="{Binding FrontCameraMirrorEffect, Mode=TwoWay}"/>
-				<ComboBox x:Uid="SettingsAutomaticallyDownloadSnaps" Header="Automatically download snaps" SelectedIndex="{Binding DownloadSnapsMode, Converter={StaticResource DownloadSnapsModeConverter}, Mode=TwoWay}">
-					<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsNever">Never</ComboBoxItem>
-					<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsWifi">Wi-Fi only</ComboBoxItem>
-					<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsAlways">Always</ComboBoxItem>
-				</ComboBox>
-			</StackPanel>
-		</PivotItem>
-
-		<PivotItem x:Uid="SettingsAboutGroup" Header="about" ScrollViewer.VerticalScrollMode="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
-			<ScrollViewer>
+			<PivotItem x:Uid="SettingsNotificationsGroup" Header="TILE">
 				<Grid>
 					<StackPanel>
-						<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
-						<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
+						<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="{Binding LiveTileEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsTileTransaprency" Header="Tile Transparency" IsOn="{Binding TileTransparencyEnabled, Mode=TwoWay}"/>
 
-						<!-- Street creds -->
-						<TextBlock x:Uid="AboutDevelopersGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Developers</TextBlock>
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}" FontFamily="Global User Interface">
-							<Run>Matt Saville&#160;</Run>
-							<Hyperlink NavigateUri="https://twitter.com/mattsaville8" Foreground="#FF00A2FF">@mattsaville8</Hyperlink>
-						</TextBlock>
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}">
-							<Run>Alex Reed&#160;</Run>
-							<Hyperlink NavigateUri="https://twitter.com/alexerax" Foreground="#FF00A2FF">@alexerax</Hyperlink>
-						</TextBlock>
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}">
-							<Run>Collin Dillinger&#160;</Run>
-							<Hyperlink NavigateUri="https://twitter.com/cddillinger" Foreground="#FF00A2FF">@cddillinger</Hyperlink>
-						</TextBlock>
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}">
-							<Run>Kaelan Fouwels&#160;</Run>
-							<Hyperlink NavigateUri="https://twitter.com/kfouwels" Foreground="#FF00A2FF">@kfouwels</Hyperlink>
-						</TextBlock>
-
-						<!-- Localization credits -->
-						<TextBlock x:Uid="AboutTranslatorsGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Localization</TextBlock>
-
-						<!-- Spanish -->
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
-						<TextBlock>name here</TextBlock>
-
-						<!-- German -->
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
-						<TextBlock>name here</TextBlock>
 					</StackPanel>
+
+					<Border VerticalAlignment="Bottom" HorizontalAlignment="Center"
+							Height="290" Width="340" BorderThickness="2,2,2,0" BorderBrush="#FF808080" CornerRadius="10,10,0,0">
+						<Border VerticalAlignment="Bottom" HorizontalAlignment="Center"
+								Height="270" Width="305" BorderThickness="2,2,2,0" BorderBrush="#FF808080" Background="#FFDDDDDD" CornerRadius="10,10,0,0">
+							<Grid>
+								<Border Background="#FFFFFFFF" CornerRadius="3" Height="7" BorderThickness="1" 
+										BorderBrush="#FF808080" Margin="0,10,5,0"
+										VerticalAlignment="Top" HorizontalAlignment="Center" Width="69" />
+								<Ellipse Height="10" Width="10" VerticalAlignment="Top" HorizontalAlignment="Center"
+										 Fill="#FFFFFFFF" Stroke="#FF808080" StrokeThickness="1" Margin="85,8,0,0" />
+
+								<Border VerticalAlignment="Bottom" HorizontalAlignment="Center"
+										Height="243" Width="286" BorderThickness="2,2,2,0" BorderBrush="#FF808080" Background="#FFFFFFFF" CornerRadius="2,2,0,0">
+									<Grid Margin="20,33,20,0">
+										<Grid.RowDefinitions>
+											<RowDefinition Height="56" />
+											<RowDefinition Height="6" />
+											<RowDefinition Height="56" />
+											<RowDefinition Height="6" />
+											<RowDefinition Height="56" />
+											<RowDefinition Height="6" />
+											<RowDefinition Height="56" />
+										</Grid.RowDefinitions>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="56" />
+											<ColumnDefinition Width="6" />
+											<ColumnDefinition Width="56" />
+											<ColumnDefinition Width="6" />
+											<ColumnDefinition Width="56" />
+											<ColumnDefinition Width="6" />
+											<ColumnDefinition Width="56" />
+											<ColumnDefinition Width="*" />
+										</Grid.ColumnDefinitions>
+
+										<!-- the live tile! -->
+										<Grid Background="{Binding TileTransparencyUiExampleBrush, FallbackValue='#FF3cb2e2'}" Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3">
+											<TextBlock x:Uid="SettingsTileAppName" Text="Coldsnap" FontFamily="Segoe WP" FontWeight="Normal" 
+													   Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="5" />
+
+											<Border BorderThickness="1" BorderBrush="#FFFFFFFF" Height="56" Width="56">
+												<Grid>
+													<Rectangle Width="77" Height="1" Fill="#FFFFFFFF" RenderTransformOrigin="0.5,0.5" Margin="-11.409,26.473,-11.425,26.693" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+														<Rectangle.RenderTransform>
+															<CompositeTransform Rotation="45"/>
+														</Rectangle.RenderTransform>
+													</Rectangle>
+													<Rectangle Width="77" Height="1" Fill="#FFFFFFFF" RenderTransformOrigin="0.5,0.5" Margin="-11.632,26.437,-11.369,26.563" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+														<Rectangle.RenderTransform>
+															<CompositeTransform Rotation="-45"/>
+														</Rectangle.RenderTransform>
+													</Rectangle>
+												</Grid>
+											</Border>
+
+										</Grid>
+
+										<Rectangle Grid.Column="0" Grid.Row="0" Fill="#FFC1C1C1" />
+										<Rectangle Grid.Column="2" Grid.Row="0" Fill="#FFC1C1C1" />
+										<Rectangle Grid.Column="0" Grid.Row="2" Fill="#FFC1C1C1" />
+										<Rectangle Grid.Column="2" Grid.Row="2" Fill="#FFC1C1C1" />
+
+										<Rectangle Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" Grid.RowSpan="3" 
+												   Fill="#FFC1C1C1" />
+
+										<Rectangle Grid.Column="4" Grid.Row="4" Fill="#FFC1C1C1" />
+										<Rectangle Grid.Column="6" Grid.Row="4" Fill="#FFC1C1C1" />
+										
+										<Rectangle Grid.Column="4" Grid.Row="6" Fill="#FFC1C1C1" />
+										<Rectangle Grid.Column="6" Grid.Row="6" Fill="#FFC1C1C1" />
+									</Grid>
+								</Border>
+							</Grid>
+						</Border>
+					</Border>
 				</Grid>
-			</ScrollViewer>
-		</PivotItem>
-	</Pivot>
+			</PivotItem>
+
+			<PivotItem x:Uid="SettingsAppGroup" Header="APP">
+				<StackPanel>
+					<ToggleSwitch x:Uid="SettingsHoldToViewSnap" Header="Hold to view snaps" IsOn="{Binding HoldToViewSnap, Mode=TwoWay}"/>
+					<ToggleSwitch x:Uid="SettingsFrontCameraMirrorEffect" Header="Front camera mirror effect" IsOn="{Binding FrontCameraMirrorEffect, Mode=TwoWay}"/>
+					<ComboBox x:Uid="SettingsAutomaticallyDownloadSnaps" Header="Automatically download snaps" SelectedIndex="{Binding DownloadSnapsMode, Converter={StaticResource DownloadSnapsModeConverter}, Mode=TwoWay}">
+						<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsNever">Never</ComboBoxItem>
+						<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsWifi">Wi-Fi only</ComboBoxItem>
+						<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsAlways">Always</ComboBoxItem>
+					</ComboBox>
+				</StackPanel>
+			</PivotItem>
+
+			<PivotItem x:Uid="SettingsAboutGroup" Header="ABOUT" ScrollViewer.VerticalScrollMode="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch">
+				<ScrollViewer>
+					<Grid>
+						<StackPanel>
+							<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
+							<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0</TextBlock>
+
+							<!-- Street creds -->
+							<TextBlock x:Uid="AboutDevelopersGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Developers</TextBlock>
+							<TextBlock Style="{StaticResource BodyTextBlockStyle}" FontFamily="Global User Interface">
+								<Run>Matt Saville&#160;</Run>
+								<Hyperlink NavigateUri="https://twitter.com/mattsaville8" Foreground="#FF00A2FF">@mattsaville8</Hyperlink>
+							</TextBlock>
+							<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+								<Run>Alex Reed&#160;</Run>
+								<Hyperlink NavigateUri="https://twitter.com/alexerax" Foreground="#FF00A2FF">@alexerax</Hyperlink>
+							</TextBlock>
+							<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+								<Run>Collin Dillinger&#160;</Run>
+								<Hyperlink NavigateUri="https://twitter.com/cddillinger" Foreground="#FF00A2FF">@cddillinger</Hyperlink>
+							</TextBlock>
+							<TextBlock Style="{StaticResource BodyTextBlockStyle}">
+								<Run>Kaelan Fouwels&#160;</Run>
+								<Hyperlink NavigateUri="https://twitter.com/kfouwels" Foreground="#FF00A2FF">@kfouwels</Hyperlink>
+							</TextBlock>
+
+							<!-- Localization credits -->
+							<TextBlock x:Uid="AboutTranslatorsGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Localization</TextBlock>
+
+							<!-- Spanish -->
+							<TextBlock Style="{StaticResource BodyTextBlockStyle}">Spanish</TextBlock>
+							<TextBlock>name here</TextBlock>
+
+							<!-- German -->
+							<TextBlock Style="{StaticResource BodyTextBlockStyle}">German</TextBlock>
+							<TextBlock>name here</TextBlock>
+						</StackPanel>
+					</Grid>
+				</ScrollViewer>
+			</PivotItem>
+		</Pivot>
+	</Grid>
 </UserControl>

@@ -334,6 +334,12 @@
   <data name="SettingsStoryPrivacy.Header" xml:space="preserve">
     <value>Who can see my story?</value>
   </data>
+  <data name="SettingsTileAppName.Text" xml:space="preserve">
+    <value>Coldsnap</value>
+  </data>
+  <data name="SettingsTileTransaprency.Header" xml:space="preserve">
+    <value>Tile Transparency</value>
+  </data>
   <data name="SettingsToastNotifications.Header" xml:space="preserve">
     <value>Toast notifications</value>
   </data>

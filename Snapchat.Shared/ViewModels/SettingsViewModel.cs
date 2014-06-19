@@ -1,4 +1,6 @@
 ﻿using System.Windows.Input;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 using Snapchat.Common;
 using System;
 using SnapDotNet.Core.Snapchat.Models.New;
@@ -53,14 +55,67 @@ namespace Snapchat.ViewModels
 		}
 
 		/// <summary>
-		/// Gets or sets whether toast notifications should be enabled.
+		/// Gets or sets whether the app tile should be transparent should be enabled.
 		/// </summary>
-		public bool ToastsEnabled
+		public bool TileTransparencyEnabled
 		{
-			get { return AppSettings.Get("ToastsEnabled", true); }
+			get { return AppSettings.Get("TileTransparencyEnabled", true); }
 			set
 			{
-				AppSettings.Set("ToastsEnabled", value);
+				AppSettings.Set("TileTransparencyEnabled", value);
+				OnNotifyPropertyChanged();
+				ExplicitOnNotifyPropertyChanged("TileTransparencyUiExampleBrush");
+			}
+		}
+
+		/// <summary>
+		/// Gets the example colour of the app tile for the phone example
+		/// </summary>
+		public SolidColorBrush TileTransparencyUiExampleBrush
+		{
+			get
+			{
+				return TileTransparencyEnabled
+					? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush
+					: new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether snap notifications should be enabled.
+		/// </summary>
+		public bool SnapNotificationsEnabled
+		{
+			get { return AppSettings.Get("SnapNotificationsEnabled", true); }
+			set
+			{
+				AppSettings.Set("SnapNotificationsEnabled", value);
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether chat notifications should be enabled.
+		/// </summary>
+		public bool ChatNotificationsEnabled
+		{
+			get { return AppSettings.Get("ChatNotificationsEnabled", true); }
+			set
+			{
+				AppSettings.Set("ChatNotificationsEnabled", value);
+				OnNotifyPropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether screenshot notifications should be enabled.
+		/// </summary>
+		public bool ScreenshotNotificationsEnabled
+		{
+			get { return AppSettings.Get("ScreenshotNotificationsEnabled", true); }
+			set
+			{
+				AppSettings.Set("ScreenshotNotificationsEnabled", value);
 				OnNotifyPropertyChanged();
 			}
 		}

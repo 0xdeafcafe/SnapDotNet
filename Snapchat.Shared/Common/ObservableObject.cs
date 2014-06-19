@@ -32,5 +32,11 @@ namespace Snapchat.Common
 			if (PropertyChanged != null)
 				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
+
+		protected void ExplicitOnNotifyPropertyChanged(string propertyName = "")
+		{
+			if (PropertyChanged != null)
+				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 }
