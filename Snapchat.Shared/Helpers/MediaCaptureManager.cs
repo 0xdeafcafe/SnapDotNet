@@ -4,7 +4,10 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Graphics.Display;
 using Windows.Media.Capture;
+using Windows.Media.MediaProperties;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Snapchat.Helpers
 {
@@ -61,6 +64,23 @@ namespace Snapchat.Helpers
 		private static int _currentAudioDevice = 0, _currentVideoDevice;
 		private static bool _isPrepared, _isInitialized;
 
+		public static async Task<BitmapImage> CapturePhotoAsync()
+		{
+			var imageEncodingProperties = ImageEncodingProperties.CreateJpeg();
+			imageEncodingProperties.Width = 480;
+			imageEncodingProperties.Height = 640;
+
+			var bitmapImage = new BitmapImage();
+			using (var photoStream = new InMemoryRandomAccessStream())
+			{
+				await MediaCapture.CapturePhotoToStreamAsync(imageEncodingProperties, photoStream);
+				await photoStream.FlushAsync();
+				photoStream.Seek(0);
+				bitmapImage.SetSource(photoStream);
+			}
+			return bitmapImage;
+		}
+
 		/// <summary>
 		/// Prepares the media capture manager by obtaining device information.
 		/// </summary>
@@ -116,7 +136,7 @@ namespace Snapchat.Helpers
 
 			// Correct camera rotation
 			MediaCapture.SetPreviewRotation(IsUsingFrontCamera
-				? VideoRotation.Clockwise270Degrees
+				? VideoRotation.Clockwise90Degrees
 				: VideoRotation.Clockwise270Degrees);
 
 			// Crashes if enabled even inside a try/catch block :x

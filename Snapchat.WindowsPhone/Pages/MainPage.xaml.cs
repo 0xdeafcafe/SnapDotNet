@@ -17,14 +17,12 @@ using Snapchat.ViewModels;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages
 {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
 	[RequiresAuthentication]
 	public sealed partial class MainPage
 	{
@@ -76,13 +74,7 @@ namespace Snapchat.Pages
 		{
 			Label = App.Strings.GetString("ImportPictureAppBarButtonLabel")
 		};
-
-		private readonly AppBarButton _sendMessageAppBarButton = new AppBarButton
-		{
-			Icon = new SymbolIcon {Symbol = Symbol.Send},
-			Label = App.Strings.GetString("SendCommentAppBarButtonLabel")
-		};
-
+		
 		private readonly AppBarButton _logoutAppBarButton = new AppBarButton
 		{
 			Icon = new SymbolIcon { Symbol = Symbol.LeaveChat },
@@ -106,15 +98,9 @@ namespace Snapchat.Pages
 			// Setup ALL the datas :D
 			DataContext = ViewModel = new MainViewModel(ScrollViewer);
 
-			// Delete the camera button tip if necessary.
-			if (AppSettings.Get("FirstTime", true))
-			{
-				AppSettings.Set("FirstTime", false);
-			}
-			else
-			{
+			// Set the Camera Tip
+			if (!AppSettings.Get("FirstTime", true))
 				CameraPage.Children.Remove(FirstRunPrompt);
-			}
 
 			// Set up the scroll viewer
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
@@ -263,7 +249,7 @@ namespace Snapchat.Pages
 				case "Camera":
 					// exit the app
 					break;
-
+					
 				case "Friends":
 					ScrollViewer.HorizontalSnapPointsType = SnapPointsType.None;
 					ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
@@ -277,6 +263,7 @@ namespace Snapchat.Pages
 
 				case "Conversation":
 				case "Settings":
+				case "Preview":
 					// Determine the page that's currently in view.
 					var pageIndex = (int) Math.Round(ScrollViewer.HorizontalOffset / CameraPage.ActualWidth);
 					var frameworkElement = PagesContainer.Children[pageIndex] as FrameworkElement;
@@ -372,6 +359,11 @@ namespace Snapchat.Pages
 						appBar.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x33, 0x33, 0x33));
 						break;
 
+					case "Preview":
+						displayMode = AppBarClosedDisplayMode.Minimal;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x33, 0x33, 0x33));
+						break;
+
 					case "Friends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
 						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x9b, 0x55, 0xa0));
@@ -425,19 +417,16 @@ namespace Snapchat.Pages
 			appBar.ClosedDisplayMode = displayMode;
 		}
 
-		private void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
+		private async void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
-			// TODO: Take snapshot
-		}
+			var bitmapImage = await MediaCaptureManager.CapturePhotoAsync();
+			PreviewPage.DataContext = new PreviewViewModel(bitmapImage);
+			PreviewPage.Load();
+			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
 
-		private void CapturePhotoButton_Holding(object sender, HoldingRoutedEventArgs e)
-		{
-			// Play storyboard that shows a red ring circling the capture button
-		}
-
-		private void CapturePhotoButton_PointerPressed(object sender, PointerRoutedEventArgs e)
-		{
-			// TODO: Start recording
+			// Remove the Camera Tip
+			AppSettings.Set("FirstTime", false);
+			CameraPage.Children.Remove(FirstRunPrompt);
 		}
 
 		#region Snap Media Viewer
