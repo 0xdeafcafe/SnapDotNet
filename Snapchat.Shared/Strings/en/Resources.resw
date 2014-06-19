@@ -272,16 +272,19 @@
     <value>send</value>
   </data>
   <data name="SettingsAboutGroup.Header" xml:space="preserve">
-    <value>about</value>
+    <value>ABOUT</value>
   </data>
   <data name="SettingsAppBarButtonLabel" xml:space="preserve">
     <value>view settings...</value>
   </data>
   <data name="SettingsAppGroup.Header" xml:space="preserve">
-    <value>app</value>
+    <value>APP</value>
   </data>
   <data name="SettingsAutomaticallyDownloadSnaps.Header" xml:space="preserve">
     <value>Automatically download snaps</value>
+  </data>
+  <data name="SettingsChatNotifications.Header" xml:space="preserve">
+    <value>Chat notifications</value>
   </data>
   <data name="SettingsDisplayNameTextBox.Header" xml:space="preserve">
     <value>Display name</value>
@@ -308,7 +311,7 @@
     <value>Next replay</value>
   </data>
   <data name="SettingsNotificationsGroup.Header" xml:space="preserve">
-    <value>notifications</value>
+    <value>NOTIFICATIONS</value>
   </data>
   <data name="SettingsNumberOfBestFriends.Header" xml:space="preserve">
     <value>Number of best friends</value>
@@ -326,22 +329,28 @@
     <value>Phone</value>
   </data>
   <data name="SettingsPrivacyGroup.Header" xml:space="preserve">
-    <value>privacy</value>
+    <value>PRIVACY</value>
   </data>
   <data name="SettingsProfileGroup.Header" xml:space="preserve">
-    <value>profile</value>
+    <value>PROFILE</value>
+  </data>
+  <data name="SettingsScreenshotNotifications.Header" xml:space="preserve">
+    <value>Screenshot notifications</value>
+  </data>
+  <data name="SettingsSnapNotifications.Header" xml:space="preserve">
+    <value>Snap notifications</value>
   </data>
   <data name="SettingsStoryPrivacy.Header" xml:space="preserve">
     <value>Who can see my story?</value>
   </data>
   <data name="SettingsTileAppName.Text" xml:space="preserve">
-    <value>Coldsnap</value>
+    <value>ColdSnap</value>
+  </data>
+  <data name="SettingsTileGroup.Header" xml:space="preserve">
+    <value>TILE</value>
   </data>
   <data name="SettingsTileTransaprency.Header" xml:space="preserve">
     <value>Tile Transparency</value>
-  </data>
-  <data name="SettingsToastNotifications.Header" xml:space="preserve">
-    <value>Toast notifications</value>
   </data>
   <data name="SettingsUsernameTextBox.Header" xml:space="preserve">
     <value>Username</value>

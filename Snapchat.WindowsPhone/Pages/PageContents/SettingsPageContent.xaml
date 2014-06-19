@@ -80,9 +80,9 @@
 			<PivotItem x:Uid="SettingsNotificationsGroup" Header="NOTIFICATIONS">
 				<Grid>
 					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsToastNotifications" Header="Snap notifications" IsOn="{Binding SnapNotificationsEnabled, Mode=TwoWay}"/>
-						<ToggleSwitch x:Uid="SettingsToastNotifications" Header="Chat notifications" IsOn="{Binding ChatNotificationsEnabled, Mode=TwoWay}"/>
-						<ToggleSwitch x:Uid="SettingsToastNotifications" Header="Screenshot notifications" IsOn="{Binding ScreenshotNotificationsEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Snap notifications" IsOn="{Binding SnapNotificationsEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsChatNotifications" Header="Chat notifications" IsOn="{Binding ChatNotificationsEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsScreenshotNotifications" Header="Screenshot notifications" IsOn="{Binding ScreenshotNotificationsEnabled, Mode=TwoWay}"/>
 
 						<CheckBox x:Uid="SettingsInstantNotifications" IsEnabled="{Binding IsProUser}" Content="Instant notifications" IsChecked="{Binding InstantNotifications, Mode=TwoWay}"/>
 						<TextBlock x:Uid="InstantNotificationsDisclaimer" 
@@ -95,7 +95,7 @@
 				</Grid>
 			</PivotItem>
 
-			<PivotItem x:Uid="SettingsNotificationsGroup" Header="TILE">
+			<PivotItem x:Uid="SettingsTileGroup" Header="TILE">
 				<Grid>
 					<StackPanel>
 						<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="{Binding LiveTileEnabled, Mode=TwoWay}"/>
@@ -139,7 +139,7 @@
 
 										<!-- the live tile! -->
 										<Grid Background="{Binding TileTransparencyUiExampleBrush, FallbackValue='#FF3cb2e2'}" Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3">
-											<TextBlock x:Uid="SettingsTileAppName" Text="Coldsnap" FontFamily="Segoe WP" FontWeight="Normal" 
+											<TextBlock x:Uid="SettingsTileAppName" Text="ColdSnap" FontFamily="Segoe WP" FontWeight="Normal" 
 													   Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="5" />
 
 											<Border BorderThickness="1" BorderBrush="#FFFFFFFF" Height="56" Width="56">

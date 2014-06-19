@@ -17,7 +17,7 @@ namespace Snapchat.ViewModels
 			UpgradeProCommand = new RelayCommand(UpgradeToPro);
 
 			var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-			timer.Tick += delegate { OnNotifyPropertyChanged("NextReplay"); };
+			timer.Tick += delegate { ExplicitOnNotifyPropertyChanged("NextReplay"); };
 			timer.Start();
 		}
 
