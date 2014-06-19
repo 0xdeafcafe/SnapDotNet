@@ -34,18 +34,18 @@ namespace Snapchat.Controls
 
 			Click += (sender, args) =>
 			{
+				IsPrimaryContentVisible = !IsPrimaryContentVisible;
+
 				if (IsPrimaryContentVisible)
-				{
-					PrimaryTextVisibility = Visibility.Collapsed;
-					SecondaryTextVisibility = Visibility.Visible;
-				}
-				else
 				{
 					PrimaryTextVisibility = Visibility.Visible;
 					SecondaryTextVisibility = Visibility.Collapsed;
 				}
-
-				IsPrimaryContentVisible = !IsPrimaryContentVisible;
+				else
+				{
+					PrimaryTextVisibility = Visibility.Collapsed;
+					SecondaryTextVisibility = Visibility.Visible;
+				}
 			};
 		}
 
@@ -54,7 +54,7 @@ namespace Snapchat.Controls
 		/// </summary>
 		public String PrimaryText
 		{
-			get { return (String)GetValue(PrimaryTextDependencyProperty); }
+			get { return (String) GetValue(PrimaryTextDependencyProperty); }
 			set { SetValue(PrimaryTextDependencyProperty, value); }
 		}
 
@@ -63,7 +63,7 @@ namespace Snapchat.Controls
 		/// </summary>
 		public Visibility PrimaryTextVisibility
 		{
-			get { return (Visibility)GetValue(PrimaryTextVisibilityDependencyProperty); }
+			get { return (Visibility) GetValue(PrimaryTextVisibilityDependencyProperty); }
 			set { SetValue(PrimaryTextVisibilityDependencyProperty, value); }
 		}
 
@@ -72,7 +72,7 @@ namespace Snapchat.Controls
 		/// </summary>
 		public String SecondaryText
 		{
-			get { return (String)GetValue(SecondaryTextDependencyProperty); }
+			get { return (String) GetValue(SecondaryTextDependencyProperty); }
 			set { SetValue(SecondaryTextDependencyProperty, value); }
 		}
 
@@ -81,7 +81,7 @@ namespace Snapchat.Controls
 		/// </summary>
 		public Visibility SecondaryTextVisibility
 		{
-			get { return (Visibility)GetValue(SecondaryTextVisibilityDependencyProperty); }
+			get { return (Visibility) GetValue(SecondaryTextVisibilityDependencyProperty); }
 			set { SetValue(SecondaryTextVisibilityDependencyProperty, value); }
 		}
 	}

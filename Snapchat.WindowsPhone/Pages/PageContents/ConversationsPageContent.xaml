@@ -107,7 +107,6 @@
 		</Grid.RowDefinitions>
 		<Grid Background="#FF3cb2e2" Grid.Row="0">
 			<controls:StateTextBlock x:Uid="ConvosPageTitleStateTextBlock"
-									 x:Name="ConvosPageTitleStateTextBlock"
 									 PrimaryText="coldsnap" 
 									 Foreground="White" 
 									 SecondaryText="{Binding Account.FriendlyRatio, FallbackValue=69 | 69}"
@@ -117,96 +116,101 @@
 		</Grid>
 
 		<ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
-			<StackPanel>
-				<!-- Search box -->
-				<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
-					<TextBox.Resources>
-						<x:Double x:Key="TextControlThemeMinWidth">51</x:Double>
-						<x:Double x:Key="TextControlThemeMinHeight">33</x:Double>
-						<x:Double x:Key="ContentControlFontSize">18</x:Double>
-						<SolidColorBrush x:Key="TextBoxDisabledBackgroundThemeBrush" Color="Transparent"/>
-						<x:Double x:Key="TextControlBackgroundThemeOpacity">0.8</x:Double>
-						<x:Double x:Key="TextControlBorderThemeOpacity">0.8</x:Double>
-						<Style TargetType="TextBox">
-							<Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
-							<Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}"/>
-							<Setter Property="SelectionHighlightColor" Value="{ThemeResource TextSelectionHighlightColorThemeBrush}"/>
-							<Setter Property="Background" Value="{ThemeResource TextBoxBackgroundThemeBrush}"/>
-							<Setter Property="BorderBrush" Value="#f1f1f1"/>
-							<Setter Property="BorderThickness" Value="0,0,0,1"/>
-							<Setter Property="FontFamily" Value="Segoe WP"/>
-							<Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}"/>
-							<Setter Property="TextWrapping" Value="NoWrap"/>
-							<Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
-							<Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto"/>
-							<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
-							<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
-							<Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
-							<Setter Property="Padding" Value="0,10"/>
-							<Setter Property="Margin" Value="0"/>
-							<Setter Property="VerticalAlignment" Value="Top"/>
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate TargetType="TextBox">
-										<Grid Height="50">
-											<Grid.ColumnDefinitions>
-												<ColumnDefinition Width="55" />
-												<ColumnDefinition Width="*" />
-											</Grid.ColumnDefinitions>
-											<VisualStateManager.VisualStateGroups>
-												<VisualStateGroup x:Name="CommonStates">
-													<VisualState x:Name="Disabled">
-														<Storyboard>
-															<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundElement">
-																<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledBackgroundThemeBrush}"/>
-															</ObjectAnimationUsingKeyFrames>
-															<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BorderElement">
-																<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledBorderThemeBrush}"/>
-															</ObjectAnimationUsingKeyFrames>
-															<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentElement">
-																<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledForegroundThemeBrush}"/>
-															</ObjectAnimationUsingKeyFrames>
-															<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="PlaceholderTextContentPresenter">
-																<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledForegroundThemeBrush}"/>
-															</ObjectAnimationUsingKeyFrames>
-														</Storyboard>
-													</VisualState>
-													<VisualState x:Name="Normal">
-														<Storyboard>
-															<DoubleAnimation Duration="0" To="{ThemeResource TextControlBackgroundThemeOpacity}" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BackgroundElement"/>
-															<DoubleAnimation Duration="0" To="{ThemeResource TextControlBorderThemeOpacity}" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BorderElement"/>
-														</Storyboard>
-													</VisualState>
-													<VisualState x:Name="Focused">
-														<Storyboard>
-															<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BorderElement">
-																<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextSelectionHighlightColorThemeBrush}"/>
-															</ObjectAnimationUsingKeyFrames>
-															<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PlaceholderTextContentPresenter"/>
-															<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundElement">
-																<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxFocusedBackgroundThemeBrush}"/>
-															</ObjectAnimationUsingKeyFrames>
-														</Storyboard>
-													</VisualState>
-												</VisualStateGroup>
-											</VisualStateManager.VisualStateGroups>
-											<Border x:Name="BackgroundElement" Background="{TemplateBinding Background}" 
+			
+			<!-- le items -->
+			<ItemsControl ItemsSource="{Binding Conversations}" MinHeight="10">
+				<ItemsControl.Template>
+					<ControlTemplate TargetType="ItemsControl">
+						<StackPanel>
+							<!-- Search box -->
+							<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus">
+								<TextBox.Resources>
+									<x:Double x:Key="TextControlThemeMinWidth">51</x:Double>
+									<x:Double x:Key="TextControlThemeMinHeight">33</x:Double>
+									<x:Double x:Key="ContentControlFontSize">18</x:Double>
+									<SolidColorBrush x:Key="TextBoxDisabledBackgroundThemeBrush" Color="Transparent"/>
+									<x:Double x:Key="TextControlBackgroundThemeOpacity">0.8</x:Double>
+									<x:Double x:Key="TextControlBorderThemeOpacity">0.8</x:Double>
+									<Style TargetType="TextBox">
+										<Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
+										<Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}"/>
+										<Setter Property="SelectionHighlightColor" Value="{ThemeResource TextSelectionHighlightColorThemeBrush}"/>
+										<Setter Property="Background" Value="{ThemeResource TextBoxBackgroundThemeBrush}"/>
+										<Setter Property="BorderBrush" Value="#f1f1f1"/>
+										<Setter Property="BorderThickness" Value="0,0,0,1"/>
+										<Setter Property="FontFamily" Value="Segoe WP"/>
+										<Setter Property="FontSize" Value="{ThemeResource ContentControlFontSize}"/>
+										<Setter Property="TextWrapping" Value="NoWrap"/>
+										<Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
+										<Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto"/>
+										<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+										<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+										<Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
+										<Setter Property="Padding" Value="0,10"/>
+										<Setter Property="Margin" Value="0"/>
+										<Setter Property="VerticalAlignment" Value="Top"/>
+										<Setter Property="Template">
+											<Setter.Value>
+												<ControlTemplate TargetType="TextBox">
+													<Grid Height="50">
+														<Grid.ColumnDefinitions>
+															<ColumnDefinition Width="55" />
+															<ColumnDefinition Width="*" />
+														</Grid.ColumnDefinitions>
+														<VisualStateManager.VisualStateGroups>
+															<VisualStateGroup x:Name="CommonStates">
+																<VisualState x:Name="Disabled">
+																	<Storyboard>
+																		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundElement">
+																			<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledBackgroundThemeBrush}"/>
+																		</ObjectAnimationUsingKeyFrames>
+																		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BorderElement">
+																			<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledBorderThemeBrush}"/>
+																		</ObjectAnimationUsingKeyFrames>
+																		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentElement">
+																			<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledForegroundThemeBrush}"/>
+																		</ObjectAnimationUsingKeyFrames>
+																		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="PlaceholderTextContentPresenter">
+																			<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxDisabledForegroundThemeBrush}"/>
+																		</ObjectAnimationUsingKeyFrames>
+																	</Storyboard>
+																</VisualState>
+																<VisualState x:Name="Normal">
+																	<Storyboard>
+																		<DoubleAnimation Duration="0" To="{ThemeResource TextControlBackgroundThemeOpacity}" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BackgroundElement"/>
+																		<DoubleAnimation Duration="0" To="{ThemeResource TextControlBorderThemeOpacity}" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="BorderElement"/>
+																	</Storyboard>
+																</VisualState>
+																<VisualState x:Name="Focused">
+																	<Storyboard>
+																		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="BorderElement">
+																			<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextSelectionHighlightColorThemeBrush}"/>
+																		</ObjectAnimationUsingKeyFrames>
+																		<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PlaceholderTextContentPresenter"/>
+																		<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="BackgroundElement">
+																			<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextBoxFocusedBackgroundThemeBrush}"/>
+																		</ObjectAnimationUsingKeyFrames>
+																	</Storyboard>
+																</VisualState>
+															</VisualStateGroup>
+														</VisualStateManager.VisualStateGroups>
+														<Border x:Name="BackgroundElement" Background="{TemplateBinding Background}" 
 																	Margin="{TemplateBinding BorderThickness}" Grid.Column="0" Grid.ColumnSpan="2"/>
 
-											<Border x:Name="BorderElement" BorderBrush="{TemplateBinding BorderBrush}" 
+														<Border x:Name="BorderElement" BorderBrush="{TemplateBinding BorderBrush}" 
 																	BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="0" Grid.ColumnSpan="2"/>
 
-											<Grid Grid.Row="0" Grid.Column="0">
-												<Grid Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
-													<Grid.RenderTransform>
-														<CompositeTransform Rotation="-31.176"/>
-													</Grid.RenderTransform>
-													<Ellipse Margin="1,-4,0,0" Width="12" Height="12" StrokeThickness="1" Stroke="#989897" />
-													<Border Width="1" Height="8" Background="#989897" Margin="2,15,0,0" CornerRadius="0,0,1,1" />
-												</Grid>
-											</Grid>
+														<Grid Grid.Row="0" Grid.Column="0">
+															<Grid Width="25" Height="25" RenderTransformOrigin="0.5,0.5">
+																<Grid.RenderTransform>
+																	<CompositeTransform Rotation="-31.176"/>
+																</Grid.RenderTransform>
+																<Ellipse Margin="1,-4,0,0" Width="12" Height="12" StrokeThickness="1" Stroke="#989897" />
+																<Border Width="1" Height="8" Background="#989897" Margin="2,15,0,0" CornerRadius="0,0,1,1" />
+															</Grid>
+														</Grid>
 
-											<ScrollViewer x:Name="ContentElement" AutomationProperties.AccessibilityView="Raw" 
+														<ScrollViewer x:Name="ContentElement" AutomationProperties.AccessibilityView="Raw" 
 																		  HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" 
 																		  HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" 
 																		  IsTabStop="False" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" 
@@ -218,34 +222,31 @@
 																		  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" 
 																		  VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
 
-											<ContentControl x:Name="PlaceholderTextContentPresenter" Content="{TemplateBinding PlaceholderText}" 
+														<ContentControl x:Name="PlaceholderTextContentPresenter" Content="{TemplateBinding PlaceholderText}" 
 																			Foreground="#b9b9b9" FontStyle="Italic" FontWeight="SemiLight" FontFamily="Segoe WP"
 																			FontSize="{ThemeResource ContentControlFontSize}" 
 																			IsTabStop="False" VerticalAlignment="Center"
 																			Padding="{TemplateBinding Padding}" Grid.Column="1"/>
-										</Grid>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</TextBox.Resources>
-				</TextBox>
+													</Grid>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</TextBox.Resources>
+							</TextBox>
 
-				<!-- le items -->
-				<ItemsControl ItemsSource="{Binding Conversations}" MinHeight="10">
-					<ItemsControl.Template>
-						<ControlTemplate TargetType="ItemsControl">
 							<ItemsPresenter Margin="0,0,0,30"/>
-						</ControlTemplate>
-					</ItemsControl.Template>
-					<ItemsControl.ItemsPanel>
-						<ItemsPanelTemplate>
-							<VirtualizingStackPanel/>
-						</ItemsPanelTemplate>
-					</ItemsControl.ItemsPanel>
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
+						</StackPanel>
+					</ControlTemplate>
+				</ItemsControl.Template>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<VirtualizingStackPanel/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
 									Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding"
 									
 									PointerCanceled="UIElement_OnPointerCanceled"
@@ -257,93 +258,92 @@
 									PointerReleased="UIElement_OnPointerReleased"
 									
 									>
-								<Button.Resources>
-									<Storyboard x:Key="ConvoItemDetailPeekStoryboard">
-										<DoubleAnimation Duration="0:0:0.3" To="1" 
+							<Button.Resources>
+								<Storyboard x:Key="ConvoItemDetailPeekStoryboard">
+									<DoubleAnimation Duration="0:0:0.3" To="1" 
 														 Storyboard.TargetProperty="(UIElement.Opacity)"
 														 Storyboard.TargetName="SnapDetails"/>
-										<DoubleAnimation Duration="0:0:0.3" To="-2" 
+									<DoubleAnimation Duration="0:0:0.3" To="-2" 
 														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
 														 Storyboard.TargetName="SnapUser">
-											<DoubleAnimation.EasingFunction>
-												<CubicEase EasingMode="EaseOut"/>
-											</DoubleAnimation.EasingFunction>
-										</DoubleAnimation>
-										<DoubleAnimation Duration="0:0:0.3" To="2" 
+										<DoubleAnimation.EasingFunction>
+											<CubicEase EasingMode="EaseOut"/>
+										</DoubleAnimation.EasingFunction>
+									</DoubleAnimation>
+									<DoubleAnimation Duration="0:0:0.3" To="2" 
 														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
 														 Storyboard.TargetName="SnapDetails">
-											<DoubleAnimation.EasingFunction>
-												<CubicEase EasingMode="EaseOut"/>
-											</DoubleAnimation.EasingFunction>
-										</DoubleAnimation>
-										<DoubleAnimation BeginTime="0:0:2" To="0" 
+										<DoubleAnimation.EasingFunction>
+											<CubicEase EasingMode="EaseOut"/>
+										</DoubleAnimation.EasingFunction>
+									</DoubleAnimation>
+									<DoubleAnimation BeginTime="0:0:2" To="0" 
 														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" 
 														 Storyboard.TargetName="SnapDetails"/>
-									</Storyboard>
-									<Storyboard x:Key="ConvoItemDetailCloseStoryboard">
-										<DoubleAnimation Duration="0:0:0.3" To="0"
+								</Storyboard>
+								<Storyboard x:Key="ConvoItemDetailCloseStoryboard">
+									<DoubleAnimation Duration="0:0:0.3" To="0"
 														 Storyboard.TargetProperty="(UIElement.Opacity)"
 														 Storyboard.TargetName="SnapDetails"/>
-										<DoubleAnimation Duration="0:0:0.3" To="7" 
+									<DoubleAnimation Duration="0:0:0.3" To="7" 
 														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
 														 Storyboard.TargetName="SnapUser">
-											<DoubleAnimation.EasingFunction>
-												<CubicEase EasingMode="EaseOut"/>
-											</DoubleAnimation.EasingFunction>
-										</DoubleAnimation>
-										<DoubleAnimation Duration="0:0:0.3" To="0" 
+										<DoubleAnimation.EasingFunction>
+											<CubicEase EasingMode="EaseOut"/>
+										</DoubleAnimation.EasingFunction>
+									</DoubleAnimation>
+									<DoubleAnimation Duration="0:0:0.3" To="0" 
 														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
 														 Storyboard.TargetName="SnapDetails">
-											<DoubleAnimation.EasingFunction>
-												<CubicEase EasingMode="EaseOut"/>
-											</DoubleAnimation.EasingFunction>
-										</DoubleAnimation>
-									</Storyboard>
-								</Button.Resources>
-								<Grid x:Name="ConvoItemGrid" Height="50">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="0" />
-										<ColumnDefinition Width="15" />
-										<ColumnDefinition Width="40" />
-										<ColumnDefinition Width="15" />
-										<ColumnDefinition Width="*" />
-									</Grid.ColumnDefinitions>
+										<DoubleAnimation.EasingFunction>
+											<CubicEase EasingMode="EaseOut"/>
+										</DoubleAnimation.EasingFunction>
+									</DoubleAnimation>
+								</Storyboard>
+							</Button.Resources>
+							<Grid x:Name="ConvoItemGrid" Height="50">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="0" />
+									<ColumnDefinition Width="15" />
+									<ColumnDefinition Width="40" />
+									<ColumnDefinition Width="15" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
 
-									<TextBlock Grid.Column="1"
+								<TextBlock Grid.Column="1"
 											   Text="{Binding Path=PendingSnapCount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
 											   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
 											   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
 
-									<Grid Grid.Column="2" VerticalAlignment="Center">
-										<ContentControl Content="{Binding}" VerticalAlignment="Center" Margin="0,0,0,0"
+								<Grid Grid.Column="2" VerticalAlignment="Center">
+									<ContentControl Content="{Binding}" VerticalAlignment="Center" Margin="0,0,0,0"
 														ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
-										<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
+									<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
 														Template="{StaticResource recieved_message}"
 														Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>
-									</Grid>
+								</Grid>
 
-									<StackPanel Grid.Column="4" VerticalAlignment="Center">
-										<TextBlock x:Name="SnapUser" Text="{Binding Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
+								<StackPanel Grid.Column="4" VerticalAlignment="Center">
+									<TextBlock x:Name="SnapUser" Text="{Binding Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
 												   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
-											<TextBlock.RenderTransform>
-												<CompositeTransform TranslateY="7"/>
-											</TextBlock.RenderTransform>
-										</TextBlock>
+										<TextBlock.RenderTransform>
+											<CompositeTransform TranslateY="7"/>
+										</TextBlock.RenderTransform>
+									</TextBlock>
 
-										<ContentControl x:Name="SnapDetails" Content="{Binding}" Opacity="0"
+									<ContentControl x:Name="SnapDetails" Content="{Binding}" Opacity="0"
 														ContentTemplateSelector="{StaticResource SnapInfoTemplateSelector}" 
 														RenderTransformOrigin="0.5,0.5">
-											<ContentControl.RenderTransform>
-												<CompositeTransform TranslateX="0" TranslateY="0"/>
-											</ContentControl.RenderTransform>
-										</ContentControl>
-									</StackPanel>
-								</Grid>
-							</Button>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</StackPanel>
+										<ContentControl.RenderTransform>
+											<CompositeTransform TranslateX="0" TranslateY="0"/>
+										</ContentControl.RenderTransform>
+									</ContentControl>
+								</StackPanel>
+							</Grid>
+						</Button>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
 		</ScrollViewer>
 	</Grid>
 </UserControl>

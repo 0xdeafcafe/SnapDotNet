@@ -68,7 +68,7 @@ namespace Snapchat.ViewModels
 				// set le auth token here
 				App.SnapchatManager.UpdateAuthToken("5ee95824-c242-4716-b4e2-d50dc4609ff9");
 				App.SnapchatManager.UpdateUsername("alexerax");
-				await App.SnapchatManager.Endpoints.GetAllUpdatesAsync();
+				await App.SnapchatManager.UpdateAllAsync(delegate { });
 
 				// Hide progress indicator.
 				progIndicator.Text = String.Empty;

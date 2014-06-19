@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -224,10 +223,26 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			#endregion
 
-			// TODO: finish this
+			#region Update Background Fetch Secret Key
+
 			AllUpdates.BackgroundFetchSecretKey = allUpdates.BackgroundFetchSecretKey;
+
+			#endregion
+
+			#region Update Messaging Gateway Infomation
+
+			if (AllUpdates.MessagingGatewayInfo == null)
+				AllUpdates.MessagingGatewayInfo = new MessagingGatewayInfo();
+
+			var messagingGatewayInfo = AllUpdates.MessagingGatewayInfo;
+
+			messagingGatewayInfo.GatewayAuthenticationToken = allUpdates.MessagingGatewayInfo.GatewayAuthenticationToken;
+			messagingGatewayInfo.GatewayServer = allUpdates.MessagingGatewayInfo.GatewayServer;
+
+			#endregion
+
+			// TODO: finish this
 			AllUpdates.ConversationResponse = allUpdates.ConversationResponse;
-			AllUpdates.MessagingGatewayInfo = allUpdates.MessagingGatewayInfo;
 			AllUpdates.StoriesResponse = allUpdates.StoriesResponse;
 
 			//AllUpdates = allUpdates;

@@ -191,7 +191,7 @@
 		<!-- Snap Media Overlay -->
 		<Grid x:Name="SnapMediaOverlayGrid" Background="Black" 
 			  Visibility="Collapsed" IsHitTestVisible="False">
-			<!-- -->
+			<!-- le media controls -->
 			<Image x:Name="SnapMediaImage" IsHitTestVisible="False" />
 			<MediaElement x:Name="SnapMediaVideo" IsHitTestVisible="False" />
 		</Grid>
