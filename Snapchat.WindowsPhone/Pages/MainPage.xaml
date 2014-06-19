@@ -166,9 +166,6 @@
 				<pageContents:AddFriendsPage x:Name="AddFriendsPage" Tag="AddFriends" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
 			</StackPanel>
 		</ScrollViewer>
-		
-		<!-- for a better fade-in/fade-out animation with the settings page -->
-		<Rectangle x:Name="PageColorCover" Fill="{ThemeResource PhoneBackgroundBrush}" Opacity="0" IsHitTestVisible="False"/>
 
 		<pageContents:SettingsPageContent x:Name="SettingsPage" Visibility="Collapsed">
 			<pageContents:SettingsPageContent.RenderTransform>
@@ -217,19 +214,8 @@
 								</EasingDoubleKeyFrame.EasingFunction>
 							</EasingDoubleKeyFrame>
 						</DoubleAnimationUsingKeyFrames>
-						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
-							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
-								<EasingDoubleKeyFrame.EasingFunction>
-									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
-								</EasingDoubleKeyFrame.EasingFunction>
-							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
-						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
-							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
 							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
@@ -270,19 +256,8 @@
 								</EasingDoubleKeyFrame.EasingFunction>
 							</EasingDoubleKeyFrame>
 						</DoubleAnimationUsingKeyFrames>
-						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
-							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
-								<EasingDoubleKeyFrame.EasingFunction>
-									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
-								</EasingDoubleKeyFrame.EasingFunction>
-							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
-						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
-							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
@@ -324,19 +299,8 @@
 								</EasingDoubleKeyFrame.EasingFunction>
 							</EasingDoubleKeyFrame>
 						</DoubleAnimationUsingKeyFrames>
-						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
-							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
-								<EasingDoubleKeyFrame.EasingFunction>
-									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
-								</EasingDoubleKeyFrame.EasingFunction>
-							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
-						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
-							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
@@ -378,19 +342,8 @@
 								</EasingDoubleKeyFrame.EasingFunction>
 							</EasingDoubleKeyFrame>
 						</DoubleAnimationUsingKeyFrames>
-						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
-							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
-								<EasingDoubleKeyFrame.EasingFunction>
-									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
-								</EasingDoubleKeyFrame.EasingFunction>
-							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
-						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
-							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
@@ -420,9 +373,6 @@
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
-							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
-						</ObjectAnimationUsingKeyFrames>
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
 							<EasingDoubleKeyFrame KeyTime="0" Value="-200"/>
 							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
@@ -434,14 +384,6 @@
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.Opacity)">
 							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1">
-								<EasingDoubleKeyFrame.EasingFunction>
-									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
-								</EasingDoubleKeyFrame.EasingFunction>
-							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>
-						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
-							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
 								<EasingDoubleKeyFrame.EasingFunction>
 									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
 								</EasingDoubleKeyFrame.EasingFunction>
@@ -508,19 +450,8 @@
 								</EasingDoubleKeyFrame.EasingFunction>
 							</EasingDoubleKeyFrame>
 						</DoubleAnimationUsingKeyFrames>
-						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="(UIElement.Opacity)">
-							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
-								<EasingDoubleKeyFrame.EasingFunction>
-									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
-								</EasingDoubleKeyFrame.EasingFunction>
-							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="Collapsed"/>
-						</ObjectAnimationUsingKeyFrames>
-						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PageColorCover" Storyboard.TargetProperty="Visibility">
-							<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed"/>
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
 				</VisualState>
