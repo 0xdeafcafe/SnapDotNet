@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -175,11 +176,39 @@ namespace SnapDotNet.Core.Snapchat.Api
 			foreach (var bestFriend in newUpdates.BestFriends)
 				updates.BestFriends.Add(bestFriend);
 
-			// Update Friends
+			#region Update Friends
+
+			// This is messy, so I'm wrapping it in a region
 			if (updates.Friends == null) updates.Friends = new ObservableCollection<Friend>();
-			updates.Friends.Clear();
-			foreach (var friend in newUpdates.Friends)
-				updates.Friends.Add(friend);
+			var currentFriends = new ObservableCollection<String>();
+			foreach (var newFriend in newUpdates.Friends)
+			{
+				currentFriends.Add(newFriend.Name);
+				var oldFriend = updates.Friends.FirstOrDefault(f => f.Name == newFriend.Name);
+				if (oldFriend == null)
+					// this guy is a new guy!
+					updates.Friends.Add(newFriend);
+				else
+				{
+					oldFriend.CanSeeCustomStories = newFriend.CanSeeCustomStories;
+					oldFriend.Direction = newFriend.Direction;
+					oldFriend.Display = newFriend.Display;
+					oldFriend.Name = newFriend.Name;
+				}
+
+			}
+
+			// TODO: If someone can think of a better way to do this, pls do it
+			var duplicateFriends = updates.Friends.ToList();
+			foreach (var currentFriend in currentFriends)
+			{
+				var currentFriendSafe = currentFriend;
+				var current = duplicateFriends.FirstOrDefault(f => f.Name == currentFriendSafe);
+				if (current == null) updates.Friends.Remove(f => f.Name == currentFriendSafe);
+				else duplicateFriends.Remove(current);
+			}
+
+			#endregion
 
 			// Recent Friends
 			if (updates.RecentFriends == null) updates.RecentFriends = new ObservableCollection<String>();
