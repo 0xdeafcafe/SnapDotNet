@@ -46,12 +46,7 @@ namespace Snapchat.Pages
 		private readonly AppBarButton _flipCameraAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png") },
-			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel"),
-			Command = new RelayCommand(async () =>
-			{
-				await MediaCaptureManager.ToggleCameraAsync();
-				Singleton.UpdateBottomAppBar();
-			})
+			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel")
 		};
 
 		private readonly AppBarButton _toggleFlashAppBarButton = new AppBarButton
@@ -74,7 +69,7 @@ namespace Snapchat.Pages
 		{
 			Label = App.Strings.GetString("ImportPictureAppBarButtonLabel")
 		};
-		
+
 		private readonly AppBarButton _logoutAppBarButton = new AppBarButton
 		{
 			Icon = new SymbolIcon { Symbol = Symbol.LeaveChat },
@@ -163,7 +158,7 @@ namespace Snapchat.Pages
 				ConversationsPage.Opacity = 1;
 				timer.Stop();
 
-				
+
 				switch (destination)
 				{
 					case "Conversations":
@@ -211,7 +206,7 @@ namespace Snapchat.Pages
 		{
 			if (PagesVisualStateGroup.CurrentState == null)
 				return;
-			
+
 			var currentState = PagesVisualStateGroup.CurrentState.Name;
 			if (currentState == "Camera")
 			{
@@ -249,7 +244,7 @@ namespace Snapchat.Pages
 				case "Camera":
 					// exit the app
 					break;
-					
+
 				case "Friends":
 					ScrollViewer.HorizontalSnapPointsType = SnapPointsType.None;
 					ScrollViewer.ChangeView(CameraPage.ActualWidth, null, null, false); // go to camera
@@ -265,7 +260,7 @@ namespace Snapchat.Pages
 				case "Settings":
 				case "Preview":
 					// Determine the page that's currently in view.
-					var pageIndex = (int) Math.Round(ScrollViewer.HorizontalOffset / CameraPage.ActualWidth);
+					var pageIndex = (int)Math.Round(ScrollViewer.HorizontalOffset / CameraPage.ActualWidth);
 					var frameworkElement = PagesContainer.Children[pageIndex] as FrameworkElement;
 					if (frameworkElement != null)
 					{
@@ -294,7 +289,7 @@ namespace Snapchat.Pages
 		private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
 		{
 			// Determine the page that's currently in view.
-			var pageIndex = (int) Math.Round(ScrollViewer.HorizontalOffset/CameraPage.ActualWidth);
+			var pageIndex = (int)Math.Round(ScrollViewer.HorizontalOffset / CameraPage.ActualWidth);
 			var frameworkElement = PagesContainer.Children[pageIndex] as FrameworkElement;
 			if (frameworkElement != null)
 			{
@@ -348,6 +343,23 @@ namespace Snapchat.Pages
 						break;
 
 					case "Camera":
+
+						_flipCameraAppBarButton.Command = new RelayCommand(async () =>
+						{
+							await MediaCaptureManager.ToggleCameraAsync();
+
+							var scaleTransform = CapturePreview.RenderTransform as CompositeTransform;
+							if (MediaCaptureManager.IsMirrored)
+							{
+								if (scaleTransform != null)
+									scaleTransform.ScaleX = -1;
+							}
+							else if (scaleTransform != null)
+								scaleTransform.ScaleX = 1;
+
+							Singleton.UpdateBottomAppBar();
+						});
+
 						if (MediaCaptureManager.HasFrontCamera)
 							primaryCommands.Add(_flipCameraAppBarButton);
 
@@ -419,8 +431,8 @@ namespace Snapchat.Pages
 
 		private async void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
-			var bitmapImage = await MediaCaptureManager.CapturePhotoAsync();
-			PreviewPage.DataContext = new PreviewViewModel(bitmapImage);
+			var writeableBitmap = await MediaCaptureManager.CapturePhotoAsync();
+			PreviewPage.DataContext = new PreviewViewModel(writeableBitmap);
 			PreviewPage.Load();
 			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
 

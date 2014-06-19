@@ -17,7 +17,7 @@ namespace Snapchat.Pages.PageContents
 			var context = DataContext as PreviewViewModel;
 			if (context == null) return;
 
-			ImageMediaElement.Source = context.BitmapImage;
+			ImageMediaElement.Source = context.WriteableBitmap;
 		}
 	}
 }

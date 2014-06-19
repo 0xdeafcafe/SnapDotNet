@@ -5,16 +5,16 @@ namespace Snapchat.ViewModels.PageContents
 	public class PreviewViewModel
 		: BaseViewModel
 	{
-		public PreviewViewModel(BitmapImage bitmapImage)
+		public PreviewViewModel(WriteableBitmap writeableBitmap)
 		{
-			BitmapImage = bitmapImage;
+			WriteableBitmap = writeableBitmap;
 		}
 
-		public BitmapImage BitmapImage
+		public WriteableBitmap WriteableBitmap
 		{
-			get { return _bitmapImage; }
-			set { TryChangeValue(ref _bitmapImage, value); }
+			get { return _writeableBitmap; }
+			set { TryChangeValue(ref _writeableBitmap, value); }
 		}
-		private BitmapImage _bitmapImage;
+		private WriteableBitmap _writeableBitmap;
 	}
 }

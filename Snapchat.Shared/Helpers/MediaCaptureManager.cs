@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Graphics.Display;
@@ -21,8 +22,10 @@ namespace Snapchat.Helpers
 		public static bool IsPreviewing { get; set; }
 		public static bool IsMirrored
 		{
-			get { return AppSettings.Get<bool>("FrontCameraMirrorEffect"); }
-			set { AppSettings.Set("FrontCameraMirrorEffect", value); }
+			get
+			{
+				return AppSettings.Get<bool>("FrontCameraMirrorEffect") && IsUsingFrontCamera;
+			}
 		}
 
 		public static bool IsUsingFrontCamera
@@ -61,22 +64,35 @@ namespace Snapchat.Helpers
 		private static DeviceInformationCollection _cameraInfoCollection, _microphoneInfoCollection;
 		private static int _currentVideoDevice, _currentAudioDevice = 0;
 
-		public static async Task<BitmapImage> CapturePhotoAsync()
+		#region Capture Methods
+
+		public static async Task<WriteableBitmap> CapturePhotoAsync()
 		{
 			var imageEncodingProperties = ImageEncodingProperties.CreateJpeg();
-			imageEncodingProperties.Width = 480;
-			imageEncodingProperties.Height = 640;
+			imageEncodingProperties.Width = 720;
+			imageEncodingProperties.Height = 1280;
 
 			var bitmapImage = new BitmapImage();
+			WriteableBitmap writableBitmap;
 			using (var photoStream = new InMemoryRandomAccessStream())
 			{
 				await MediaCapture.CapturePhotoToStreamAsync(imageEncodingProperties, photoStream);
 				await photoStream.FlushAsync();
 				photoStream.Seek(0);
 				bitmapImage.SetSource(photoStream);
+
+				writableBitmap = new WriteableBitmap(bitmapImage.PixelWidth, bitmapImage.PixelHeight);
+				photoStream.Seek(0);
+				await writableBitmap.SetSourceAsync(photoStream);
+				//writableBitmap.Rotate(90);
+
 			}
-			return bitmapImage;
+			return writableBitmap;
 		}
+
+		#endregion
+
+		#region Prep and Disposal Methods
 
 		/// <summary>
 		/// Prepares the media capture manager by obtaining device information.
@@ -94,7 +110,7 @@ namespace Snapchat.Helpers
 			_microphoneInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.AudioCapture);
 
 			// Enable front camera if there's more than one camera.
-			HasFrontCamera = _cameraInfoCollection.Count >= 2;
+			HasFrontCamera = _cameraInfoCollection.Any(c => c.EnclosureLocation.Panel == Panel.Front);
 
 			IsPrepared = true;
 		}
@@ -131,17 +147,14 @@ namespace Snapchat.Helpers
 			});
 			IsInitialized = true;
 
-			var previewMirroring = MediaCapture.GetPreviewMirroring();
+			// Crashes if enabled even inside a try/catch block :x - dicks
+			var previewMirroring = MediaCapture.GetPreviewMirroring() && IsUsingFrontCamera;
 			var counterclockwiseRotation = (previewMirroring && !IsUsingFrontCamera) ||
-				(!previewMirroring && IsUsingFrontCamera);
+				(IsUsingFrontCamera);
 
 			// Correct camera rotation
 			MediaCapture.SetPreviewRotation(VideoPreviewRotationLookup(
 				DisplayInformation.GetForCurrentView().CurrentOrientation, counterclockwiseRotation));
-
-			// Crashes if enabled even inside a try/catch block :x
-			//if (IsMirrored && IsUsingFrontCamera)
-			//	MediaCapture.SetPreviewMirroring(true);
 
 			Debug.WriteLine("Initialized camera!");
 		}
@@ -208,6 +221,8 @@ namespace Snapchat.Helpers
 			catch (Exception e) { }
 			IsPreviewing = false;
 		}
+
+		#endregion
 
 		private static VideoRotation VideoPreviewRotationLookup(DisplayOrientations displayOrientation, bool counterclockwise)
 		{

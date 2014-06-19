@@ -58,7 +58,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		
+
 		<Style x:Key="CaptureButtonStyle" BasedOn="{StaticResource EmptyButtonStyle}" TargetType="Button">
 			<Setter Property="Template">
 				<Setter.Value>
@@ -114,7 +114,7 @@
 			</Setter>
 		</Style>
 	</Page.Resources>
-	
+
 	<Grid>
 		<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
 					  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
@@ -146,12 +146,15 @@
 						</EventTrigger>
 					</Grid.Triggers>
 
-					<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0">
+					<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0" RenderTransformOrigin="0.5,0.5">
 						<CaptureElement.Resources>
 							<Storyboard x:Key="FadeInStoryboard">
 								<DoubleAnimation To="1" Storyboard.TargetName="CapturePreview" Storyboard.TargetProperty="Opacity" Duration="00:00:00.3"/>
 							</Storyboard>
 						</CaptureElement.Resources>
+						<CaptureElement.RenderTransform>
+							<CompositeTransform ScaleX="1"/>
+						</CaptureElement.RenderTransform>
 					</CaptureElement>
 
 					<StackPanel x:Name="FirstRunPrompt" VerticalAlignment="Bottom" Margin="0,0,0,180" Height="100">
@@ -171,7 +174,7 @@
 							Tapped="CapturePhotoButton_Tapped"
 							VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,90"
 							Width="92" Height="92" />
-					
+
 
 					<Grid x:Name="NavButtonsContainer" VerticalAlignment="Bottom" Height="70" Margin="0,0,0,58" Opacity="0">
 						<Grid.RenderTransform>
@@ -242,14 +245,14 @@
 
 		<pageContents:PreviewPageContent x:Name="PreviewPage" Visibility="Collapsed"
 										 VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-			
+
 		</pageContents:PreviewPageContent>
-		
+
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
 				<!-- Can't use transitions because it makes the app bar update AFTER the animation, not DURING -->
 				<!-- awhhh -->
-				
+
 				<VisualState x:Name="Conversations">
 					<Storyboard>
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
@@ -421,7 +424,7 @@
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
 				</VisualState>
-				
+
 				<VisualState x:Name="Settings">
 					<Storyboard>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="Visibility">
@@ -465,7 +468,7 @@
 						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
 				</VisualState>
-				
+
 				<VisualState x:Name="Conversation">
 					<Storyboard>
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ConvoPage" Storyboard.TargetProperty="Visibility">
@@ -487,7 +490,7 @@
 								</EasingDoubleKeyFrame.EasingFunction>
 							</EasingDoubleKeyFrame>
 						</DoubleAnimationUsingKeyFrames>
-						
+
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="SettingsPage" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
 							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 							<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-200">
