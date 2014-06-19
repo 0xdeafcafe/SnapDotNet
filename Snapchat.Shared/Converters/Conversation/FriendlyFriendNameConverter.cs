@@ -13,6 +13,13 @@ namespace Snapchat.Converters.Conversation
 				return OutputLowercase ? "me" : "ME";
 
 			var friend = App.SnapchatManager.AllUpdates.UpdatesResponse.Friends.FirstOrDefault(f => f.Name.ToLowerInvariant() == name);
+
+			// Team Snapchat test
+			if (friend == null && name == "teamsnapchat")
+				return OutputLowercase
+					? "team snapchat"
+					: "TEAM SNAPCHAT";
+
 			return friend == null
 				? OutputLowercase 
 					? "unknown friend" 
