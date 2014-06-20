@@ -372,8 +372,7 @@ namespace Snapchat.Pages
 						break;
 
 					case "Preview":
-						displayMode = AppBarClosedDisplayMode.Minimal;
-						appBar.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x33, 0x33, 0x33));
+						BottomAppBar = null;
 						break;
 
 					case "Friends":
@@ -400,10 +399,16 @@ namespace Snapchat.Pages
 			}
 
 			// Add global commands.
-			if (currentState != "Settings")
+			if (currentState != "Settings" && currentState != "Preview")
 			{
 				secondaryCommands.Add(_refreshAppBarButton);
 				secondaryCommands.Add(_settingsAppBarButton);
+			}
+
+			if (BottomAppBar == null)
+			{
+				appBar.PrimaryCommands.Clear();
+				appBar.SecondaryCommands.Clear();
 			}
 
 			// Update the app bar if commands have changed (to avoid animation glitches).

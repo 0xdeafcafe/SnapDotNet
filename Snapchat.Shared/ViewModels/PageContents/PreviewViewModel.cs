@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Media.Imaging;
+﻿using System;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Snapchat.ViewModels.PageContents
 {
@@ -16,5 +17,9 @@ namespace Snapchat.ViewModels.PageContents
 			set { TryChangeValue(ref _writeableBitmap, value); }
 		}
 		private WriteableBitmap _writeableBitmap;
+
+		public string CurrentTimeFilterTime { get { return DateTime.Now.ToString("h:mm"); } }
+		public string CurrentTimeFilterDesignator { get { return DateTime.Now.ToString("tt"); } }
 	}
 }
+

@@ -9,5 +9,45 @@
 
 	<Grid Background="Black">
 		<Image x:Name="ImageMediaElement" />
+		
+		<Pivot>
+			<PivotItem Tag="None" Background="Transparent"/>
+
+			<PivotItem Tag="Sepia" Background="#55FF0000">
+				<PivotItem.RenderTransform>
+					<CompositeTransform TranslateX="-20" TranslateY="-23" ScaleY="1.05" ScaleX="1.12"/>
+				</PivotItem.RenderTransform>
+			</PivotItem>
+
+			<PivotItem Tag="Retro" Background="#5500FF00">
+				<PivotItem.RenderTransform>
+					<CompositeTransform TranslateX="-20" TranslateY="-23" ScaleY="1.05" ScaleX="1.12"/>
+				</PivotItem.RenderTransform>
+			</PivotItem>
+
+			<PivotItem Tag="BlackAndWhite" Background="#550000FF">
+				<PivotItem.RenderTransform>
+					<CompositeTransform TranslateX="-20" TranslateY="-23" ScaleY="1.05" ScaleX="1.12"/>
+				</PivotItem.RenderTransform>
+			</PivotItem>
+			
+			<PivotItem Tag="Temperature">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="72">72</TextBlock>
+					<TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" FontSize="22" Margin="0,-42,0,0">&#176;F</TextBlock>
+				</StackPanel>
+			</PivotItem>
+
+			<PivotItem Tag="Time">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+					<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="72" Text="{Binding CurrentTimeFilterTime}" FontFamily="ms-appx:/Assets/LCD-N___.TTF#LCD"/>
+					<TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" FontSize="22" Margin="0,30,0,0" Text="{Binding CurrentTimeFilterDesignator}"/>
+				</StackPanel>
+			</PivotItem>
+
+			<PivotItem Tag="Weather">
+				<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72">&#x1f31e;</TextBlock>
+			</PivotItem>
+		</Pivot>
 	</Grid>
 </UserControl>
