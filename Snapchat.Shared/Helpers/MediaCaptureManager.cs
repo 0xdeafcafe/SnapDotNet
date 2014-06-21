@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
+using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
 using Windows.Media.Capture;
 using Windows.Media.MediaProperties;
@@ -280,7 +281,7 @@ namespace Snapchat.Helpers
 		private static async Task SetResolution(MediaStreamType mediaStreamType)
 		{
 			// TODO: ::NOTE::
-			// I believe the best SubType GUID's are YUY2 and NV12 - they have the 
+			// I believe the best SubType GUID's are YUY2, UYVY and NV12 - they have the 
 			// best sampleing and bits per channel. I also believe they are supported 
 			// by every device. But that DOES need claraification from !testing! (or we fucked yo)
 			// TODO: ::NOTE::
@@ -296,12 +297,12 @@ namespace Snapchat.Helpers
 				var vp = (VideoEncodingProperties)res[i];
 				var frameRate = (vp.FrameRate.Numerator / vp.FrameRate.Denominator);
 
-				if (vp.Subtype.Equals("YUY2") || vp.Subtype.Equals("NV12"))
+				if (vp.Subtype.Equals("YUY2") || vp.Subtype.Equals("NV12") || vp.Subtype.Equals("UYVY"))
 					resolutions.Add(new Tuple<uint, uint, int>(vp.Width, vp.Height, i));
 
 				Debug.WriteLine("{0}) {1}, {2}x{3}, Frame/s: {4}", i, vp.Subtype, vp.Width, vp.Height, frameRate);
 
-				if (vp.Width > perfectResolution.Item1 && (vp.Subtype.Equals("YUY2") || vp.Subtype.Equals("NV12")))
+				if (vp.Width > perfectResolution.Item1 && (vp.Subtype.Equals("YUY2") || vp.Subtype.Equals("NV12") || vp.Subtype.Equals("UYVY")))
 					perfectResolution = new Tuple<uint, uint, int>(vp.Width, vp.Height, i);
 			}
 
@@ -324,7 +325,10 @@ namespace Snapchat.Helpers
 					index++;
 				}
 				var pefectIndex = distanceInfo.Item2;
-				perfectResolution = new Tuple<uint, uint, int>(resolutions[pefectIndex].Item1, resolutions[pefectIndex].Item2, resolutions[pefectIndex].Item3);
+				perfectResolution = new Tuple<uint, uint, int>(
+					resolutions[pefectIndex].Item1, 
+					resolutions[pefectIndex].Item2,
+					resolutions[pefectIndex].Item3);
 			}
 
 			switch (mediaStreamType)
