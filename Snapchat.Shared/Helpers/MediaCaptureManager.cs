@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +7,6 @@ using Windows.Devices.Enumeration;
 using Windows.Graphics.Display;
 using Windows.Media.Capture;
 using Windows.Media.MediaProperties;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using Panel = Windows.Devices.Enumeration.Panel;
@@ -17,6 +17,8 @@ namespace Snapchat.Helpers
 	{
 		private static MediaCapture MediaCapture { get; set; }
 		public static CaptureElement PreviewElement { get; set; }
+
+		public static LowLagPhotoCapture LowLagPhotoCapture { get; set; }
 
 		public static bool IsRecording { get; set; }
 		public static bool IsPreviewing { get; set; }
@@ -32,6 +34,9 @@ namespace Snapchat.Helpers
 		{
 			get { return _cameraInfoCollection[_currentVideoDevice].EnclosureLocation.Panel == Panel.Front; }
 		}
+
+		public static uint PhotoCaptureHeight { get; private set; }
+		public static uint PhotoCaptureWidth { get; private set; }
 
 		/// <summary>
 		/// Gets or sets whether flash is currently enabled.
@@ -68,29 +73,17 @@ namespace Snapchat.Helpers
 
 		public static async Task<WriteableBitmap> CapturePhotoAsync()
 		{
-			var imageEncodingProperties = ImageEncodingProperties.CreateJpeg();
-			imageEncodingProperties.Width = 720;
-			imageEncodingProperties.Height = 1280;
+			var capture = await LowLagPhotoCapture.CaptureAsync();
+			var writableBitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
+			await writableBitmap.SetSourceAsync(capture.Frame);
 
-			var bitmapImage = new BitmapImage();
-			WriteableBitmap writableBitmap;
-			using (var photoStream = new InMemoryRandomAccessStream())
-			{
-				await MediaCapture.CapturePhotoToStreamAsync(imageEncodingProperties, photoStream);
-				await photoStream.FlushAsync();
-				photoStream.Seek(0);
-				bitmapImage.SetSource(photoStream);
+			// Fix image mirroring (as we only actualy mirror the preview, not the capture element)
+			if (IsMirrored) writableBitmap = writableBitmap.Flip(WriteableBitmapExtensions.FlipMode.Horizontal);
 
-				writableBitmap = new WriteableBitmap(bitmapImage.PixelWidth, bitmapImage.PixelHeight);
-				photoStream.Seek(0);
-				await writableBitmap.SetSourceAsync(photoStream);
-
-				// Fix image rotation
-				writableBitmap = writableBitmap.Rotate(RotationValueFromVideoRotation(VideoPreviewRotationLookup()));
-
-				// Fix image mirroring (as we only actualy mirror the preview, not the capture element)
-				if (IsMirrored) writableBitmap = writableBitmap.Flip(WriteableBitmapExtensions.FlipMode.Horizontal);
-			}
+			// Fix rotation
+			writableBitmap = writableBitmap.RotateFree(RotationValueFromVideoRotation(VideoPreviewRotationLookup()), false);
+			
+			// Get that sexy image back to the user!
 			return writableBitmap;
 		}
 
@@ -151,8 +144,24 @@ namespace Snapchat.Helpers
 			});
 			IsInitialized = true;
 
+			// Set Resolutions
+			await SetResolution(MediaStreamType.Photo);
+			await SetResolution(MediaStreamType.VideoPreview);
+			await SetResolution(MediaStreamType.VideoRecord);
+
 			// Correct camera rotation
 			MediaCapture.SetPreviewRotation(VideoPreviewRotationLookup());
+			MediaCapture.SetRecordRotation(VideoPreviewRotationLookup());
+
+			//// TODO: Fix Auto Focus
+			//MediaCapture.VideoDeviceController.FocusControl.Configure(new FocusSettings { AutoFocusRange = AutoFocusRange.Normal, Mode = FocusMode.Continuous });
+
+			// Setup low-lag Photo Capture
+			MediaCapture.VideoDeviceController.LowLagPhoto.ThumbnailEnabled = false;
+			var imageEncoding = ImageEncodingProperties.CreateJpeg();
+			imageEncoding.Width = PhotoCaptureWidth;
+			imageEncoding.Height = PhotoCaptureHeight;
+			LowLagPhotoCapture = await MediaCapture.PrepareLowLagPhotoCaptureAsync(imageEncoding);
 
 			Debug.WriteLine("Initialized camera!");
 		}
@@ -169,16 +178,18 @@ namespace Snapchat.Helpers
 			{
 				await StopPreviewAsync();
 			}
-
+			
 			if (MediaCapture != null)
 			{
 				if (PreviewElement != null)
 					PreviewElement.Source = null;
-				
+
+				if (LowLagPhotoCapture != null)
+					await LowLagPhotoCapture.FinishAsync();
+
 				MediaCapture.Dispose();
 				MediaCapture = null;
 			}
-
 			IsInitialized = false;
 		}
 
@@ -222,6 +233,8 @@ namespace Snapchat.Helpers
 
 		#endregion
 
+		#region Helpers
+
 		private static VideoRotation VideoPreviewRotationLookup()
 		{
 			var previewMirroring = MediaCapture.GetPreviewMirroring() && IsUsingFrontCamera;
@@ -260,6 +273,72 @@ namespace Snapchat.Helpers
 				default:
 					return 0;
 			}
+		}
+		
+		#endregion
+
+		private static async Task SetResolution(MediaStreamType mediaStreamType)
+		{
+			// TODO: ::NOTE::
+			// I believe the best SubType GUID's are YUY2 and NV12 - they have the 
+			// best sampleing and bits per channel. I also believe they are supported 
+			// by every device. But that DOES need claraification from !testing! (or we fucked yo)
+			// TODO: ::NOTE::
+
+			var res = MediaCapture.VideoDeviceController.GetAvailableMediaStreamProperties(mediaStreamType);
+			var resolutions = new List<Tuple<uint, uint, int>>();
+			var perfectResolution = new Tuple<uint, uint, int>(0, 0, 0);
+
+			if (res.Count <= 0) return;
+
+			for (var i = 0; i < res.Count; i++)
+			{
+				var vp = (VideoEncodingProperties)res[i];
+				var frameRate = (vp.FrameRate.Numerator / vp.FrameRate.Denominator);
+
+				if (vp.Subtype.Equals("YUY2") || vp.Subtype.Equals("NV12"))
+					resolutions.Add(new Tuple<uint, uint, int>(vp.Width, vp.Height, i));
+
+				Debug.WriteLine("{0}) {1}, {2}x{3}, Frame/s: {4}", i, vp.Subtype, vp.Width, vp.Height, frameRate);
+
+				if (vp.Width > perfectResolution.Item1 && (vp.Subtype.Equals("YUY2") || vp.Subtype.Equals("NV12")))
+					perfectResolution = new Tuple<uint, uint, int>(vp.Width, vp.Height, i);
+			}
+
+			var distanceInfo = new Tuple<int, int>(-1, -1);
+			if (perfectResolution.Item1 > 640)
+			{
+				// Get res closest to 480p (640x480)
+				var index = 0;
+				foreach (var resolution in resolutions)
+				{
+					var distance = 640 - (int)resolution.Item1;
+					if (distance < 0) distance = distance * (-1);
+
+					if (distanceInfo.Item1 == -1 ||
+					    distance < distanceInfo.Item1)
+					{
+						distanceInfo = new Tuple<int, int>(distance, index);
+					}
+
+					index++;
+				}
+				var pefectIndex = distanceInfo.Item2;
+				perfectResolution = new Tuple<uint, uint, int>(resolutions[pefectIndex].Item1, resolutions[pefectIndex].Item2, resolutions[pefectIndex].Item3);
+			}
+
+			switch (mediaStreamType)
+			{
+				case MediaStreamType.Photo:
+					PhotoCaptureWidth = perfectResolution.Item1;
+					PhotoCaptureHeight = perfectResolution.Item2;
+					break;
+			}
+
+			Debug.WriteLine("Set {0} Resolution - {1}x{2}", mediaStreamType, perfectResolution.Item1, perfectResolution.Item2);
+
+			// setting resolution
+			await MediaCapture.VideoDeviceController.SetMediaStreamPropertiesAsync(mediaStreamType, res[perfectResolution.Item3]);
 		}
 	}
 }

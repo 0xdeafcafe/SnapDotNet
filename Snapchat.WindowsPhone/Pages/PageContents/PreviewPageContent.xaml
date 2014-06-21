@@ -5,12 +5,85 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:i="using:Microsoft.Xaml.Interactivity"
+		xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	mc:Ignorable="d">
 
-	<Grid Background="Black">
-		<Image x:Name="ImageMediaElement" />
-		
-		<Pivot>
+	<Grid x:Name="OwnerGrid" Background="#FF000000">
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="CommonStates">
+				<VisualState x:Name="PendingMedia">
+					<Storyboard>
+						<DoubleAnimation Duration="0:0:0.8" From="0" To="1" Storyboard.TargetProperty="Opacity" 
+										 Storyboard.TargetName="OwnerGrid" />
+					</Storyboard>
+				</VisualState>
+
+				<VisualState x:Name="Conversations">
+					<Storyboard>
+						
+					</Storyboard>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+		<Image x:Name="ImageMediaElement" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+		<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
+					  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
+					  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
+					  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
+					  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
+			<i:Interaction.Behaviors>
+				<core:EventTriggerBehavior EventName="Loaded">
+					
+				</core:EventTriggerBehavior>
+			</i:Interaction.Behaviors>
+
+			<StackPanel x:Name="OverlaysContainer" Orientation="Horizontal">
+				<Grid Tag="TimeStartingGrace2" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="72" Text="{Binding CurrentTimeFilterTime}" FontFamily="ms-appx:/Assets/LCD-N___.TTF#LCD"/>
+						<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="22" Margin="0,30,0,0" Text="{Binding CurrentTimeFilterDesignator}"/>
+					</StackPanel>
+				</Grid>
+				<Grid Tag="TimeStartingGrace1" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="72" Text="{Binding CurrentTimeFilterTime}" FontFamily="ms-appx:/Assets/LCD-N___.TTF#LCD"/>
+						<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="22" Margin="0,30,0,0" Text="{Binding CurrentTimeFilterDesignator}"/>
+					</StackPanel>
+				</Grid>
+				<!-- This is hacky, so pls leave me alone above here -->
+				
+				
+				
+				<Grid Tag="NoOverlay" x:Name="NoOverlayGrid" Background="Transparent"
+					  Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
+					
+				</Grid>
+
+				<Grid Tag="Sepia" Background="#55FF0000"
+					  Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
+
+				</Grid>
+				
+				<Grid Tag="Time" Background="Transparent"
+					  Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
+					
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="72" Text="{Binding CurrentTimeFilterTime}" FontFamily="ms-appx:/Assets/LCD-N___.TTF#LCD"/>
+						<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="22" Margin="0,30,0,0" Text="{Binding CurrentTimeFilterDesignator}"/>
+					</StackPanel>
+				</Grid>
+				
+				
+				
+				<!-- This is hacky, so pls leave me alone -->
+				<Grid Tag="NoOverlayEndingGrace1" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}" />
+				<Grid Tag="NoOverlayEndingGrace2" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}" />
+			</StackPanel>
+		</ScrollViewer>
+
+		<!--<Pivot>
 			<PivotItem Tag="None" Background="Transparent"/>
 
 			<PivotItem Tag="Sepia" Background="#55FF0000">
@@ -48,6 +121,6 @@
 			<PivotItem Tag="Weather">
 				<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72">&#x1f31e;</TextBlock>
 			</PivotItem>
-		</Pivot>
+		</Pivot>-->
 	</Grid>
 </UserControl>

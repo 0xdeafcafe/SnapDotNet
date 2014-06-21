@@ -343,22 +343,7 @@ namespace Snapchat.Pages
 						break;
 
 					case "Camera":
-
-						_flipCameraAppBarButton.Command = new RelayCommand(async () =>
-						{
-							await MediaCaptureManager.ToggleCameraAsync();
-
-							var scaleTransform = CapturePreview.RenderTransform as CompositeTransform;
-							if (MediaCaptureManager.IsMirrored)
-							{
-								if (scaleTransform != null)
-									scaleTransform.ScaleX = -1;
-							}
-							else if (scaleTransform != null)
-								scaleTransform.ScaleX = 1;
-
-							Singleton.UpdateBottomAppBar();
-						});
+						_flipCameraAppBarButton.Command = new RelayCommand(ToggleCamera);
 
 						if (MediaCaptureManager.HasFrontCamera)
 							primaryCommands.Add(_flipCameraAppBarButton);
@@ -436,10 +421,11 @@ namespace Snapchat.Pages
 
 		private async void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
+			PreviewPage.Reset();
+			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
 			var writeableBitmap = await MediaCaptureManager.CapturePhotoAsync();
 			PreviewPage.DataContext = new PreviewViewModel(writeableBitmap);
 			PreviewPage.Load();
-			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
 
 			// Remove the Camera Tip
 			AppSettings.Set("FirstTime", false);
@@ -487,5 +473,26 @@ namespace Snapchat.Pages
 		}
 
 		#endregion
+
+		private void CameraPage_OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+		{
+			ToggleCamera();
+		}
+
+		private async void ToggleCamera()
+		{
+			await MediaCaptureManager.ToggleCameraAsync();
+
+			var scaleTransform = CapturePreview.RenderTransform as CompositeTransform;
+			if (MediaCaptureManager.IsMirrored)
+			{
+				if (scaleTransform != null)
+					scaleTransform.ScaleX = -1;
+			}
+			else if (scaleTransform != null)
+				scaleTransform.ScaleX = 1;
+
+			Singleton.UpdateBottomAppBar();
+		}
 	}
 }

@@ -184,6 +184,20 @@
 						<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsWifi">Wi-Fi only</ComboBoxItem>
 						<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsAlways">Always</ComboBoxItem>
 					</ComboBox>
+					
+					<TextBlock x:Uid="SettingsCameraShutterSoundHeader"
+							   Text="Change Camera Shutter Sound"
+							   Margin="0,4,0,0"
+							   FontFamily="Segoe WP"
+							   FontSize="15"
+							   Foreground="#FF8C8C8C"/>
+					<TextBlock x:Uid="SettingsCameraShutterSoundBody"
+							   Text="To toggle the camera shutter sound, go to ringtones+sounds in settings."
+							   Margin="0,5,0,0"
+							   FontFamily="Segoe WP"
+							   FontSize="20"
+							   TextWrapping="Wrap"
+							   Foreground="#FF000000"/>
 				</StackPanel>
 			</PivotItem>
 

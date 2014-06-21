@@ -286,6 +286,12 @@
   <data name="SettingsAutomaticallyDownloadSnaps.Header" xml:space="preserve">
     <value>Automatically download snaps</value>
   </data>
+  <data name="SettingsCameraShutterSoundBody.Text" xml:space="preserve">
+    <value>To toggle the camera shutter sound, go to ringtones+sounds in settings.</value>
+  </data>
+  <data name="SettingsCameraShutterSoundHeader.Text" xml:space="preserve">
+    <value>Change Camera Shutter Sound</value>
+  </data>
   <data name="SettingsChatNotifications.Header" xml:space="preserve">
     <value>Chat notifications</value>
   </data>

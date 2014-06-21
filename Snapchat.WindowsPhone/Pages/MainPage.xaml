@@ -130,7 +130,9 @@
 			<StackPanel x:Name="PagesContainer" Orientation="Horizontal">
 				<pageContents:ConversationsPageContent x:Name="ConversationsPage" Opacity="1" Tag="Conversations" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"/>
 
-				<Grid x:Name="CameraPage" Tag="Camera" Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}">
+				<Grid x:Name="CameraPage" Tag="Camera" 
+					  Height="{Binding ActualHeight, ElementName=Page}" Width="{Binding ActualWidth, ElementName=Page}"
+					  DoubleTapped="CameraPage_OnDoubleTapped">
 					<Grid.Triggers>
 						<EventTrigger RoutedEvent="Grid.Loaded">
 							<BeginStoryboard>
@@ -146,16 +148,18 @@
 						</EventTrigger>
 					</Grid.Triggers>
 
-					<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0" RenderTransformOrigin="0.5,0.5">
-						<CaptureElement.Resources>
-							<Storyboard x:Key="FadeInStoryboard">
-								<DoubleAnimation To="1" Storyboard.TargetName="CapturePreview" Storyboard.TargetProperty="Opacity" Duration="00:00:00.3"/>
-							</Storyboard>
-						</CaptureElement.Resources>
-						<CaptureElement.RenderTransform>
-							<CompositeTransform ScaleX="1"/>
-						</CaptureElement.RenderTransform>
-					</CaptureElement>
+					<Grid x:Name="CapturePreviewParentGrid">
+						<CaptureElement x:Name="CapturePreview" Stretch="UniformToFill" Opacity="0" RenderTransformOrigin="0.5,0.5">
+							<CaptureElement.Resources>
+								<Storyboard x:Key="FadeInStoryboard">
+									<DoubleAnimation To="1" Storyboard.TargetName="CapturePreview" Storyboard.TargetProperty="Opacity" Duration="00:00:00.3"/>
+								</Storyboard>
+							</CaptureElement.Resources>
+							<CaptureElement.RenderTransform>
+								<CompositeTransform ScaleX="1"/>
+							</CaptureElement.RenderTransform>
+						</CaptureElement>
+					</Grid>
 
 					<StackPanel x:Name="FirstRunPrompt" VerticalAlignment="Bottom" Margin="0,0,0,180" Height="100">
 						<Grid Height="80" Background="#AA000000">
@@ -520,7 +524,7 @@
 						</ObjectAnimationUsingKeyFrames>
 						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="(UIElement.Opacity)">
 							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+							<EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="1">
 								<EasingDoubleKeyFrame.EasingFunction>
 									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
 								</EasingDoubleKeyFrame.EasingFunction>

@@ -3,9 +3,9 @@ using Windows.UI.Xaml.Data;
 
 namespace Snapchat.Converters.Settings
 {
-    public sealed class NumberOfBestFriendsToIndexConverter
+	public sealed class NumberOfBestFriendsToIndexConverter
 		: IValueConverter
-    {
+	{
 		#region IValueConverter Members
 
 		public object Convert(object value, Type targetType, object parameter, string language)
