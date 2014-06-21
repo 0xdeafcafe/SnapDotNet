@@ -220,7 +220,7 @@ namespace Snapchat.Pages
 			}
 		}
 
-		private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+		private async void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
 		{
 			if (PagesVisualStateGroup.CurrentState == null)
 				return;
@@ -270,6 +270,7 @@ namespace Snapchat.Pages
 						VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), currentPage, true);
 					}
 					UpdateBottomAppBar();
+					await StatusBar.GetForCurrentView().ShowAsync();
 					e.Handled = true;
 					break;
 			}

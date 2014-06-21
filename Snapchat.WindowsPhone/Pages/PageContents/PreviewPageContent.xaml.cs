@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Snapchat.ViewModels.PageContents;
 
@@ -36,12 +37,13 @@ namespace Snapchat.Pages.PageContents
 			VisualStateManager.GoToState(this, "PendingMedia", true);
 		}
 
-		public void Load()
+		public async void Load()
 		{
 			var context = DataContext as PreviewViewModel;
 			if (context == null) return;
-
 			ImageMediaElement.Source = context.WriteableBitmap;
+
+			await StatusBar.GetForCurrentView().HideAsync();
 		}
 	}
 }
