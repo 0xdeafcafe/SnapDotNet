@@ -20,8 +20,6 @@ using Windows.UI.Xaml.Media.Animation;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Snapchat.Models.New;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Media.Capture;
 
 namespace Snapchat.Pages
 {
@@ -49,6 +47,18 @@ namespace Snapchat.Pages
 		{
 			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.camera.flip.png") },
 			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel")
+		};
+		
+		private readonly AppBarButton _selectAllFriendsAppBarButton = new AppBarButton
+		{
+			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.checkmark.thick.png") },
+			Label = App.Strings.GetString("SelectAllFriendsAppBarButtonLabel")
+		};
+
+		private readonly AppBarButton _unSelectAllFriendsAppBarButton = new AppBarButton
+		{
+			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.checkmark.thick.unchecked.png") },
+			Label = App.Strings.GetString("DeSelectAllFriendsAppBarButtonLabel")
 		};
 
 		private readonly AppBarButton _toggleFlashAppBarButton = new AppBarButton
@@ -258,6 +268,13 @@ namespace Snapchat.Pages
 					e.Handled = true;
 					break;
 
+				case "OutboundSelectFriends":
+					VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
+					UpdateBottomAppBar();
+					await StatusBar.GetForCurrentView().ShowAsync();
+					e.Handled = true;
+					break;
+
 				case "Conversation":
 				case "Settings":
 				case "Preview":
@@ -363,6 +380,17 @@ namespace Snapchat.Pages
 						BottomAppBar = null;
 						break;
 
+					case "OutboundSelectFriends":
+						displayMode = AppBarClosedDisplayMode.Compact;
+						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
+
+						_selectAllFriendsAppBarButton.Command = new RelayCommand(OutboundSelectFriendsPage.SelectAllFriends);
+						primaryCommands.Add(_selectAllFriendsAppBarButton);
+
+						_unSelectAllFriendsAppBarButton.Command = new RelayCommand(OutboundSelectFriendsPage.DeSelectAllFriends);
+						primaryCommands.Add(_unSelectAllFriendsAppBarButton);
+						break;
+
 					case "Friends":
 						displayMode = AppBarClosedDisplayMode.Minimal;
 						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x9b, 0x55, 0xa0));
@@ -387,7 +415,7 @@ namespace Snapchat.Pages
 			}
 
 			// Add global commands.
-			if (currentState != "Settings" && currentState != "Preview")
+			if (currentState != "Settings" && currentState != "Preview" && currentState != "OutboundSelectFriends")
 			{
 				secondaryCommands.Add(_refreshAppBarButton);
 				secondaryCommands.Add(_settingsAppBarButton);
@@ -497,6 +525,11 @@ namespace Snapchat.Pages
 				scaleTransform.ScaleX = 1;
 
 			Singleton.UpdateBottomAppBar();
+		}
+
+		public void GoToVisualState(string stateName)
+		{
+			VisualStateManager.GoToState(this, stateName, true);
 		}
 	}
 }

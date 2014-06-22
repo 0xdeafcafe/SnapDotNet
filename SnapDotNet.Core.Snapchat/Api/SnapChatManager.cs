@@ -48,6 +48,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 		}
 
+		public UpdatesResponse Account
+		{
+			get { return AllUpdates.UpdatesResponse; }
+		}
+
 		public StoriesResponse Stories
 		{
 			get { return AllUpdates.StoriesResponse; }

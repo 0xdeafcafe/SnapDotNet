@@ -1,0 +1,113 @@
+﻿<UserControl
+	x:Class="Snapchat.Pages.PageContents.OutboundSelectFriends"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:converters="using:Snapchat.Converters">
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../../Controls/ExpanderView.xaml"/>
+				<ResourceDictionary Source="../../Controls/SearchTextBox.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<converters:CaseConverter x:Key="UpperCaseConverter" SelectedCase="Uppercase" />
+			<converters:CaseConverter x:Key="LowerCaseConverter" SelectedCase="Lowercase" />
+			<converters:DebugConverter x:Key="DebugConverter" />
+			
+			<converters:EmptyGroupToColourConverter x:Key="EmptyGroupToColourConverterBackground"
+													TrueBrush="#FF9b55a0" FalseBrush="#AA9b55a0"/>
+
+			<CollectionViewSource x:Key="SortedFriends" 
+								  Source="{Binding Path=SelectedFriends}"
+								  IsSourceGrouped="True"/>
+
+			<DataTemplate x:Key="FriendsListJumpTemplate">
+				<Border Padding="5">
+					<Border Background="{Binding Path=Group.Count, Converter={StaticResource EmptyGroupToColourConverterBackground}}" 
+							Width="82" Height="82" HorizontalAlignment="Left">
+						<TextBlock Text="{Binding Path=Group.Key, Converter={StaticResource DebugConverter}}" 
+								   Foreground="White" 
+								   FontSize="48" Margin="5,3,3,3"
+								   HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+					</Border>
+				</Border>
+			</DataTemplate>
+			<DataTemplate x:Key="FriendsListItemTemplate">
+				<Border MinHeight="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch">
+					<TextBlock Text="{Binding Path=FriendlyName, FallbackValue='Alex Reed'}" />
+				</Border>
+			</DataTemplate>
+			<DataTemplate x:Key="FriendsListGroupHeaderTemplate">
+				<Border Background="Transparent" Height="40"
+						HorizontalAlignment="Stretch">
+					<TextBlock Text="{Binding Path=Key, Converter={StaticResource UpperCaseConverter}, FallbackValue='A'}" Foreground="#FF9b55a0" FontSize="15"
+							   FontWeight="Bold" Margin="18,0,0,0"
+							   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				</Border>
+			</DataTemplate>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<Grid Background="White">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="80" />
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid Background="#FF3cb2e2" Grid.Row="0">
+			<TextBlock x:Uid="OutboundSelectFriendsPageTitleTextBlock"
+					   Text="send to..."
+					   Foreground="White" 
+					   VerticalAlignment="Bottom" HorizontalAlignment="Left"
+					   Margin="15,0,0,0" FontWeight="Light"
+					   FontFamily="Segoe WP" FontSize="40" />
+
+			<ContentControl Width="25" Height="23" Template="{StaticResource AddFriendIcon}"
+							VerticalAlignment="Bottom" HorizontalAlignment="Right"
+							Margin="0,0,10,10"/>
+		</Grid>
+
+		<SemanticZoom Grid.Row="1" MinHeight="10">
+			<SemanticZoom.ZoomedInView>
+				<ListView x:Name="FriendsListView" IsHoldingEnabled="True"
+						  ItemsSource="{Binding Path=SelectedFriends}"
+						  ItemTemplate="{StaticResource FriendsListItemTemplate}">
+					<ListView.Template>
+						<ControlTemplate TargetType="ListView">
+							<ScrollViewer>
+								<StackPanel>
+									<!-- Search box -->
+									<!--<TextBox Background="White" x:Name="SearchBox" x:Uid="ConvosSearchBox" PlaceholderText="Search" 
+											 Style="{StaticResource SearchTextBoxStyle}"/>-->
+
+									<!-- Friends List -->
+									<ItemsPresenter Margin="0,0,0,30" />
+								</StackPanel>
+							</ScrollViewer>
+						</ControlTemplate>
+					</ListView.Template>
+					<ListView.ItemContainerStyle>
+						<Style TargetType="ListViewItem">
+							<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+						</Style>
+					</ListView.ItemContainerStyle>
+					<ListView.GroupStyle>
+						<GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource FriendsListGroupHeaderTemplate}"/>
+					</ListView.GroupStyle>
+					<ListView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel/>
+						</ItemsPanelTemplate>
+					</ListView.ItemsPanel>
+				</ListView>
+			</SemanticZoom.ZoomedInView>
+			<SemanticZoom.ZoomedOutView>
+				<GridView Background="#AAFFFFFF"
+						  ItemsSource="{Binding Source={StaticResource SortedFriends}, Path=CollectionGroups}"
+						  ItemTemplate="{StaticResource FriendsListJumpTemplate}"
+						  VerticalContentAlignment="Top" HorizontalContentAlignment="Center">
+				</GridView>
+			</SemanticZoom.ZoomedOutView>
+		</SemanticZoom>
+	</Grid>
+</UserControl>

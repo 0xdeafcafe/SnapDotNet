@@ -250,8 +250,11 @@
 
 		<pageContents:PreviewPageContent x:Name="PreviewPage" Visibility="Collapsed"
 										 VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-
 		</pageContents:PreviewPageContent>
+		
+		<pageContents:OutboundSelectFriends x:Name="OutboundSelectFriendsPage" Visibility="Collapsed"
+											VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+		</pageContents:OutboundSelectFriends>
 
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="PagesVisualStateGroup">
@@ -523,14 +526,14 @@
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
-						<!--<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="(UIElement.Opacity)">
-							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-							<EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="1">
-								<EasingDoubleKeyFrame.EasingFunction>
-									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
-								</EasingDoubleKeyFrame.EasingFunction>
-							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>-->
+					</Storyboard>
+				</VisualState>
+
+				<VisualState x:Name="OutboundSelectFriends">
+					<Storyboard>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="OutboundSelectFriendsPage" Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
 					</Storyboard>
 				</VisualState>
 			</VisualStateGroup>

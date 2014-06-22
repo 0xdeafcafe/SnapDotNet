@@ -10,6 +10,7 @@
 			
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Assets/Vectors/SnapStatusIcons.xaml"/>
+				<ResourceDictionary Source="Assets/Vectors/SnapChatIcons.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

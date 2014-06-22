@@ -22,6 +22,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml.cs" />
+    <Page Include="$(MSBuildThisFileDirectory)Controls\SearchTextBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlyFriendNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingChatsConverter.cs" />
@@ -56,6 +59,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PageContents\FriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PageContents\ConversationsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PageContents\OutboundSelectFriendsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PageContents\PreviewViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartViewModel.cs" />
@@ -71,6 +75,8 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\Icons\appbar.camera.flip.off.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Icons\appbar.camera.flip.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Icons\appbar.camera.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Icons\appbar.checkmark.thick.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Icons\appbar.checkmark.thick.unchecked.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Icons\appbar.group.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Logo.scale-240.png" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\SmallLogo.scale-240.png" />
@@ -80,6 +86,10 @@
     <Content Include="$(MSBuildThisFileDirectory)Common\StoreLogo.scale-240.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Assets\Vectors\SnapChatIcons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Assets\Vectors\SnapStatusIcons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
