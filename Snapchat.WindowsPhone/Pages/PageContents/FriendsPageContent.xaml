@@ -158,7 +158,7 @@
 					   Margin="15,0,0,0" FontWeight="Light"
 					   FontFamily="Segoe WP" FontSize="40" />
 
-			<SymbolIcon Foreground="White" HorizontalAlignment="Right" Symbol="AddFriend" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Tapped="AddFriendsIcon_Tapped">
+			<SymbolIcon x:Name="GoToAddFriendsButton" Foreground="White" HorizontalAlignment="Right" Symbol="AddFriend" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Tapped="AddFriendsIcon_Tapped">
 				<SymbolIcon.RenderTransform>
 					<CompositeTransform TranslateX="-15" TranslateY="-10" ScaleX="1.5" ScaleY="1.5"/>
 				</SymbolIcon.RenderTransform>

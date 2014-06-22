@@ -174,7 +174,7 @@
 								Data="M 0,0 L 40,0 20,20 0,0" />
 					</StackPanel>
 
-					<Button x:Name="CapturePhotoButton"
+					<Button x:Name="CapturePhotoButton" x:FieldModifier="Public"
 							Style="{StaticResource CaptureButtonStyle}"
 							Tapped="CapturePhotoButton_Tapped"
 							VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,90"
