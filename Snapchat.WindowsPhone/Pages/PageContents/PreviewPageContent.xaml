@@ -21,13 +21,16 @@
 
 				<VisualState x:Name="Conversations">
 					<Storyboard>
-						
+
 					</Storyboard>
 				</VisualState>
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
-		
+
 		<Image x:Name="ImageMediaElement" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+		<Grid Background="Red"></Grid>
+		<Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Source="ms-appx:///Assets/camera_background_testing.jpg"/>
 
 		<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
 					  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
@@ -36,7 +39,7 @@
 					  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False" >
 			<i:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="Loaded">
-					
+
 				</core:EventTriggerBehavior>
 			</i:Interaction.Behaviors>
 
@@ -54,36 +57,36 @@
 					</StackPanel>
 				</Grid>
 				<!-- This is hacky, so pls leave me alone above here -->
-				
-				
-				
+
+
+
 				<Grid Tag="NoOverlay" x:Name="NoOverlayGrid" Background="Transparent"
 					  Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
-					
+
 				</Grid>
 
 				<Grid Tag="Sepia" Background="#55FF0000"
 					  Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
 
 				</Grid>
-				
+
 				<Grid Tag="Time" Background="Transparent"
 					  Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}">
-					
+
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
 						<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="72" Text="{Binding CurrentTimeFilterTime}" FontFamily="ms-appx:/Assets/LCD-N___.TTF#LCD"/>
 						<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="22" Margin="0,30,0,0" Text="{Binding CurrentTimeFilterDesignator}"/>
 					</StackPanel>
 				</Grid>
-				
-				
-				
+
+
+
 				<!-- This is hacky, so pls leave me alone -->
 				<Grid Tag="NoOverlayEndingGrace1" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}" />
 				<Grid Tag="NoOverlayEndingGrace2" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}" />
 			</StackPanel>
 		</ScrollViewer>
-		
+
 		<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left"
 					Height="36" Margin="25">
 			<Grid x:Name="SaveMediaGrid" Margin="0,0,0,0" Width="36" Height="36">
@@ -91,7 +94,11 @@
 					  Margin="2,3,0,0"
 					  Height="22" Width="26" VerticalAlignment="Center" HorizontalAlignment="Center"
 					  Data="M 0,0 L 12,12 24,0 M 0,0 Z
-							M 0,18 L 24,18 Z" StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round"/>
+							M 0,18 L 24,18 Z" StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+					<Path.RenderTransform>
+						<CompositeTransform ScaleX="0.8" ScaleY="0.8"/>
+					</Path.RenderTransform>
+				</Path>
 			</Grid>
 
 			<Grid x:Name="SaveToStoryGrid" Margin="25,0,0,0" Width="36" Height="36">
@@ -100,20 +107,76 @@
 					  Data="M 10,0 L 0,0 0,24 24,24 24,14 M 0,0 Z
 							M 18,1 18,11 Z
 							M 13,6 23,6 Z" 
-					  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round"/>
+					  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+					<Path.RenderTransform>
+						<CompositeTransform ScaleX="0.8" ScaleY="0.8"/>
+					</Path.RenderTransform>
+				</Path>
 			</Grid>
 		</StackPanel>
 
 		<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"
 					Height="36" Margin="25">
 			<Grid x:Name="SelectFriendsGrid" Margin="0" Width="45" Height="36">
+				<Grid.Triggers>
+					<EventTrigger RoutedEvent="Grid.Loaded">
+						<BeginStoryboard>
+							<Storyboard>
+								<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
+															   RepeatBehavior="Forever" Storyboard.TargetName="SelectFriendsPathBackground">
+									<EasingDoubleKeyFrame   KeyTime="0:0:0" Value="0"/>
+									<EasingDoubleKeyFrame   KeyTime="0:0:0.5" Value="0"/>
+									<EasingDoubleKeyFrame   KeyTime="0:0:0.8" Value="1"/>
+									<EasingDoubleKeyFrame   KeyTime="0:0:1.1" Value="0"/>
+									<EasingDoubleKeyFrame   KeyTime="0:0:1.5" Value="0"/>
+								</DoubleAnimationUsingKeyFrames>
+								<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" 
+															   RepeatBehavior="Forever" Storyboard.TargetName="SelectFriendsInnerArrowPath">
+									<EasingDoubleKeyFrame   KeyTime="0:0:0" Value="0"/>
+									<EasingDoubleKeyFrame   KeyTime="0:0:0.3" Value="19.5"/>
+									<DiscreteDoubleKeyFrame KeyTime="0:0:0.8" Value="0"/>
+									<DiscreteDoubleKeyFrame KeyTime="0:0:1.5" Value="0"/>
+								</DoubleAnimationUsingKeyFrames>
+							</Storyboard>
+						</BeginStoryboard>
+					</EventTrigger>
+				</Grid.Triggers>
+				<Path Stroke="Black" StrokeThickness="4" 
+					  Fill="Transparent" Margin="0,0,0,0"
+					  Height="30" Width="36" VerticalAlignment="Center" HorizontalAlignment="Center"
+					  Data="M 0,0 L 20,0 32,12 20,24 0,24 12,12 0,0 Z" 
+					  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+					<Path.RenderTransform>
+						<CompositeTransform ScaleX="1" ScaleY="1"/>
+					</Path.RenderTransform>
+				</Path>
+				<Path x:Name="SelectFriendsPathBackground" Stroke="White" StrokeThickness="5" Opacity="0"
+					  Fill="Transparent" Margin="0,0,0,0"
+					  Height="30" Width="36" VerticalAlignment="Center" HorizontalAlignment="Center"
+					  Data="M 0,0 L 20,0 32,12 20,24 0,24 12,12 0,0 Z" 
+					  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+					<Path.RenderTransform>
+						<CompositeTransform ScaleX="1" ScaleY="1"/>
+					</Path.RenderTransform>
+				</Path>
 				<Path x:Name="SelectFriendsPath" Stroke="White" StrokeThickness="3" 
 					  Fill="#47FFFFFF"
 					  Height="30" Width="36" VerticalAlignment="Center" HorizontalAlignment="Center"
-					  Data="M 0,0 L 20,0 33,13 20,26 0,26 12,13 0,0 Z" 
-					  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round">
+					  Data="M 0,0 L 20,0 32,12 20,24 0,24 12,12 0,0 Z" 
+					  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+					<Path.RenderTransform>
+						<CompositeTransform ScaleX="1" ScaleY="1"/>
+					</Path.RenderTransform>
 				</Path>
-				<!-- TODO: Animate inner arrow -->
+				
+				<Path x:Name="SelectFriendsInnerArrowPath" Stroke="White" StrokeThickness="3" Margin="5,0,0,0"
+					  Height="30" Width="13" VerticalAlignment="Center" HorizontalAlignment="Left"
+					  Data="M 0,0 L 12,12 0,24 M 0,0 Z" 
+					  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+					<Path.RenderTransform>
+						<CompositeTransform TranslateX="0"/>
+					</Path.RenderTransform>
+				</Path>
 			</Grid>
 		</StackPanel>
 
