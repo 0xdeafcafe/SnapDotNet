@@ -14,8 +14,8 @@
 			<VisualStateGroup x:Name="CommonStates">
 				<VisualState x:Name="PendingMedia">
 					<Storyboard>
-						<DoubleAnimation Duration="0:0:0.8" From="0" To="1" Storyboard.TargetProperty="Opacity" 
-										 Storyboard.TargetName="OwnerGrid" />
+						<!--<DoubleAnimation Duration="0:0:0.8" From="0" To="1" Storyboard.TargetProperty="Opacity" 
+										 Storyboard.TargetName="OwnerGrid" />-->
 					</Storyboard>
 				</VisualState>
 
@@ -26,6 +26,7 @@
 				</VisualState>
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
+		
 		<Image x:Name="ImageMediaElement" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
 		<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 

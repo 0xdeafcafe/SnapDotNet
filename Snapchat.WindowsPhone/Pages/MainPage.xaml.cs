@@ -20,6 +20,8 @@ using Windows.UI.Xaml.Media.Animation;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Snapchat.Models.New;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.Media.Capture;
 
 namespace Snapchat.Pages
 {
@@ -424,13 +426,14 @@ namespace Snapchat.Pages
 		{
 			PreviewPage.Reset();
 			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
-			var writeableBitmap = await MediaCaptureManager.CapturePhotoAsync();
-			PreviewPage.DataContext = new PreviewViewModel(writeableBitmap);
-			PreviewPage.Load();
 
 			// Remove the Camera Tip
 			AppSettings.Set("FirstTime", false);
 			CameraPage.Children.Remove(FirstRunPrompt);
+
+			var writeableBitmap = await MediaCaptureManager.CapturePhotoAsync();
+			PreviewPage.DataContext = new PreviewViewModel(writeableBitmap);
+			PreviewPage.Load();
 		}
 
 		#region Snap Media Viewer

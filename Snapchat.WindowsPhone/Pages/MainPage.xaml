@@ -174,7 +174,8 @@
 								Data="M 0,0 L 40,0 20,20 0,0" />
 					</StackPanel>
 
-					<Button Style="{StaticResource CaptureButtonStyle}"
+					<Button x:Name="CapturePhotoButton"
+							Style="{StaticResource CaptureButtonStyle}"
 							Tapped="CapturePhotoButton_Tapped"
 							VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,90"
 							Width="92" Height="92" />
@@ -522,14 +523,14 @@
 						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="Visibility">
 							<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
 						</ObjectAnimationUsingKeyFrames>
-						<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="(UIElement.Opacity)">
+						<!--<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PreviewPage" Storyboard.TargetProperty="(UIElement.Opacity)">
 							<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
 							<EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="1">
 								<EasingDoubleKeyFrame.EasingFunction>
 									<ExponentialEase EasingMode="EaseOut" Exponent="6"/>
 								</EasingDoubleKeyFrame.EasingFunction>
 							</EasingDoubleKeyFrame>
-						</DoubleAnimationUsingKeyFrames>
+						</DoubleAnimationUsingKeyFrames>-->
 					</Storyboard>
 				</VisualState>
 			</VisualStateGroup>

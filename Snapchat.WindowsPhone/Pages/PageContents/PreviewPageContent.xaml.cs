@@ -2,6 +2,7 @@
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Snapchat.ViewModels.PageContents;
+using Snapchat.Helpers;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -41,7 +42,7 @@ namespace Snapchat.Pages.PageContents
 		{
 			var context = DataContext as PreviewViewModel;
 			if (context == null) return;
-			ImageMediaElement.Source = context.WriteableBitmap;
+			ImageMediaElement.Source = context.ImageSource;
 
 			await StatusBar.GetForCurrentView().HideAsync();
 		}

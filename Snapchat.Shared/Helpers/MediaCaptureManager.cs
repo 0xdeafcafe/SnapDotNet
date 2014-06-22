@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.Media;
 using Windows.Media.Capture;
 using Windows.Media.MediaProperties;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +18,7 @@ namespace Snapchat.Helpers
 	public static class MediaCaptureManager
 	{
 		private static MediaCapture MediaCapture { get; set; }
+		private static MediaCapture ScreenMediaCapture { get; set; }
 		public static CaptureElement PreviewElement { get; set; }
 
 		public static LowLagPhotoCapture LowLagPhotoCapture { get; set; }
@@ -77,12 +79,6 @@ namespace Snapchat.Helpers
 			var capture = await LowLagPhotoCapture.CaptureAsync();
 			var writableBitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
 			await writableBitmap.SetSourceAsync(capture.Frame);
-
-			// Fix image mirroring (as we only actualy mirror the preview, not the capture element)
-			if (IsMirrored) writableBitmap = writableBitmap.Flip(WriteableBitmapExtensions.FlipMode.Horizontal);
-
-			// Fix rotation
-			writableBitmap = writableBitmap.RotateFree(RotationValueFromVideoRotation(VideoPreviewRotationLookup()), false);
 			
 			// Get that sexy image back to the user!
 			return writableBitmap;
@@ -141,9 +137,15 @@ namespace Snapchat.Helpers
 				VideoDeviceId =  _cameraInfoCollection[_currentVideoDevice].Id,
 				PhotoCaptureSource = PhotoCaptureSource.VideoPreview,
 				//AudioDeviceId = _cameraInfoCollection[_currentAudioDevice].Id,
-				StreamingCaptureMode = StreamingCaptureMode.Video
+				StreamingCaptureMode = StreamingCaptureMode.Video,
 			});
-			IsInitialized = true;
+
+			// Initialize screen media capture
+			ScreenMediaCapture = new MediaCapture();
+			await ScreenMediaCapture.InitializeAsync(new MediaCaptureInitializationSettings
+			{
+				VideoSource = ScreenCapture.GetForCurrentView().VideoSource
+			});
 
 			// Set Resolutions
 			await SetResolution(MediaStreamType.Photo);
@@ -158,12 +160,13 @@ namespace Snapchat.Helpers
 			//MediaCapture.VideoDeviceController.FocusControl.Configure(new FocusSettings { AutoFocusRange = AutoFocusRange.Normal, Mode = FocusMode.Continuous });
 
 			// Setup low-lag Photo Capture
-			MediaCapture.VideoDeviceController.LowLagPhoto.ThumbnailEnabled = false;
+			ScreenMediaCapture.VideoDeviceController.LowLagPhoto.ThumbnailEnabled = false;
 			var imageEncoding = ImageEncodingProperties.CreateJpeg();
 			imageEncoding.Width = PhotoCaptureWidth;
 			imageEncoding.Height = PhotoCaptureHeight;
-			LowLagPhotoCapture = await MediaCapture.PrepareLowLagPhotoCaptureAsync(imageEncoding);
+			LowLagPhotoCapture = await ScreenMediaCapture.PrepareLowLagPhotoCaptureAsync(imageEncoding);
 
+			IsInitialized = true;
 			Debug.WriteLine("Initialized camera!");
 		}
 
@@ -172,7 +175,10 @@ namespace Snapchat.Helpers
 			Debug.WriteLine("Cleaning up camera resources");
 
 			if (IsRecording && MediaCapture != null)
+			{
 				await MediaCapture.StopRecordAsync();
+				await ScreenMediaCapture.StopRecordAsync();
+			}
 			IsRecording = false;
 
 			if (IsPreviewing && MediaCapture != null)
@@ -190,6 +196,8 @@ namespace Snapchat.Helpers
 
 				MediaCapture.Dispose();
 				MediaCapture = null;
+				ScreenMediaCapture.Dispose();
+				ScreenMediaCapture = null;
 			}
 			IsInitialized = false;
 		}
@@ -213,6 +221,7 @@ namespace Snapchat.Helpers
 
 			DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
 			await MediaCapture.StartPreviewAsync();
+			await ScreenMediaCapture.StartPreviewAsync();
 			IsPreviewing = true;
 
 			Debug.WriteLine("Started camera preview");
@@ -226,6 +235,7 @@ namespace Snapchat.Helpers
 			try
 			{
 				await MediaCapture.StopPreviewAsync();
+				await ScreenMediaCapture.StopPreviewAsync();
 				Debug.WriteLine("Stopped camera preview");
 			}
 			catch (Exception e) { }
