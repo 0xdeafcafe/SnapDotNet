@@ -24,7 +24,7 @@ namespace Snapchat.Pages.PageContents
 			HardwareButtons.CameraPressed += delegate
 			{
 				// Remove focus from SearchBox
-				Focus(FocusState.Programmatic);
+				MainPage.Singleton.CapturePhotoButton.Focus(FocusState.Programmatic);
 			};
 			HardwareButtons.BackPressed += (sender, args) =>
 			{
