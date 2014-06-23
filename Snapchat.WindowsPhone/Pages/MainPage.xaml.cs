@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Store;
 using Windows.Phone.UI.Input;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -151,6 +152,12 @@ namespace Snapchat.Pages
 			timer.Start();
 		}
 
+		public void GoToOutboundFriendSelection()
+		{
+			OutboundSelectFriendsPage.Load();
+			VisualStateManager.GoToState(this, "OutboundSelectFriends", true);
+		}
+
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			var destination = e.Parameter as string ?? "";
@@ -269,6 +276,7 @@ namespace Snapchat.Pages
 					break;
 
 				case "OutboundSelectFriends":
+					OutboundSelectFriendsPage.Reset();
 					VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
 					UpdateBottomAppBar();
 					await StatusBar.GetForCurrentView().ShowAsync();

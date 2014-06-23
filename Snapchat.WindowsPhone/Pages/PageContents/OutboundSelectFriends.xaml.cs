@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Snapchat.ViewModels.PageContents;
-using SnapDotNet.Core.Snapchat.Models.AppSpecific;
-using SnapDotNet.Core.Snapchat.Models.New;
+﻿using Snapchat.ViewModels.PageContents;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -26,24 +23,24 @@ namespace Snapchat.Pages.PageContents
 
 		public void SelectAllFriends()
 		{
-			foreach (var reciepicent in ViewModel.SelectedFriends
-				.Where(reciepicent => reciepicent.Key is Friend ||
-				                      reciepicent.Key is SelectedRecent))
-			{
-				// le code
-				ViewModel.SelectedFriends[reciepicent.Key] = true;
-			}
+			//foreach (var reciepicent in ViewModel.Friends
+			//	.Where(reciepicent => reciepicent.Key is Friend ||
+			//						  reciepicent.Key is SelectedRecent))
+			//{
+			//	// le code
+			//	ViewModel.Friends[reciepicent.Key] = true;
+			//}
 		}
 
 		public void DeSelectAllFriends()
 		{
-			foreach (var reciepicent in ViewModel.SelectedFriends
-				.Where(reciepicent => reciepicent.Key is Friend ||
-									  reciepicent.Key is SelectedRecent))
-			{
-				// le code
-				ViewModel.SelectedFriends[reciepicent.Key] = false;
-			}
+			//foreach (var reciepicent in ViewModel.Friends
+			//	.Where(reciepicent => reciepicent.Key is Friend ||
+			//						  reciepicent.Key is SelectedRecent))
+			//{
+			//	// le code
+			//	ViewModel.Friends[reciepicent.Key] = false;
+			//}
 		}
 	}
 }

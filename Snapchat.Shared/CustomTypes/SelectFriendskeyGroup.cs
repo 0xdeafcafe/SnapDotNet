@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Windows.Globalization.Collation;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
+using SnapDotNet.Core.Snapchat.Models.AppSpecific;
 
-namespace SnapDotNet.Core.Miscellaneous.CustomTypes
+namespace Snapchat.CustomTypes
 {
-	public class AlphaKeyGroup<T> : List<T>
+	public class SelectFriendskeyGroup<T> : List<T>
 	{
 		/// <summary>
 		/// The delegate that is used to get the key information.
@@ -24,7 +27,7 @@ namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 		/// Public constructor.
 		/// </summary>
 		/// <param name="key">The key for this group.</param>
-		public AlphaKeyGroup(string key)
+		public SelectFriendskeyGroup(string key)
 		{
 			Key = key;
 		}
@@ -35,9 +38,9 @@ namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 		/// <param name="slg">The </param>
 		/// <param name="useCaps">Use capital letters for the friends list.</param>
 		/// <returns>Theitems source for a LongListSelector</returns>
-		private static List<AlphaKeyGroup<T>> CreateGroups(IEnumerable<CharacterGrouping> slg, bool useCaps)
+		private static List<SelectFriendskeyGroup<T>> CreateGroups(IEnumerable<CharacterGrouping> slg, bool useCaps)
 		{
-			return (from key in slg where string.IsNullOrWhiteSpace(key.Label) == false select new AlphaKeyGroup<T>(useCaps ? key.Label.ToUpperInvariant() : key.Label)).ToList();
+			return (from key in slg where string.IsNullOrWhiteSpace(key.Label) == false select new SelectFriendskeyGroup<T>(useCaps ? key.Label.ToUpperInvariant() : key.Label)).ToList();
 		}
 
 		/// <summary>
@@ -45,29 +48,32 @@ namespace SnapDotNet.Core.Miscellaneous.CustomTypes
 		/// </summary>
 		/// <param name="items">The items to place in the groups.</param>
 		/// <param name="ci">The CultureInfo to group and sort by.</param>
-		/// <param name="getKey">A delegate to get the key from an item.</param>
-		/// <param name="sort">Will sort the data if true.</param>
-		/// <param name="useCaps">Use capital letters for the friends list.</param>
 		/// <returns>An items source for a LongListSelector</returns>
-		public static ObservableCollection<AlphaKeyGroup<T>> CreateGroups(IEnumerable<T> items, CultureInfo ci, GetKeyDelegate getKey, bool sort, bool useCaps)
+		public static ObservableCollection<SelectFriendskeyGroup<T>> CreateGroups(IEnumerable<T> items, CultureInfo ci)
 		{
 			var slg = new CharacterGroupings();
-			var list = CreateGroups(slg, useCaps);
+			var list = CreateGroups(slg, true);
+			list.Insert(0, new SelectFriendskeyGroup<T>("RECENTS"));
+			list.Insert(0, new SelectFriendskeyGroup<T>("STORIES"));
 
 			foreach (var item in items)
 			{
-				var index = slg.Lookup(getKey(item));
+				string index;
+
+				if (item is SelectedStory)
+					index = "STORIES";
+				else if (item is SelectedRecent)
+					index = "RECENTS";
+				else if (item is SelectedFriend)
+					index = (item as SelectedFriend).Friend.FriendlyName.ToUpperInvariant()[0].ToString();
+				else
+					throw new ArgumentException("This item is not of a valid type", "items");
+
 				if (string.IsNullOrEmpty(index) == false)
-					list.Find(a => a.Key == (useCaps ? index.ToUpperInvariant() : index)).Add(item);
+					list.Find(a => a.Key == index.ToUpperInvariant()).Add(item);
 			}
 
-			if (!sort) 
-				return new ObservableCollection<AlphaKeyGroup<T>>(list);
-
-			foreach (var group in list)
-				@group.Sort((c0, c1) => ci.CompareInfo.Compare(getKey(c0), getKey(c1)));
-
-			return new ObservableCollection<AlphaKeyGroup<T>>(list);
+			return new ObservableCollection<SelectFriendskeyGroup<T>>(list);
 		}
 	}
 }

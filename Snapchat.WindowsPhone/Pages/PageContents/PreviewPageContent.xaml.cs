@@ -116,7 +116,7 @@ namespace Snapchat.Pages.PageContents
 
 		private void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			MainPage.Singleton.GoToVisualState("OutboundSelectFriends");
+			MainPage.Singleton.GoToOutboundFriendSelection();
 		}
 	}
 }

@@ -22,6 +22,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\OutboundSelectFriends\SelectedItemToFriendlyTextConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomTypes\SelectFriendskeyGroup.cs" />
     <Page Include="$(MSBuildThisFileDirectory)Controls\SearchTextBox.xaml">
       <SubType>Designer</SubType>
     </Page>
