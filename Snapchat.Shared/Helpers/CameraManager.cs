@@ -246,30 +246,33 @@ namespace Snapchat.Helpers
 		/// <summary>
 		/// Obtains all video and audio capture devices on this device.
 		/// </summary>
-		private void DiscoverDevicesAsync()
+		private async void DiscoverDevicesAsync()
 		{
-			if (_isPrepped)
+			await Task.Run(() =>
 			{
-				Debug.WriteLine("Skipping unnecessary device discovery");
-				return;
-			}
+				if (_isPrepped)
+				{
+					Debug.WriteLine("Skipping unnecessary device discovery");
+					return;
+				}
 
-			Debug.WriteLine("Discovering all video and audio capture devices...");
+				Debug.WriteLine("Discovering all video and audio capture devices...");
 
-			var findAllCameraTask = Task.Run(async () =>
-			{
-				_cameraInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
-				Debug.WriteLine("Found all camera devices ({0} total)", _cameraInfoCollection.Count);
+				var findAllCameraTask = Task.Run(async () =>
+				{
+					_cameraInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
+					Debug.WriteLine("Found all camera devices ({0} total)", _cameraInfoCollection.Count);
+				});
+
+				var findAllMicrophoneTask = Task.Run(async () =>
+				{
+					_microphoneInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.AudioCapture);
+					Debug.WriteLine("Found all audio capture devices ({0} total)", _microphoneInfoCollection);
+				});
+
+				Task.WaitAll(findAllCameraTask, findAllMicrophoneTask);
+				_isPrepped = true;
 			});
-
-			var findAllMicrophoneTask = Task.Run(async () =>
-			{
-				_microphoneInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.AudioCapture);
-				Debug.WriteLine("Found all audio capture devices ({0} total)", _microphoneInfoCollection);
-			});
-
-			Task.WaitAll(findAllCameraTask, findAllMicrophoneTask);
-			_isPrepped = true;
 		}
 
 		/// <summary>
