@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel;
-using Windows.ApplicationModel.Store;
 using Windows.Phone.UI.Input;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -395,7 +394,7 @@ namespace Snapchat.Pages
 						break;
 
 					case "OutboundSelectFriends":
-						displayMode = AppBarClosedDisplayMode.Compact;
+						displayMode = AppBarClosedDisplayMode.Minimal;
 						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
 
 						_selectAllFriendsAppBarButton.Command = new RelayCommand(OutboundSelectFriendsPage.SelectAllFriends);
@@ -466,16 +465,15 @@ namespace Snapchat.Pages
 
 		private async void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
-			PreviewPage.Reset();
 			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
+			PreviewPage.Reset();
 
 			// Remove the Camera Tip
 			AppSettings.Set("FirstTime", false);
 			CameraPage.Children.Remove(FirstRunPrompt);
 
-			var writeableBitmap = await App.Camera.CapturePhotoAsync();
-			PreviewPage.DataContext = new PreviewViewModel(writeableBitmap);
-			PreviewPage.Load();
+			//var writeableBitmap = await App.Camera.CapturePhotoAsync();
+			PreviewPage.Load(new PreviewViewModel(null));
 		}
 
 		#region Snap Media Viewer

@@ -6,7 +6,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:i="using:Microsoft.Xaml.Interactivity"
-		xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	mc:Ignorable="d">
 	<UserControl.Resources>
 		<Style x:Key="EmptyButtonStyle" TargetType="Button">
@@ -186,17 +186,54 @@
 										 Storyboard.TargetName="OwnerGrid" />-->
 					</Storyboard>
 				</VisualState>
+				<VisualState x:Name="DrawingState">
+					<Storyboard>
+						<DoubleAnimation BeginTime="0:0:0.2" Duration="0:0:0.3" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" 
+										 Storyboard.TargetName="HeaderButtonsGrid" />
+						<DoubleAnimation BeginTime="0:0:0.2" Duration="0:0:0.3" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" 
+										 Storyboard.TargetName="FooterButtonsGrid" />
+
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="HeaderButtonsGrid">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.6" Value="Collapsed"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="PendingState">
+					<Storyboard>
+						<DoubleAnimation Duration="0:0:0.2" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" 
+										 Storyboard.TargetName="HeaderButtonsGrid" />
+						<DoubleAnimation Duration="0:0:0.2" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" 
+										 Storyboard.TargetName="FooterButtonsGrid" />
+
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="HeaderButtonsGrid">
+							<DiscreteObjectKeyFrame KeyTime="0:0:0.0" Value="Visible"/>
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
 
 		<Grid x:Name="FinalRenderGrid">
 			<Image x:Name="ImageMediaElement" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
-			<!--<Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="ms-appx:///Assets/camera_background_testing.jpg"/>-->
+			<Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="ms-appx:///Assets/camera_background_testing.jpg"/>
 
-
-			<Canvas x:Name="DrawingCanvas">
-
-			</Canvas>
+			<ItemsControl x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+						  ItemsSource="{Binding Path=DrawnLines}">
+				<ItemsControl.Template>
+					<ControlTemplate>
+						<Grid>
+							<Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+								<ItemsPresenter />
+							</Canvas>
+						</Grid>
+					</ControlTemplate>
+				</ItemsControl.Template>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
 
 			<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
 						  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
@@ -254,26 +291,16 @@
 			</ScrollViewer>
 		</Grid>
 		
-		<Grid x:Name="HeaderButtonsGrid">
-			<StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right"
-						Height="48" Margin="15">
-				<ToggleButton x:Name="DrawingToggleButton" Style="{StaticResource EmptyToggleButtonStyle}" Margin="25,0,0,0"
-							  Width="48" Height="48" Background="Red" 
-							  Unchecked="DrawingToggleButton_CheckedChanged"
-							  Checked="DrawingToggleButton_CheckedChanged">
-					<Grid x:Name="SelectDrawingGrid" Margin="0,0,0,0" Width="36" Height="36">
-						<Path Stroke="White" StrokeThickness="2"
-							  Height="11" Width="26" VerticalAlignment="Center" HorizontalAlignment="Center"
-							  Data="M 0,0 L 20,0 25,5 20,10 0,10 0,0 Z" StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
-							<Path.RenderTransform>
-								<CompositeTransform Rotation="135" ScaleX="1.25" ScaleY="1.25"/>
-							</Path.RenderTransform>
-						</Path>
-					</Grid>
-				</ToggleButton>
-			</StackPanel>
+		<Grid x:Name="BitmapDrawingGrid" Visibility="Collapsed"
+			  IsHitTestVisible="True" Background="Transparent"
+			  PointerEntered="BitmapDrawingGrid_PointerEntered"
+			  PointerMoved="BitmapDrawingGrid_OnPointerMoved"
+			  PointerReleased="BitmapDrawingGrid_OnPointerReleased"
+			  PointerCanceled="BitmapDrawingGrid_OnPointerReleased"
+			  PointerCaptureLost="BitmapDrawingGrid_OnPointerReleased"
+			  PointerExited="BitmapDrawingGrid_OnPointerReleased">
 		</Grid>
-		
+
 		<Grid x:Name="FooterButtonsGrid">
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left"
 						Height="48" Margin="15">
@@ -293,7 +320,7 @@
 								</PathGeometry>
 							</Path.Data>
 						</Path>
-					
+
 						<Path Stroke="#FFFFFFFF" StrokeThickness="3" Margin="0,1,0,0"
 							  StrokeLineJoin="Round" StrokeDashCap="Round" StrokeEndLineCap="Round" 
 							  StrokeStartLineCap="Round" RenderTransformOrigin="0.5,0.5">
@@ -311,7 +338,7 @@
 
 						<Grid Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center">
 							<Ellipse Stroke="#FFFFFFFF" Fill="#AA000000" StrokeThickness="3" />
-							<TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"
+							<TextBlock Text="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-1,0,0"
 									   FontFamily="Segoe WP" FontSize="17"/>
 						</Grid>
 					</Grid>
@@ -378,15 +405,6 @@
 								</BeginStoryboard>
 							</EventTrigger>
 						</Grid.Triggers>
-						<!--<Path Stroke="Black" StrokeThickness="4" 
-							  Fill="Transparent" Margin="0,0,0,0"
-							  Height="30" Width="36" VerticalAlignment="Center" HorizontalAlignment="Center"
-							  Data="M 0,0 L 20,0 32,12 20,24 0,24 12,12 0,0 Z" 
-							  StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
-							<Path.RenderTransform>
-								<CompositeTransform ScaleX="1" ScaleY="1"/>
-							</Path.RenderTransform>
-						</Path>-->
 						<Path x:Name="SelectFriendsPathBackground" Stroke="White" StrokeThickness="5" Opacity="0"
 							  Fill="Transparent" Margin="0,0,0,0"
 							  Height="30" Width="36" VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -418,16 +436,27 @@
 				</Button>
 			</StackPanel>
 		</Grid>
-
-		<Grid x:Name="BitmapDrawingGrid" Visibility="Collapsed"
-			  IsHitTestVisible="True" Background="Transparent"
-			  PointerEntered="BitmapDrawingGrid_PointerEntered"
-			  PointerMoved="BitmapDrawingGrid_OnPointerMoved"
-			  PointerReleased="BitmapDrawingGrid_OnPointerReleased"
-			  PointerCanceled="BitmapDrawingGrid_OnPointerReleased"
-			  PointerCaptureLost="BitmapDrawingGrid_OnPointerReleased"
-			  PointerExited="BitmapDrawingGrid_OnPointerReleased">
+		
+		<Grid x:Name="HeaderButtonsGrid">
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right"
+						Height="48" Margin="15">
+				<ToggleButton x:Name="DrawingToggleButton" Style="{StaticResource EmptyToggleButtonStyle}" Margin="25,0,0,0"
+							  Width="48" Height="48" Background="Red" 
+							  Unchecked="DrawingToggleButton_CheckedChanged"
+							  Checked="DrawingToggleButton_CheckedChanged">
+					<Grid x:Name="SelectDrawingGrid" Margin="0,0,0,0" Width="36" Height="36">
+						<Path Stroke="White" StrokeThickness="2"
+							  Height="11" Width="26" VerticalAlignment="Center" HorizontalAlignment="Center"
+							  Data="M 0,0 L 20,0 25,5 20,10 0,10 0,0 Z" StrokeEndLineCap="Round" StrokeStartLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+							<Path.RenderTransform>
+								<CompositeTransform Rotation="135" ScaleX="1.25" ScaleY="1.25"/>
+							</Path.RenderTransform>
+						</Path>
+					</Grid>
+				</ToggleButton>
+			</StackPanel>
 		</Grid>
+		
 		<!--<Pivot>
 			<PivotItem Tag="None" Background="Transparent"/>
 

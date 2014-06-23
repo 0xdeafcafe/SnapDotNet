@@ -12,7 +12,6 @@ namespace SnapDotNet.Core.Snapchat.Models.AppSpecific
 			get { return _selected; }
 			set { SetField(ref _selected, value); }
 		}
-
 		private Boolean _selected;
 	}
 

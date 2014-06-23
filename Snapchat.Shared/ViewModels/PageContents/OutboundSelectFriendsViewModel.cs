@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Snapchat.CustomTypes;
@@ -12,7 +13,10 @@ namespace Snapchat.ViewModels.PageContents
 	{
 		public OutboundSelectFriendsViewModel()
 		{
-			_recipientList.CollectionChanged += delegate { ExplicitOnNotifyPropertyChanged("SelectedFriends"); };
+			_recipientList.CollectionChanged += delegate
+			{
+				ExplicitOnNotifyPropertyChanged("SelectedRecipients");
+			};
 
 			var friends = App.SnapchatManager.Account.Friends.Where(f => f.Type != FriendRequestState.Blocked).Select(friend => new SelectedFriend { Friend = friend }).Cast<SelectedItem>().ToList();
 			friends.AddRange(App.SnapchatManager.Account.RecentFriends.Select(recent => new SelectedRecent { RecentName = recent }));
@@ -24,8 +28,33 @@ namespace Snapchat.ViewModels.PageContents
 		public ObservableCollection<SelectFriendskeyGroup<SelectedItem>> RecipientList
 		{
 			get { return _recipientList; }
-			set { TryChangeValue(ref _recipientList, value); }
+			set
+			{
+				TryChangeValue(ref _recipientList, value);
+				ExplicitOnNotifyPropertyChanged("SelectedRecipients");
+			}
 		}
 		private ObservableCollection<SelectFriendskeyGroup<SelectedItem>> _recipientList = new ObservableCollection<SelectFriendskeyGroup<SelectedItem>>();
+
+		public ObservableCollection<String> SelectedRecipients
+		{
+			get
+			{
+				// TODO: Figure out why this isn't firing...
+				var friends = new ObservableCollection<String>();
+
+				foreach (var recipient in RecipientList.SelectMany(recipientGroup => recipientGroup).Where(recipient => recipient.Selected))
+				{
+					if (recipient is SelectedStory)
+						friends.Add((recipient as SelectedStory).StoryName);
+					else if (recipient is SelectedRecent)
+						friends.Add((recipient as SelectedRecent).RecentName);
+					else if (recipient is SelectedFriend)
+						friends.Add((recipient as SelectedFriend).Friend.FriendlyName);
+				}
+
+				return friends;
+			}
+		}
 	}
 }

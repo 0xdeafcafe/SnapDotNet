@@ -16,6 +16,8 @@ namespace Snapchat.Pages.PageContents
 	/// </summary>
 	public sealed partial class PreviewPageContent
 	{
+		public PreviewViewModel ViewModel { get; private set; }
+
 		public PreviewPageContent()
 		{
 			InitializeComponent();
@@ -43,11 +45,10 @@ namespace Snapchat.Pages.PageContents
 			VisualStateManager.GoToState(this, "PendingMedia", true);
 		}
 
-		public async void Load()
+		public async void Load(PreviewViewModel viewModel)
 		{
-			var context = DataContext as PreviewViewModel;
-			if (context == null) return;
-			ImageMediaElement.Source = context.ImageSource;
+			DataContext = ViewModel = viewModel;
+			ImageMediaElement.Source = ViewModel.ImageSource;
 
 			await StatusBar.GetForCurrentView().HideAsync();
 		}
@@ -63,6 +64,7 @@ namespace Snapchat.Pages.PageContents
 			if (!(DrawingToggleButton.IsChecked ?? false))
 				return;
 
+			VisualStateManager.GoToState(this, "DrawingState", true);
 			ScrollViewer.IsHitTestVisible = false;
 			ScrollViewer.IsEnabled = false;
 
@@ -78,16 +80,14 @@ namespace Snapchat.Pages.PageContents
 				return;
 
 			var point = e.GetCurrentPoint(DrawingCanvas);
-			DrawingCanvas.Children.Add(new Line
+			ViewModel.DrawnLines.Add(new Line
 			{
 				Stroke = new SolidColorBrush(Colors.Red),
 				StrokeThickness = 10,
-				Opacity = 1,
-				StrokeStartLineCap = PenLineCap.Round,
 				StrokeDashCap = PenLineCap.Round,
-				StrokeEndLineCap = PenLineCap.Round,
 				StrokeLineJoin = PenLineJoin.Round,
-
+				StrokeEndLineCap = PenLineCap.Round,
+				StrokeStartLineCap = PenLineCap.Round,
 				X1 = point.RawPosition.X,
 				Y1 = point.RawPosition.Y,
 				X2 = _oldPoint.RawPosition.X,
@@ -102,11 +102,10 @@ namespace Snapchat.Pages.PageContents
 			Debug.WriteLine("event :: BitmapDrawingGrid_OnPointerReleased");
 
 			_isDrawing = false;
+			VisualStateManager.GoToState(this, "PendingState", true);
 			ScrollViewer.IsHitTestVisible = true;
 			ScrollViewer.IsEnabled = true;
 		}
-
-		#endregion
 
 		private void DrawingToggleButton_CheckedChanged(object sender, RoutedEventArgs e)
 		{
@@ -114,6 +113,8 @@ namespace Snapchat.Pages.PageContents
 			BitmapDrawingGrid.Visibility = isChecked ? Visibility.Visible : Visibility.Collapsed;
 		}
 
+		#endregion
+		
 		private void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			MainPage.Singleton.GoToOutboundFriendSelection();

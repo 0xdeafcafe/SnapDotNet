@@ -83,7 +83,7 @@ namespace Snapchat.Helpers
 		public async Task PreloadAsync()
 		{
 			Debug.WriteLine("Preloading camera manager");
-			if (!_isPrepped) await DiscoverDevicesAsync();
+			if (!_isPrepped) DiscoverDevicesAsync();
 			if (!_isInitialized) await InitializeCameraAsync();
 		}
 
@@ -93,7 +93,7 @@ namespace Snapchat.Helpers
 		/// <param name="captureElement"></param>
 		public async Task SetPreviewSourceAsync(CaptureElement captureElement)
 		{
-			if (!_isPrepped) await DiscoverDevicesAsync();
+			if (!_isPrepped) DiscoverDevicesAsync();
 			if (!_isInitialized) await InitializeCameraAsync();
 
 			if (captureElement.Source != null)
@@ -138,14 +138,18 @@ namespace Snapchat.Helpers
 
 		public async Task<WriteableBitmap> CapturePhotoAsync()
 		{
-			WriteableBitmap bitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
+			var bitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
 
 			if (_isUsingInstantCapture)
 			{
 				// TODO: Hide all FrameworkElements that isn't a parent in the hierarchy of the capture element's visual tree.
 
+				var imageEncoding = ImageEncodingProperties.CreateJpeg();
+				imageEncoding.Height = PhotoCaptureHeight;
+				imageEncoding.Width = PhotoCaptureWidth;
+
 				var stream = new InMemoryRandomAccessStream();
-				await _screenCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreateJpeg(), stream);
+				await _screenCapture.CapturePhotoToStreamAsync(imageEncoding, stream);
 				await bitmap.SetSourceAsync(stream);
 			}
 			else
@@ -218,7 +222,7 @@ namespace Snapchat.Helpers
 
 		private static int GetRotationDegreeFromVideoRotation(VideoRotation rotation)
 		{
-			int degree = 0;
+			var degree = 0;
 			switch (rotation)
 			{
 				case VideoRotation.Clockwise180Degrees:
@@ -236,14 +240,13 @@ namespace Snapchat.Helpers
 
 			if (degree == 0)
 				return 0;
-			else
-				return 360 - degree;
+			return 360 - degree;
 		}
 
 		/// <summary>
 		/// Obtains all video and audio capture devices on this device.
 		/// </summary>
-		private async Task DiscoverDevicesAsync()
+		private void DiscoverDevicesAsync()
 		{
 			if (_isPrepped)
 			{
