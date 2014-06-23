@@ -32,7 +32,7 @@ namespace Snapchat.Pages
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 
 		    var logoutTask = App.SnapchatManager.Logout();
-			var initializeCameraTask = MediaCaptureManager.InitializeCameraAsync();
+			var preloadCameraTask = App.Camera.PreloadAsync();
 
 			// Detect orientation changed
 			if (_accelerometer != null)

@@ -191,7 +191,7 @@
 
 		<Grid x:Name="FinalRenderGrid">
 			<Image x:Name="ImageMediaElement" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
-			<Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="ms-appx:///Assets/camera_background_testing.jpg"/>
+			<!--<Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="ms-appx:///Assets/camera_background_testing.jpg"/>-->
 
 
 			<Canvas x:Name="DrawingCanvas">

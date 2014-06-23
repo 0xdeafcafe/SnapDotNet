@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\OutboundSelectFriends\SelectedItemToFriendlyTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomTypes\SelectFriendskeyGroup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CameraManager.cs" />
     <Page Include="$(MSBuildThisFileDirectory)Controls\SearchTextBox.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -50,7 +51,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extentions\StringExtentions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\AppSettings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\MediaCaptureManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\VariousHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\Conversations\SnapTemplateSelector.cs" />

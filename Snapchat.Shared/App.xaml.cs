@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Core.Snapchat.Api;
 using Snapchat.ViewModels;
 using SnapDotNet.Core.Miscellaneous.Helpers;
+using System.Diagnostics;
+using Windows.UI.Core;
 
 namespace Snapchat
 {
@@ -29,6 +31,8 @@ namespace Snapchat
 		public static string DeviceId;
 
 		public static readonly SnapchatManager SnapchatManager = new SnapchatManager();
+
+		public static readonly CameraManager Camera = new CameraManager();
 
 		private TransitionCollection _transitions;
 
@@ -77,6 +81,7 @@ namespace Snapchat
 
 				// Place the frame in the current Window
 				Window.Current.Content = RootFrame;
+				Window.Current.VisibilityChanged += OnCurrentWindowVisibilityChanged;
 			}
 
 			if (RootFrame.Content == null)
@@ -119,6 +124,7 @@ namespace Snapchat
 		/// <param name="o"></param>
 		private static void OnResuming(object sender, object o)
 		{
+			Debug.WriteLine("Resuming app");
 			UpdateSnapchatDataAsync();
 		}
 
@@ -144,16 +150,33 @@ namespace Snapchat
 		/// <param name="e">Details about the suspend request.</param>
 		private static async void OnSuspending(object sender, SuspendingEventArgs e)
 		{
+			Debug.WriteLine("Suspending app");
+
 			var deferral = e.SuspendingOperation.GetDeferral();
 
-			await MediaCaptureManager.CleanupCaptureResourcesAsync();
+			// Save state here
 
 			deferral.Complete();
 		}
 		
 		private static async void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			await MediaCaptureManager.CleanupCaptureResourcesAsync();
+			if (Camera != null)
+				Camera.Dispose();
+
+			App.Current.Exit();
+		}
+
+		private static async void OnCurrentWindowVisibilityChanged(object sender, VisibilityChangedEventArgs e)
+		{
+			if (e.Visible)
+			{
+				await App.Camera.StartPreviewAsync();
+			}
+			else
+			{
+				await App.Camera.StopPreviewAsync();
+			}
 		}
 
 		#region Snapchat Data Helpers

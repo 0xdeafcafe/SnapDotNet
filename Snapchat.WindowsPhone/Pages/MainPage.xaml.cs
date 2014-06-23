@@ -68,7 +68,7 @@ namespace Snapchat.Pages
 			Label = App.Strings.GetString("ToggleFlashAppBarButtonLabel"),
 			Command = new RelayCommand(() =>
 			{
-				MediaCaptureManager.IsFlashEnabled = !MediaCaptureManager.IsFlashEnabled;
+				App.Camera.IsFlashEnabled = !App.Camera.IsFlashEnabled;
 				// TODO: Change icon
 			})
 		};
@@ -101,6 +101,7 @@ namespace Snapchat.Pages
 		public MainPage()
 		{
 			InitializeComponent();
+			NavigationCacheMode = NavigationCacheMode.Required;
 			Singleton = this;
 
 			// Setup ALL the datas :D
@@ -114,6 +115,11 @@ namespace Snapchat.Pages
 			ScrollViewer.ViewChanged += ScrollViewer_ViewChanged;
 			ScrollViewer.ViewChanging += ScrollViewer_ViewChanging;
 			PagesVisualStateGroup.CurrentStateChanged += delegate { UpdateBottomAppBar(); };
+
+			Loaded += delegate
+			{
+				App.Camera.SetPreviewSourceAsync(CapturePreview);
+			};
 		}
 
 		public static MainPage Singleton { get; private set; }
@@ -194,7 +200,7 @@ namespace Snapchat.Pages
 			{
 				try
 				{
-					await MediaCaptureManager.StartPreviewAsync(CapturePreview);
+					
 				}
 				catch { }
 				var storyboard = CapturePreview.Resources["FadeInStoryboard"] as Storyboard;
@@ -218,7 +224,7 @@ namespace Snapchat.Pages
 		{
 			HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
 			HardwareButtons.CameraPressed -= HardwareButtons_CameraPressed;
-			await MediaCaptureManager.StopPreviewAsync();
+			await App.Camera.StopPreviewAsync();
 		}
 
 		private void HardwareButtons_CameraPressed(object sender, CameraEventArgs e)
@@ -373,10 +379,10 @@ namespace Snapchat.Pages
 					case "Camera":
 						_flipCameraAppBarButton.Command = new RelayCommand(ToggleCamera);
 
-						if (MediaCaptureManager.HasFrontCamera)
+						if (App.Camera.HasFrontCamera)
 							primaryCommands.Add(_flipCameraAppBarButton);
 
-						if (MediaCaptureManager.IsFlashSupported)
+						if (App.Camera.IsFlashSupported)
 							primaryCommands.Add(_toggleFlashAppBarButton);
 
 						secondaryCommands.Add(_importPictureAppBarButton);
@@ -467,7 +473,7 @@ namespace Snapchat.Pages
 			AppSettings.Set("FirstTime", false);
 			CameraPage.Children.Remove(FirstRunPrompt);
 
-			var writeableBitmap = await MediaCaptureManager.CapturePhotoAsync();
+			var writeableBitmap = await App.Camera.CapturePhotoAsync();
 			PreviewPage.DataContext = new PreviewViewModel(writeableBitmap);
 			PreviewPage.Load();
 		}
@@ -521,7 +527,7 @@ namespace Snapchat.Pages
 
 		private async void ToggleCamera()
 		{
-			await MediaCaptureManager.ToggleCameraAsync();
+			/*await MediaCaptureManager.ToggleCameraAsync();
 
 			var scaleTransform = CapturePreview.RenderTransform as CompositeTransform;
 			if (MediaCaptureManager.IsMirrored)
@@ -531,7 +537,7 @@ namespace Snapchat.Pages
 			}
 			else if (scaleTransform != null)
 				scaleTransform.ScaleX = 1;
-
+			*/
 			Singleton.UpdateBottomAppBar();
 		}
 

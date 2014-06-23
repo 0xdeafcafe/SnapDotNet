@@ -34,15 +34,15 @@ namespace Snapchat.Pages.PageContents
 			};
 
 			// this is haky
-			var dispatcherTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 2)};
+			var dispatcherTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 2) };
 			dispatcherTimer.Tick += (sender, o) =>
 			{
 				dispatcherTimer.Stop();
 
 				// Testin
-				MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
-				MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
-				MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
+				//MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
+				//MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
+				//MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
 			};
 			dispatcherTimer.Start();
 
