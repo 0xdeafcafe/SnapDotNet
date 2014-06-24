@@ -223,7 +223,7 @@ namespace Snapchat.Pages
 			var currentState = PagesVisualStateGroup.CurrentState.Name;
 			if (currentState == "Camera")
 			{
-				// TODO: Take a picture
+				CapturePhotoButton_Tapped(CapturePhotoButton, null);
 			}
 			else
 			{
@@ -451,8 +451,8 @@ namespace Snapchat.Pages
 			AppSettings.Set("FirstTime", false);
 			CameraPage.Children.Remove(FirstRunPrompt);
 
-			//var writeableBitmap = await App.Camera.CapturePhotoAsync();
-			PreviewPage.Load(new PreviewViewModel(null));
+			var writeableBitmap = await App.Camera.CapturePhotoAsync();
+			PreviewPage.Load(new PreviewViewModel(writeableBitmap));
 		}
 
 		#region Snap Media Viewer
