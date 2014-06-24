@@ -442,7 +442,7 @@ namespace Snapchat.Pages
 			appBar.ClosedDisplayMode = displayMode;
 		}
 
-		private void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
+		private async void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
 			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
 			PreviewPage.Reset();
