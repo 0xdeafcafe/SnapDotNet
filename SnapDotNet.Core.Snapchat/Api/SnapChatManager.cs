@@ -323,6 +323,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 			return (AllUpdates != null && AllUpdates.UpdatesResponse != null && AllUpdates.UpdatesResponse.Logged);
 		}
 
+		/// <summary>
+		/// Creates a MediaId used for Snaps, Stories and Conversations
+		/// </summary>
+		public string GenerateMediaId()
+		{
+			return !IsAuthenticated() ? null : String.Format("{0}~{1}", Username.ToUpperInvariant(), Guid.NewGuid());
+		}
+
 		#endregion
 		
 		#region Actions

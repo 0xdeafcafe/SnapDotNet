@@ -180,7 +180,6 @@
 							VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,90"
 							Width="92" Height="92" />
 
-
 					<Grid x:Name="NavButtonsContainer" VerticalAlignment="Bottom" Height="70" Margin="0,0,0,58" Opacity="0">
 						<Grid.RenderTransform>
 							<TranslateTransform x:Name="NavButtonsTranslateTransform" Y="30"/>

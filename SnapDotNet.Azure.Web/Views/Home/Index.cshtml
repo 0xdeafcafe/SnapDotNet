@@ -1,31 +1,94 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+	Layout = null;
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+	<title>ColdSnap - Snapchat client for Windows Phone</title>
+
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+	
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+
+			font-family: 'Open Sans', sans-serif;
+			text-rendering: optimizeLegibility;
+		}
+		.section-container {
+			margin: 0;
+			padding: 0;
+		}
+
+		.section-container.alpha {
+			background: #3cb2e2;
+			color: white;
+		 }
+		.section-container.bravo {
+			background: white;
+			color: #1b1b1b;
+		}
+
+		#le-matt-branding {
+			background-image: url(../../Content/Images/le-logo.png);
+			background-position: center left;
+			background-size: 150px 150px;
+			background-repeat: no-repeat;
+
+			height: 150px;
+			width: 150px;
+			margin: 0 auto;
+		}
+		#le-matt-branding > span {
+			display: none;
+		}
+		#app-preview {
+			height: 775px;
+			color: white;
+			text-align: center;
+
+			background-image: url(../../Content/Images/phone-preview.png);
+			background-position: bottom center;
+			background-size: 770px 471px;
+			background-repeat: no-repeat;
+		}
+		#app-preview > h1 {
+			margin-top: -10px;
+			font-size: 35px;
+			font-weight: 300;
+		}
+		#app-preview > h2 {
+			margin-top: -20px;
+			font-size: 25px;
+			font-weight: 400;
+		}
+	</style>
+</head>
+	<body>
+		<!--  -->
+		<div class="section-container alpha" id="app-preview">
+			<div id="le-matt-branding"></div>
+			<h1>ColdSnap</h1>
+			<h2>Snapchat client for Windows Phone</h2>
+
+		</div>
+		
+		<!--  -->
+		<div class="section-container bravo">
+
+		</div>
+
+		<footer class="section-container bravo">
+			<p>&copy; @DateTime.Now.Year - ColdSnap</p>
+		</footer>
+
+		@Scripts.Render("~/bundles/jquery")
+	</body>
+</html>

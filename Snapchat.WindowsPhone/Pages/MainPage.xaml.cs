@@ -19,7 +19,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Extensions;
-using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages
@@ -146,9 +145,9 @@ namespace Snapchat.Pages
 			timer.Start();
 		}
 
-		public void GoToOutboundFriendSelection()
+		public void GoToOutboundFriendSelection(byte[] imageData)
 		{
-			OutboundSelectFriendsPage.Load();
+			OutboundSelectFriendsPage.Load(imageData);
 			VisualStateManager.GoToState(this, "OutboundSelectFriends", true);
 		}
 
@@ -446,16 +445,9 @@ namespace Snapchat.Pages
 			AppSettings.Set("FirstTime", false);
 			CameraPage.Children.Remove(FirstRunPrompt);
 
-			try
-			{
-				var writeableBitmap = await App.Camera.CapturePhotoAsync();
-				PreviewPage.Load(new PreviewViewModel(writeableBitmap));
-			}
-			catch
-			{
-				PreviewPage.Load(new PreviewViewModel(null));
-				throw new InvalidOperationException("uh oh");
-			}
+			//var writeableBitmap = await App.Camera.CapturePhotoAsync();
+			//PreviewPage.Load(new PreviewViewModel(writeableBitmap));
+			PreviewPage.Load(new PreviewViewModel(null));
 		}
 
 		#region Snap Media Viewer

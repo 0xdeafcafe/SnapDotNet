@@ -167,6 +167,50 @@ namespace SnapDotNet.Core.Snapchat.Api
 			}
 		}
 
+		/// <summary>
+		///     Posts data to the Snapchat API
+		/// </summary>
+		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="multipartContent">Dictionary of data to put in the multipost content</param>
+		/// <param name="typeToken">
+		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
+		///     Authorized Requests)
+		/// </param>
+		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
+		/// <param name="data">The data to put in the post</param>
+		/// <param name="headers">Optional additional Headers</param>
+		public async Task<HttpResponseMessage> PostAsMultipartFormAsync(string endpoint, Dictionary<string, string> multipartContent,
+			string typeToken, string timeStamp, byte[] data, Dictionary<string, string> headers = null)
+		{
+			var webClient = new HttpClient();
+			webClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", Settings.UserAgent);
+			webClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Length", "160");
+			webClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "*/*");
+			webClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip,deflate");
+
+			if (headers != null)
+				foreach (var header in headers)
+					webClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+
+			var multipartFormData = new MultipartFormDataContent();
+			foreach (var each in multipartContent)
+				multipartFormData.Add(new StringContent(each.Value), each.Key);
+			
+			multipartFormData.Add(new ByteArrayContent(data), "data");
+			multipartFormData.Add(new StringContent(Tokens.GenerateRequestToken(Settings.Secret, Settings.HashingPattern, typeToken, timeStamp)), "req_token");
+			var response = await webClient.PostAsync(new Uri(EndpointBase + endpoint), multipartFormData);
+
+			switch (response.StatusCode)
+			{
+				case HttpStatusCode.OK:
+					return response;
+
+				default:
+					// Well, fuck
+					throw new InvalidHttpResponseException(response.ReasonPhrase, response);
+			}
+		}
+
 		#endregion
 
 		#region Get

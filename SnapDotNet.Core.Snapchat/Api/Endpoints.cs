@@ -30,6 +30,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		private const string ClearFeedEndpointUrl =			"clear";
 		private const string FindFriendEndpointUrl =		"find_friends";
 		private const string FriendEndpointUrl =			"friend";
+		private const string UploadEndpointUrl =			"upload";
+		private const string SendEndpointUrl =				"send";
 		private const string LoginEndpointUrl =				"login";
 		private const string LogoutEndpointUrl =			"logout";
 		private const string StoriesEndpointUrl =			"stories";
@@ -1265,6 +1267,105 @@ namespace SnapDotNet.Core.Snapchat.Api
 		public byte[] GetSnapBlob(string snapId)
 		{
 			return AsyncHelpers.RunSync(() => GetSnapBlobAsync(snapId));
+		}
+
+		#endregion
+
+		#region Upload
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mediaType"></param>
+		/// <param name="mediaId"></param>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public async Task<bool> UploadMediaAsync(MediaType mediaType, string mediaId, byte[] data)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var multipartFormContent = new Dictionary<string, string>
+			{
+				{"username", GetAuthedUsername()},
+				{"type", ((int) mediaType).ToString()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
+				{"media_id", mediaId},
+			};
+
+			try
+			{
+				var response =
+					await
+						_webConnect.PostAsMultipartFormAsync(UploadEndpointUrl, multipartFormContent, _snapchatManager.AuthToken,
+							timestamp.ToString(CultureInfo.InvariantCulture), data);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				SnazzyDebug.WriteLine(ex);
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mediaType"></param>
+		/// <param name="mediaId"></param>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public bool UploadMedia(MediaType mediaType, string mediaId, byte[] data)
+		{
+			return AsyncHelpers.RunSync(() => UploadMediaAsync(mediaType, mediaId, data));
+		}
+
+		#endregion
+
+		#region Send
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mediaId"></param>
+		/// <param name="recipients"></param>
+		/// <param name="time"></param>
+		/// <returns></returns>
+		public async Task<bool> SendMediaAsync(string mediaId, string[] recipients, int time = 10)
+		{
+			var timestamp = Timestamps.GenerateRetardedTimestamp();
+			var postData = new Dictionary<string, string>
+			{
+				{"media_id", mediaId},
+				{"recipient", String.Join(", ", recipients)},
+				{"time", time.ToString()},
+				{"username", GetAuthedUsername()},
+				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			try
+			{
+				var response =
+					await
+						_webConnect.PostToResponseAsync(SendEndpointUrl, postData, _snapchatManager.AuthToken,
+							timestamp.ToString(CultureInfo.InvariantCulture));
+				return true;
+			}
+			catch (Exception ex)
+			{
+				SnazzyDebug.WriteLine(ex);
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mediaId"></param>
+		/// <param name="recipients"></param>
+		/// <param name="time"></param>
+		/// <returns></returns>
+		public bool SendMedia(string mediaId, string[] recipients, int time = 10)
+		{
+			return AsyncHelpers.RunSync(() => SendMediaAsync(mediaId, recipients, time));
 		}
 
 		#endregion

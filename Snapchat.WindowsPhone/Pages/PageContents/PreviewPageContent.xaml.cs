@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Input;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
 using Snapchat.ViewModels.PageContents;
+using SnapDotNet.Core.Miscellaneous.Extensions;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -115,9 +120,26 @@ namespace Snapchat.Pages.PageContents
 
 		#endregion
 		
-		private void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
+		private async void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			MainPage.Singleton.GoToOutboundFriendSelection();
+			var renderTargetBitmap = new RenderTargetBitmap();
+			await renderTargetBitmap.RenderAsync(FinalRenderGrid);
+			var pixels = await renderTargetBitmap.GetPixelsAsync();
+
+			using (var stream = new InMemoryRandomAccessStream())
+			{
+				var encoder = await
+					BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream);
+				var bytes = pixels.ToArray();
+				encoder.SetPixelData(BitmapPixelFormat.Bgra8,
+									 BitmapAlphaMode.Ignore,
+									 (uint) FinalRenderGrid.ActualWidth, (uint) FinalRenderGrid.ActualHeight,
+									 96, 96, bytes);
+
+				await encoder.FlushAsync();
+				var imageData = await stream.ToArray();
+				MainPage.Singleton.GoToOutboundFriendSelection(imageData);
+			}
 		}
 	}
 }

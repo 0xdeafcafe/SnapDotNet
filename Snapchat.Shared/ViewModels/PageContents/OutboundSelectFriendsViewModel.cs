@@ -12,12 +12,14 @@ namespace Snapchat.ViewModels.PageContents
 	public class OutboundSelectFriendsViewModel
 		: BaseViewModel
 	{
-		public OutboundSelectFriendsViewModel()
+		public OutboundSelectFriendsViewModel(byte[] imageData)
 		{
 			_recipientList.CollectionChanged += delegate
 			{
 				ExplicitOnNotifyPropertyChanged("SelectedRecipients");
 			};
+
+			ImageData = imageData;
 
 			var friends = App.SnapchatManager.Account.Friends.Where(f => f.Type != FriendRequestState.Blocked).Select(friend => new SelectedFriend { Friend = friend }).Cast<SelectedItem>().ToList();
 			friends.AddRange(App.SnapchatManager.Account.RecentFriends.Select(recent => new SelectedRecent { RecentName = recent }));
@@ -36,6 +38,13 @@ namespace Snapchat.ViewModels.PageContents
 			}
 		}
 		private ObservableCollection<SelectFriendskeyGroup<SelectedItem>> _recipientList = new ObservableCollection<SelectFriendskeyGroup<SelectedItem>>();
+
+		public Byte[] ImageData
+		{
+			get { return _imageData; }
+			set { TryChangeValue(ref _imageData, value); }
+		}
+		private Byte[] _imageData;
 
 		public String SelectedRecipients
 		{

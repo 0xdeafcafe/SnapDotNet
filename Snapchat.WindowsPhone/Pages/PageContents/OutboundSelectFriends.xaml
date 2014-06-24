@@ -284,7 +284,8 @@
 			</ScrollViewer>
 			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"
 					Height="40" Margin="0,0,10,10">
-				<Button x:Name="SelectFriendsButton" Style="{StaticResource EmptyButtonStyle}">
+				<Button x:Name="SelectFriendsButton" Style="{StaticResource EmptyButtonStyle}"
+						Click="SelectFriendsButton_OnClick">
 					<Grid x:Name="SelectFriendsGrid" Margin="0" Width="45" Height="36" RenderTransformOrigin="0.5,0.5">
 						<Grid.RenderTransform>
 							<CompositeTransform ScaleX="1.2" ScaleY="1.2"/>

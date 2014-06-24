@@ -1,9 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 using Snapchat.CustomTypes;
 using Snapchat.ViewModels.PageContents;
+using SnapDotNet.Core.Miscellaneous.Crypto;
+using SnapDotNet.Core.Snapchat.Api;
 using SnapDotNet.Core.Snapchat.Models.AppSpecific;
+using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -21,9 +26,9 @@ namespace Snapchat.Pages.PageContents
 			DataContext = ViewModel = null;
 		}
 
-		public void Load()
+		public void Load(byte[] imageData)
 		{
-			DataContext = ViewModel = new OutboundSelectFriendsViewModel();
+			DataContext = ViewModel = new OutboundSelectFriendsViewModel(imageData);
 		}
 
 		private bool _isInMassOperation;
@@ -111,6 +116,17 @@ namespace Snapchat.Pages.PageContents
 
 			// We no doin this, no mo
 			ViewModel.ExplicitOnNotifyPropertyChanged("SelectedRecipients");
+		}
+
+		private async void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			var data = Aes.EncryptData(ViewModel.ImageData, Convert.FromBase64String(Settings.BlobEncryptionKey));
+			var mediaId = App.SnapchatManager.GenerateMediaId();
+			var response = await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, data);
+			var response2 = await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, new[] {"wumbotestalex"}, 10);
+			// get jpeg
+			// Send first command
+			// Send second command
 		}
 	}
 }
