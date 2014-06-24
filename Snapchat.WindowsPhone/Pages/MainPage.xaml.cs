@@ -106,7 +106,7 @@ namespace Snapchat.Pages
 
 			Loaded += delegate
 			{
-				AsyncHelpers.RunSync(() => App.Camera.SetPreviewSourceAsync(CapturePreview));
+				App.Camera.SetPreviewSourceAsync(CapturePreview);
 			};
 		}
 
@@ -186,11 +186,6 @@ namespace Snapchat.Pages
 			// Start the camera.
 			if (!DesignMode.DesignModeEnabled)
 			{
-				try
-				{
-					
-				}
-				catch { }
 				var storyboard = CapturePreview.Resources["FadeInStoryboard"] as Storyboard;
 				if (storyboard != null)
 					storyboard.Begin();
@@ -451,8 +446,16 @@ namespace Snapchat.Pages
 			AppSettings.Set("FirstTime", false);
 			CameraPage.Children.Remove(FirstRunPrompt);
 
-			var writeableBitmap = await App.Camera.CapturePhotoAsync();
-			PreviewPage.Load(new PreviewViewModel(writeableBitmap));
+			try
+			{
+				var writeableBitmap = await App.Camera.CapturePhotoAsync();
+				PreviewPage.Load(new PreviewViewModel(writeableBitmap));
+			}
+			catch
+			{
+				PreviewPage.Load(new PreviewViewModel(null));
+				throw new InvalidOperationException("uh oh");
+			}
 		}
 
 		#region Snap Media Viewer

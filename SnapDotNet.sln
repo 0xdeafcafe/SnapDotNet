@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snapchat.WindowsPhone", "Sn
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Snapchat.Shared", "Snapchat.Shared\Snapchat.Shared.shproj", "{0099AB56-AED8-44A1-9FAD-DD8952559C61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Azure.Web", "SnapDotNet.Azure.Web\SnapDotNet.Azure.Web.csproj", "{D537CA47-C995-4F77-9479-0406698796E2}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Snapchat.Shared\Snapchat.Shared.projitems*{29b29605-215d-41c9-b083-30b85532c13f}*SharedItemsImports = 4
@@ -94,6 +96,14 @@ Global
 		{29B29605-215D-41C9-B083-30B85532C13F}.Release|x86.ActiveCfg = Release|x86
 		{29B29605-215D-41C9-B083-30B85532C13F}.Release|x86.Build.0 = Release|x86
 		{29B29605-215D-41C9-B083-30B85532C13F}.Release|x86.Deploy.0 = Release|x86
+		{D537CA47-C995-4F77-9479-0406698796E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D537CA47-C995-4F77-9479-0406698796E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D537CA47-C995-4F77-9479-0406698796E2}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D537CA47-C995-4F77-9479-0406698796E2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D537CA47-C995-4F77-9479-0406698796E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D537CA47-C995-4F77-9479-0406698796E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D537CA47-C995-4F77-9479-0406698796E2}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D537CA47-C995-4F77-9479-0406698796E2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +116,6 @@ Global
 		{E53AF6A8-4ECB-4E70-8EE9-6E65D3AA6A79} = {F9870B4E-8AFF-4477-851C-FA1073EA9BF2}
 		{29B29605-215D-41C9-B083-30B85532C13F} = {91EFE32B-A9A1-4394-A5E4-6E3891B388B6}
 		{0099AB56-AED8-44A1-9FAD-DD8952559C61} = {91EFE32B-A9A1-4394-A5E4-6E3891B388B6}
+		{D537CA47-C995-4F77-9479-0406698796E2} = {250C29F0-AF9A-4F43-915A-EF5F4AA26890}
 	EndGlobalSection
 EndGlobal
