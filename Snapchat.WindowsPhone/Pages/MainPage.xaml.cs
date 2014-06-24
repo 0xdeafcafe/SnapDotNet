@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Extensions;
+using SnapDotNet.Core.Miscellaneous.Helpers.Async;
 using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages
@@ -49,18 +50,6 @@ namespace Snapchat.Pages
 			Label = App.Strings.GetString("FlipCameraAppBarButtonLabel")
 		};
 		
-		private readonly AppBarButton _selectAllFriendsAppBarButton = new AppBarButton
-		{
-			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.checkmark.thick.png") },
-			Label = App.Strings.GetString("SelectAllFriendsAppBarButtonLabel")
-		};
-
-		private readonly AppBarButton _unSelectAllFriendsAppBarButton = new AppBarButton
-		{
-			Icon = new BitmapIcon { UriSource = new Uri("ms-appx:///Assets/Icons/appbar.checkmark.thick.unchecked.png") },
-			Label = App.Strings.GetString("DeSelectAllFriendsAppBarButtonLabel")
-		};
-
 		private readonly AppBarButton _toggleFlashAppBarButton = new AppBarButton
 		{
 			Icon = new BitmapIcon { UriSource = FlashOnUri },
@@ -117,7 +106,7 @@ namespace Snapchat.Pages
 
 			Loaded += delegate
 			{
-				App.Camera.SetPreviewSourceAsync(CapturePreview);
+				AsyncHelpers.RunSync(() => App.Camera.SetPreviewSourceAsync(CapturePreview));
 			};
 		}
 
@@ -389,19 +378,9 @@ namespace Snapchat.Pages
 						appBar.Background = new SolidColorBrush(Color.FromArgb(0x66, 0x33, 0x33, 0x33));
 						break;
 
+					case "OutboundSelectFriends":
 					case "Preview":
 						BottomAppBar = null;
-						break;
-
-					case "OutboundSelectFriends":
-						displayMode = AppBarClosedDisplayMode.Minimal;
-						appBar.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
-
-						_selectAllFriendsAppBarButton.Command = new RelayCommand(OutboundSelectFriendsPage.SelectAllFriends);
-						primaryCommands.Add(_selectAllFriendsAppBarButton);
-
-						_unSelectAllFriendsAppBarButton.Command = new RelayCommand(OutboundSelectFriendsPage.DeSelectAllFriends);
-						primaryCommands.Add(_unSelectAllFriendsAppBarButton);
 						break;
 
 					case "Friends":
@@ -463,7 +442,7 @@ namespace Snapchat.Pages
 			appBar.ClosedDisplayMode = displayMode;
 		}
 
-		private async void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
+		private void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
 			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
 			PreviewPage.Reset();
@@ -523,7 +502,7 @@ namespace Snapchat.Pages
 			ToggleCamera();
 		}
 
-		private async void ToggleCamera()
+		private void ToggleCamera()
 		{
 			/*await MediaCaptureManager.ToggleCameraAsync();
 

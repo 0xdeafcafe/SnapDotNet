@@ -192,9 +192,6 @@
   <data name="ConvosSearchBox.PlaceholderText" xml:space="preserve">
     <value>Search</value>
   </data>
-  <data name="DeSelectAllFriendsAppBarButtonLabel" xml:space="preserve">
-    <value>Un Select All</value>
-  </data>
   <data name="DisplayChangeWarningRun1.Text" xml:space="preserve">
     <value>This is how your friend's name appears to you.</value>
   </data>
@@ -276,9 +273,6 @@
   </data>
   <data name="RemoveFriend" xml:space="preserve">
     <value>Remove</value>
-  </data>
-  <data name="SelectAllFriendsAppBarButtonLabel" xml:space="preserve">
-    <value>Select All</value>
   </data>
   <data name="SendCommentAppBarButtonLabel" xml:space="preserve">
     <value>send</value>

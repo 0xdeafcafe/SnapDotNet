@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
@@ -36,13 +37,11 @@ namespace Snapchat.ViewModels.PageContents
 		}
 		private ObservableCollection<SelectFriendskeyGroup<SelectedItem>> _recipientList = new ObservableCollection<SelectFriendskeyGroup<SelectedItem>>();
 
-		public ObservableCollection<String> SelectedRecipients
+		public String SelectedRecipients
 		{
 			get
 			{
-				// TODO: Figure out why this isn't firing...
-				var friends = new ObservableCollection<String>();
-
+				var friends = new HashSet<String>();
 				foreach (var recipient in RecipientList.SelectMany(recipientGroup => recipientGroup).Where(recipient => recipient.Selected))
 				{
 					if (recipient is SelectedStory)
@@ -52,8 +51,7 @@ namespace Snapchat.ViewModels.PageContents
 					else if (recipient is SelectedFriend)
 						friends.Add((recipient as SelectedFriend).Friend.FriendlyName);
 				}
-
-				return friends;
+				return String.Join(", ", friends.ToArray());
 			}
 		}
 	}

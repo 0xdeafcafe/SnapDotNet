@@ -15,7 +15,8 @@ namespace Snapchat.CustomTypes
 		Friends
 	}
 
-	public class SelectFriendskeyGroup<T> : List<T>
+	public class SelectFriendskeyGroup<T> 
+		: ObservableCollection<T>
 	{
 		/// <summary>
 		/// The delegate that is used to get the key information.
