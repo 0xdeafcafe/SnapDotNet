@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Core.Snapchat.Api.Tests", "SnapDotNet.Core.Snapchat.Api.Tests\SnapDotNet.Core.Snapchat.Api.Tests.csproj", "{194757E6-0DFF-4CF2-BFFB-7625B1A2F789}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SnapDotNet.Azure", "SnapDotNet.Azure", "{250C29F0-AF9A-4F43-915A-EF5F4AA26890}"
+	ProjectSection(SolutionItems) = preProject
+		DatabaseDesign.txt = DatabaseDesign.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet.Azure.MobileService", "SnapDotNet.Azure.MobileService\SnapDotNet.Azure.MobileService.csproj", "{C49169F2-A1B1-4DD1-9959-9E75B3F2FB30}"
 EndProject

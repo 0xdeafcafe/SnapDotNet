@@ -437,11 +437,8 @@ namespace Snapchat.Helpers
 				);
 			}
 
-			if (mediaStreamType == MediaStreamType.Photo)
-			{
-				PhotoCaptureWidth = perfectResolution.Item1;
-				PhotoCaptureHeight = perfectResolution.Item2;
-			}
+			PhotoCaptureWidth = perfectResolution.Item1;
+			PhotoCaptureHeight = perfectResolution.Item2;
 
 			await _deviceCapture.VideoDeviceController.SetMediaStreamPropertiesAsync(mediaStreamType, encodings[perfectResolution.Item3]);
 			Debug.WriteLine("Set {0} resolution to {1}x{2}", mediaStreamType, perfectResolution.Item1, perfectResolution.Item2);
