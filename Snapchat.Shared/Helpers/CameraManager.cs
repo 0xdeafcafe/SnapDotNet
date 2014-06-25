@@ -83,7 +83,7 @@ namespace Snapchat.Helpers
 		public async Task PreloadAsync()
 		{
 			Debug.WriteLine("Preloading camera manager");
-			if (!_isPrepped) DiscoverDevicesAsync();
+			if (!_isPrepped) await DiscoverDevicesAsync();
 			if (!_isInitialized) await InitializeCameraAsync();
 		}
 
@@ -93,7 +93,7 @@ namespace Snapchat.Helpers
 		/// <param name="captureElement"></param>
 		public async Task SetPreviewSourceAsync(CaptureElement captureElement)
 		{
-			if (!_isPrepped) DiscoverDevicesAsync();
+			if (!_isPrepped) await DiscoverDevicesAsync();
 			if (!_isInitialized) await InitializeCameraAsync();
 
 			if (captureElement.Source != null)
@@ -140,31 +140,37 @@ namespace Snapchat.Helpers
 		{
 			var bitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
 
-			if (_isUsingInstantCapture)
+			try
 			{
-				// TODO: Hide all FrameworkElements that isn't a parent in the hierarchy of the capture element's visual tree.
+				if (_isUsingInstantCapture)
+				{
+					// TODO: Hide all FrameworkElements that isn't a parent in the hierarchy of the capture element's visual tree.
 
-				var imageEncoding = ImageEncodingProperties.CreateJpeg();
-				imageEncoding.Height = PhotoCaptureHeight;
-				imageEncoding.Width = PhotoCaptureWidth;
+					var imageEncoding = ImageEncodingProperties.CreateJpeg();
+					imageEncoding.Height = PhotoCaptureHeight;
+					imageEncoding.Width = PhotoCaptureWidth;
 
-				var stream = new InMemoryRandomAccessStream();
-				await _screenCapture.CapturePhotoToStreamAsync(imageEncoding, stream);
-				await bitmap.SetSourceAsync(stream);
+					var stream = new InMemoryRandomAccessStream();
+					await _screenCapture.CapturePhotoToStreamAsync(imageEncoding, stream);
+					await bitmap.SetSourceAsync(stream);
+				}
+				else
+				{
+					var capturedPhoto = await _lowLagPhotoCapture.CaptureAsync();
+					await bitmap.SetSourceAsync(capturedPhoto.Frame);
+
+					// Fix image mirroring (as we only actualy mirror the preview, not the capture element)
+					if (!IsFrontCameraMirrored)
+						bitmap = bitmap.Flip(WriteableBitmapExtensions.FlipMode.Horizontal);
+
+					// Fix rotation
+					bitmap = bitmap.RotateFree(GetRotationDegreeFromVideoRotation(GetVideoPreviewRotation()), false);
+				}
 			}
-			else
+			catch (Exception e)
 			{
-				var capturedPhoto = await _lowLagPhotoCapture.CaptureAsync();
-				await bitmap.SetSourceAsync(capturedPhoto.Frame);
 
-				// Fix image mirroring (as we only actualy mirror the preview, not the capture element)
-				if (!IsFrontCameraMirrored)
-					bitmap = bitmap.Flip(WriteableBitmapExtensions.FlipMode.Horizontal);
-
-				// Fix rotation
-				bitmap = bitmap.RotateFree(GetRotationDegreeFromVideoRotation(GetVideoPreviewRotation()), false);
 			}
-
 			return bitmap;
 		}
 
@@ -246,7 +252,7 @@ namespace Snapchat.Helpers
 		/// <summary>
 		/// Obtains all video and audio capture devices on this device.
 		/// </summary>
-		private async void DiscoverDevicesAsync()
+		private async Task DiscoverDevicesAsync()
 		{
 			await Task.Run(() =>
 			{
@@ -267,7 +273,7 @@ namespace Snapchat.Helpers
 				var findAllMicrophoneTask = Task.Run(async () =>
 				{
 					_microphoneInfoCollection = await DeviceInformation.FindAllAsync(DeviceClass.AudioCapture);
-					Debug.WriteLine("Found all audio capture devices ({0} total)", _microphoneInfoCollection);
+					Debug.WriteLine("Found all audio capture devices ({0} total)", _microphoneInfoCollection.Count);
 				});
 
 				Task.WaitAll(findAllCameraTask, findAllMicrophoneTask);
@@ -286,48 +292,40 @@ namespace Snapchat.Helpers
 				return;
 			}
 
-			var initializeDeviceCaptureTask = Task.Factory.StartNew(async () =>
+			Debug.WriteLine("Initializing camera media capture...");
+			_deviceCapture = new MediaCapture();
+			await _deviceCapture.InitializeAsync(new MediaCaptureInitializationSettings
 			{
-				Debug.WriteLine("Initializing camera media capture...");
-				_deviceCapture = new MediaCapture();
-				await _deviceCapture.InitializeAsync(new MediaCaptureInitializationSettings
+				VideoDeviceId = _cameraInfoCollection[_currentVideoDevice].Id,
+				PhotoCaptureSource = PhotoCaptureSource.VideoPreview,
+				//AudioDeviceId = _microphoneInfoCollection[_currentAudioDevice].Id
+				StreamingCaptureMode = StreamingCaptureMode.Video
+			});
+			Debug.WriteLine("Initialized camera media capture!");
+
+			Debug.WriteLine("Initializing screen media capture...");
+			_screenCapture = new MediaCapture();
+			try
+			{
+				await _screenCapture.InitializeAsync(new MediaCaptureInitializationSettings
 				{
-					VideoDeviceId = _cameraInfoCollection[_currentVideoDevice].Id,
-					PhotoCaptureSource = PhotoCaptureSource.VideoPreview,
-					//AudioDeviceId = _microphoneInfoCollection[_currentAudioDevice].Id
-					StreamingCaptureMode = StreamingCaptureMode.Video
+					VideoSource = ScreenCapture.GetForCurrentView().VideoSource
 				});
-				Debug.WriteLine("Initialized camera media capture!");
-			});
-
-			var initializeScreenCaptureTask = Task.Factory.StartNew(async () =>
+				_isUsingInstantCapture = true;
+				Debug.WriteLine("Initialized screen media capture!");
+				Debug.WriteLine("Instant screen capture is enabled");
+			}
+			catch
 			{
-				Debug.WriteLine("Initializing screen media capture...");
-				_screenCapture = new MediaCapture();
-				try
-				{
-					await _screenCapture.InitializeAsync(new MediaCaptureInitializationSettings
-					{
-						VideoSource = ScreenCapture.GetForCurrentView().VideoSource
-					});
-					_isUsingInstantCapture = true;
-					Debug.WriteLine("Initialized screen media capture!");
-					Debug.WriteLine("Instant screen capture is enabled");
-				}
-				catch
-				{
-					Debug.WriteLine("Failed to initialize screen capture, falling back to slow camera capture instead.");
-				}
-			});
-
-			Task.WaitAll(initializeDeviceCaptureTask, initializeScreenCaptureTask);
+				Debug.WriteLine("Failed to initialize screen capture, falling back to slow camera capture instead.");
+			}
 
 			// Set up resolutions.
-			Task.WaitAll(
-				Task.Factory.StartNew(() => SetResolutionAsync(MediaStreamType.Photo)),
-				Task.Factory.StartNew(() => SetResolutionAsync(MediaStreamType.VideoPreview)),
-				Task.Factory.StartNew(() => SetResolutionAsync(MediaStreamType.VideoRecord))
-			);
+			//Task.WaitAll(
+			//	Task.Factory.StartNew(() => SetResolutionAsync(MediaStreamType.Photo)),
+			//	Task.Factory.StartNew(() => SetResolutionAsync(MediaStreamType.VideoPreview)),
+			//	Task.Factory.StartNew(() => SetResolutionAsync(MediaStreamType.VideoRecord))
+			//);
 
 			// Correct camera rotation.
 			var rotation = GetVideoPreviewRotation();

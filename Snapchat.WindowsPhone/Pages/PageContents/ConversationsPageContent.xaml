@@ -7,7 +7,8 @@
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 				xmlns:converters="using:Snapchat.Converters"
 				xmlns:selectorsConversations="using:Snapchat.Selectors.Conversations"
-				mc:Ignorable="d" Background="White">
+				mc:Ignorable="d" Background="White"
+				x:Name="page">
 				
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -119,12 +120,13 @@
 		<ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
 			
 			<!-- le items -->
-			<ItemsControl ItemsSource="{Binding Conversations}" MinHeight="10">
+			<ItemsControl ItemsSource="{Binding FilteredConversations}" MinHeight="10">
 				<ItemsControl.Template>
 					<ControlTemplate TargetType="ItemsControl">
 						<StackPanel>
 							<!-- Search box -->
 							<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus"
+									 Text="{Binding FilterText, Mode=TwoWay}"
 									 Style="{StaticResource SearchTextBoxStyle}" />
 
 							<ItemsPresenter Margin="0,0,0,30"/>

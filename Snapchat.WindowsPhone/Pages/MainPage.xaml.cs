@@ -445,9 +445,8 @@ namespace Snapchat.Pages
 			AppSettings.Set("FirstTime", false);
 			CameraPage.Children.Remove(FirstRunPrompt);
 
-			//var writeableBitmap = await App.Camera.CapturePhotoAsync();
-			//PreviewPage.Load(new PreviewViewModel(writeableBitmap));
-			PreviewPage.Load(new PreviewViewModel(null));
+			var writeableBitmap = await App.Camera.CapturePhotoAsync();
+			PreviewPage.Load(new PreviewViewModel(writeableBitmap));
 		}
 
 		#region Snap Media Viewer
