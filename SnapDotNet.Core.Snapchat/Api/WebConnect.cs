@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Storage.Streams;
 using Newtonsoft.Json;
-using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Miscellaneous.Helpers.Compression;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
@@ -31,7 +30,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		///     Posts data to the Snapchat API
 		/// </summary>
-		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="endpoint">The endpoint to point to (ie; login)</param>
+		/// <param name="endpointType">The type of endpoint (ie; bq)</param>
 		/// <param name="postData">Dictionary of data to post</param>
 		/// <param name="typeToken">
 		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
@@ -39,10 +39,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		public async Task<T> PostToGenericAsync<T>(string endpoint, Dictionary<string, string> postData,
+		public async Task<T> PostToGenericAsync<T>(string endpoint, EndpointType endpointType, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
-			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+			var response = await PostAsync(endpoint, endpointType, postData, typeToken, timeStamp, headers);
 
 			// Do GZip
 			string data;
@@ -59,7 +59,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		///     Posts data to the Snapchat API
 		/// </summary>
-		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="endpoint">The endpoint to point to (ie; login)</param>
+		/// <param name="endpointType">The type of endpoint (ie; bq)</param>
 		/// <param name="postData">Dictionary of data to post</param>
 		/// <param name="typeToken">
 		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
@@ -67,10 +68,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		public async Task<string> PostToStringAsync(string endpoint, Dictionary<string, string> postData,
+		public async Task<string> PostToStringAsync(string endpoint, EndpointType endpointType, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
-			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+			var response = await PostAsync(endpoint, endpointType, postData, typeToken, timeStamp, headers);
 
 			// Do GZip
 			string data;
@@ -86,7 +87,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		///     Posts data to the Snapchat API
 		/// </summary>
-		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="endpoint">The endpoint to point to (ie; login)</param>
+		/// <param name="endpointType">The type of endpoint (ie; bq)</param>
 		/// <param name="postData">Dictionary of data to post</param>
 		/// <param name="typeToken">
 		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
@@ -94,16 +96,17 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		public async Task<HttpResponseMessage> PostToResponseAsync(string endpoint, Dictionary<string, string> postData,
+		public async Task<HttpResponseMessage> PostToResponseAsync(string endpoint, EndpointType endpointType, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
-			return await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+			return await PostAsync(endpoint, endpointType, postData, typeToken, timeStamp, headers);
 		}
 
 		/// <summary>
 		///     Posts data to the Snapchat API
 		/// </summary>
-		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="endpoint">The endpoint to point to (ie; login)</param>
+		/// <param name="endpointType">The type of endpoint (ie; bq)</param>
 		/// <param name="postData">Dictionary of data to post</param>
 		/// <param name="typeToken">
 		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
@@ -111,10 +114,10 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		public async Task<byte[]> PostToByteArrayAsync(string endpoint, Dictionary<string, string> postData,
+		public async Task<byte[]> PostToByteArrayAsync(string endpoint, EndpointType endpointType, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
-			var response = await PostAsync(endpoint, postData, typeToken, timeStamp, headers);
+			var response = await PostAsync(endpoint, endpointType, postData, typeToken, timeStamp, headers);
 
 			// Do GZip
 			byte[] data;
@@ -130,7 +133,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		///     Posts data to the Snapchat API
 		/// </summary>
-		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="endpoint">The endpoint to point to (ie; login)</param>
+		/// <param name="endpointType">The type of endpoint (ie; bq)</param>
 		/// <param name="postData">Dictionary of data to post</param>
 		/// <param name="typeToken">
 		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
@@ -138,7 +142,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		private async Task<HttpResponseMessage> PostAsync(string endpoint, Dictionary<string, string> postData,
+		private async Task<HttpResponseMessage> PostAsync(string endpoint, EndpointType endpointType, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
 		{
 			var webClient = new HttpClient();
@@ -155,7 +159,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			var postBody = PostBodyParser(postData);
 			var response =
 				await
-					webClient.PostAsync(new Uri(EndpointBase + endpoint),
+					webClient.PostAsync(new Uri(String.Format(EndpointBase, endpointType, endpoint)),
 						new StringContent(postBody, Encoding.UTF8, "application/x-www-form-urlencoded"));
 
 			switch (response.StatusCode)
@@ -172,17 +176,18 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		///     Posts data to the Snapchat API
 		/// </summary>
-		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="endpoint">The endpoint to point to (ie; login)</param>
+		/// <param name="endpointType">The type of endpoint (ie; bq)</param>
 		/// <param name="multipartContent">Dictionary of data to put in the multipost content</param>
 		/// <param name="typeToken">
 		///     The token to generate the req_token (StaticToken for Unauthorized Requests, AuthToken for
 		///     Authorized Requests)
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
-		/// <param name="data">The data to put in the post</param>
+		/// <param name="streamContent">The data to put in the post</param>
 		/// <param name="headers">Optional additional Headers</param>
-		public async Task<HttpResponseMessage> PostAsMultipartFormAsync(string endpoint, Dictionary<string, string> multipartContent,
-			string typeToken, string timeStamp, byte[] data, Dictionary<string, string> headers = null)
+		public async Task<HttpResponseMessage> PostAsMultipartFormAsync(string endpoint, EndpointType endpointType, Dictionary<string, string> multipartContent,
+			string typeToken, string timeStamp, Stream streamContent, Dictionary<string, string> headers = null)
 		{
 			var webClient = new HttpClient();
 			webClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", Settings.UserAgent);
@@ -198,9 +203,12 @@ namespace SnapDotNet.Core.Snapchat.Api
 			foreach (var each in multipartContent)
 				multipartFormData.Add(new StringContent(each.Value), each.Key);
 
-			multipartFormData.Add(new StreamContent(data.ToStream()), "data", "data");
+			var dataContnet = new StreamContent(streamContent);
+			dataContnet.Headers.Add("Content-Type", "application/octet-stream");
+
+			multipartFormData.Add(dataContnet, "data", "data");
 			multipartFormData.Add(new StringContent(Tokens.GenerateRequestToken(Settings.Secret, Settings.HashingPattern, typeToken, timeStamp)), "req_token");
-			var response = await webClient.PostAsync(new Uri(EndpointBase + endpoint), multipartFormData);
+			var response = await webClient.PostAsync(new Uri(String.Format(EndpointBase, endpointType, endpoint)), multipartFormData);
 
 			switch (response.StatusCode)
 			{
@@ -220,12 +228,13 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <summary>
 		///     Gets data from the Snapchat API
 		/// </summary>
-		/// <param name="endpoint">The endpoint to point to (ie; login, logout)</param>
+		/// <param name="endpoint">The endpoint to point to (ie; login)</param>
+		/// <param name="endpointType">The type of endpoint (ie; bq)</param>
 		/// <param name="headers">Optional Bonus Headers</param>
 		/// <returns>Http Response Message</returns>
-		public async Task<byte[]> GetBytesAsync(string endpoint, Dictionary<string, string> headers = null)
+		public async Task<byte[]> GetBytesAsync(string endpoint, EndpointType endpointType, Dictionary<string, string> headers = null)
 		{
-			return await GetBytesAsync(new Uri(EndpointBase + endpoint), headers);
+			return await GetBytesAsync(new Uri(String.Format(EndpointBase, endpointType, endpoint)), headers);
 		}
 
 		/// <summary>

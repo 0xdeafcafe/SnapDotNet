@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media.Imaging;
 using Snapchat.CustomTypes;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Crypto;
@@ -120,10 +119,31 @@ namespace Snapchat.Pages.PageContents
 
 		private async void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			var data = Aes.EncryptData(ViewModel.ImageData, Convert.FromBase64String(Settings.BlobEncryptionKey));
+			var dataStream = Aes.EncryptData(ViewModel.ImageData, Convert.FromBase64String(Settings.BlobEncryptionKey));
+			//var safeData = Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
+
+			//// write to file
+			//var folder = KnownFolders.SavedPictures;
+			//var file = await folder.CreateFileAsync("yoloswag.jpg", CreationCollisionOption.ReplaceExisting);
+
+			//using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+			//{
+			//	using (var outputStream = fileStream.GetOutputStreamAt(0))
+			//	{
+			//		using (var dataWriter = new DataWriter(outputStream))
+			//		{
+			//			dataWriter.WriteBytes(safeData);
+			//			await dataWriter.StoreAsync();
+			//			dataWriter.DetachStream();
+			//		}
+			//		await outputStream.FlushAsync();
+			//	}
+			//}
+
 			var mediaId = App.SnapchatManager.GenerateMediaId();
-			var response = await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, data);
-			var response2 = await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, new[] {"wumbotestalex"}, 10);
+			var response = await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);
+			var response2 = await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, new[] {"wumbotestalex", "msaville8", "kfouwels", "collindaginger"}, 10);
+
 			// get jpeg
 			// Send first command
 			// Send second command

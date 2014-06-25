@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -16,27 +17,35 @@ using SnapDotNet.Core.Snapchat.Models.New.Responses;
 
 namespace SnapDotNet.Core.Snapchat.Api
 {
+	public enum EndpointType
+	{
+		Bq,
+		Loq,
+		Ph
+	}
+
 	public class Endpoints
 	{
 		private readonly SnapchatManager _snapchatManager;
 		private readonly WebConnect _webConnect;
-		private readonly WebConnect _loqWebConnect;
 
-		#region /bq/ Endpoints (use _webConnect)
+		#region /bq/ Endpoints
 
 		private const string BestsEndpointUrl =				"bests";
 		private const string SnapBlobEndpointUrl =			"blob";
 		private const string ChatMediaEndpointUrl =			"chat_media";
-		private const string ClearFeedEndpointUrl =			"clear";
-		private const string FindFriendEndpointUrl =		"find_friends";
 		private const string FriendEndpointUrl =			"friend";
 		private const string UploadEndpointUrl =			"upload";
 		private const string SendEndpointUrl =				"send";
 		private const string LoginEndpointUrl =				"login";
 		private const string LogoutEndpointUrl =			"logout";
+		private const string BestFriendCountEndpointUrl =	"set_num_best_friends";
+
+		// TODO: all of this ya'll
+		private const string ClearFeedEndpointUrl =			"clear";
+		private const string FindFriendEndpointUrl =		"find_friends";
 		private const string StoriesEndpointUrl =			"stories";
 		private const string UpdatesEndpointUrl =			"updates";
-		private const string BestFriendCountEndpointUrl =	"set_num_best_friends";
 		private const string SettingsEndpointUrl =			"settings";
 		private const string UpdatesFeaturesEndpointUrl =	"update_feature_settings";
 		private const string SendSnapEventsEndpointUrl =	"update_snaps";
@@ -48,7 +57,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 		#endregion
 
-		#region /loq/ Endpoionts (use _loqWebConnect)
+		#region /loq/ Endpoionts
 
 		private const string AllUpdatesEndpointUrl =		"all_updates";
 
@@ -63,7 +72,6 @@ namespace SnapDotNet.Core.Snapchat.Api
 		{
 			_snapchatManager = snapchatManager;
 			_webConnect = new WebConnect(Settings.ApiBasePoint);
-			_loqWebConnect = new WebConnect(Settings.ApiLoqBasePoint);
 		}
 
 		#region Old Api Functions
@@ -926,7 +934,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var account =
 				await
-					_webConnect.PostToGenericAsync<Response>(LoginEndpointUrl, postData, Settings.StaticToken,
+					_webConnect.PostToGenericAsync<Response>(LoginEndpointUrl, EndpointType.Bq, postData, Settings.StaticToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (account == null || !account.Logged)
@@ -970,7 +978,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostToGenericAsync<Response>(LogoutEndpointUrl, postData, GetAuthToken(),
+					_webConnect.PostToGenericAsync<Response>(LogoutEndpointUrl, EndpointType.Bq, postData, GetAuthToken(),
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -1004,7 +1012,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var allUpdatesResponse =
 				await
-					_loqWebConnect.PostToGenericAsync<AllUpdatesResponse>(AllUpdatesEndpointUrl, postData, GetAuthToken(),
+					_webConnect.PostToGenericAsync<AllUpdatesResponse>(AllUpdatesEndpointUrl, EndpointType.Loq, postData, GetAuthToken(),
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (allUpdatesResponse == null || allUpdatesResponse.UpdatesResponse == null || !allUpdatesResponse.UpdatesResponse.Logged)
@@ -1056,7 +1064,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var publicActivities =
 				await
-					_webConnect.PostToGenericAsync<ObservableDictionary<string, PublicActivity>>(BestsEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<ObservableDictionary<string, PublicActivity>>(BestsEndpointUrl, EndpointType.Bq, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			_snapchatManager.UpdatePublicActivities(publicActivities);
@@ -1093,7 +1101,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, EndpointType.Bq, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -1130,7 +1138,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<Response>(FriendEndpointUrl, EndpointType.Bq, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -1175,7 +1183,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response =
 				await
-					_webConnect.PostToGenericAsync<BestFriends>(BestFriendCountEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToGenericAsync<BestFriends>(BestFriendCountEndpointUrl, EndpointType.Bq, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return response;
@@ -1251,7 +1259,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var data =
 				await
-					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToByteArrayAsync(SnapBlobEndpointUrl, EndpointType.Bq, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			return Blob.ValidateMediaBlob(data)
@@ -1278,9 +1286,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </summary>
 		/// <param name="mediaType"></param>
 		/// <param name="mediaId"></param>
-		/// <param name="data"></param>
+		/// <param name="streamContent"></param>
 		/// <returns></returns>
-		public async Task<bool> UploadMediaAsync(MediaType mediaType, string mediaId, byte[] data)
+		public async Task<bool> UploadMediaAsync(MediaType mediaType, string mediaId, Stream streamContent)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var multipartFormContent = new Dictionary<string, string>
@@ -1291,19 +1299,19 @@ namespace SnapDotNet.Core.Snapchat.Api
 				{"media_id", mediaId},
 			};
 
-			try
-			{
+			//try
+			//{
 				var response =
 					await
-						_webConnect.PostAsMultipartFormAsync(UploadEndpointUrl, multipartFormContent, _snapchatManager.AuthToken,
-							timestamp.ToString(CultureInfo.InvariantCulture), data);
+						_webConnect.PostAsMultipartFormAsync(UploadEndpointUrl, EndpointType.Bq, multipartFormContent, _snapchatManager.AuthToken,
+							timestamp.ToString(CultureInfo.InvariantCulture), streamContent);
 				return true;
-			}
-			catch (Exception ex)
-			{
-				SnazzyDebug.WriteLine(ex);
-				return false;
-			}
+			//}
+			//catch (Exception ex)
+			//{
+			//	SnazzyDebug.WriteLine(ex);
+			//	return false;
+			//}
 		}
 
 		/// <summary>
@@ -1311,11 +1319,11 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// </summary>
 		/// <param name="mediaType"></param>
 		/// <param name="mediaId"></param>
-		/// <param name="data"></param>
+		/// <param name="streamContent"></param>
 		/// <returns></returns>
-		public bool UploadMedia(MediaType mediaType, string mediaId, byte[] data)
+		public bool UploadMedia(MediaType mediaType, string mediaId, Stream streamContent)
 		{
-			return AsyncHelpers.RunSync(() => UploadMediaAsync(mediaType, mediaId, data));
+			return AsyncHelpers.RunSync(() => UploadMediaAsync(mediaType, mediaId, streamContent));
 		}
 
 		#endregion
@@ -1345,7 +1353,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			{
 				var response =
 					await
-						_webConnect.PostToResponseAsync(SendEndpointUrl, postData, _snapchatManager.AuthToken,
+						_webConnect.PostToResponseAsync(SendEndpointUrl, EndpointType.Bq, postData, _snapchatManager.AuthToken,
 							timestamp.ToString(CultureInfo.InvariantCulture));
 				return true;
 			}
@@ -1391,7 +1399,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var response = Aes.DecryptDataWithIv(
 				(await
-					_webConnect.PostToByteArrayAsync(ChatMediaEndpointUrl, postData, _snapchatManager.AuthToken,
+					_webConnect.PostToByteArrayAsync(ChatMediaEndpointUrl, EndpointType.Bq, postData, _snapchatManager.AuthToken,
 						timestamp.ToString(CultureInfo.InvariantCulture))), Convert.FromBase64String(key), Convert.FromBase64String(iv));
 
 			return response;

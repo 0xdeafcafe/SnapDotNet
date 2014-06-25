@@ -76,7 +76,7 @@ namespace SnapDotNet.Core.Miscellaneous.Crypto
 		/// <param name="data"></param>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public static byte[] EncryptData(byte[] data, byte[] key)
+		public static Stream EncryptData(byte[] data, byte[] key)
 		{
 			// AES algorthim with ECB cipher & PKCS5 padding...
 			var cipher = CipherUtilities.GetCipher("AES/ECB/PKCS5Padding");
@@ -91,13 +91,8 @@ namespace SnapDotNet.Core.Miscellaneous.Crypto
 			var enryptedStream = new MemoryStream(encryptionBytes.Length);
 			enryptedStream.Write(encryptionBytes, 0, encryptionBytes.Length);
 			enryptedStream.Write(encryptedFinal, 0, encryptedFinal.Length);
-			enryptedStream.Flush();
-
-			var encryptedData = new byte[enryptedStream.Length];
-			enryptedStream.Position = 0;
-			enryptedStream.Read(encryptedData, 0, (int)enryptedStream.Length);
-
-			return encryptedData;
+			enryptedStream.Seek(0, SeekOrigin.Begin);
+			return enryptedStream;
 		}
 	}
 }
