@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
@@ -44,6 +45,18 @@ namespace SnapDotNet.Core.Miscellaneous.Extensions
 			await randomAccessStream.WriteAsync(byteArray.AsBuffer());
 			randomAccessStream.Seek(0);
 			return randomAccessStream;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="byteArray"></param>
+		/// <returns></returns>
+		public static Stream ToStream(this byte[] byteArray)
+		{
+			var memoryStream = new MemoryStream();
+			memoryStream.Write(byteArray, 0, byteArray.Length);
+			return memoryStream;
 		}
 	}
 }

@@ -4,7 +4,9 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using Newtonsoft.Json;
+using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Miscellaneous.Helpers.Compression;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 using SnapDotNet.Core.Snapchat.Helpers;
@@ -195,8 +197,8 @@ namespace SnapDotNet.Core.Snapchat.Api
 			var multipartFormData = new MultipartFormDataContent();
 			foreach (var each in multipartContent)
 				multipartFormData.Add(new StringContent(each.Value), each.Key);
-			
-			multipartFormData.Add(new ByteArrayContent(data), "data");
+
+			multipartFormData.Add(new StreamContent(data.ToStream()), "data", "data");
 			multipartFormData.Add(new StringContent(Tokens.GenerateRequestToken(Settings.Secret, Settings.HashingPattern, typeToken, timeStamp)), "req_token");
 			var response = await webClient.PostAsync(new Uri(EndpointBase + endpoint), multipartFormData);
 
