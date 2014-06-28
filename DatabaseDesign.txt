@@ -1,32 +1,31 @@
 -- Database Design
 
-SnapchatAuthTokens
-	AuthToken			String
-	Expired				Boolean
-
 Users
 	AuthTokenId			Integer
+	DeviceId			String
 	SnapchatUsername	String
 	Subscribed			Boolean
 	SnapNotif			Boolean
-	ScreenshotNotif		Boolean
 	ChatNotif			Boolean
+	ScreenshotNotif		Boolean
 	NextUpdate			DateTime
 	Probation			Boolean
 	LastPushServed		DateTime
-	Culture				String
+	NewUser				Boolean
+	AuthToken			String
+	AuthTokenExpired	String
 
 SnapchatSnaps
 	UserId				Integer
 	SnapId				String
 	SnapMediaId			String
 	SnapStatus			Integer
+	SenderName			String
 
 SnapchatChats
 	UserId				Integer
 	ChatId				String
-	ChatMediaId			String
-	ChatReported		Boolean
+	SenderName			String
 
 SnapchatAddedFriends
 	UserId				Integer
@@ -36,8 +35,9 @@ SnapchatAddedFriends
 
 	- Every User gets updated every 1 minute
 	- If the user has gone 7 days without a single push being served, that is bumped up to every 6 hours.
+	- If the user has gone 1 month without a single push being served, that is bumped to every 24 hours.
 	- We can stop a user being pushed to and being updated by flagging them as being on probation
-	- After an update, the user's 'NextUpdate' is set to 1 minutes from the current time
+	- After an update, the user's 'NextUpdate' is set to 1 minute from the current time
 	- Checking for new friends happens every 5 minutes and that is in a seperate scheduled job, ignores the 
 		NextUpdate check, aswell as the LastPushedServed check. But holds the ability to skip users on Probation
 	- All timers are controlled from the azure panel, meaning we can slow the checks down if the load is too heavy for x period of time.

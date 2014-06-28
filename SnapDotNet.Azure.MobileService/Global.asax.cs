@@ -1,9 +1,8 @@
-﻿using System.Web.Http;
-using System.Web.Routing;
+﻿using System.Web;
 
 namespace SnapDotNet.Azure.MobileService
 {
-	public class WebApiApplication : System.Web.HttpApplication
+	public class WebApiApplication : HttpApplication
 	{
 		protected void Application_Start()
 		{

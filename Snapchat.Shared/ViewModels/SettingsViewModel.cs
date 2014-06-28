@@ -1,8 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System.Linq;
+using System.Windows.Input;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Snapchat.Common;
 using System;
+using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.UI.Xaml;
 using Snapchat.Helpers;
@@ -39,7 +41,8 @@ namespace Snapchat.ViewModels
 			get { return _isProUser; }
 			set { TryChangeValue(ref _isProUser, value); }
 		}
-		private bool _isProUser;
+
+		private bool _isProUser = true;
 
 		/// <summary>
 		/// Gets or sets whether the app tile should be live.
@@ -81,45 +84,56 @@ namespace Snapchat.ViewModels
 			}
 		}
 
+		#region Notifications
+
 		/// <summary>
 		/// Gets or sets whether snap notifications should be enabled.
 		/// </summary>
-		public bool SnapNotificationsEnabled
+		public bool SnapNotifications
 		{
-			get { return AppSettings.Get("SnapNotificationsEnabled", true); }
+			get { return AppSettings.Get("SnapNotifications", true); }
 			set
 			{
-				AppSettings.Set("SnapNotificationsEnabled", value);
-				OnNotifyPropertyChanged();
+				UpdateInstantNotifications(InstantNotifications, (() =>
+				{
+					AppSettings.Set("SnapNotifications", value);
+					ExplicitOnNotifyPropertyChanged("SnapNotifications");
+				}));
 			}
 		}
 
 		/// <summary>
 		/// Gets or sets whether chat notifications should be enabled.
 		/// </summary>
-		public bool ChatNotificationsEnabled
+		public bool ChatNotifications
 		{
-			get { return AppSettings.Get("ChatNotificationsEnabled", true); }
+			get { return AppSettings.Get("ChatNotifications", true); }
 			set
 			{
-				AppSettings.Set("ChatNotificationsEnabled", value);
-				OnNotifyPropertyChanged();
+				UpdateInstantNotifications(InstantNotifications, (() =>
+				{
+					AppSettings.Set("ChatNotifications", value);
+					ExplicitOnNotifyPropertyChanged("ChatNotifications");
+				}));
 			}
 		}
 
 		/// <summary>
 		/// Gets or sets whether screenshot notifications should be enabled.
 		/// </summary>
-		public bool ScreenshotNotificationsEnabled
+		public bool ScreenshotNotifications
 		{
-			get { return AppSettings.Get("ScreenshotNotificationsEnabled", true); }
+			get { return AppSettings.Get("ScreenshotNotifications", true); }
 			set
 			{
-				AppSettings.Set("ScreenshotNotificationsEnabled", value);
-				OnNotifyPropertyChanged();
+				UpdateInstantNotifications(InstantNotifications, (() =>
+				{
+					AppSettings.Set("ScreenshotNotifications", value);
+					ExplicitOnNotifyPropertyChanged("ScreenshotNotifications");
+				}));
 			}
 		}
-
+		
 		/// <summary>
 		/// Gets or sets whether instant notifications should be enabled.
 		/// </summary>
@@ -128,10 +142,74 @@ namespace Snapchat.ViewModels
 			get { return AppSettings.Get<bool>("InstantNotifications"); }
 			set
 			{
-				AppSettings.Set("InstantNotifications", value);
-				OnNotifyPropertyChanged();
+				UpdateInstantNotifications(value, (() =>
+				{
+					AppSettings.Set("InstantNotifications", value);
+					ExplicitOnNotifyPropertyChanged("InstantNotifications");
+				}));
 			}
 		}
+
+		/// <summary>
+		/// Gets or sets whether notification UI elements should be enabled.
+		/// </summary>
+		public Boolean NotificationSettingsEnabled
+		{
+			get { return _notificationSettingsEnabled; }
+			set { TryChangeValue(ref _notificationSettingsEnabled, value); }
+		}
+		private Boolean _notificationSettingsEnabled = true;
+
+		private async void UpdateInstantNotifications(bool enabled, Action saveSettings)
+		{
+			// Tell UI we're updating
+			await ProgressHelper.ShowStatusBarAsync("Saving...");
+
+			// Disable the checkbox
+			NotificationSettingsEnabled = false;
+
+			// Get the user object (or create it), update the settings in it, and send it back on its way
+			var create = false;
+			var user = (await App.MobileService.GetTable<User>()
+				.Where(
+					u =>
+						u.DeviceId == App.DeviceIdent && u.SnapchatUsername == App.SnapchatManager.Username &&
+						u.AuthToken == App.SnapchatManager.AuthToken).ToListAsync()).FirstOrDefault();
+
+			if (user == null)
+			{
+				user = new User
+				{
+					DeviceId = App.DeviceIdent,
+					Probation = false,
+					LastPushServed = DateTime.UtcNow,
+					Subscribed = true,
+					SnapchatUsername = App.SnapchatManager.Username
+				};
+				create = true;
+			}
+			user.AuthToken = App.SnapchatManager.AuthToken;
+			user.AuthTokenExpired = false;
+			user.Subscribed = enabled;
+			user.ChatNotify = ChatNotifications;
+			user.ScreenshotNotify = ScreenshotNotifications;
+			user.SnapNotify = SnapNotifications;
+			user.NewUser = true;
+			user.NextUpdate = DateTime.UtcNow;
+			if (create) await App.MobileService.GetTable<User>().InsertAsync(user);
+			else await App.MobileService.GetTable<User>().UpdateAsync(user);
+
+			// Set App Settings
+			saveSettings();
+			
+			// Enable the checkbox
+			NotificationSettingsEnabled = true;
+
+			// Hide Updating UI
+			await ProgressHelper.HideStatusBarAsync();
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Gets or sets whether snaps are visible as long a finger is placed on the screen.
@@ -187,7 +265,7 @@ namespace Snapchat.ViewModels
 		private async void UpdateBff(int value)
 		{
 			// Tell UI we're updating
-			await ProgressHelper.ShowStatusBarAsync("Updating...");
+			await ProgressHelper.ShowStatusBarAsync("Saving...");
 
 			// Update
 			await App.SnapchatManager.Endpoints.SetBestFriendCountAsync(value);

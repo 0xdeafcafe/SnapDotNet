@@ -922,7 +922,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="username"></param>
 		/// <param name="password"></param>
 		/// <returns></returns>
-		public async Task<Response> AuthenticateAsync(string username, string password)
+		public async Task<UpdatesResponse> AuthenticateAsync(string username, string password)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
@@ -934,7 +934,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			var account =
 				await
-					_webConnect.PostToGenericAsync<Response>(LoginEndpointUrl, EndpointType.Bq, postData, Settings.StaticToken,
+					_webConnect.PostToGenericAsync<UpdatesResponse>(LoginEndpointUrl, EndpointType.Bq, postData, Settings.StaticToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (account == null || !account.Logged)
@@ -951,7 +951,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <param name="username"></param>
 		/// <param name="password"></param>
 		/// <returns></returns>
-		public Response Authenticate(string username, string password)
+		public UpdatesResponse Authenticate(string username, string password)
 		{
 			return AsyncHelpers.RunSync(() => AuthenticateAsync(username, password));
 		}
@@ -1001,18 +1001,18 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<AllUpdatesResponse> GetAllUpdatesAsync()
+		public async Task<AllUpdatesResponse> GetAllUpdatesAsync(string username = null, string authToken = null)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
-				{"username", GetAuthedUsername()},
+				{"username", username ?? GetAuthedUsername()},
 				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)}
 			};
 
 			var allUpdatesResponse =
 				await
-					_webConnect.PostToGenericAsync<AllUpdatesResponse>(AllUpdatesEndpointUrl, EndpointType.Loq, postData, GetAuthToken(),
+					_webConnect.PostToGenericAsync<AllUpdatesResponse>(AllUpdatesEndpointUrl, EndpointType.Loq, postData, authToken ?? GetAuthToken(),
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			if (allUpdatesResponse == null || allUpdatesResponse.UpdatesResponse == null || !allUpdatesResponse.UpdatesResponse.Logged)
@@ -1028,9 +1028,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public AllUpdatesResponse GetAllUpdates()
+		public AllUpdatesResponse GetAllUpdates(string username = null, string authToken = null)
 		{
-			return AsyncHelpers.RunSync(GetAllUpdatesAsync);
+			return AsyncHelpers.RunSync(() => GetAllUpdatesAsync(username, authToken));
 		}
 
 		#endregion

@@ -61,7 +61,6 @@
     <Compile Include="Helpers\Storage\IsolatedStorage.cs" />
     <Compile Include="Helpers\Time.cs" />
     <Compile Include="Helpers\VariousHelpers.cs" />
-    <Compile Include="Models\Atlas\Snap.cs" />
     <Compile Include="Models\Atlas\User.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\GroupInfoList.cs" />

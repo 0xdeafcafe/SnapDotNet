@@ -159,7 +159,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 			var postBody = PostBodyParser(postData);
 			var response =
 				await
-					webClient.PostAsync(new Uri(String.Format(EndpointBase, endpointType, endpoint)),
+					webClient.PostAsync(new Uri(String.Format(EndpointBase, endpointType.ToString().ToLowerInvariant(), endpoint)),
 						new StringContent(postBody, Encoding.UTF8, "application/x-www-form-urlencoded"));
 
 			switch (response.StatusCode)
@@ -208,7 +208,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			multipartFormData.Add(dataContnet, "data", "data");
 			multipartFormData.Add(new StringContent(Tokens.GenerateRequestToken(Settings.Secret, Settings.HashingPattern, typeToken, timeStamp)), "req_token");
-			var response = await webClient.PostAsync(new Uri(String.Format(EndpointBase, endpointType, endpoint)), multipartFormData);
+			var response = await webClient.PostAsync(new Uri(String.Format(EndpointBase, endpointType.ToString().ToLowerInvariant(), endpoint)), multipartFormData);
 
 			switch (response.StatusCode)
 			{
@@ -234,7 +234,7 @@ namespace SnapDotNet.Core.Snapchat.Api
 		/// <returns>Http Response Message</returns>
 		public async Task<byte[]> GetBytesAsync(string endpoint, EndpointType endpointType, Dictionary<string, string> headers = null)
 		{
-			return await GetBytesAsync(new Uri(String.Format(EndpointBase, endpointType, endpoint)), headers);
+			return await GetBytesAsync(new Uri(String.Format(EndpointBase, endpointType.ToString().ToLowerInvariant(), endpoint)), headers);
 		}
 
 		/// <summary>

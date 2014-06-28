@@ -1,7 +1,4 @@
-﻿using Windows.System;
-using Snapchat.ViewModels;
-using System;
-using Windows.UI.Xaml;
+﻿using Snapchat.ViewModels;
 
 namespace Snapchat.Pages.PageContents
 {

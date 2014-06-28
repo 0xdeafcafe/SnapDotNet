@@ -23,8 +23,9 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 		/// </param>
 		/// <param name="timeStamp">The retarded Snapchat Timestamp</param>
 		/// <param name="headers">Optional Bonus Headers</param>
-		public async Task<Tuple<HttpResponseMessage, Account>> PostAsync(string endpoint, Dictionary<string, string> postData,
+		public async Task<Tuple<HttpResponseMessage, T>> PostAsync<T>(string endpoint, Dictionary<string, string> postData,
 			string typeToken, string timeStamp, Dictionary<string, string> headers = null)
+			where T : new()
 		{
 			var webClient = new HttpClient();
 			webClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", Settings.UserAgent);
@@ -53,14 +54,11 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 						data = await response.Content.ReadAsStringAsync();
 
 					// Http Request Worked
-					var deseralizedData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<Account>(data));
-					if (deseralizedData == null || !deseralizedData.Logged)
-						return null;
-
-					return new Tuple<HttpResponseMessage, Account>(response, deseralizedData);
+					var deseralizedData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(data));
+					return new Tuple<HttpResponseMessage, T>(response, deseralizedData);
 
 				default:
-					return new Tuple<HttpResponseMessage, Account>(response, null);
+					return new Tuple<HttpResponseMessage, T>(response, new T());
 			}
 		}
 

@@ -1,4 +1,7 @@
-﻿using Windows.ApplicationModel.Resources;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Resources;
+using Windows.Networking.PushNotifications;
+using Windows.System.Profile;
 using Microsoft.WindowsAzure.MobileServices;
 using Snapchat.Helpers;
 using Snapchat.Pages;
@@ -9,6 +12,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Snapchat.Api;
 using Snapchat.ViewModels;
 using SnapDotNet.Core.Miscellaneous.Helpers;
@@ -28,7 +32,9 @@ namespace Snapchat
 			"https://snapdotnet.azure-mobile.net/",
 			"sTdykEmtfJsTQmafUMxrKalcdkaphW67"
 		);
-		public static string DeviceId;
+
+		public static string DeviceIdent =
+			Sha.Sha256(BitConverter.ToString(HardwareIdentification.GetPackageSpecificToken(null).Id.ToArray()));
 
 		public static readonly SnapchatManager SnapchatManager = new SnapchatManager();
 
@@ -61,9 +67,9 @@ namespace Snapchat
 		protected override async void OnLaunched(LaunchActivatedEventArgs e)
 		{
 #if DEBUG
-			if (System.Diagnostics.Debugger.IsAttached)
+			if (Debugger.IsAttached)
 			{
-				//DebugSettings.EnableFrameRateCounter = true;
+				DebugSettings.EnableFrameRateCounter = true;
 			}
 #endif
 
@@ -103,6 +109,9 @@ namespace Snapchat
 				if (!SnapchatManager.Loaded)
 					await SnapchatManager.LoadAsync();
 				var destinationPage = SnapchatManager.IsAuthenticated() ? typeof (MainPage) : typeof (StartPage);
+
+				// Register for Push Notifications
+				RegisterPushChannel();
 
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
@@ -148,7 +157,7 @@ namespace Snapchat
 		/// </summary>
 		/// <param name="sender">The source of the suspend request.</param>
 		/// <param name="e">Details about the suspend request.</param>
-		private static async void OnSuspending(object sender, SuspendingEventArgs e)
+		private static void OnSuspending(object sender, SuspendingEventArgs e)
 		{
 			Debug.WriteLine("Suspending app");
 
@@ -159,23 +168,33 @@ namespace Snapchat
 			deferral.Complete();
 		}
 		
-		private static async void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			if (Camera != null)
 				Camera.Dispose();
 
-			App.Current.Exit();
+			Current.Exit();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private static async void OnCurrentWindowVisibilityChanged(object sender, VisibilityChangedEventArgs e)
 		{
 			if (e.Visible)
 			{
-				await App.Camera.StartPreviewAsync();
+				await Camera.StartPreviewAsync();
 			}
 			else
 			{
-				await App.Camera.StopPreviewAsync();
+				await Camera.StopPreviewAsync();
 			}
 		}
 
@@ -199,6 +218,23 @@ namespace Snapchat
 				(downloadMode == AutomaticallyDownloadSnapsMode.WiFi && !NetworkInformationHelper.OnWifiConnection());
 			if (shouldDownloadSnaps) await SnapchatManager.DownloadSnapsAsync();
 		}
+
+		#endregion
+		
+		#region Push Channel
+
+		private static async void RegisterPushChannel()
+		{
+			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+			try
+			{
+				await MobileService.GetPush().RegisterNativeAsync(channel.Uri, new[] {DeviceIdent});
+			}
+			catch (Exception ex)
+			{
+				SnazzyDebug.WriteLine(ex);
+			}
+		}  
 
 		#endregion
 	}

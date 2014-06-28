@@ -10,7 +10,7 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 	public class Endpoints
 	{
 		private readonly WebConnect _webConnect;
-		private const string UpdatesEndpointUrl = "updates";
+		private const string ConversationsEndpointUrl = "loq/conversations";
 
 		public Endpoints()
 		{
@@ -21,7 +21,7 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<Tuple<HttpResponseMessage, Account>> GetUpdatesAsync(string username, string authToken)
+		public async Task<Tuple<HttpResponseMessage, ConversationReponseWrapper>> GetConversationsAsync(string username, string authToken)
 		{
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
@@ -32,7 +32,7 @@ namespace SnapDotNet.Azure.MobileService.Helpers
 
 			return
 				await
-					_webConnect.PostAsync(UpdatesEndpointUrl, postData, authToken,
+					_webConnect.PostAsync<ConversationReponseWrapper>(ConversationsEndpointUrl, postData, authToken,
 						timestamp.ToString(CultureInfo.InvariantCulture));
 		}
 	}

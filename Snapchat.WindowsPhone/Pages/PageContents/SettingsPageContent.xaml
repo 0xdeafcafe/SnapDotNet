@@ -74,19 +74,19 @@
 				</StackPanel>
 			</PivotItem>
 
-			<PivotItem x:Uid="SettingsNotificationsGroup" Header="NOTIFICATIONS">
+			<PivotItem x:Uid="SettingsNotificationsGroup" Header="NOTIFICATIONS" IsEnabled="{Binding NotificationSettingsEnabled}">
 				<StackPanel>
-					<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Snap notifications" IsOn="{Binding SnapNotificationsEnabled, Mode=TwoWay}"/>
-					<ToggleSwitch x:Uid="SettingsChatNotifications" Header="Chat notifications" IsOn="{Binding ChatNotificationsEnabled, Mode=TwoWay}"/>
-					<ToggleSwitch x:Uid="SettingsScreenshotNotifications" Header="Screenshot notifications" IsOn="{Binding ScreenshotNotificationsEnabled, Mode=TwoWay}"/>
+					<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Snap notifications" IsOn="{Binding SnapNotifications, Mode=TwoWay}"/>
+					<ToggleSwitch x:Uid="SettingsChatNotifications" Header="Chat notifications" IsOn="{Binding ChatNotifications, Mode=TwoWay}"/>
+					<ToggleSwitch x:Uid="SettingsScreenshotNotifications" Header="Screenshot notifications" IsOn="{Binding ScreenshotNotifications, Mode=TwoWay}"/>
 
-					<CheckBox x:Uid="SettingsInstantNotifications" IsEnabled="{Binding IsProUser}" Content="Instant notifications" IsChecked="{Binding InstantNotifications, Mode=TwoWay}"/>
+					<CheckBox x:Uid="SettingsInstantNotifications" Content="Instant notifications" IsChecked="{Binding InstantNotifications, Mode=TwoWay}"/>
+					<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Command="{Binding UpgradeProCommand}" Content="Unlock this feature for just $1.99"/>
 					<TextBlock x:Uid="InstantNotificationsDisclaimer" 
-								   TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
+							   TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
 							If you enable instant notifications, you give us permission to store
 							your Snapchat auth token on our secure cloud service.
 					</TextBlock>
-					<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Command="{Binding UpgradeProCommand}" Content="Unlock this feature for just $1.99"/>
 				</StackPanel>
 			</PivotItem>
 

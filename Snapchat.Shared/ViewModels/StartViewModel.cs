@@ -7,6 +7,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Snapchat.Common;
 using Snapchat.Pages;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
@@ -98,29 +99,17 @@ namespace Snapchat.ViewModels
 			try
 			{
 				// Try to log into Snapchat.
-				await App.SnapchatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
+				var account = await App.SnapchatManager.Endpoints.AuthenticateAsync(CurrentUsername, CurrentPassword);
 
 				// Good, now lets get the data from the new API
-				var updates = await App.SnapchatManager.Endpoints.GetAllUpdatesAsync();
+				var updates = await App.SnapchatManager.Endpoints.GetAllUpdatesAsync(account.Username, account.AuthToken);
 
 				if (updates == null || updates.UpdatesResponse == null)
 					throw new InvalidHttpResponseException();
 
-				// Register this device for push notifications.
-				await
-					App.MobileService.GetTable<User>()
-						.InsertAsync(new User
-						{
-							AuthExpired = false,
-							NewUser = true,
-							DeviceIdent = App.DeviceId,
-							SnapchatAuthToken = App.SnapchatManager.AuthToken,
-							SnapchatUsername = App.SnapchatManager.AllUpdates.UpdatesResponse.Username
-						});
-
 				// Navigate to the main page.
 				var frame = Window.Current.Content as Frame;
-				if (frame != null) frame.Navigate(typeof(MainPage));
+				if (frame != null) frame.Navigate(typeof (MainPage));
 			}
 			catch (InvalidCredentialsException)
 			{
@@ -130,6 +119,10 @@ namespace Snapchat.ViewModels
 			{
 				(new MessageDialog(App.Strings.GetString("InvalidHttpResponseExceptionMessage"))).ShowAsync();
 				Debug.WriteLine(e.Message);
+			}
+			catch (Exception ex)
+			{
+				SnazzyDebug.WriteLine(ex);
 			}
 			finally
 			{
