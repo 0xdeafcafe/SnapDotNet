@@ -139,7 +139,7 @@ namespace Snapchat.ViewModels
 		/// </summary>
 		public bool InstantNotifications
 		{
-			get { return AppSettings.Get<bool>("InstantNotifications"); }
+			get { return AppSettings.Get("InstantNotifications", false); }
 			set
 			{
 				UpdateInstantNotifications(value, (() =>

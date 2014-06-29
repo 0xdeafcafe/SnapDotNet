@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Azure.MobileService.Helpers.Compression;
-using SnapDotNet.Azure.MobileService.Models;
 
 namespace SnapDotNet.Azure.MobileService.Helpers
 {

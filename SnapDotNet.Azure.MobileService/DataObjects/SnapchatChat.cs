@@ -6,7 +6,7 @@ namespace SnapDotNet.Azure.MobileService.DataObjects
 	[Table("snapdotnet.SnapchatChats")]
 	public class SnapchatChat : BaseEntity
 	{
-		public Int64 UserId { get; set; }
+		public String UserId { get; set; }
 
 		public String ChatId { get; set; }
 

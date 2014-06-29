@@ -177,6 +177,10 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Snapchat.BackgroundPushTask\Snapchat.BackgroundPushTask.csproj">
+      <Project>{04191004-6108-442e-a03b-6ba5596e7eeb}</Project>
+      <Name>Snapchat.BackgroundPushTask</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SnapDotNet.Core.Miscellaneous\SnapDotNet.Core.Miscellaneous.csproj">
       <Project>{43f7f39f-37e3-4a7b-8c5e-b9b93a4ace65}</Project>
       <Name>SnapDotNet.Core.Miscellaneous</Name>

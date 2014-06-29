@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.Networking.PushNotifications;
 using Windows.System.Profile;
@@ -225,10 +226,33 @@ namespace Snapchat
 
 		private static async void RegisterPushChannel()
 		{
+			// Setup background task
+			await BackgroundExecutionManager.RequestAccessAsync();
+
+			// Get rid of existing registrations.  
+			foreach (var task in BackgroundTaskRegistration.AllTasks)
+			{
+				try
+				{
+					task.Value.Unregister(false);
+				}
+				catch (Exception ex)
+				{
+					SnazzyDebug.WriteLine(ex);
+				}
+			}
+			var builder = new BackgroundTaskBuilder
+			{
+				Name = "Background Push Task",
+				TaskEntryPoint = typeof(BackgroundPushTask.BackgroundPushTask).FullName
+			};
+			builder.SetTrigger(new PushNotificationTrigger());
+			builder.Register();
+
 			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
 			try
 			{
-				await MobileService.GetPush().RegisterNativeAsync(channel.Uri, new[] {DeviceIdent});
+				await MobileService.GetPush().RegisterNativeAsync(channel.Uri, new[] {"SnapDotNetUser", DeviceIdent});
 			}
 			catch (Exception ex)
 			{

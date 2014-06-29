@@ -197,6 +197,7 @@
     <Compile Include="DataObjects\SnapchatChat.cs" />
     <Compile Include="DataObjects\SnapchatSnap.cs" />
     <Compile Include="DataObjects\User.cs" />
+    <Compile Include="Helpers\AsyncHelpers.cs" />
     <Compile Include="Helpers\Compression\Gzip.cs" />
     <Compile Include="Helpers\Crypto\Sha.cs" />
     <Compile Include="Helpers\Endpoints.cs" />
@@ -232,12 +233,21 @@
     <Compile Include="Migrations\201406281528582_AddedStartingModels.Designer.cs">
       <DependentUpon>201406281528582_AddedStartingModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201406282012078_ChangedIdsToStrings.cs" />
+    <Compile Include="Migrations\201406282012078_ChangedIdsToStrings.Designer.cs">
+      <DependentUpon>201406282012078_ChangedIdsToStrings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406282121558_ByeUselessSnapColumn.cs" />
+    <Compile Include="Migrations\201406282121558_ByeUselessSnapColumn.Designer.cs">
+      <DependentUpon>201406282121558_ByeUselessSnapColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ChatMessage.cs" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\ConversationReponseWrapper.cs" />
     <Compile Include="Models\ConversationResponse.cs" />
     <Compile Include="Models\NotifyPropertyChangedBase.cs" />
+    <Compile Include="Models\RawNotificationTransfer\RawNotificationTransfer.cs" />
     <Compile Include="Models\Snap.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -247,7 +257,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -285,6 +297,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201406281528582_AddedStartingModels.resx">
       <DependentUpon>201406281528582_AddedStartingModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406282012078_ChangedIdsToStrings.resx">
+      <DependentUpon>201406282012078_ChangedIdsToStrings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406282121558_ByeUselessSnapColumn.resx">
+      <DependentUpon>201406282121558_ByeUselessSnapColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
