@@ -7,6 +7,9 @@ using Snapchat.Dialogs;
 using Snapchat.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Snapchat.Models.New;
+using System.Collections.ObjectModel;
+using SnapDotNet.Core.Miscellaneous.CustomTypes;
+using System.Globalization;
 
 namespace Snapchat.ViewModels.PageContents
 {
@@ -16,6 +19,34 @@ namespace Snapchat.ViewModels.PageContents
 		public FriendsViewModel()
 		{
 			ChangeFriendDisplayNameCommand = new RelayCommand<Friend>(ChangeFriendDisplayName);
+		}
+
+		public string FilterText
+		{
+			get { return _filterText; }
+			set
+			{
+				TryChangeValue(ref _filterText, value);
+				ExplicitOnNotifyPropertyChanged("FilteredSortedFriends");
+			}
+		}
+		private string _filterText;
+
+		public ObservableCollection<AlphaKeyGroup<Friend>> FilteredSortedFriends
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(FilterText))
+					return Account.SortedFriends;
+
+				var filteredFriends = new Collection<Friend>();
+				foreach (var friend in App.SnapchatManager.Account.Friends)
+				{
+					if (friend.FriendlyName.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()))
+						filteredFriends.Add(friend);
+				}
+				return AlphaKeyGroup<Friend>.CreateGroups(filteredFriends, new CultureInfo("en"), f => f.FriendlyName, true, false);
+			}
 		}
 
 		public ICommand ChangeFriendDisplayNameCommand

@@ -78,5 +78,10 @@ namespace Snapchat.Pages.PageContents
 			};
 			flyout.ShowAt(button);
 		}
+
+		private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			ViewModel.FilterText = (sender as TextBox).Text;
+		}
 	}
 }

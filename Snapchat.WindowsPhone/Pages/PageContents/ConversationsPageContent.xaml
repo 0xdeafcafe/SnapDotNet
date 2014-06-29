@@ -127,7 +127,7 @@
 							<!-- Search box -->
 							<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus"
 									 Text="{Binding FilterText, Mode=TwoWay}"
-									 Style="{StaticResource SearchTextBoxStyle}" />
+									 Style="{StaticResource SearchTextBoxStyle}" TextChanged="SearchBox_TextChanged" />
 
 							<ItemsPresenter Margin="0,0,0,30"/>
 						</StackPanel>

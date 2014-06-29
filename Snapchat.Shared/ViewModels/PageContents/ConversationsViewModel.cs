@@ -15,8 +15,11 @@ namespace Snapchat.ViewModels.PageContents
 				var filteredConvos = new ObservableCollection<ConversationResponse>();
 				foreach (var convo in Conversations)
 				{
-					if (convo.Participants[1].Contains(FilterText))
-						filteredConvos.Add(convo);
+					foreach (var friend in App.SnapchatManager.Account.Friends)
+					{
+						if (friend.Name == convo.Participants[1] && friend.FriendlyName.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()))
+							filteredConvos.Add(convo);
+					}
 				}
 				return filteredConvos;
 			}

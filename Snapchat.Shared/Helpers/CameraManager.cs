@@ -205,7 +205,11 @@ namespace Snapchat.Helpers
 					_isPreviewing = false;
 				}
 
-				_deviceCapture.Dispose();
+				try
+				{
+					_deviceCapture.Dispose();
+				}
+				catch { }
 				_deviceCapture = null;
 			}
 
@@ -218,7 +222,8 @@ namespace Snapchat.Helpers
 
 			if (_screenCapture != null)
 			{
-				_screenCapture.Dispose();
+				try { _screenCapture.Dispose(); }
+				catch { }
 				_screenCapture = null;
 			}
 

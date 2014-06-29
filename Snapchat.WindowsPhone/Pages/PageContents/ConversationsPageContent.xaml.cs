@@ -7,6 +7,7 @@ using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Controls;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -195,6 +196,11 @@ namespace Snapchat.Pages.PageContents
 			DetatchConvoData();
 			TryHideMediaContent();
 			Debug.WriteLine("Ending _holdTimer");
+		}
+
+		private void SearchBox_TextChanged(object sender, Windows.UI.Xaml.Controls.TextChangedEventArgs e)
+		{
+			ViewModel.FilterText = (sender as TextBox).Text;
 		}
 	}
 }

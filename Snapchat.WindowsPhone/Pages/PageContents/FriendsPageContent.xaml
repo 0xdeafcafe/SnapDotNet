@@ -67,7 +67,7 @@
 			<converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
 			
 			<CollectionViewSource x:Key="SortedFriends" 
-								  Source="{Binding Path=Account.SortedFriends}"
+								  Source="{Binding Path=FilteredSortedFriends}"
 								  IsSourceGrouped="True"/>
 			
 			<DataTemplate x:Key="FriendsListJumpTemplate">
@@ -177,7 +177,7 @@
 								<StackPanel>
 									<!-- Search box -->
 									<TextBox Background="White" x:Name="SearchBox" x:Uid="ConvosSearchBox" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus"
-											 Style="{StaticResource SearchTextBoxStyle}" />
+											 Style="{StaticResource SearchTextBoxStyle}" TextChanged="SearchBox_TextChanged" />
 
 									<!-- Friends List -->
 									<ItemsPresenter Margin="0,0,0,30" />
