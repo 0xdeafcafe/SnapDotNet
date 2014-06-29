@@ -132,6 +132,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\258x67_WPS_Download_blk.png" />
+    <Content Include="Content\Images\app logo.png" />
     <Content Include="Content\Images\le-logo.png" />
     <Content Include="Content\Images\phone-preview.png" />
     <Content Include="favicon.ico" />

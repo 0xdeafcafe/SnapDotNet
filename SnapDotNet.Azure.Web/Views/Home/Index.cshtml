@@ -35,9 +35,15 @@
 			background: white;
 			color: #1b1b1b;
 		}
+        .section-container.chavo {
+			background: white;
+			color: #808080;
+            text-align: center;
+            font-size: 10px;
+		}
 
 		#le-matt-branding {
-			background-image: url(../../Content/Images/le-logo.png);
+			background-image: url("../../Content/Images/app logo.png");
 			background-position: center left;
 			background-size: 150px 150px;
 			background-repeat: no-repeat;
@@ -50,7 +56,7 @@
 			display: none;
 		}
 		#app-preview {
-			height: 775px;
+			height: 820px;
 			color: white;
 			text-align: center;
 
@@ -69,6 +75,7 @@
 			font-size: 25px;
 			font-weight: 400;
 		}
+
 	</style>
 </head>
 	<body>
@@ -77,7 +84,7 @@
 			<div id="le-matt-branding"></div>
 			<h1>ColdSnap</h1>
 			<h2>Snapchat client for Windows Phone</h2>
-
+            <a href="http://xboxchaos.com"><img src="~/Content/Images/258x67_WPS_Download_blk.png"/></a>
 		</div>
 		
 		<!--  -->
@@ -85,8 +92,8 @@
 
 		</div>
 
-		<footer class="section-container bravo">
-			<p>&copy; @DateTime.Now.Year - ColdSnap</p>
+		<footer class="section-container chavo">
+			<p>&copy; @DateTime.Now.Year Alex Reed, Matt Saville, Kaelan Fouwels, and Collin Dillinger</p>
 		</footer>
 
 		@Scripts.Render("~/bundles/jquery")
