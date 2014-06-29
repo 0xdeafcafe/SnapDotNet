@@ -293,7 +293,7 @@
     <value>To toggle the camera shutter sound, go to ringtones+sounds in settings.</value>
   </data>
   <data name="SettingsCameraShutterSoundHeader.Text" xml:space="preserve">
-    <value>Change Camera Shutter Sound</value>
+    <value>Camera shutter sound</value>
   </data>
   <data name="SettingsChatNotifications.Header" xml:space="preserve">
     <value>Chat notifications</value>

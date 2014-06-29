@@ -186,7 +186,7 @@
 					</ComboBox>
 					
 					<TextBlock x:Uid="SettingsCameraShutterSoundHeader"
-							   Text="Change Camera Shutter Sound"
+							   Text="Change camera shutter sound"
 							   Margin="0,4,0,0"
 							   FontFamily="Segoe WP"
 							   FontSize="15"
