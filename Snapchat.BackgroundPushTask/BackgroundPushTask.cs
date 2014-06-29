@@ -17,7 +17,7 @@ namespace Snapchat.BackgroundPushTask
 			var rawNotification = taskInstance.TriggerDetails as RawNotification;
 			if (rawNotification == null) return;
 
-			ShowToast("Recieved Raw Notification", "ColdSnap", "debug", "", false, false);
+			//ShowToast("Recieved Raw Notification", "ColdSnap", "debug", "", false, false);
 
 			try
 			{
@@ -28,26 +28,26 @@ namespace Snapchat.BackgroundPushTask
 				var screenshotNotifications = notifications.ScreenshotNotifications;
 
 				foreach (var snap in snapNotifications)
-					ShowToast(String.Format("New snap from {0}", snap.Sender), "ColdSnap", "snap", snap.Id, snapNotifications.Count() > 1, false);
+					ShowToast("Sent you a snap", snap.Sender, "snap", snap.Id, snapNotifications.Count() > 1, false);
 				if (snapNotifications.Count() > 1)
 					ShowToast(String.Format("{0} new snaps", snapNotifications.Count()), "ColdSnap", "snapcount", "", false, true);
 
 				#region Process Chat Notifications
 
 				foreach (var chatMessage in chatMessageNotifications)
-					ShowToast(String.Format("New chat from {0}", chatMessage.Sender), "ColdSnap", "chat", chatMessage.Id, chatMessageNotifications.Count() > 1, false);
+					ShowToast("Sent you a chat", chatMessage.Sender, "chat", chatMessage.Id, chatMessageNotifications.Count() > 1, false);
 				if (chatMessageNotifications.Count() > 1)
-					ShowToast(String.Format("{0} new chat", chatMessageNotifications.Count()), "ColdSnap", "chatcount", "", false, true);
+					ShowToast(String.Format("{0} new chats", chatMessageNotifications.Count()), "ColdSnap", "chatcount", "", false, true);
 
 				foreach (var chatScreenshotMessage in chatScreenshotMessageNotifications)
-					ShowToast(String.Format("{0} screenshotted your chat!", chatScreenshotMessage.Sender), "ColdSnap", "chatscreenshot", chatScreenshotMessage.Id, chatScreenshotMessageNotifications.Count() > 1, false);
+					ShowToast("Screenshotted your chat!", chatScreenshotMessage.Sender, "chatscreenshot", chatScreenshotMessage.Id, chatScreenshotMessageNotifications.Count() > 1, false);
 				if (chatScreenshotMessageNotifications.Count() > 1)
-					ShowToast(String.Format("{0} chat screenshots!", chatScreenshotMessageNotifications.Count()), "ColdSnap", "chatscreenshotcount", "", false, true);
+					ShowToast(String.Format("{0} chat screenshots!", chatScreenshotMessageNotifications.Count()), "ColdSnap", "", "", false, true);
 
 				#endregion
 
 				foreach (var screenshotSnap in screenshotNotifications)
-					ShowToast(String.Format("{0} screenshotted your snap!", screenshotSnap.Sender), "ColdSnap", "screenshot", screenshotSnap.Id, screenshotNotifications.Count() > 1, false);
+					ShowToast("Screenshotted your snap!", screenshotSnap.Sender, "screenshot", screenshotSnap.Id, screenshotNotifications.Count() > 1, false);
 				if (screenshotNotifications.Count() > 1)
 					ShowToast(String.Format("{0} new snap screenshots!", screenshotNotifications.Count()), "ColdSnap", "screenshotcount", "", false, true);
 			}
