@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Snapchat.Models.New;
+using Windows.Storage.Pickers;
 
 namespace Snapchat.Pages
 {
@@ -67,7 +68,17 @@ namespace Snapchat.Pages
 
 		private readonly AppBarButton _importPictureAppBarButton = new AppBarButton
 		{
-			Label = App.Strings.GetString("ImportPictureAppBarButtonLabel")
+			Label = App.Strings.GetString("ImportPictureAppBarButtonLabel"),
+			Command = new RelayCommand(() =>
+			{
+				FileOpenPicker picker = new FileOpenPicker();
+				picker.FileTypeFilter.Add(".jpg");
+				picker.FileTypeFilter.Add(".bmp");
+				picker.FileTypeFilter.Add(".png");
+				picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+				picker.ViewMode = PickerViewMode.Thumbnail;
+				picker.PickSingleFileAndContinue();
+			})
 		};
 
 		private readonly AppBarButton _logoutAppBarButton = new AppBarButton
