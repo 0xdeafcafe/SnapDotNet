@@ -108,6 +108,18 @@ namespace Snapchat.Helpers
 			await StartPreviewAsync();
 		}
 
+		public async Task FlipCameraAsync()
+		{
+			var captureElement = _captureElement;
+
+			await StopPreviewAsync();
+			Dispose();
+			_isDisposed = false;
+
+			_currentVideoDevice = _currentVideoDevice == 0 ? 1 : 0;
+			await SetPreviewSourceAsync(captureElement);
+		}
+
 		/// <summary>
 		/// Starts the camera preview.
 		/// </summary>
@@ -308,7 +320,7 @@ namespace Snapchat.Helpers
 			});
 			Debug.WriteLine("Initialized camera media capture!");
 
-			Debug.WriteLine("Initializing screen media capture...");
+			/*Debug.WriteLine("Initializing screen media capture...");
 			_screenCapture = new MediaCapture();
 			try
 			{
@@ -323,7 +335,7 @@ namespace Snapchat.Helpers
 			catch
 			{
 				Debug.WriteLine("Failed to initialize screen capture, falling back to slow camera capture instead.");
-			}
+			}*/
 
 			// Set up resolutions.
 			//Task.WaitAll(
