@@ -89,7 +89,7 @@
 				<TextBlock x:Name="SnapDetails" FontFamily="Segoe WP" FontWeight="Normal" 
 						   Foreground="#FFA8A8A8" FontSize="14">
 					<Run Text="{Binding Path=LastInteraction, Converter={StaticResource FriendlyTimeConverter}}" />
-					<Run Text="-" />
+					<Run Text="-" FontFamily="Global User Interface" />
 					<Run Text="{Binding Path=LastSnap, 
 										UpdateSourceTrigger=PropertyChanged,
 										Converter={StaticResource SnapStatusConverter}}" FontFamily="Global User Interface" />
@@ -141,8 +141,8 @@
 							<!-- Search box -->
 							<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus"
 									 Text="{Binding FilterText, Mode=TwoWay}"
-									 TextChanged="SearchBox_TextChanged" 
-									 />
+									 TextChanged="SearchBox_TextChanged" FontFamily="Global User Interface" 
+									 Style="{StaticResource SearchTextBoxStyle}"/>
 
 							<ItemsPresenter Margin="0,0,0,30"/>
 						</StackPanel>

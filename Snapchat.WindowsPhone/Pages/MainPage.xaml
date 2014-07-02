@@ -118,7 +118,7 @@
 	<Grid>
 		<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
 					  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
-					  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
+					  HorizontalScrollMode="Enabled" 
 					  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
 					  IsVerticalRailEnabled="False" IsHorizontalRailEnabled="False">
 			<i:Interaction.Behaviors>
