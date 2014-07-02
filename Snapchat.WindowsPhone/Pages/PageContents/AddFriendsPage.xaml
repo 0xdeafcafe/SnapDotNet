@@ -98,7 +98,7 @@
 				</Grid>
 
 				<Grid x:Name="importContactsGrid" Visibility="Collapsed">
-					<Button x:Uid="SearchContactsButton" Foreground="Black" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Tapped="FindFriendsButton_Tapped" Margin="25,0,25,25">Search contacts</Button>
+					<Button x:Uid="SearchContactsButton" Foreground="Black" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Tapped="FindFriendsButton_Tapped" Margin="25,0,25,50">Search contacts</Button>
 				</Grid>
 
 				<ScrollViewer x:Name="searchFriendsGrid" Visibility="Collapsed">

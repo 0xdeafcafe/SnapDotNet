@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Controls;
+using Windows.Foundation;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -16,6 +17,7 @@ namespace Snapchat.Pages.PageContents
 		private bool _isFingerDown;
 		private ConversationResponse _selectedConversation;
 		private readonly DispatcherTimer _holdingTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+		private bool _alreadyRefreshed;
 
 		public ConversationsPageContent()
 		{
@@ -33,19 +35,6 @@ namespace Snapchat.Pages.PageContents
 				TryHideMediaContent();
 				args.Handled = true;
 			};
-
-			// this is haky
-			var dispatcherTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 2) };
-			dispatcherTimer.Tick += (sender, o) =>
-			{
-				dispatcherTimer.Stop();
-
-				// Testin
-				//MainPage.Singleton.PointerCaptureLost += (sender1, args) => Debug.WriteLine("MainPage_PointerCaptureLost");
-				//MainPage.Singleton.PointerReleased += (sender1, args) => Debug.WriteLine("MainPage_PointerReleased");
-				//MainPage.Singleton.PointerExited += (sender1, args) => Debug.WriteLine("MainPage_PointerExited");
-			};
-			dispatcherTimer.Start();
 
 			_holdingTimer.Tick += (o, o1) =>
 			{
@@ -152,7 +141,7 @@ namespace Snapchat.Pages.PageContents
 
 		private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerEntered");
+			//Debug.WriteLine("UIElement_OnPointerEntered");
 
 			var element = sender as FrameworkElement;
 			if (element == null) return;
@@ -164,30 +153,30 @@ namespace Snapchat.Pages.PageContents
 
 		private void UIElement_OnPointerCanceled(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerCanceled");
+			//Debug.WriteLine("UIElement_OnPointerCanceled");
 			DetatchConvoData();
 		}
 
 		private void UIElement_OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerCaptureLost");
+			//Debug.WriteLine("UIElement_OnPointerCaptureLost");
 			DetatchConvoData();
 		}
 
 		private void UIElement_OnPointerExited(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerExited");
+			//Debug.WriteLine("UIElement_OnPointerExited");
 			DetatchConvoData();
 		}
 
 		private void UIElement_OnPointerMoved(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerMoved");
+			//Debug.WriteLine("UIElement_OnPointerMoved");
 		}
 
 		private void UIElement_OnPointerPressed(object sender, PointerRoutedEventArgs e)
 		{
-			Debug.WriteLine("UIElement_OnPointerPressed");
+			//Debug.WriteLine("UIElement_OnPointerPressed");
 		}
 
 		private void UIElement_OnPointerReleased(object sender, PointerRoutedEventArgs e)
@@ -201,6 +190,28 @@ namespace Snapchat.Pages.PageContents
 		private void SearchBox_TextChanged(object sender, Windows.UI.Xaml.Controls.TextChangedEventArgs e)
 		{
 			ViewModel.FilterText = (sender as TextBox).Text;
+		}
+
+		private void flashy_Loaded(object sender, RoutedEventArgs e)
+		{
+			var flashy = sender as UIElement;
+			if (flashy == null) return;
+
+			var refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+			refreshTimer.Tick += delegate
+			{
+				Point screenCoords = flashy.TransformToVisual(Window.Current.Content).TransformPoint(new Point(0, 0));
+				if (screenCoords.Y > 0 && !_alreadyRefreshed)
+				{
+					_alreadyRefreshed = true;
+					App.UpdateSnapchatDataAsync();
+				}
+				else if (screenCoords.Y < 0)
+				{
+					_alreadyRefreshed = false;
+				}
+			};
+			refreshTimer.Start();
 		}
 	}
 }

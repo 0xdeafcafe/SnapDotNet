@@ -20,6 +20,7 @@ using SnapDotNet.Core.Miscellaneous.Helpers;
 using System.Diagnostics;
 using Windows.UI.Core;
 using Windows.Storage.Streams;
+using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace Snapchat
 {
@@ -228,7 +229,19 @@ namespace Snapchat
 			await ProgressHelper.ShowStatusBarAsync(Strings.GetString("StatusUpdating"));
 
 			// update data, and hide ui
-			await SnapchatManager.UpdateAllAsync(ProgressHelper.HideStatusBar);
+			Action closeStatusAction = ProgressHelper.HideStatusBar;
+			try
+			{
+				await SnapchatManager.UpdateAllAsync(closeStatusAction);
+			}
+			catch (InvalidHttpResponseException e)
+			{
+				App.RootFrame.Navigate(typeof(StartPage));
+			}
+			finally
+			{
+				closeStatusAction();
+			}
 
 			// Automatically download snaps if enabled
 			var downloadMode = AppSettings.Get("AutomaticallyDownloadSnapsMode", AutomaticallyDownloadSnapsMode.WiFi);

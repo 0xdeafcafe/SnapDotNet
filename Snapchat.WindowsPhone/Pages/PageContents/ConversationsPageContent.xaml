@@ -8,7 +8,7 @@
 				xmlns:converters="using:Snapchat.Converters"
 				xmlns:selectorsConversations="using:Snapchat.Selectors.Conversations"
 				mc:Ignorable="d" Background="White"
-				x:Name="page">
+				x:Name="page" FontFamily="Global User Interface">
 				
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -92,7 +92,7 @@
 					<Run Text="-" />
 					<Run Text="{Binding Path=LastSnap, 
 										UpdateSourceTrigger=PropertyChanged,
-										Converter={StaticResource SnapStatusConverter}}" />
+										Converter={StaticResource SnapStatusConverter}}" FontFamily="Global User Interface" />
 				</TextBlock>
 			</DataTemplate>
 			<selectorsConversations:SnapTemplateSelector x:Key="SnapInfoTemplateSelector"
@@ -120,14 +120,29 @@
 		<ScrollViewer x:Name="ScrollViewer" Grid.Row="1">
 			
 			<!-- le items -->
-			<ItemsControl ItemsSource="{Binding FilteredConversations}" MinHeight="10">
+			<ItemsControl ItemsSource="{Binding FilteredConversations}" MinHeight="10" FontFamily="Global User Interface">
 				<ItemsControl.Template>
 					<ControlTemplate TargetType="ItemsControl">
 						<StackPanel>
+							
+							<!-- Refresh animation -->
+							<Grid x:Name="flashy" Background="Red" Height="150" Margin="0,-150,0,0" Loaded="flashy_Loaded">
+								<Grid.Triggers>
+									<EventTrigger RoutedEvent="Grid.Loaded">
+										<BeginStoryboard>
+											<Storyboard Storyboard.TargetName="flashy" AutoReverse="True" RepeatBehavior="Forever">
+												<ColorAnimation To="Yellow" From="Red" Duration="0:0:0.3" Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)"/>
+											</Storyboard>
+										</BeginStoryboard>
+									</EventTrigger>
+								</Grid.Triggers>
+							</Grid>
+							
 							<!-- Search box -->
 							<TextBox x:Name="SearchBox" x:Uid="ConvosSearchBox" Background="White" PlaceholderText="Search" LostFocus="SearchBox_LostFocus" GotFocus="SearchBox_GotFocus"
 									 Text="{Binding FilterText, Mode=TwoWay}"
-									 Style="{StaticResource SearchTextBoxStyle}" TextChanged="SearchBox_TextChanged" />
+									 TextChanged="SearchBox_TextChanged" 
+									 />
 
 							<ItemsPresenter Margin="0,0,0,30"/>
 						</StackPanel>
