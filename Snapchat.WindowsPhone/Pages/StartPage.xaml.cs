@@ -77,7 +77,11 @@ namespace Snapchat.Pages
 
 		private async void CalculateDeviceRotation(Accelerometer sender, AccelerometerReadingChangedEventArgs args)
 		{
-			await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { UpdateOrientation(); });
+			try
+			{
+				await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { UpdateOrientation(); });
+			}
+			catch { }
 		}
 
 		private void UpdateOrientation()

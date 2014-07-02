@@ -38,7 +38,7 @@
 										</VisualState>
 										<VisualState x:Name="Pressed">
 											<Storyboard>
-												<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+												<!--<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>-->
 											</Storyboard>
 										</VisualState>
 									</VisualStateGroup>

@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\OutboundSelectFriends\SelectedItemToFriendlyTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomTypes\SelectFriendskeyGroup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CameraManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PageContents\AddFriendsViewModel.cs" />
     <Page Include="$(MSBuildThisFileDirectory)Controls\SearchTextBox.xaml">
       <SubType>Designer</SubType>
     </Page>

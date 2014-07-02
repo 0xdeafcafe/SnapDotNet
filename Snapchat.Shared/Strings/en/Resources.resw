@@ -274,6 +274,9 @@
   <data name="RemoveFriend" xml:space="preserve">
     <value>Remove</value>
   </data>
+  <data name="SearchContactsButton.Content" xml:space="preserve">
+    <value>Search contacts</value>
+  </data>
   <data name="SendCommentAppBarButtonLabel" xml:space="preserve">
     <value>send</value>
   </data>

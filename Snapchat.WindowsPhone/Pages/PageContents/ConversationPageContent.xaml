@@ -66,7 +66,8 @@
 						</ContentControl>
 
 						<TextBlock FontSize="{StaticResource ConversationItemFontSize}" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF333333" Margin="5,0,0,0"
-							   Text="{Binding Path=Snap, Converter={StaticResource SnapStatusConverter}}" />
+								   Text="{Binding Path=Snap, Converter={StaticResource SnapStatusConverter}}"
+								   TextWrapping="WrapWholeWords"/>
 					</StackPanel>
 				</Border>
 			</DataTemplate>
@@ -111,7 +112,7 @@
 							BorderThickness="{Binding Path=ChatMessage, Converter={StaticResource MessageStateToThicknessConverter}}" 
 							BorderBrush="{Binding Path=ChatMessage.Sender, Converter={StaticResource MessageOwnerColourConverter}}">
 						<TextBlock FontSize="{StaticResource ConversationItemFontSize}" FontFamily="Segoe WP" FontWeight="Normal" Foreground="#FF333333" 
-								   Text="{Binding Path=ChatMessage.Body.Text}" VerticalAlignment="Center" />
+								   Text="{Binding Path=ChatMessage.Body.Text}" VerticalAlignment="Center" TextWrapping="WrapWholeWords" />
 					</Border>
 				</Grid>
 			</DataTemplate>

@@ -76,13 +76,29 @@
 					<StackPanel>
 						<TextBlock Foreground="#FFFF8000" Margin="10,5" FontWeight="SemiBold" FontSize="18.667">FRIENDS WHO ADDED ME</TextBlock>
 						<ScrollViewer>
-							<!-- TODO: ListView goes here -->
+							<ListView Height="500" ItemsSource="{Binding FriendsWhoAddedMe}">
+								<ListView.ItemTemplate>
+									<DataTemplate>
+										<Grid Height="60">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="*"/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+
+											<TextBlock FontSize="20" Text="{Binding FriendlyName}" Foreground="Black" VerticalAlignment="Center"/>
+
+											<!-- {Binding Type} can be Accepted, Pending, or Blocked -->
+											<!-- TODO: Show togglebutton here -->
+										</Grid>
+									</DataTemplate>
+								</ListView.ItemTemplate>
+							</ListView>
 						</ScrollViewer>
 					</StackPanel>
 				</Grid>
 
 				<Grid x:Name="importContactsGrid" Visibility="Collapsed">
-					<TextBlock Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center">find friends from contacts</TextBlock>
+					<Button x:Uid="SearchContactsButton" Foreground="Black" BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Tapped="FindFriendsButton_Tapped" Margin="25,0,25,25">Search contacts</Button>
 				</Grid>
 
 				<ScrollViewer x:Name="searchFriendsGrid" Visibility="Collapsed">
