@@ -28,7 +28,7 @@ namespace Snapchat.Pages.PageContents
 		{
 			InitializeComponent();
 
-			ScrollViewer.Loaded += (sender, args) => ScrollViewer.ScrollToHorizontalOffset(NoOverlayGrid.ActualWidth * 2);
+			/*ScrollViewer.Loaded += (sender, args) => ScrollViewer.ScrollToHorizontalOffset(NoOverlayGrid.ActualWidth * 2);
 			ScrollViewer.ViewChanged += (sender, args) =>
 			{
 				// TODO: Make this cleaner, im sure you'll find a way matt. But the basic stuff is here
@@ -40,13 +40,14 @@ namespace Snapchat.Pages.PageContents
 					ScrollViewer.ScrollToHorizontalOffset(NoOverlayGrid.ActualWidth * 2); // *2 goes to no-overlay
 				else if (pageIndex == 1)
 					ScrollViewer.ScrollToHorizontalOffset(NoOverlayGrid.ActualWidth * 4); // *4 goes to time - i should map these
-			};
+			};*/
 		}
 
 		public void Reset()
 		{
 			DataContext = null;
 			ImageMediaElement.Source = null;
+			FiltersPivot.SelectedIndex = 0;
 
 			VisualStateManager.GoToState(this, "PendingMedia", true);
 		}
@@ -71,8 +72,8 @@ namespace Snapchat.Pages.PageContents
 				return;
 
 			VisualStateManager.GoToState(this, "DrawingState", true);
-			ScrollViewer.IsHitTestVisible = false;
-			ScrollViewer.IsEnabled = false;
+			//ScrollViewer.IsHitTestVisible = false;
+			//ScrollViewer.IsEnabled = false;
 
 			_oldPoint = e.GetCurrentPoint(DrawingCanvas);
 			_isDrawing = true;
@@ -109,8 +110,8 @@ namespace Snapchat.Pages.PageContents
 
 			_isDrawing = false;
 			VisualStateManager.GoToState(this, "PendingState", true);
-			ScrollViewer.IsHitTestVisible = true;
-			ScrollViewer.IsEnabled = true;
+			//ScrollViewer.IsHitTestVisible = true;
+			//ScrollViewer.IsEnabled = true;
 		}
 
 		private void DrawingToggleButton_CheckedChanged(object sender, RoutedEventArgs e)

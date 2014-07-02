@@ -21,6 +21,11 @@ using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Extensions;
 using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Storage.Pickers;
+using Windows.Storage;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
+using System.IO;
+using Windows.Graphics.Imaging;
 
 namespace Snapchat.Pages
 {
@@ -445,6 +450,20 @@ namespace Snapchat.Pages
 					appBar.SecondaryCommands.Add(command);
 			}
 			appBar.ClosedDisplayMode = displayMode;
+		}
+
+		public async Task ImportPhotoAsync(StorageFile file)
+		{
+			if (file == null) return;
+
+			VisualStateManager.GoToState(VisualStateUtilities.FindNearestStatefulControl(ScrollViewer), "Preview", true);
+			PreviewPage.Reset();
+
+			var stream = await file.OpenAsync(FileAccessMode.Read);
+			var bmp = new BitmapImage();
+			await bmp.SetSourceAsync(stream);
+
+			PreviewPage.Load(new PreviewViewModel(bmp));
 		}
 
 		private async void CapturePhotoButton_Tapped(object sender, TappedRoutedEventArgs e)

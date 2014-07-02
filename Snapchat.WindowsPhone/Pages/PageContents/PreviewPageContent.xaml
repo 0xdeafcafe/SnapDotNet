@@ -235,7 +235,7 @@
 				</ItemsControl.ItemsPanel>
 			</ItemsControl>
 
-			<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
+			<!--<ScrollViewer x:Name="ScrollViewer" x:FieldModifier="Public" VerticalScrollBarVisibility="Hidden" 
 						  VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden" 
 						  HorizontalScrollMode="Enabled" ManipulationMode="TranslateX" 
 						  HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Near" 
@@ -259,7 +259,6 @@
 							<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="22" Margin="0,30,0,0" Text="{Binding CurrentTimeFilterDesignator}"/>
 						</StackPanel>
 					</Grid>
-					<!-- This is hacky, so pls leave me alone above here -->
 
 
 
@@ -284,11 +283,31 @@
 
 
 
-					<!-- This is hacky, so pls leave me alone -->
 					<Grid Tag="NoOverlayEndingGrace1" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}" />
 					<Grid Tag="NoOverlayEndingGrace2" Background="Transparent" Height="{Binding ActualHeight, ElementName=PreviewControl}" Width="{Binding ActualWidth, ElementName=PreviewControl}" />
 				</StackPanel>
-			</ScrollViewer>
+			</ScrollViewer>-->
+			<Pivot x:Name="FiltersPivot">
+				<PivotItem Tag="None" Background="Transparent"/>
+
+				<PivotItem Tag="Temperature">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="100">85</TextBlock>
+						<TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" FontSize="36" Margin="0,-50,0,0">&#176;F</TextBlock>
+					</StackPanel>
+				</PivotItem>
+
+				<PivotItem Tag="Time">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="100" Text="{Binding CurrentTimeFilterTime}" FontFamily="ms-appx:/Assets/LCD-N___.TTF#LCD"/>
+						<TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" FontSize="36" Margin="5,40,0,0" Text="{Binding CurrentTimeFilterDesignator}"/>
+					</StackPanel>
+				</PivotItem>
+
+				<PivotItem Tag="Weather">
+					<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72">&#x1f31e;</TextBlock>
+				</PivotItem>
+			</Pivot>
 		</Grid>
 		
 		<Grid x:Name="BitmapDrawingGrid" Visibility="Collapsed"

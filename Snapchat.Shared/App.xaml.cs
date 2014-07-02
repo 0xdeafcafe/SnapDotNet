@@ -19,6 +19,7 @@ using Snapchat.ViewModels;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using System.Diagnostics;
 using Windows.UI.Core;
+using Windows.Storage.Streams;
 
 namespace Snapchat
 {
@@ -125,6 +126,23 @@ namespace Snapchat
 			
 			// yolo rite
 			Window.Current.Activate();
+		}
+
+		protected override async void OnActivated(IActivatedEventArgs args)
+		{
+			base.OnActivated(args);
+
+#if WINDOWS_PHONE_APP
+			if (args.Kind == ActivationKind.PickFileContinuation)
+			{
+				Debug.WriteLine("App reactivated after file open picker");
+				var fileArgs = args as FileOpenPickerContinuationEventArgs;
+				if (fileArgs == null || fileArgs.Files.Count == 0) return;
+
+				var selectedImage = fileArgs.Files[0];
+				await MainPage.Singleton.ImportPhotoAsync(selectedImage);
+			}
+#endif
 		}
 
 		/// <summary>
