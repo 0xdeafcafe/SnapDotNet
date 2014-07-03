@@ -18,6 +18,7 @@ namespace Snapchat.Pages.PageContents
 		private bool _isFingerDown;
 		private ConversationResponse _selectedConversation;
 		private readonly DispatcherTimer _holdingTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+		private readonly DispatcherTimer _distructionTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(69) };
 		private bool _alreadyRefreshed;
 
 		public ConversationsPageContent()
@@ -33,8 +34,12 @@ namespace Snapchat.Pages.PageContents
 			HardwareButtons.BackPressed += (sender, args) =>
 			{
 				DetatchConvoData();
-				TryHideMediaContent();
 				args.Handled = true;
+			};
+
+			_distructionTimer.Tick += delegate
+			{
+				DetatchConvoData();
 			};
 
 			_holdingTimer.Tick += (o, o1) =>
@@ -102,21 +107,23 @@ namespace Snapchat.Pages.PageContents
 
 		private void ConvoItem_OnHolding(object sender, HoldingRoutedEventArgs e)
 		{
-			var element = sender as FrameworkElement;
-			if (element == null) return;
-			var conversation = element.DataContext as ConversationResponse;
+			var button = sender as Button;
+			if (button == null) return;
+			var conversation = button.DataContext as ConversationResponse;
 			if (conversation == null) return;
 
 			if (e.HoldingState == HoldingState.Started)
 				SetupSnapData(conversation);
 			else
-				TryHideMediaContent();
+				DetatchConvoData();
 		}
 
 		private void SetupSnapData(ConversationResponse conversation)
 		{
 			_isFingerDown = true;
 			_selectedConversation = conversation;
+			ScrollViewer.IsEnabled = false;
+			MainPage.Singleton.ShowSnapMedia(_selectedConversation.PendingReceivedSnaps.Last());
 		}
 
 		private void DetatchConvoData()
@@ -124,13 +131,7 @@ namespace Snapchat.Pages.PageContents
 			_isFingerDown = false;
 			_selectedConversation = null;
 			ScrollViewer.IsEnabled = true;
-			_holdingTimer.Stop();
-		}
-
-		private void TryHideMediaContent()
-		{
 			MainPage.Singleton.HideSnapMedia();
-			ScrollViewer.IsEnabled = true;
 		}
 
 		#region Old holding stuff xo

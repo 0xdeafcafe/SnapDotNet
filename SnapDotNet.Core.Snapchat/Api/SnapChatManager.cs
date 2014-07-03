@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -251,15 +252,13 @@ namespace SnapDotNet.Core.Snapchat.Api
 			if (AllUpdates.ConversationResponse == null)
 				AllUpdates.ConversationResponse = new ObservableCollection<ConversationResponse>();
 
-			var conversationResponse = AllUpdates.ConversationResponse;
-
 			// Add conversations that are not currently there
 			foreach (var newConversation in allUpdates.ConversationResponse.Reverse())
 			{
 				var currentConversation = AllUpdates.ConversationResponse.FirstOrDefault(c => c.Id == newConversation.Id);
 				if (currentConversation == null)
 				{
-					conversationResponse.Add(newConversation);
+					AllUpdates.ConversationResponse.Add(newConversation);
 					continue;
 				}
 
@@ -273,13 +272,14 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 				if (currentConversation.LastChatActions == null)
 					currentConversation.LastChatActions = new LastChatActions();
+				if (newConversation.LastChatActions == null)
+					newConversation.LastChatActions = new LastChatActions();
 
-				var lastChatAction = currentConversation.LastChatActions;
-				lastChatAction.LastRead = newConversation.LastChatActions.LastRead;
-				lastChatAction.LastReader = newConversation.LastChatActions.LastReader;
-				lastChatAction.LastWrite = newConversation.LastChatActions.LastWrite;
-				lastChatAction.LastWriteType = newConversation.LastChatActions.LastWriteType;
-				lastChatAction.LastWriter = newConversation.LastChatActions.LastWriter;
+				currentConversation.LastChatActions.LastRead = newConversation.LastChatActions.LastRead;
+				currentConversation.LastChatActions.LastReader = newConversation.LastChatActions.LastReader;
+				currentConversation.LastChatActions.LastWrite = newConversation.LastChatActions.LastWrite;
+				currentConversation.LastChatActions.LastWriteType = newConversation.LastChatActions.LastWriteType;
+				currentConversation.LastChatActions.LastWriter = newConversation.LastChatActions.LastWriter;
 
 				#endregion
 
@@ -293,13 +293,51 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 				#endregion
 
+				#region Add Pending Snaps
+
+				if (currentConversation.PendingReceivedSnaps == null)
+					currentConversation.PendingReceivedSnaps = new ObservableCollection<Snap>();
+				if (newConversation.PendingReceivedSnaps == null)
+					newConversation.PendingReceivedSnaps = new ObservableCollection<Snap>();
+
+				foreach (var newSnap in newConversation.PendingReceivedSnaps)
+				{
+					var existingSnap = currentConversation.PendingReceivedSnaps.FirstOrDefault(s => s.Id == newSnap.Id);
+					if (existingSnap == null)
+						// new snap, add it
+						currentConversation.PendingReceivedSnaps.Add(existingSnap);
+					else
+						// update existing
+						existingSnap.Update(newSnap);
+				}
+
+				var snapsToRemove = new List<Snap>();
+				foreach (var currentSnap in currentConversation.PendingReceivedSnaps)
+				{
+					if (currentSnap == null)
+					{
+						snapsToRemove.Add(currentSnap);
+						continue;
+					}
+
+					var newSnap = newConversation.PendingReceivedSnaps.FirstOrDefault(s => s.Id == currentSnap.Id);
+					if (newSnap == null)
+						snapsToRemove.Add(currentSnap);
+				}
+
+				foreach (var snap in snapsToRemove)
+					currentConversation.PendingReceivedSnaps.Add(snap);
+
+				currentConversation.PendingReceivedSnaps =
+					new ObservableCollection<Snap>(currentConversation.PendingReceivedSnaps.Where(s => s != null).OrderByDescending(s => s.Timestamp));
+				
+				#endregion
+
 				// TODO: Inpc this
 				currentConversation.ConversationMessages = newConversation.ConversationMessages;
 				currentConversation.PendingReceivedSnaps = newConversation.PendingReceivedSnaps;
 			}
-			// TODO: this
-			//nversationResponse =
-			//ew ObservableCollection<ConversationResponse>(conversationResponse.OrderByDescending(c => c.LastInteraction));
+			AllUpdates.ConversationResponse = new ObservableCollection<ConversationResponse>(AllUpdates.ConversationResponse.OrderByDescending(c => c.LastInteraction));
 			
 			#endregion
 

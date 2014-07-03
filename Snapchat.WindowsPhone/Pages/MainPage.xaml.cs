@@ -502,9 +502,6 @@ namespace Snapchat.Pages
 
 			// Block ScrollViewer
 			ScrollViewer.IsEnabled = false;
-			ScrollViewer.PointerReleased += delegate { Debug.WriteLine("MainPageScrollViewer_PointerReleased"); };
-			ScrollViewer.PointerCaptureLost += delegate { Debug.WriteLine("MainPageScrollViewer_PointerCaptureLost"); };
-			ScrollViewer.PointerExited += delegate { Debug.WriteLine("MainPageScrollViewer_PointerExited"); };
 		}
 
 		public void HideSnapMedia()

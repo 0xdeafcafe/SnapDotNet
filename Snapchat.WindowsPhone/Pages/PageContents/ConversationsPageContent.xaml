@@ -61,7 +61,7 @@
 
 			<DataTemplate x:Key="PendingSnapIconDataTemplate">
 				<ContentControl Width="55"
-								Template="{Binding Path=LastPendingSnap, 
+								Template="{Binding Path=PendingReceivedSnaps[0], 
 												   UpdateSourceTrigger=PropertyChanged, 
 												   Converter={StaticResource SnapIconConverter}}" />
 			</DataTemplate>
@@ -80,7 +80,7 @@
 						   Foreground="#FFA8A8A8" FontSize="14">
 					<Run Text="{Binding Path=LastInteraction, Converter={StaticResource FriendlyTimeConverter}}" />
 					<Run Text="-" />
-					<Run Text="{Binding Path=LastPendingSnap, 
+					<Run Text="{Binding Path=PendingReceivedSnaps[0], 
 										UpdateSourceTrigger=PropertyChanged,
 										Converter={StaticResource SnapStatusConverter}}" />
 				</TextBlock>
@@ -219,29 +219,29 @@
 								</Grid.ColumnDefinitions>
 
 								<TextBlock Grid.Column="1"
-											   Text="{Binding Path=PendingSnapCount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
-											   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
-											   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
+										   Text="{Binding Path=PendingSnapCount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
+										   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
+										   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
 
 								<Grid Grid.Column="2" VerticalAlignment="Center">
 									<ContentControl Content="{Binding}" VerticalAlignment="Center" Margin="0,0,0,0"
-														ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
+													ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
 									<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
-														Template="{StaticResource recieved_message}"
-														Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>
+													Template="{StaticResource recieved_message}"
+													Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>
 								</Grid>
 
 								<StackPanel Grid.Column="4" VerticalAlignment="Center">
 									<TextBlock x:Name="SnapUser" Text="{Binding Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
-												   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
+											   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
 										<TextBlock.RenderTransform>
 											<CompositeTransform TranslateY="7"/>
 										</TextBlock.RenderTransform>
 									</TextBlock>
 
 									<ContentControl x:Name="SnapDetails" Content="{Binding}" Opacity="0"
-														ContentTemplateSelector="{StaticResource SnapInfoTemplateSelector}" 
-														RenderTransformOrigin="0.5,0.5">
+													ContentTemplateSelector="{StaticResource SnapInfoTemplateSelector}" 
+													RenderTransformOrigin="0.5,0.5">
 										<ContentControl.RenderTransform>
 											<CompositeTransform TranslateX="0" TranslateY="0"/>
 										</ContentControl.RenderTransform>

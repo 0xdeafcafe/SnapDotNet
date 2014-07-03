@@ -151,7 +151,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 
 		public async Task DownloadSnapBlobAsync(SnapchatManager manager)
 		{
-			if (HasMedia || Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
+			if (Status != SnapStatus.Delivered || SenderName == manager.Username) return; // || HasMedia
 
 			// Set snap to IsDownloading
 			Status = SnapStatus.Downloading;
@@ -206,7 +206,17 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		}
 
 		#endregion
+
+		public void Update(Snap newSnap)
+		{
+			ContentId = newSnap.ContentId;
+			Id = newSnap.Id;
+			MediaType = newSnap.MediaType;
+			RecipientName = newSnap.RecipientName;
+			SenderName = newSnap.SenderName;
+			Status = newSnap.Status;
+			PostedAt = newSnap.PostedAt;
+			Timestamp = newSnap.Timestamp;
+		}
 	}
-
-
 }
