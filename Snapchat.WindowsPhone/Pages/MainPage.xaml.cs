@@ -376,6 +376,7 @@ namespace Snapchat.Pages
 
 					case "Camera":
 						_flipCameraAppBarButton.Command = new RelayCommand(ToggleCamera);
+						primaryCommands.Add(_flipCameraAppBarButton);
 
 						if (App.Camera.HasFrontCamera)
 							primaryCommands.Add(_flipCameraAppBarButton);
@@ -526,19 +527,9 @@ namespace Snapchat.Pages
 			ToggleCamera();
 		}
 
-		private void ToggleCamera()
+		private async void ToggleCamera()
 		{
-			/*await MediaCaptureManager.ToggleCameraAsync();
-
-			var scaleTransform = CapturePreview.RenderTransform as CompositeTransform;
-			if (MediaCaptureManager.IsMirrored)
-			{
-				if (scaleTransform != null)
-					scaleTransform.ScaleX = -1;
-			}
-			else if (scaleTransform != null)
-				scaleTransform.ScaleX = 1;
-			*/
+			await App.Camera.FlipCameraAsync();
 			Singleton.UpdateBottomAppBar();
 		}
 
