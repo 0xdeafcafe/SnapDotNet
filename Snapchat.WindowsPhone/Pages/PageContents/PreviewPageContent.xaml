@@ -214,7 +214,7 @@
 		</VisualStateManager.VisualStateGroups>
 
 		<Grid x:Name="FinalRenderGrid">
-			<Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="ms-appx:///Assets/camera_background_testing.jpg"/>
+			<!--Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="ms-appx:///Assets/camera_background_testing.jpg"/-->
 			<Image x:Name="ImageMediaElement" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
 			<ItemsControl x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
