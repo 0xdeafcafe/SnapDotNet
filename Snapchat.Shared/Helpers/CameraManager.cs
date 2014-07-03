@@ -150,6 +150,7 @@ namespace Snapchat.Helpers
 
 		public async Task<WriteableBitmap> CapturePhotoAsync()
 		{
+			Debug.WriteLine("Attempting Photo Capture. Using Instant: " + _isUsingInstantCapture);
 			var bitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
 
 			try
@@ -168,7 +169,9 @@ namespace Snapchat.Helpers
 				}
 				else
 				{
-					var capturedPhoto = await _lowLagPhotoCapture.CaptureAsync();
+					CapturedPhoto capturedPhoto;
+					capturedPhoto = await _lowLagPhotoCapture.CaptureAsync();
+					Debug.WriteLine("Successfully captured via lowlag");
 					await bitmap.SetSourceAsync(capturedPhoto.Frame);
 
 					// Fix image mirroring (as we only actualy mirror the preview, not the capture element)

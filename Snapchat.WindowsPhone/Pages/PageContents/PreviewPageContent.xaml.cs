@@ -55,6 +55,7 @@ namespace Snapchat.Pages.PageContents
 		public async void Load(PreviewViewModel viewModel)
 		{
 			DataContext = ViewModel = viewModel;
+			var y = viewModel;
 			ImageMediaElement.Source = ViewModel.ImageSource;
 
 			await StatusBar.GetForCurrentView().HideAsync();
