@@ -58,29 +58,29 @@ namespace Snapchat.ViewModels
 		private async void LogInAsync()
 		{
 #if DEBUG
-			if (string.IsNullOrWhiteSpace(CurrentUsername) ||
-				string.IsNullOrWhiteSpace(CurrentPassword))
-			{
-				// Show progress indicator.
-				var progIndicator = StatusBar.GetForCurrentView().ProgressIndicator;
-				progIndicator.Text = App.Strings.GetString("StatusLoggingIn");
-				await progIndicator.ShowAsync();
+			//if (string.IsNullOrWhiteSpace(CurrentUsername) ||
+			//	string.IsNullOrWhiteSpace(CurrentPassword))
+			//{
+			//	// Show progress indicator.
+			//	var progIndicator = StatusBar.GetForCurrentView().ProgressIndicator;
+			//	progIndicator.Text = App.Strings.GetString("StatusLoggingIn");
+			//	await progIndicator.ShowAsync();
 
-				// set le auth token here
-				App.SnapchatManager.UpdateAuthToken("5ee95824-c242-4716-b4e2-d50dc4609ff9");
-				App.SnapchatManager.UpdateUsername("alexerax");
-				await App.SnapchatManager.UpdateAllAsync(delegate { });
+			//	// set le auth token here
+			//	App.SnapchatManager.UpdateAuthToken("5ee95824-c242-4716-b4e2-d50dc4609ff9");
+			//	App.SnapchatManager.UpdateUsername("alexerax");
+			//	await App.SnapchatManager.UpdateAllAsync(delegate { });
 
-				// Hide progress indicator.
-				progIndicator.Text = String.Empty;
-				progIndicator.HideAsync();
+			//	// Hide progress indicator.
+			//	progIndicator.Text = String.Empty;
+			//	progIndicator.HideAsync();
 
-				// Navigate to the main page.
-				var frame = Window.Current.Content as Frame;
-				if (frame != null) frame.Navigate(typeof(MainPage));
+			//	// Navigate to the main page.
+			//	var frame = Window.Current.Content as Frame;
+			//	if (frame != null) frame.Navigate(typeof(MainPage));
 
-				return;
-			}
+			//	return;
+			//}
 #endif
 
 			// Username or password cannot be null.
