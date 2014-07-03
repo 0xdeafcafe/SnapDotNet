@@ -156,17 +156,16 @@
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
-									Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding"
-									
-									PointerCanceled="UIElement_OnPointerCanceled"
-									PointerCaptureLost="UIElement_OnPointerCaptureLost"
-									PointerEntered="UIElement_OnPointerEntered"
-									PointerExited="UIElement_OnPointerExited"
-									PointerMoved="UIElement_OnPointerMoved"
-									PointerPressed="UIElement_OnPointerPressed"
-									PointerReleased="UIElement_OnPointerReleased"
-									
-									>
+									Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding">
+
+							<!--PointerCanceled="UIElement_OnPointerCanceled"
+							PointerCaptureLost="UIElement_OnPointerCaptureLost"
+							PointerEntered="UIElement_OnPointerEntered"
+							PointerExited="UIElement_OnPointerExited"
+							PointerMoved="UIElement_OnPointerMoved"
+							PointerPressed="UIElement_OnPointerPressed"
+							PointerReleased="UIElement_OnPointerReleased"-->
+
 							<Button.Resources>
 								<Storyboard x:Key="ConvoItemDetailPeekStoryboard">
 									<DoubleAnimation Duration="0:0:0.3" To="1" 

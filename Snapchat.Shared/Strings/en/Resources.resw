@@ -370,6 +370,12 @@
   <data name="SettingsUsernameTextBox.Header" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="SignedOutDialogBody" xml:space="preserve">
+    <value>You signed in on another device and therefor been signed out.</value>
+  </data>
+  <data name="SignedOutDialogTitle" xml:space="preserve">
+    <value>Signed Out</value>
+  </data>
   <data name="SignUpButton.Content" xml:space="preserve">
     <value>SIGN UP</value>
   </data>

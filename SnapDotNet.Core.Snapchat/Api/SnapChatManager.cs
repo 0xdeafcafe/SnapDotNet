@@ -246,8 +246,64 @@ namespace SnapDotNet.Core.Snapchat.Api
 
 			#endregion
 
+			#region Update Conversations
+
+			if (AllUpdates.ConversationResponse == null)
+				AllUpdates.ConversationResponse = new ObservableCollection<ConversationResponse>();
+
+			var conversationResponse = AllUpdates.ConversationResponse;
+
+			// Add conversations that are not currently there
+			foreach (var newConversation in allUpdates.ConversationResponse.Reverse())
+			{
+				var currentConversation = AllUpdates.ConversationResponse.FirstOrDefault(c => c.Id == newConversation.Id);
+				if (currentConversation == null)
+				{
+					conversationResponse.Add(newConversation);
+					continue;
+				}
+
+				// update data inside it yo
+				currentConversation.Id = newConversation.Id;
+				currentConversation.IterToken = newConversation.IterToken;
+				currentConversation.LastInteraction = newConversation.LastInteraction;
+				currentConversation.ConversationState = newConversation.ConversationState;
+
+				#region Set Last Chat Actions
+
+				if (currentConversation.LastChatActions == null)
+					currentConversation.LastChatActions = new LastChatActions();
+
+				var lastChatAction = currentConversation.LastChatActions;
+				lastChatAction.LastRead = newConversation.LastChatActions.LastRead;
+				lastChatAction.LastReader = newConversation.LastChatActions.LastReader;
+				lastChatAction.LastWrite = newConversation.LastChatActions.LastWrite;
+				lastChatAction.LastWriteType = newConversation.LastChatActions.LastWriteType;
+				lastChatAction.LastWriter = newConversation.LastChatActions.LastWriter;
+
+				#endregion
+
+				#region Add Pending Chats
+
+				if (currentConversation.PendingChatsFor == null)
+					currentConversation.PendingChatsFor = new ObservableCollection<string>();
+
+				currentConversation.PendingChatsFor.Clear();
+				currentConversation.PendingChatsFor = newConversation.PendingChatsFor;
+
+				#endregion
+
+				// TODO: Inpc this
+				currentConversation.ConversationMessages = newConversation.ConversationMessages;
+				currentConversation.PendingReceivedSnaps = newConversation.PendingReceivedSnaps;
+			}
+			// TODO: this
+			//nversationResponse =
+			//ew ObservableCollection<ConversationResponse>(conversationResponse.OrderByDescending(c => c.LastInteraction));
+			
+			#endregion
+
 			// TODO: finish this
-			AllUpdates.ConversationResponse = allUpdates.ConversationResponse;
 			AllUpdates.StoriesResponse = allUpdates.StoriesResponse;
 
 			//AllUpdates = allUpdates;

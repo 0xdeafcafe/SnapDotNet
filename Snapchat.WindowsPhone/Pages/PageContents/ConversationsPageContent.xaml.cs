@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using Windows.UI.Input;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Phone.UI.Input;
@@ -101,22 +102,15 @@ namespace Snapchat.Pages.PageContents
 
 		private void ConvoItem_OnHolding(object sender, HoldingRoutedEventArgs e)
 		{
-			//var element = sender as FrameworkElement;
-			//if (element == null) return;
-			//var conversation = element.DataContext as ConversationResponse;
-			//if (conversation == null) return;
-			//
-			//if (e.HoldingState == HoldingState.Started)
-			//{
-			//	if (!conversation.HasPendingSnaps) return;
-			//	MainPage.Singleton.ShowSnapMedia(conversation.PendingReceivedSnaps.Last());
-			//	ScrollViewer.IsEnabled = false;
-			//}
-			//else
-			//{
-			//	MainPage.Singleton.HideSnapMedia();
-			//	ScrollViewer.IsEnabled = true;
-			//}
+			var element = sender as FrameworkElement;
+			if (element == null) return;
+			var conversation = element.DataContext as ConversationResponse;
+			if (conversation == null) return;
+
+			if (e.HoldingState == HoldingState.Started)
+				SetupSnapData(conversation);
+			else
+				TryHideMediaContent();
 		}
 
 		private void SetupSnapData(ConversationResponse conversation)
@@ -139,57 +133,62 @@ namespace Snapchat.Pages.PageContents
 			ScrollViewer.IsEnabled = true;
 		}
 
-		private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
-		{
-			//Debug.WriteLine("UIElement_OnPointerEntered");
+		#region Old holding stuff xo
 
-			var element = sender as FrameworkElement;
-			if (element == null) return;
-			var conversation = element.DataContext as ConversationResponse;
-			if (conversation == null || !conversation.HasPendingSnaps) return;
-			SetupSnapData(conversation);
-			_holdingTimer.Start();
-		}
+		//private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
+		//{
+		//	//Debug.WriteLine("UIElement_OnPointerEntered");
 
-		private void UIElement_OnPointerCanceled(object sender, PointerRoutedEventArgs e)
-		{
-			//Debug.WriteLine("UIElement_OnPointerCanceled");
-			DetatchConvoData();
-		}
+		//	var element = sender as FrameworkElement;
+		//	if (element == null) return;
+		//	var conversation = element.DataContext as ConversationResponse;
+		//	if (conversation == null || !conversation.HasPendingSnaps) return;
+		//	SetupSnapData(conversation);
+		//	_holdingTimer.Start();
+		//}
 
-		private void UIElement_OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
-		{
-			//Debug.WriteLine("UIElement_OnPointerCaptureLost");
-			DetatchConvoData();
-		}
+		//private void UIElement_OnPointerCanceled(object sender, PointerRoutedEventArgs e)
+		//{
+		//	//Debug.WriteLine("UIElement_OnPointerCanceled");
+		//	DetatchConvoData();
+		//}
 
-		private void UIElement_OnPointerExited(object sender, PointerRoutedEventArgs e)
-		{
-			//Debug.WriteLine("UIElement_OnPointerExited");
-			DetatchConvoData();
-		}
+		//private void UIElement_OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
+		//{
+		//	//Debug.WriteLine("UIElement_OnPointerCaptureLost");
+		//	DetatchConvoData();
+		//}
 
-		private void UIElement_OnPointerMoved(object sender, PointerRoutedEventArgs e)
-		{
-			//Debug.WriteLine("UIElement_OnPointerMoved");
-		}
+		//private void UIElement_OnPointerExited(object sender, PointerRoutedEventArgs e)
+		//{
+		//	//Debug.WriteLine("UIElement_OnPointerExited");
+		//	DetatchConvoData();
+		//}
 
-		private void UIElement_OnPointerPressed(object sender, PointerRoutedEventArgs e)
-		{
-			//Debug.WriteLine("UIElement_OnPointerPressed");
-		}
+		//private void UIElement_OnPointerMoved(object sender, PointerRoutedEventArgs e)
+		//{
+		//	//Debug.WriteLine("UIElement_OnPointerMoved");
+		//}
 
-		private void UIElement_OnPointerReleased(object sender, PointerRoutedEventArgs e)
-		{
-			Debug.WriteLine("UIElement_OnPointerReleased");
-			DetatchConvoData();
-			TryHideMediaContent();
-			Debug.WriteLine("Ending _holdTimer");
-		}
+		//private void UIElement_OnPointerPressed(object sender, PointerRoutedEventArgs e)
+		//{
+		//	//Debug.WriteLine("UIElement_OnPointerPressed");
+		//}
 
-		private void SearchBox_TextChanged(object sender, Windows.UI.Xaml.Controls.TextChangedEventArgs e)
+		//private void UIElement_OnPointerReleased(object sender, PointerRoutedEventArgs e)
+		//{
+		//	Debug.WriteLine("UIElement_OnPointerReleased");
+		//	DetatchConvoData();
+		//	TryHideMediaContent();
+		//	Debug.WriteLine("Ending _holdTimer");
+		//}
+
+		#endregion
+
+		private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			ViewModel.FilterText = (sender as TextBox).Text;
+			var textBox = sender as TextBox;
+			if (textBox != null) ViewModel.FilterText = textBox.Text;
 		}
 
 		private void flashy_Loaded(object sender, RoutedEventArgs e)

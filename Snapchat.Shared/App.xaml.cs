@@ -3,6 +3,7 @@ using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
 using Windows.Networking.PushNotifications;
 using Windows.System.Profile;
+using Windows.UI.Popups;
 using Microsoft.WindowsAzure.MobileServices;
 using Snapchat.Helpers;
 using Snapchat.Pages;
@@ -234,9 +235,16 @@ namespace Snapchat
 			{
 				await SnapchatManager.UpdateAllAsync(closeStatusAction);
 			}
-			catch (InvalidHttpResponseException e)
+			catch (SnapchatSessionExpiredException)
 			{
-				App.RootFrame.Navigate(typeof(StartPage));
+				// Signed out
+				var messageDialog = new MessageDialog(Strings.GetString("SignedOutDialogBody"), Strings.GetString("SignedOutDialogTitle"));
+				messageDialog.ShowAsync();
+				RootFrame.Navigate(typeof(StartPage));
+			}
+			catch (InvalidHttpResponseException)
+			{
+				RootFrame.Navigate(typeof(StartPage));
 			}
 			finally
 			{

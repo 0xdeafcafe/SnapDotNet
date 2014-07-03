@@ -43,12 +43,12 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 		private ConversationState _conversationState;
 
 		[DataMember(Name = "last_chat_actions")]
-		public LastSnapActions LastChatActions
+		public LastChatActions LastChatActions
 		{
 			get { return _lastChatActions; }
 			set { SetField(ref _lastChatActions, value); }
 		}
-		private LastSnapActions _lastChatActions;
+		private LastChatActions _lastChatActions;
 
 		[DataMember(Name = "id")]
 		public String Id
@@ -306,7 +306,7 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 	}
 
 	[DataContract]
-	public class LastSnapActions
+	public class LastChatActions
 		: NotifyPropertyChangedBase
 	{
 		[DataMember(Name = "last_read_timestamp")]

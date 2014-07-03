@@ -167,6 +167,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 				case HttpStatusCode.OK:
 					return response;
 
+				case HttpStatusCode.Unauthorized:
+					throw new SnapchatSessionExpiredException();
+
 				default:
 					// Well, fuck
 					throw new InvalidHttpResponseException(response.ReasonPhrase, response);
@@ -214,6 +217,9 @@ namespace SnapDotNet.Core.Snapchat.Api
 			{
 				case HttpStatusCode.OK:
 					return response;
+
+				case HttpStatusCode.Unauthorized:
+					throw new SnapchatSessionExpiredException();
 
 				default:
 					// Well, fuck

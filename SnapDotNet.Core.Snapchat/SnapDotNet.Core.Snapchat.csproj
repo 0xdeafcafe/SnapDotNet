@@ -46,6 +46,7 @@
     <Compile Include="Api\Exceptions\InvalidCredentialsException.cs" />
     <Compile Include="Api\Exceptions\InvalidRegistrationException.cs" />
     <Compile Include="Api\Exceptions\InvalidHttpResponseException.cs" />
+    <Compile Include="Api\Exceptions\SnapchatSessionExpiredException.cs" />
     <Compile Include="Api\Settings.cs" />
     <Compile Include="Api\SnapchatManager.cs" />
     <Compile Include="Api\WebConnect.cs" />
