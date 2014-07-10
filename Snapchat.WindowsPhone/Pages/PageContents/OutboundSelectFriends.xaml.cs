@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
-using Snapchat.CustomTypes;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Snapchat.Api;
@@ -30,92 +31,145 @@ namespace Snapchat.Pages.PageContents
 			DataContext = ViewModel = new OutboundSelectFriendsViewModel(imageData);
 		}
 
-		private bool _isInMassOperation;
-		private bool _isCheckingOtherShit;
-		public void SelectAllFriends()
-		{
-			_isInMassOperation = true;
-			foreach (var recipient in ViewModel.RecipientList.Where(r => r.GroupType != GroupType.Stories).SelectMany(recipientGroup => recipientGroup))
-				recipient.Selected = true;
-			_isInMassOperation = false;
+		#region On Check Changed
 
-			ViewModel.ExplicitOnNotifyPropertyChanged("SelectedRecipients");
+		private bool _skipEventLogic;
+		private bool _isInMassEvent;
+
+		private void StoryBox_OnCheckChanged(object sender, RoutedEventArgs e)
+		{
+			if (_skipEventLogic || _isInMassEvent)
+				return;
+
+			var @checked = (bool)(e.OriginalSource as CheckBox).IsChecked;
+			var selected = GetCastedDataContext<SelectedOther>(sender);
+			if (selected == null) return;
+
+			ViewModel.UpdateSelectedRecipients(selected.OtherName, @checked);
 		}
 
-		public void DeSelectAllFriends()
+		private void BestFriendsBox_OnCheckChanged(object sender, RoutedEventArgs e)
 		{
-			_isInMassOperation = true;
-			foreach (var recipient in ViewModel.RecipientList.Where(r => r.GroupType != GroupType.Stories).SelectMany(recipientGroup => recipientGroup))
-				recipient.Selected = false;
-			_isInMassOperation = false;
+			if (_skipEventLogic || _isInMassEvent)
+				return;
 
-			ViewModel.ExplicitOnNotifyPropertyChanged("SelectedRecipients");
+			// Get Username from Datacontext
+			var @checked = (bool) (e.OriginalSource as CheckBox).IsChecked;
+			var selected = GetCastedDataContext<SelectedOther>(sender);
+			if (selected == null) return;
+
+			DoSelectionLogic(selected.OtherName, SelectionType.BestFriends, @checked);
 		}
 
-		private void SelectionCheckBox_OnCheckChanged(object sender, RoutedEventArgs e)
+		private void RecentsBox_OnCheckChanged(object sender, RoutedEventArgs e)
 		{
-			// TODO: Fix this bugg shitfest
+			if (_skipEventLogic || _isInMassEvent)
+				return;
 
-			var element = sender as FrameworkElement;
-			if (element == null) return;
-			var item = element.DataContext as SelectedItem;
-			if (item == null) return;
+			// Get Username from Datacontext
+			var @checked = (bool)(e.OriginalSource as CheckBox).IsChecked;
+			var selected = GetCastedDataContext<SelectedOther>(sender);
+			if (selected == null) return;
 
-			if (_isCheckingOtherShit) return;
-			if (_isInMassOperation) return;
+			DoSelectionLogic(selected.OtherName, SelectionType.Recents, @checked);
+		}
 
-			item.Selected = !item.Selected;
-			ViewModel.ExplicitOnNotifyPropertyChanged("SelectedRecipients");
-			_isCheckingOtherShit = true;
+		private void FriendsBox_OnCheckChanged(object sender, RoutedEventArgs e)
+		{
+			if (_skipEventLogic || _isInMassEvent)
+				return;
 
-			if (item is SelectedRecent)
+			// Get Username from Datacontext
+			var @checked = (bool)(e.OriginalSource as CheckBox).IsChecked;
+			var selected = GetCastedDataContext<SelectedFriend>(sender);
+			if (selected == null) return;
+
+			DoSelectionLogic(selected.Friend.Name, SelectionType.Friends, @checked);
+		}
+
+		private void DoSelectionLogic(string username, SelectionType selectionType, bool selectedState)
+		{
+			_skipEventLogic = true;
+
+			if (selectionType != SelectionType.BestFriends)
+				// Select any best friends with the same username
+				foreach (var bestFriend in ViewModel.BestFriendsCollection.Where(bestFriend => bestFriend.OtherName == username))
+					bestFriend.Selected = selectedState;
+
+			if (selectionType != SelectionType.Recents)
+				// Select any best friends with the same username
+				foreach (var recent in ViewModel.RecentsCollection.Where(bestFriend => bestFriend.OtherName == username))
+					recent.Selected = selectedState;
+
+			if (selectionType != SelectionType.Friends)
+				// Select any friends with the same username
+				foreach (var recipient in ViewModel.FriendsCollection.SelectMany(recipientGroup => recipientGroup).Where(recipient => recipient.Friend.Name == username))
+					recipient.Selected = selectedState;
+
+			ViewModel.UpdateSelectedRecipients(username, selectedState);
+
+			_skipEventLogic = false;
+		}
+
+		private void HeaderTextBlock_OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+		{
+			_isInMassEvent = true;
+
+			#region Check our new selection state
+
+			var stuffs = new List<SelectedItem>();
+			stuffs.AddRange(ViewModel.StoriesCollection);
+			stuffs.AddRange(ViewModel.BestFriendsCollection);
+			stuffs.AddRange(ViewModel.RecentsCollection);
+			stuffs.AddRange(ViewModel.FriendsCollection.SelectMany(recipientGroup => recipientGroup));
+
+			var newSelectionState = false;
+			var hasBeenChecked = false;
+			var hasBeenUnChecked = false;
+
+			foreach (var stuff in stuffs)
+				if (stuff.Selected)
+					hasBeenChecked = true;
+				else
+					hasBeenUnChecked = true;
+
+			if ((hasBeenChecked && hasBeenUnChecked) || hasBeenUnChecked)
+				newSelectionState = true;
+
+			#endregion
+
+			// Stories
+			foreach (var story in ViewModel.StoriesCollection)
 			{
-				// Do friend processing
-				CheckYo((item as SelectedRecent).RecentName, GroupType.Friends, item.Selected);
-			}
-			else if (item is SelectedFriend)
-			{
-				// Do recent processing
-				CheckYo((item as SelectedFriend).Friend.FriendlyName, GroupType.Recents, item.Selected);
+				story.Selected = newSelectionState;
+				ViewModel.UpdateSelectedRecipients(story.OtherName, newSelectionState);
 			}
 
-			_isCheckingOtherShit = false;
+			// Best Friends
+			foreach (var bestFriend in ViewModel.BestFriendsCollection)
+			{
+				bestFriend.Selected = newSelectionState;
+				ViewModel.UpdateSelectedRecipients(bestFriend.OtherName, newSelectionState);
+			}
+
+			// Recents
+			foreach (var recent in ViewModel.RecentsCollection)
+			{
+				recent.Selected = newSelectionState;
+				ViewModel.UpdateSelectedRecipients(recent.OtherName, newSelectionState);
+			}
+
+			// Friends
+			foreach (var friend in ViewModel.FriendsCollection.SelectMany(recipientGroup => recipientGroup))
+			{
+				friend.Selected = newSelectionState;
+				ViewModel.UpdateSelectedRecipients(friend.Friend.Name, newSelectionState);
+			}
+
+			_isInMassEvent = false;
 		}
 
-		private void CheckYo(string name, GroupType groupType, bool selectedState)
-		{
-			foreach (var recipient in ViewModel.RecipientList.Where(r => r.GroupType == groupType).SelectMany(recipientGroup => recipientGroup))
-			{
-				switch (groupType)
-				{
-					case GroupType.Recents:
-					{
-						if (!(recipient is SelectedRecent)) continue;
-						var recent = recipient as SelectedRecent;
-						if (recent.RecentName == name)
-						{
-							recent.Selected = selectedState;
-							Debug.WriteLine("Set Recent {0} to {1}", recent.RecentName, recent.Selected);
-						}
-					}
-						break;
-					case GroupType.Friends:
-					{
-						if (!(recipient is SelectedFriend)) continue;
-						var friend = recipient as SelectedFriend;
-						if (friend.Friend.FriendlyName == name)
-						{
-							friend.Selected = selectedState;
-							Debug.WriteLine("Set Friend {0} to {1}", friend.Friend.FriendlyName, friend.Selected);
-						}
-					}
-						break;
-				}
-			}
-
-			// We no doin this, no mo
-			ViewModel.ExplicitOnNotifyPropertyChanged("SelectedRecipients");
-		}
+		#endregion
 
 		private async void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
 		{
@@ -142,11 +196,21 @@ namespace Snapchat.Pages.PageContents
 
 			var mediaId = App.SnapchatManager.GenerateMediaId();
 			var response = await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);
-			var response2 = await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, new[] {"wumbotestalex", "msaville8", "kfouwels", "collindaginger"}, 10);
+			var response2 = await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, ViewModel.SelectedRecipients.Split(','), 10);
 
 			// get jpeg
 			// Send first command
 			// Send second command
+		}
+
+		private static T GetCastedDataContext<T>(object sender)
+			where T : class
+		{
+			var frameworkElement = sender as FrameworkElement;
+			if (frameworkElement == null) return null;
+
+			var dataContext = frameworkElement.DataContext as T;
+			return dataContext;
 		}
 	}
 }

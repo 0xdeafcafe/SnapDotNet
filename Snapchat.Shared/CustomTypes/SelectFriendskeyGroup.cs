@@ -8,13 +8,6 @@ using SnapDotNet.Core.Snapchat.Models.AppSpecific;
 
 namespace Snapchat.CustomTypes
 {
-	public enum GroupType
-	{
-		Stories,
-		Recents,
-		Friends
-	}
-
 	public class SelectFriendskeyGroup<T> 
 		: ObservableCollection<T>
 	{
@@ -31,19 +24,12 @@ namespace Snapchat.CustomTypes
 		public String Key { get; private set; }
 
 		/// <summary>
-		/// The Type of this group
-		/// </summary>
-		public GroupType GroupType { get; private set; }
-
-		/// <summary>
 		/// Public constructor.
 		/// </summary>
 		/// <param name="key">The key for this group.</param>
-		/// <param name="groupType"></param>
-		public SelectFriendskeyGroup(string key, GroupType groupType = GroupType.Friends)
+		public SelectFriendskeyGroup(string key)
 		{
 			Key = key;
-			GroupType = groupType;
 		}
 
 		/// <summary>
@@ -67,27 +53,12 @@ namespace Snapchat.CustomTypes
 		{
 			var slg = new CharacterGroupings();
 			var list = CreateGroups(slg, true);
-			list.Insert(0, new SelectFriendskeyGroup<T>("RECENTS", GroupType.Recents));
-			list.Insert(0, new SelectFriendskeyGroup<T>("STORIES", GroupType.Stories));
-
 			foreach (var item in items)
 			{
-				string index;
+				var selectedFriend = item as SelectedFriend;
+				if (selectedFriend == null) continue;
 
-				if (item is SelectedStory)
-					index = "STORIES";
-				else if (item is SelectedRecent)
-				{
-					index = "RECENTS";
-					var recent = (item as SelectedRecent);
-					var friend = App.SnapchatManager.Account.Friends.FirstOrDefault(f => f.Name == recent.RecentName);
-					if (friend != null) recent.RecentName = friend.FriendlyName;
-				}
-				else if (item is SelectedFriend)
-					index = (item as SelectedFriend).Friend.FriendlyName.ToUpperInvariant()[0].ToString();
-				else
-					throw new ArgumentException("This item is not of a valid type", "items");
-
+				var index = selectedFriend.Friend.FriendlyName.ToUpperInvariant()[0].ToString();
 				if (string.IsNullOrEmpty(index) == false)
 					list.Find(a => a.Key == index.ToUpperInvariant()).Add(item);
 			}

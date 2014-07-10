@@ -136,7 +136,7 @@
 				</Border>
 			</DataTemplate>
 			<DataTemplate x:Key="FriendsListGroupHeaderTemplate">
-				<Border Background="Transparent" Height="40"
+				<Border Background="Transparent" Height="30"
 						HorizontalAlignment="Stretch">
 					<TextBlock Text="{Binding Path=Key, Converter={StaticResource UpperCaseConverter}, FallbackValue='A'}" Foreground="#FF9b55a0" FontSize="15"
 							   FontWeight="Bold" Margin="18,0,0,0"

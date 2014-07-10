@@ -15,13 +15,16 @@
 			<converters:CaseConverter x:Key="UpperCaseConverter" SelectedCase="Uppercase" />
 			<converters:CaseConverter x:Key="LowerCaseConverter" SelectedCase="Lowercase" />
 
-			<outboundSelectFriends:SelectedItemToFriendlyTextConverter x:Name="SelectedItemToFriendlyTextConverter" />
+			<outboundSelectFriends:SelectedItemToFriendlyTextConverter x:Key="SelectedItemToFriendlyTextConverter" />
+			<outboundSelectFriends:ItemBackgroundFromSelectionConverter x:Key="ItemBackgroundFromSelectionConverter"/>
+			<outboundSelectFriends:ItemFontWeightFromSelectionConverter x:Key="ItemFontWeightFromSelectionConverter" />
+			<converters:IntegerToVisibilityConverter x:Key="IntegerToVisibilityConverter" />
 
 			<converters:EmptyGroupToColourConverter x:Key="EmptyGroupToColourConverterBackground"
 													TrueBrush="#FF9b55a0" FalseBrush="#AA9b55a0"/>
 
 			<CollectionViewSource x:Key="SortedRecipients" 
-								  Source="{Binding Path=RecipientList}"
+								  Source="{Binding Path=FriendsCollection}"
 								  IsSourceGrouped="True"/>
 
 			<DataTemplate x:Key="RecipientsListJumpTemplate">
@@ -36,18 +39,19 @@
 				</Border>
 			</DataTemplate>
 			<DataTemplate x:Key="RecipientsListItemTemplate">
-				<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch">
+				<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch"
+						Background="{Binding Path=Selected, Converter={StaticResource ItemBackgroundFromSelectionConverter}}">
 					<Grid x:Name="ItemGrid" Background="Transparent" IsHitTestVisible="True"
 						  HorizontalAlignment="Stretch">
-						<TextBlock FontWeight="Normal" Margin="18,0,0,0"
+						<TextBlock FontWeight="{Binding Path=Selected, Converter={StaticResource ItemFontWeightFromSelectionConverter}}" Margin="18,0,0,0"
 								   Text="{Binding Converter={StaticResource SelectedItemToFriendlyTextConverter}, FallbackValue='Alex Reed'}"
-								   FontSize="20" Foreground="#FF000000" 
+								   FontSize="20" Foreground="#FF000000" FontFamily="Segoe WP"
 								   VerticalAlignment="Center" HorizontalAlignment="Left" />
-						<CheckBox x:Name="SelectionCheckBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-								  IsChecked="{Binding Path=Selected}"
-								  Checked="SelectionCheckBox_OnCheckChanged" Unchecked="SelectionCheckBox_OnCheckChanged">
+						<CheckBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+								  IsChecked="{Binding Path=Selected, Mode=TwoWay}"
+								  Checked="FriendsBox_OnCheckChanged" Unchecked="FriendsBox_OnCheckChanged">
 							<CheckBox.Resources>
-								<Style TargetType="CheckBox">
+								<Style  TargetType="CheckBox">
 									<Setter Property="HorizontalContentAlignment" Value="Left"/>
 									<Setter Property="VerticalContentAlignment" Value="Top"/>
 									<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -127,15 +131,89 @@
 				</Border>
 			</DataTemplate>
 			<DataTemplate x:Key="RecipientsListGroupHeaderTemplate">
-				<Border Background="Transparent" Height="40"
+				<Border Background="Transparent" Height="30"
 						HorizontalAlignment="Stretch">
-					<TextBlock Text="{Binding Path=Key, Converter={StaticResource UpperCaseConverter}, FallbackValue='A'}" Foreground="#FF3cb2e2" FontSize="15"
-							   FontWeight="Bold" Margin="18,0,0,0"
+					<TextBlock Text="{Binding Path=Key, Converter={StaticResource UpperCaseConverter}, FallbackValue='A'}" Foreground="#FF4ebce8" FontSize="15"
+							   FontWeight="Bold" Margin="18,0,0,0" 
+							   FontFamily="Segoe WP"
 							   HorizontalAlignment="Left" VerticalAlignment="Center"/>
 				</Border>
 			</DataTemplate>
 
+			<Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+				<Setter Property="HorizontalContentAlignment" Value="Left"/>
+				<Setter Property="VerticalContentAlignment" Value="Top"/>
+				<Setter Property="HorizontalAlignment" Value="Left"/>
+				<Setter Property="VerticalAlignment" Value="Top"/>
+				<Setter Property="Padding" Value="{ThemeResource CheckBoxAndRadioButtonTextPaddingThickness}"/>
+				<Setter Property="MinWidth" Value="25.5"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="CheckBox">
+							<Grid Background="Transparent" 
+								  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+								<VisualStateManager.VisualStateGroups>
+									<VisualStateGroup x:Name="CommonStates">
+										<VisualState x:Name="Normal"/>
+										<VisualState x:Name="MouseOver"/>
+										<VisualState x:Name="PointerOver"/>
+										<VisualState x:Name="Pressed" />
+										<VisualState x:Name="Disabled" />
+									</VisualStateGroup>
+									<VisualStateGroup x:Name="CheckStates">
+										<VisualState x:Name="Checked">
+											<Storyboard>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CheckGlyph">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CheckBackground">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+												</ObjectAnimationUsingKeyFrames>
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="Unchecked"/>
+										<VisualState x:Name="Indeterminate">
+											<Storyboard>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NormalRectangle">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+												</ObjectAnimationUsingKeyFrames>
+											</Storyboard>
+										</VisualState>
+									</VisualStateGroup>
+								</VisualStateManager.VisualStateGroups>
+								<Grid x:Name="Grid" Margin="0"
+														  VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+														  Background="Transparent" IsHitTestVisible="True">
+									<Grid VerticalAlignment="Center" HorizontalAlignment="Right"
+															  Height="25.5" Width="25.5"
+															  Margin="0,0,25,0">
+										<Border x:Name="UnCheckBackground" BorderBrush="#FFd9d7d7" 
+																	BorderThickness="1" 
+																	CornerRadius="4"
+																	Background="Transparent" 
+																	HorizontalAlignment="Left" Height="25.5" IsHitTestVisible="False" 
+																	VerticalAlignment="Center" Width="25.5"/>
+										<Border x:Name="CheckBackground" BorderBrush="#FF3cb2e2" 
+																	BorderThickness="1" 
+																	CornerRadius="4"
+																	Background="#FF3cb2e2" 
+																	HorizontalAlignment="Left" Height="25.5" IsHitTestVisible="False" 
+																	VerticalAlignment="Center" Width="25.5"
+																	Visibility="Collapsed"/>
 
+										<Path x:Name="CheckGlyph" Margin="2,0,0,0"
+																  Data="M 0,6 L 6,12 16,2 M 0,0 z" 
+																  Stroke="#FFFFFFFF" HorizontalAlignment="Center" Height="13" 
+																  IsHitTestVisible="False" StrokeThickness="1" 
+																  StrokeLineJoin="Round" Visibility="Collapsed" VerticalAlignment="Center" 
+																  Width="18.5"/>
+									</Grid>
+								</Grid>
+							</Grid>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
 			<Style x:Key="EmptyButtonStyle" TargetType="Button">
 				<Setter Property="Background" Value="Transparent"/>
 				<Setter Property="Padding" Value="5"/>
@@ -217,14 +295,15 @@
 					   Foreground="White" 
 					   VerticalAlignment="Bottom" HorizontalAlignment="Left"
 					   Margin="15,0,0,0" FontWeight="Light"
-					   FontFamily="Segoe WP" FontSize="40" />
+					   FontFamily="Segoe WP" FontSize="40" 
+					   DoubleTapped="HeaderTextBlock_OnDoubleTapped"/>
 
 			<ContentControl Width="25" Height="23" Template="{StaticResource AddFriendIcon}"
 							VerticalAlignment="Bottom" HorizontalAlignment="Right"
 							Margin="0,0,10,10"/>
 		</Grid>
 
-		<SemanticZoom Grid.Row="1" MinHeight="10">
+		<SemanticZoom Grid.Row="1" MinHeight="10" Margin="0,0,0,60">
 			<SemanticZoom.ZoomedInView>
 				<ListView x:Name="RecipientsListView" IsHoldingEnabled="True"
 						  ItemsSource="{Binding Source={StaticResource SortedRecipients}}"
@@ -239,8 +318,185 @@
 												 Style="{StaticResource SearchTextBoxStyle}"/>
 									-->
 
+									<!-- Show Stories -->
+									<StackPanel Visibility="{Binding Path=StoriesCollection.Count, Converter={StaticResource IntegerToVisibilityConverter}}">
+										<Border Height="30" HorizontalAlignment="Stretch">
+											<TextBlock x:Uid="OutboundStoriesHeader" Text="STORIES" Foreground="#FF4ebce8" FontSize="15"
+													   FontWeight="Bold" Margin="18,0,0,0"
+													   FontFamily="Segoe WP"
+													   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+										</Border>
+										<ItemsControl ItemsSource="{Binding Path=StoriesCollection}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch"
+															Background="{Binding Path=Selected, Converter={StaticResource ItemBackgroundFromSelectionConverter}}">
+														<Grid x:Name="ItemGrid" Background="Transparent" IsHitTestVisible="True"
+															  HorizontalAlignment="Stretch">
+															<TextBlock FontWeight="{Binding Path=Selected, Converter={StaticResource ItemFontWeightFromSelectionConverter}}"  Margin="18,0,0,0"
+																	   Text="{Binding Converter={StaticResource SelectedItemToFriendlyTextConverter}, FallbackValue='Alex Reed'}"
+																	   FontSize="20" Foreground="#FF000000" 
+																	   VerticalAlignment="Center" HorizontalAlignment="Left" />
+															<CheckBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+																	  Checked="StoryBox_OnCheckChanged" Unchecked="StoryBox_OnCheckChanged"
+																	  IsChecked="{Binding Path=Selected, Mode=TwoWay}" Style="{StaticResource CheckBoxStyle}" />
+														</Grid>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<VirtualizingStackPanel/>
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+										</ItemsControl>
+									</StackPanel>
+									
+									<!-- Show Best Friends -->
+									<StackPanel Visibility="{Binding Path=BestFriendsCollection.Count, Converter={StaticResource IntegerToVisibilityConverter}}">
+										<Border Height="30" HorizontalAlignment="Stretch">
+											<TextBlock x:Uid="OutboundBestFriendHeader" Text="BEST FRIENDS" Foreground="#FF4ebce8" FontSize="15"
+													   FontWeight="Bold" Margin="18,0,0,0"
+													   FontFamily="Segoe WP"
+													   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+										</Border>
+										<ItemsControl ItemsSource="{Binding Path=BestFriendsCollection}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch"
+															Background="{Binding Path=Selected, Converter={StaticResource ItemBackgroundFromSelectionConverter}}">
+														<Grid x:Name="ItemGrid" Background="Transparent" IsHitTestVisible="True"
+															  HorizontalAlignment="Stretch">
+															<TextBlock FontWeight="{Binding Path=Selected, Converter={StaticResource ItemFontWeightFromSelectionConverter}}"  Margin="18,0,0,0"
+																	   Text="{Binding Converter={StaticResource SelectedItemToFriendlyTextConverter}, FallbackValue='Alex Reed'}"
+																	   FontSize="20" Foreground="#FF000000" 
+																	   VerticalAlignment="Center" HorizontalAlignment="Left" />
+															<CheckBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+																	  IsChecked="{Binding Path=Selected, Mode=TwoWay}"
+																	  Checked="BestFriendsBox_OnCheckChanged" Unchecked="BestFriendsBox_OnCheckChanged">
+																<CheckBox.Resources>
+																	<Style TargetType="CheckBox">
+																		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+																		<Setter Property="VerticalContentAlignment" Value="Top"/>
+																		<Setter Property="HorizontalAlignment" Value="Left"/>
+																		<Setter Property="VerticalAlignment" Value="Top"/>
+																		<Setter Property="Padding" Value="{ThemeResource CheckBoxAndRadioButtonTextPaddingThickness}"/>
+																		<Setter Property="MinWidth" Value="25.5"/>
+																		<Setter Property="Template">
+																			<Setter.Value>
+																				<ControlTemplate TargetType="CheckBox">
+																					<Grid Background="Transparent" 
+																						  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+																						<VisualStateManager.VisualStateGroups>
+																							<VisualStateGroup x:Name="CommonStates">
+																								<VisualState x:Name="Normal"/>
+																								<VisualState x:Name="MouseOver"/>
+																								<VisualState x:Name="PointerOver"/>
+																								<VisualState x:Name="Pressed" />
+																								<VisualState x:Name="Disabled" />
+																							</VisualStateGroup>
+																							<VisualStateGroup x:Name="CheckStates">
+																								<VisualState x:Name="Checked">
+																									<Storyboard>
+																										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CheckGlyph">
+																											<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+																										</ObjectAnimationUsingKeyFrames>
+																										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="CheckBackground">
+																											<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+																										</ObjectAnimationUsingKeyFrames>
+																									</Storyboard>
+																								</VisualState>
+																								<VisualState x:Name="Unchecked"/>
+																								<VisualState x:Name="Indeterminate">
+																									<Storyboard>
+																										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="NormalRectangle">
+																											<DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+																										</ObjectAnimationUsingKeyFrames>
+																									</Storyboard>
+																								</VisualState>
+																							</VisualStateGroup>
+																						</VisualStateManager.VisualStateGroups>
+																						<Grid x:Name="Grid" Margin="0"
+																							  VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+																							  Background="Transparent" IsHitTestVisible="True">
+																							<Grid VerticalAlignment="Center" HorizontalAlignment="Right"
+																								  Height="25.5" Width="25.5"
+																								  Margin="0,0,25,0">
+																								<Border x:Name="UnCheckBackground" BorderBrush="#FFd9d7d7" 
+																										BorderThickness="1" 
+																										CornerRadius="4"
+																										Background="Transparent" 
+																										HorizontalAlignment="Left" Height="25.5" IsHitTestVisible="False" 
+																										VerticalAlignment="Center" Width="25.5"/>
+																								<Border x:Name="CheckBackground" BorderBrush="#FFffcf33" 
+																										BorderThickness="1" 
+																										CornerRadius="4"
+																										Background="#FFffcf33" 
+																										HorizontalAlignment="Left" Height="25.5" IsHitTestVisible="False" 
+																										VerticalAlignment="Center" Width="25.5"
+																										Visibility="Collapsed"/>
+
+																								<Viewbox x:Name="CheckGlyph" Height="17" Width="19" Margin="0,0,0,0">
+																									<Path Fill="#FFFFFFFF" 
+																										  Data="F1 M 145.637,174.227L 127.619,110.39L 180.809,70.7577L 114.528,68.1664L 93.2725,5.33333L 70.3262,67.569L 4,68.3681L 56.0988,109.423L 36.3629,172.75L 91.508,135.888L 145.637,174.227 Z"/>
+																								</Viewbox>
+																							</Grid>
+																						</Grid>
+																					</Grid>
+																				</ControlTemplate>
+																			</Setter.Value>
+																		</Setter>
+																	</Style>
+																</CheckBox.Resources>
+															</CheckBox>
+														</Grid>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<VirtualizingStackPanel/>
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+										</ItemsControl>
+									</StackPanel>
+
+									<!-- Show Recents -->
+									<StackPanel Visibility="{Binding Path=RecentsCollection.Count, Converter={StaticResource IntegerToVisibilityConverter}}">
+										<Border Height="30" HorizontalAlignment="Stretch">
+											<TextBlock x:Uid="OutboundRecentsHeader" Text="RECENTS" Foreground="#FF4ebce8" FontSize="15"
+													   FontWeight="Bold" Margin="18,0,0,0"
+													   FontFamily="Segoe WP"
+													   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+										</Border>
+										<ItemsControl ItemsSource="{Binding Path=RecentsCollection}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Border Height="60" BorderBrush="#eeeeee" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch"
+															Background="{Binding Path=Selected, Converter={StaticResource ItemBackgroundFromSelectionConverter}}">
+														<Grid x:Name="ItemGrid" Background="Transparent" IsHitTestVisible="True"
+															  HorizontalAlignment="Stretch">
+															<TextBlock FontWeight="{Binding Path=Selected, Converter={StaticResource ItemFontWeightFromSelectionConverter}}"  Margin="18,0,0,0"
+																	   Text="{Binding Converter={StaticResource SelectedItemToFriendlyTextConverter}, FallbackValue='Alex Reed'}"
+																	   FontSize="20" Foreground="#FF000000" 
+																	   VerticalAlignment="Center" HorizontalAlignment="Left" />
+															<CheckBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+																	  IsChecked="{Binding Path=Selected, Mode=TwoWay}" Style="{StaticResource CheckBoxStyle}"
+																	  Checked="RecentsBox_OnCheckChanged" Unchecked="RecentsBox_OnCheckChanged" />
+														</Grid>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<VirtualizingStackPanel/>
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+										</ItemsControl>
+									</StackPanel>
+
 									<!-- Friends List -->
-									<ItemsPresenter Margin="0,0,0,60" />
+									<ItemsPresenter />
 								</StackPanel>
 							</ScrollViewer>
 						</ControlTemplate>
@@ -276,14 +532,13 @@
 				<ColumnDefinition Width="0.8*" />
 				<ColumnDefinition Width="0.2*" />
 			</Grid.ColumnDefinitions>
-			<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"
-						  Padding="15,0,0,0">
+			<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
 				<TextBlock Foreground="#FFFFFFFF" Text="{Binding Path=SelectedRecipients}" 
-						   FontFamily="Segoe WP" FontSize="20" FontWeight="SemiBold"
+						   FontFamily="Segoe WP" FontSize="20" FontWeight="SemiBold" Padding="15,0,0,0"
 						   VerticalAlignment="Center"/>
 			</ScrollViewer>
 			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"
-					Height="40" Margin="0,0,10,10">
+					Height="30" Margin="0,0,10,10">
 				<Button x:Name="SelectFriendsButton" Style="{StaticResource EmptyButtonStyle}"
 						Click="SelectFriendsButton_OnClick">
 					<Grid x:Name="SelectFriendsGrid" Margin="0" Width="45" Height="36" RenderTransformOrigin="0.5,0.5">

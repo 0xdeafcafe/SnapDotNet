@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Windows.UI.Xaml.Data;
 using SnapDotNet.Core.Snapchat.Models.AppSpecific;
 
@@ -14,11 +15,17 @@ namespace Snapchat.Converters.OutboundSelectFriends
 			if (value is SelectedFriend)
 				return (value as SelectedFriend).Friend.FriendlyName;
 
-			if (value is SelectedRecent)
-				return (value as SelectedRecent).RecentName;
+			if (value is SelectedOther)
+			{
+				var selectedOther = value as SelectedOther;
+				if (selectedOther.OtherType == OtherType.Recent || selectedOther.OtherType == OtherType.BestFriend)
+				{
+					var friend = App.SnapchatManager.Account.Friends.FirstOrDefault(f => f.Name == selectedOther.OtherName);
+					return friend == null ? selectedOther.OtherName : friend.FriendlyName;
+				}
+				return (value as SelectedOther).OtherName;
+			}
 
-			if (value is SelectedStory)
-				return (value as SelectedStory).StoryName;
 
 			return null;
 		}

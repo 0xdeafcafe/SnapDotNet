@@ -4,6 +4,21 @@ using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace SnapDotNet.Core.Snapchat.Models.AppSpecific
 {
+	public enum OtherType
+	{
+		Recent,
+		BestFriend,
+		Story
+	}
+
+	public enum SelectionType
+	{
+		Stories,
+		BestFriends,
+		Recents,
+		Friends
+	}
+
 	public class SelectedItem
 		: NotifyPropertyChangedBase
 	{
@@ -25,26 +40,22 @@ namespace SnapDotNet.Core.Snapchat.Models.AppSpecific
 		}
 		private Friend _friend;
 	}
-
-	public class SelectedStory
+	
+	public class SelectedOther
 		: SelectedItem
 	{
-		public String StoryName
+		public String OtherName
 		{
-			get { return _storyName; }
-			set { SetField(ref _storyName, value); }
+			get { return _otherName; }
+			set { SetField(ref _otherName, value); }
 		}
-		private String _storyName;
-	}
+		private String _otherName;
 
-	public class SelectedRecent
-		: SelectedItem
-	{
-		public String RecentName
+		public OtherType OtherType
 		{
-			get { return _recentName; }
-			set { SetField(ref _recentName, value); }
+			get { return _otherType; }
+			set { SetField(ref _otherType, value); }
 		}
-		private String _recentName;
+		private OtherType _otherType;
 	}
 }

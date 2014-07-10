@@ -285,6 +285,10 @@ namespace SnapDotNet.Core.Snapchat.Models.New
 			set { SetField(ref _username, value); }
 		}
 		private String _username;
+
+		#region Helpers
+
+		#endregion
 	}
 
 	[DataContract]

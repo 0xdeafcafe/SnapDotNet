@@ -20,7 +20,6 @@ using Snapchat.ViewModels;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using System.Diagnostics;
 using Windows.UI.Core;
-using Windows.Storage.Streams;
 using SnapDotNet.Core.Snapchat.Api.Exceptions;
 
 namespace Snapchat

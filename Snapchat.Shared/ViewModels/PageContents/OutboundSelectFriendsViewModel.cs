@@ -14,30 +14,55 @@ namespace Snapchat.ViewModels.PageContents
 	{
 		public OutboundSelectFriendsViewModel(byte[] imageData)
 		{
-			_recipientList.CollectionChanged += delegate
-			{
-				ExplicitOnNotifyPropertyChanged("SelectedRecipients");
-			};
 
 			ImageData = imageData;
 
-			var friends = App.SnapchatManager.Account.Friends.Where(f => f.Type != FriendRequestState.Blocked).Select(friend => new SelectedFriend { Friend = friend }).Cast<SelectedItem>().ToList();
-			friends.AddRange(App.SnapchatManager.Account.RecentFriends.Select(recent => new SelectedRecent { RecentName = recent }));
-			friends.Add(new SelectedStory { StoryName = "My Story" });
+			FriendsCollection =
+				SelectFriendskeyGroup<SelectedFriend>.CreateGroups(
+					App.SnapchatManager.Account.Friends.Where(f => f.Type != FriendRequestState.Blocked)
+						.Select(friend => new SelectedFriend {Friend = friend})
+						.ToList(), new CultureInfo("en"));
 
-			RecipientList = SelectFriendskeyGroup<SelectedItem>.CreateGroups(friends, new CultureInfo("en"));
+			StoriesCollection = new ObservableCollection<SelectedOther> { new SelectedOther { OtherName = "My Story", OtherType = OtherType.Story } };
+
+			BestFriendsCollection = new ObservableCollection<SelectedOther>(
+				App.SnapchatManager.Account.BestFriends.Take(App.SnapchatManager.Account.NumberOfBestFriends == 0 ? 3 : App.SnapchatManager.Account.NumberOfBestFriends)
+					.Select(bestFriend => new SelectedOther { OtherName = bestFriend, OtherType = OtherType.BestFriend })
+					.ToList());
+
+			RecentsCollection = new ObservableCollection<SelectedOther>(
+				App.SnapchatManager.Account.RecentFriends
+					.Select(recent => new SelectedOther { OtherName = recent, OtherType = OtherType.Recent })
+					.ToList());
 		}
 		
-		public ObservableCollection<SelectFriendskeyGroup<SelectedItem>> RecipientList
+		public ObservableCollection<SelectFriendskeyGroup<SelectedFriend>> FriendsCollection
 		{
-			get { return _recipientList; }
-			set
-			{
-				TryChangeValue(ref _recipientList, value);
-				ExplicitOnNotifyPropertyChanged("SelectedRecipients");
-			}
+			get { return _friendsCollection; }
+			set { TryChangeValue(ref _friendsCollection, value); }
 		}
-		private ObservableCollection<SelectFriendskeyGroup<SelectedItem>> _recipientList = new ObservableCollection<SelectFriendskeyGroup<SelectedItem>>();
+		private ObservableCollection<SelectFriendskeyGroup<SelectedFriend>> _friendsCollection = new ObservableCollection<SelectFriendskeyGroup<SelectedFriend>>();
+
+		public ObservableCollection<SelectedOther> StoriesCollection
+		{
+			get { return _storiesCollection; }
+			set { TryChangeValue(ref _storiesCollection, value); }
+		}
+		private ObservableCollection<SelectedOther> _storiesCollection = new ObservableCollection<SelectedOther>();
+
+		public ObservableCollection<SelectedOther> BestFriendsCollection
+		{
+			get { return _bestFriendsCollection; }
+			set { TryChangeValue(ref _bestFriendsCollection, value); }
+		}
+		private ObservableCollection<SelectedOther> _bestFriendsCollection = new ObservableCollection<SelectedOther>();
+
+		public ObservableCollection<SelectedOther> RecentsCollection
+		{
+			get { return _recentsCollection; }
+			set { TryChangeValue(ref _recentsCollection, value); }
+		}
+		private ObservableCollection<SelectedOther> _recentsCollection = new ObservableCollection<SelectedOther>();
 
 		public Byte[] ImageData
 		{
@@ -48,20 +73,37 @@ namespace Snapchat.ViewModels.PageContents
 
 		public String SelectedRecipients
 		{
-			get
-			{
-				var friends = new HashSet<String>();
-				foreach (var recipient in RecipientList.SelectMany(recipientGroup => recipientGroup).Where(recipient => recipient.Selected))
-				{
-					if (recipient is SelectedStory)
-						friends.Add((recipient as SelectedStory).StoryName);
-					else if (recipient is SelectedRecent)
-						friends.Add((recipient as SelectedRecent).RecentName);
-					else if (recipient is SelectedFriend)
-						friends.Add((recipient as SelectedFriend).Friend.FriendlyName);
-				}
-				return String.Join(", ", friends.ToArray());
-			}
+			get { return String.Join(", ", _selectedRecipients); }
 		}
+		public Boolean HasRecipients
+		{
+			get { return _selectedRecipients.Count > 0; }
+		}
+		private readonly List<String> _selectedRecipients = new List<string>();
+
+		public void UpdateSelectedRecipients(string username, bool selectedState)
+		{
+			// do shit
+			var friendlyName = username;
+			var friend = App.SnapchatManager.Account.Friends.FirstOrDefault(f => f.Name == username);
+			if (friend != null)
+				friendlyName = friend.FriendlyName;
+
+			if (selectedState)
+			{
+				// Add it yo
+				if (!_selectedRecipients.Contains(friendlyName))
+					_selectedRecipients.Insert(0, friendlyName);
+			}
+			else
+			{
+				// Remove it yo
+				if (_selectedRecipients.Contains(friendlyName))
+					_selectedRecipients.Remove(friendlyName);
+			}
+
+			ExplicitOnNotifyPropertyChanged("SelectedRecipients");
+		}
+
 	}
 }
