@@ -4,8 +4,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Snapchat.Controls;
 using Snapchat.Helpers;
+using Snapchat.Models;
 using Snapchat.ViewModels.PageContents;
-using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages.PageContents
 {

@@ -1,7 +1,8 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using SnapDotNet.Core.Snapchat.Models.New;
+using Snapchat.SnapLogic.Models.New;
+using Snapchat.SnapLogic.Models.New;
 
 namespace Snapchat.Converters.Conversations
 {

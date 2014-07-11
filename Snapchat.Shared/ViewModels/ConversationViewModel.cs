@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using SnapDotNet.Core.Snapchat.Models.AppSpecific;
-using SnapDotNet.Core.Snapchat.Models.New;
+using Snapchat.Models;
 
 namespace Snapchat.ViewModels
 {
@@ -9,12 +8,12 @@ namespace Snapchat.ViewModels
 	{
 		public ConversationViewModel() { }
 
-		public ConversationViewModel(ConversationResponse conversation)
+		public ConversationViewModel(Conversation conversation)
 		{
 			Conversation = conversation;
 		}
 
-		public ConversationResponse Conversation
+		public Conversation Conversation
 		{
 			get { return _conversation; }
 			set
@@ -23,7 +22,7 @@ namespace Snapchat.ViewModels
 				OnNotifyPropertyChanged("ConversationThread");
 			}
 		}
-		private ConversationResponse _conversation;
+		private Conversation _conversation;
 
 		public ObservableCollection<IConversationThreadItem> ConversationThread
 		{

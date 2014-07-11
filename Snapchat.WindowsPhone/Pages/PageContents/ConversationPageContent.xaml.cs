@@ -2,8 +2,8 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Snapchat.Models;
 using SnapDotNet.Core.Miscellaneous.Extensions;
-using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages.PageContents
 {

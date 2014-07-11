@@ -5,8 +5,7 @@ using Windows.ApplicationModel.Background;
 using Windows.Networking.PushNotifications;
 using Windows.UI.Notifications;
 using Newtonsoft.Json;
-using SnapDotNet.Core.Snapchat.Models.AppSpecific.RawNotificationTransfer;
-using SnapDotNet.Core.Snapchat.Models.New;
+using SnapDotNet.Core.Miscellaneous.Models.AppSpecific.RawNotificationTransfer;
 
 namespace Snapchat.BackgroundPushTask
 {

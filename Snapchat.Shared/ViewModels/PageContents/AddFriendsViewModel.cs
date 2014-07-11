@@ -1,4 +1,4 @@
-﻿using SnapDotNet.Core.Snapchat.Models.New;
+﻿using Snapchat.Models;
 using System.Collections.ObjectModel;
 
 namespace Snapchat.ViewModels.PageContents

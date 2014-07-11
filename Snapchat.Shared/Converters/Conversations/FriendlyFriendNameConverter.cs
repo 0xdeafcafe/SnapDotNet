@@ -13,7 +13,7 @@ namespace Snapchat.Converters.Conversations
 				return "..unknown";
 
 			// get the snap object
-			var friend = App.SnapchatManager.AllUpdates.UpdatesResponse.Friends.FirstOrDefault(f => f.Name == friendName);
+			var friend = App.SnapchatManager.SnapchatData.UserAccount.Friends.FirstOrDefault(f => f.Name == friendName);
 
 			return friend == null ? friendName : friend.FriendlyName;
 		}

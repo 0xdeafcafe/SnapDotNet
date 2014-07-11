@@ -9,16 +9,10 @@ namespace Snapchat.Converters.Conversation
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
 			var name = ((String) value).ToLowerInvariant();
-			if (name == App.SnapchatManager.AllUpdates.UpdatesResponse.Username.ToLowerInvariant())
+			if (name == App.SnapchatManager.SnapchatData.UserAccount.Username.ToLowerInvariant())
 				return OutputLowercase ? "me" : "ME";
 
-			var friend = App.SnapchatManager.AllUpdates.UpdatesResponse.Friends.FirstOrDefault(f => f.Name.ToLowerInvariant() == name);
-
-			// Team Snapchat test
-			if (friend == null && name == "teamsnapchat")
-				return OutputLowercase
-					? "team snapchat"
-					: "TEAM SNAPCHAT";
+			var friend = App.SnapchatManager.SnapchatData.UserAccount.Friends.FirstOrDefault(f => f.Name.ToLowerInvariant() == name);
 
 			return friend == null
 				? OutputLowercase

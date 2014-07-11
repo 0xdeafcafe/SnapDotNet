@@ -1,0 +1,57 @@
+﻿using System;
+using System.Globalization;
+
+namespace Snapchat.SnapLogic.Helpers
+{
+	/// <summary>
+	///     A Timestamp Helper for Snapchat
+	/// </summary>
+	public static class Timestamps
+	{
+		/// <summary>
+		///     The date of the Unix Epoch
+		/// </summary>
+		public static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		/// <summary>
+		///     Generates this fucking retarded timestamp that snapchat use...
+		/// </summary>
+		/// <returns>The timestamp as a string</returns>
+		public static Int64 GenerateRetardedTimestamp()
+		{
+			return Convert.ToInt64(Math.Round((DateTime.UtcNow - UnixEpoch).TotalSeconds * 1000));
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <returns></returns>
+		public static double GenerateRetardedTimestampWithMilliseconds()
+		{
+			return double.Parse((DateTime.UtcNow - UnixEpoch).TotalSeconds.ToString(CultureInfo.InvariantCulture));
+		}
+
+		/// <summary>
+		///     Convert a SnapChat timestamp into a DateTime object.
+		/// </summary>
+		/// <param name="retardedTimeStamp">The snapchat timestamp.</param>
+		/// <returns>A nice, non retarded DateTime object.</returns>
+		public static DateTime ConvertToDateTime(Int64 retardedTimeStamp)
+		{
+			// Strip the last 4 digits from the number, they are milliseconds and don't effect us at all
+			if (retardedTimeStamp.ToString().Length > 10)
+				retardedTimeStamp = Int64.Parse(retardedTimeStamp.ToString().Remove(10));
+
+			return UnixEpoch.AddSeconds(retardedTimeStamp);
+		}
+
+		/// <summary>
+		///     Convert a DateTime object into a normal Unix Timestamp
+		/// </summary>
+		/// <param name="dateTime">The DateTime object to convert.</param>
+		/// <returns>A 32bit integer that holds the unix Timestamp</returns>
+		public static int ConvertToUnixTimestamp(DateTime dateTime)
+		{
+			return (int)((DateTime.UtcNow - UnixEpoch).TotalSeconds);
+		}
+	}
+}

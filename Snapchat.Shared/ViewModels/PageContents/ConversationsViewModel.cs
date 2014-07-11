@@ -1,4 +1,4 @@
-﻿using SnapDotNet.Core.Snapchat.Models.New;
+﻿using Snapchat.Models;
 using System.Collections.ObjectModel;
 
 namespace Snapchat.ViewModels.PageContents
@@ -6,19 +6,19 @@ namespace Snapchat.ViewModels.PageContents
     public class ConversationsViewModel
 		 : BaseViewModel
     {
-		public ObservableCollection<ConversationResponse> FilteredConversations
+		public ObservableCollection<IConversation> FilteredConversations
 		{
 			get
 			{
 				if (string.IsNullOrWhiteSpace(FilterText))
 					return Conversations;
 
-				var filteredConvos = new ObservableCollection<ConversationResponse>();
+				var filteredConvos = new ObservableCollection<IConversation>();
 				foreach (var convo in Conversations)
 				{
 					foreach (var friend in App.SnapchatManager.Account.Friends)
 					{
-						if (friend.Name == convo.Participants[1] && friend.FriendlyName.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()))
+						if (friend.Name == ((Conversation)convo).Participants[1] && friend.FriendlyName.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()))
 							filteredConvos.Add(convo);
 					}
 				}

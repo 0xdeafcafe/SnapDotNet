@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Input;
+using Snapchat.Models;
 using Snapchat.ViewModels.PageContents;
-using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
@@ -16,7 +16,7 @@ namespace Snapchat.Pages.PageContents
 	public sealed partial class ConversationsPageContent
 	{
 		private bool _isFingerDown;
-		private ConversationResponse _selectedConversation;
+		private Conversation _selectedConversation;
 		private readonly DispatcherTimer _holdingTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
 		private readonly DispatcherTimer _distructionTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(69) };
 		private bool _alreadyRefreshed;
@@ -48,7 +48,7 @@ namespace Snapchat.Pages.PageContents
 				if (!_isFingerDown || _selectedConversation == null) return;
 
 				// show nudes
-				MainPage.Singleton.ShowSnapMedia(_selectedConversation.PendingReceivedSnaps.Last());
+				MainPage.Singleton.ShowSnapMedia(_selectedConversation.ConversationMessages.Snaps.First());
 				ScrollViewer.IsEnabled = false;
 
 				Debug.WriteLine("we holdin");
@@ -81,18 +81,18 @@ namespace Snapchat.Pages.PageContents
 						storyboardClose.Begin();
 				};
 
-			var conversation = frameworkElement.DataContext as ConversationResponse;
+			var conversation = frameworkElement.DataContext as Conversation;
 			if (conversation == null) return;
-			var pendingSnaps = conversation.PendingReceivedSnaps;
+			var pendingSnaps = conversation.ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered);
 			if (pendingSnaps == null || !pendingSnaps.Any()) return;
-			await conversation.LastPendingSnap.DownloadSnapBlobAsync(App.SnapchatManager);
+			await conversation.ConversationMessages.Snaps.Last(s => s.IsIncoming && s.Status == SnapStatus.Delivered).DownloadSnapBlobAsync(App.SnapchatManager);
 		}
 
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
 		{
 			var element = sender as FrameworkElement;
 			if (element == null) return;
-			MainPage.Singleton.ShowConversation(element.DataContext as ConversationResponse);
+			MainPage.Singleton.ShowConversation(element.DataContext as Conversation);
 			var storyboard = element.Resources["ConvoItemDetailPeekStoryboard"] as Storyboard;
 			if (storyboard == null) return;
 
@@ -109,7 +109,7 @@ namespace Snapchat.Pages.PageContents
 		{
 			var button = sender as Button;
 			if (button == null) return;
-			var conversation = button.DataContext as ConversationResponse;
+			var conversation = button.DataContext as Conversation;
 			if (conversation == null) return;
 
 			if (e.HoldingState == HoldingState.Started)
@@ -118,12 +118,12 @@ namespace Snapchat.Pages.PageContents
 				DetatchConvoData();
 		}
 
-		private void SetupSnapData(ConversationResponse conversation)
+		private void SetupSnapData(Conversation conversation)
 		{
 			_isFingerDown = true;
 			_selectedConversation = conversation;
 			ScrollViewer.IsEnabled = false;
-			MainPage.Singleton.ShowSnapMedia(_selectedConversation.PendingReceivedSnaps.Last());
+			MainPage.Singleton.ShowSnapMedia(_selectedConversation.ConversationMessages.Snaps.First());
 		}
 
 		private void DetatchConvoData()

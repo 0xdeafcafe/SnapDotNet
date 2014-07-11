@@ -4,11 +4,10 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Snapchat.Models;
+using Snapchat.SnapLogic.Api;
 using Snapchat.ViewModels.PageContents;
 using SnapDotNet.Core.Miscellaneous.Crypto;
-using SnapDotNet.Core.Snapchat.Api;
-using SnapDotNet.Core.Snapchat.Models.AppSpecific;
-using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.Pages.PageContents
 {
@@ -206,7 +205,7 @@ namespace Snapchat.Pages.PageContents
 			await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);
 
 			// Send Snap
-			await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, ViewModel.SelectedRecipientCollection.ToArray(), 10);
+			await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, ViewModel.SelectedRecipientCollection.ToArray());
 
 			// Send To Story
 			if (hasStorySelected)

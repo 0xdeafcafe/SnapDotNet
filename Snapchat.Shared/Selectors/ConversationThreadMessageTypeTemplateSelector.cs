@@ -1,7 +1,8 @@
 ﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using SnapDotNet.Core.Snapchat.Models.New;
+using Snapchat.Models;
+using MessageContainer = Snapchat.SnapLogic.Models.New.MessageContainer;
 
 namespace Snapchat.Selectors
 {

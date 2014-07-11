@@ -9,7 +9,7 @@ using Snapchat.Common;
 using Snapchat.Pages;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Models.Atlas;
-using SnapDotNet.Core.Snapchat.Api.Exceptions;
+using Snapchat.SnapLogic.Api.Exceptions;
 
 namespace Snapchat.ViewModels
 {

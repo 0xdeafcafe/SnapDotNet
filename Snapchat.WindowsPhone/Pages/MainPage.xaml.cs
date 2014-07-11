@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using Windows.ApplicationModel;
 using Windows.Phone.UI.Input;
 using Windows.UI;
@@ -13,19 +12,17 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Snapchat.Helpers;
+using Snapchat.Models;
 using Snapchat.ViewModels;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Snapchat.ViewModels.PageContents;
-using SnapDotNet.Core.Miscellaneous.Extensions;
-using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
-using System.IO;
-using Windows.Graphics.Imaging;
+using SnapDotNet.Core.Miscellaneous.Extensions;
 
 namespace Snapchat.Pages
 {
@@ -143,7 +140,7 @@ namespace Snapchat.Pages
 			_hiddenCommandBar = null;
 		}
 
-		public void ShowConversation(ConversationResponse conversation)
+		public void ShowConversation(Conversation conversation)
 		{
 			ConvoPage.DataContext = new ConversationViewModel(conversation);
 			ConvoPage.Load();

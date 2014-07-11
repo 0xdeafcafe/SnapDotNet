@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Windows.UI.Xaml.Data;
-using SnapDotNet.Core.Snapchat.Models.AppSpecific;
+using Snapchat.Models;
 
 namespace Snapchat.Converters.OutboundSelectFriends
 {

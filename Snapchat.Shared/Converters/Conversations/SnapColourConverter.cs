@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-using SnapDotNet.Core.Snapchat.Models.New;
+using Snapchat.Models;
 
 namespace Snapchat.Converters.Conversations
 {
@@ -14,9 +15,9 @@ namespace Snapchat.Converters.Conversations
 			if (snap == null)
 			{
 
-				var conversation = (ConversationResponse) value;
+				var conversation = (Models.Conversation) value;
 				if (conversation != null)
-					snap = conversation.LastSnap;
+					snap = conversation.ConversationMessages.Snaps.First();
 			}
 			if (snap == null) 
 				return null;

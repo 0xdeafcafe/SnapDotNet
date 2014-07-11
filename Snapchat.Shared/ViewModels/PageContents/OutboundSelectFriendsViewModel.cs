@@ -5,9 +5,8 @@ using System.Globalization;
 using System.Linq;
 using Windows.UI.Xaml.Media.Animation;
 using Snapchat.CustomTypes;
+using Snapchat.Models;
 using Snapchat.Pages.PageContents;
-using SnapDotNet.Core.Snapchat.Models.AppSpecific;
-using SnapDotNet.Core.Snapchat.Models.New;
 
 namespace Snapchat.ViewModels.PageContents
 {

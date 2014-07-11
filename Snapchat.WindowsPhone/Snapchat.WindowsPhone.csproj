@@ -185,10 +185,6 @@
       <Project>{43f7f39f-37e3-4a7b-8c5e-b9b93a4ace65}</Project>
       <Name>SnapDotNet.Core.Miscellaneous</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SnapDotNet.Core.Snapchat\SnapDotNet.Core.Snapchat.csproj">
-      <Project>{e53af6a8-4ecb-4e70-8ee9-6e65d3aa6a79}</Project>
-      <Name>SnapDotNet.Core.Snapchat</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAzure.Messaging.Managed">

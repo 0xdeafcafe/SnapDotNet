@@ -2,7 +2,7 @@
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
-using SnapDotNet.Core.Snapchat.Models.New;
+using Snapchat.SnapLogic.Models.New;
 
 namespace Snapchat.Converters.Conversations
 {
@@ -20,7 +20,7 @@ namespace Snapchat.Converters.Conversations
 				return Visibility.Collapsed;
 
 			var hasPendingChats = false;
-			foreach (var pendingChat in conversation.PendingChatsFor.Where(pendingChat => pendingChat == App.SnapchatManager.AllUpdates.UpdatesResponse.Username))
+			foreach (var pendingChat in conversation.PendingChatsFor.Where(pendingChat => pendingChat == App.SnapchatManager.SnapchatData.UserAccount.Username))
 				hasPendingChats = true;
 
 			return hasPendingChats

@@ -4,8 +4,8 @@ using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Snapchat.Common;
 using System;
+using Snapchat.Models;
 using SnapDotNet.Core.Miscellaneous.Models.Atlas;
-using SnapDotNet.Core.Snapchat.Models.New;
 using Windows.UI.Xaml;
 using Snapchat.Helpers;
 

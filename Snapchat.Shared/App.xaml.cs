@@ -15,12 +15,12 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using SnapDotNet.Core.Miscellaneous.Crypto;
-using SnapDotNet.Core.Snapchat.Api;
+using Snapchat.SnapLogic.Api;
 using Snapchat.ViewModels;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using System.Diagnostics;
 using Windows.UI.Core;
-using SnapDotNet.Core.Snapchat.Api.Exceptions;
+using Snapchat.SnapLogic.Api.Exceptions;
 
 namespace Snapchat
 {

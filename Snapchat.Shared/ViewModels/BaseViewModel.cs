@@ -4,7 +4,7 @@ using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Snapchat.Common;
-using SnapDotNet.Core.Snapchat.Models.New;
+using Snapchat.Models;
 
 namespace Snapchat.ViewModels
 {
@@ -16,19 +16,19 @@ namespace Snapchat.ViewModels
 			Helpers = new SnapchatDataHelpers();
 		}
 
-		public AllUpdatesResponse Updates
+		public SnapchatData Updates
 		{
-			get { return App.SnapchatManager.AllUpdates; }
+			get { return App.SnapchatManager.SnapchatData; }
 		}
 
-		public UpdatesResponse Account
+		public Account Account
 		{
-			get { return App.SnapchatManager.AllUpdates.UpdatesResponse; }
+			get { return App.SnapchatManager.SnapchatData.UserAccount; }
 		}
 
-		public ObservableCollection<ConversationResponse> Conversations
+		public ObservableCollection<IConversation> Conversations
 		{
-			get { return App.SnapchatManager.AllUpdates.ConversationResponse; }
+			get { return App.SnapchatManager.SnapchatData.Conversations; }
 		}
 
 		public SnapchatDataHelpers Helpers { get; set; }
@@ -41,13 +41,13 @@ namespace Snapchat.ViewModels
 		{
 			get
 			{
-				var updates = App.SnapchatManager.AllUpdates;
-				if (updates == null || updates.ConversationResponse == null)
+				var updates = App.SnapchatManager.SnapchatData;
+				if (updates == null || updates.Conversations == null)
 					return String.Empty;
 
 				var pendingCount =
-					updates.ConversationResponse.Sum(
-						conversation => conversation.PendingChatsFor.Count + conversation.PendingReceivedSnaps.Count);
+					updates.Conversations.Sum(
+						conversation => ((Conversation)conversation).ConversationMessages.Snaps.Count(s => s.IsIncoming && s.Status == SnapStatus.Delivered) + ((Conversation)conversation).PendingChatMessages.Count);
 
 				return pendingCount <= 0
 					? ":("
@@ -61,14 +61,14 @@ namespace Snapchat.ViewModels
 		{
 			get
 			{
-				var updates = App.SnapchatManager.AllUpdates;
-				if (updates == null || updates.ConversationResponse == null)
+				var updates = App.SnapchatManager.SnapchatData;
+				if (updates == null || updates.Conversations == null)
 					return new SolidColorBrush(new Color { A=0xFF, R = 0x00, G = 0x00, B = 0x00 });
 
 				Snap latestSnap = null;
-				foreach (var conversation in updates.ConversationResponse)
+				foreach (var conversation in updates.Conversations)
 				{
-					foreach (var snap in conversation.PendingReceivedSnaps)
+					foreach (var snap in ((Conversation)conversation).ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered))
 					{
 						latestSnap = snap;
 						break;
@@ -93,14 +93,14 @@ namespace Snapchat.ViewModels
 		{
 			get
 			{
-				var updates = App.SnapchatManager.AllUpdates;
-				if (updates == null || updates.ConversationResponse == null)
+				var updates = App.SnapchatManager.SnapchatData;
+				if (updates == null || updates.Conversations == null)
 					return new SolidColorBrush(new Color { A = 0x00, R = 0x00, G = 0x00, B = 0x00 });
 
 				Snap latestSnap = null;
-				foreach (var conversation in updates.ConversationResponse)
+				foreach (var conversation in updates.Conversations)
 				{
-					foreach (var snap in conversation.PendingReceivedSnaps)
+					foreach (var snap in ((Conversation)conversation).ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered))
 					{
 						latestSnap = snap;
 						break;

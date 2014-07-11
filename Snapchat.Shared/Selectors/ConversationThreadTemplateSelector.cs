@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using SnapDotNet.Core.Snapchat.Models.AppSpecific;
+using Snapchat.Models;
 
 namespace Snapchat.Selectors
 {

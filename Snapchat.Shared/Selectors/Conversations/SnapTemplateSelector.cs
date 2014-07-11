@@ -1,4 +1,5 @@
-﻿using SnapDotNet.Core.Snapchat.Models.New;
+﻿using System.Linq;
+using Snapchat.Models;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -11,9 +12,9 @@ namespace Snapchat.Selectors.Conversations
 
 		protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
 		{
-			var conversation = item as ConversationResponse;
+			var conversation = item as Conversation;
 			if (conversation == null) return null;
-			return conversation.HasPendingSnaps
+			return conversation.ConversationMessages.Snaps.Any(s => s.IsIncoming && s.Status == SnapStatus.Delivered)
 				? PendingSnapDataTemplate
 				: HistoricSnapDataTemplate;
 		}
