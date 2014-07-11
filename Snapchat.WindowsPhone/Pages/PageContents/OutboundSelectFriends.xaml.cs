@@ -194,13 +194,25 @@ namespace Snapchat.Pages.PageContents
 			//	}
 			//}
 
-			var mediaId = App.SnapchatManager.GenerateMediaId();
-			var response = await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);
-			var response2 = await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, ViewModel.SelectedRecipients.Split(','), 10);
+			// TODO: this all will be moved into the conversations stuff when I re-do the models for it. This will
+			// allow us to have background snap sending
 
-			// get jpeg
-			// Send first command
-			// Send second command
+			// remove stories from recpients
+			var hasStorySelected = ViewModel.StoriesCollection.First().Selected;
+			if (hasStorySelected)
+				ViewModel.SelectedRecipientCollection.Remove(ViewModel.StoriesCollection.First().OtherName);
+
+			var mediaId = App.SnapchatManager.GenerateMediaId();
+			await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);
+
+			// Send Snap
+			await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, ViewModel.SelectedRecipientCollection.ToArray(), 10);
+
+			// Send To Story
+			if (hasStorySelected)
+			{
+				// ye
+			}
 		}
 
 		private static T GetCastedDataContext<T>(object sender)

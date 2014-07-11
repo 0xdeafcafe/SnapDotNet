@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 using Snapchat.CustomTypes;
 using Snapchat.Pages.PageContents;
 using SnapDotNet.Core.Snapchat.Models.AppSpecific;
 using SnapDotNet.Core.Snapchat.Models.New;
-using WinRTXamlToolkit.AwaitableUI;
 
 namespace Snapchat.ViewModels.PageContents
 {
@@ -20,6 +18,7 @@ namespace Snapchat.ViewModels.PageContents
 		{
 			View = view;
 			ImageData = imageData;
+			SelectedRecipientCollection = new List<string>();
 
 			FriendsCollection =
 				SelectFriendskeyGroup<SelectedFriend>.CreateGroups(
@@ -79,13 +78,14 @@ namespace Snapchat.ViewModels.PageContents
 
 		public String SelectedRecipients
 		{
-			get { return String.Join(", ", _selectedRecipients); }
+			get { return String.Join(", ", SelectedRecipientCollection); }
 		}
 		public Boolean HasRecipients
 		{
-			get { return _selectedRecipients.Count > 0; }
+			get { return SelectedRecipientCollection.Count > 0; }
 		}
-		private readonly List<String> _selectedRecipients = new List<string>();
+
+		public List<String> SelectedRecipientCollection { get; private set; }
 
 		public void UpdateSelectedRecipients(string username, bool selectedState)
 		{
@@ -98,18 +98,18 @@ namespace Snapchat.ViewModels.PageContents
 			if (selectedState)
 			{
 				// Add it yo
-				if (!_selectedRecipients.Contains(friendlyName))
-					_selectedRecipients.Insert(0, friendlyName);
+				if (!SelectedRecipientCollection.Contains(friendlyName))
+					SelectedRecipientCollection.Insert(0, friendlyName);
 			}
 			else
 			{
 				// Remove it yo
-				if (_selectedRecipients.Contains(friendlyName))
-					_selectedRecipients.Remove(friendlyName);
+				if (SelectedRecipientCollection.Contains(friendlyName))
+					SelectedRecipientCollection.Remove(friendlyName);
 			}
 			
 			ExplicitOnNotifyPropertyChanged("SelectedRecipients");
-			var state = _selectedRecipients.Any() ? "HasRecipients" : "HasNoRecipients";
+			var state = SelectedRecipientCollection.Any() ? "HasRecipients" : "HasNoRecipients";
 
 			var storyboard = (Storyboard) View.Resources[state];
 			if (storyboard == null) return;
