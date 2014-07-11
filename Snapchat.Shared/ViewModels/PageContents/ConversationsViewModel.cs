@@ -18,7 +18,7 @@ namespace Snapchat.ViewModels.PageContents
 				{
 					foreach (var friend in App.SnapchatManager.Account.Friends)
 					{
-						if (friend.Name == ((Conversation)convo).Participants[1] && friend.FriendlyName.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()))
+						if (friend.Name == ((Conversation)convo).Sender && friend.FriendlyName.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()))
 							filteredConvos.Add(convo);
 					}
 				}

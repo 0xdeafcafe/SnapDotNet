@@ -478,8 +478,7 @@ namespace Snapchat.SnapLogic.Api
 			{
 				try
 				{
-					var accountDataParsed = JsonConvert.DeserializeObject<AllUpdatesResponse>(accountData);
-					Update(accountDataParsed);
+					SnapchatData = JsonConvert.DeserializeObject<SnapchatData>(accountData);
 				}
 				catch (Exception exception)
 				{

@@ -91,7 +91,16 @@ namespace Snapchat.Models
 			set { SetField(ref _participants, value); }
 		}
 		private ObservableCollection<String> _participants = new ObservableCollection<String>();
-}
+
+		public String Sender
+		{
+			get
+			{
+				var senderName = Participants.FirstOrDefault(p => p != App.SnapchatManager.Username);
+				return senderName ?? "Unknown";
+			}
+		}
+	}
 
 	public class PendingUpload
 		: NotifyPropertyChangedBase, IConversation
