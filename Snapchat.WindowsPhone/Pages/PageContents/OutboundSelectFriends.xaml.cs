@@ -28,7 +28,7 @@ namespace Snapchat.Pages.PageContents
 
 		public void Load(byte[] imageData)
 		{
-			DataContext = ViewModel = new OutboundSelectFriendsViewModel(imageData);
+			DataContext = ViewModel = new OutboundSelectFriendsViewModel(this, imageData);
 		}
 
 		#region On Check Changed

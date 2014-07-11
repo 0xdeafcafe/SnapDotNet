@@ -281,6 +281,13 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
+
+			<Storyboard x:Key="HasRecipients">
+				<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="FooterBarGrid" />
+			</Storyboard>
+			<Storyboard x:Key="HasNoRecipients">
+				<DoubleAnimation Duration="0:0:0.15" To="60" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="FooterBarGrid" />
+			</Storyboard>
 		</ResourceDictionary>
 	</UserControl.Resources>
 
@@ -288,6 +295,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="80" />
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<Grid Background="#FF3cb2e2" Grid.Row="0">
 			<TextBlock x:Uid="OutboundSelectFriendsPageTitleTextBlock"
@@ -303,7 +311,7 @@
 							Margin="0,0,10,10"/>
 		</Grid>
 
-		<SemanticZoom Grid.Row="1" MinHeight="10" Margin="0,0,0,60">
+		<SemanticZoom Grid.Row="1" Grid.RowSpan="2" MinHeight="10" Margin="0">
 			<SemanticZoom.ZoomedInView>
 				<ListView x:Name="RecipientsListView" IsHoldingEnabled="True"
 						  ItemsSource="{Binding Source={StaticResource SortedRecipients}}"
@@ -496,7 +504,7 @@
 									</StackPanel>
 
 									<!-- Friends List -->
-									<ItemsPresenter />
+									<ItemsPresenter Padding="0,0,0,60" />
 								</StackPanel>
 							</ScrollViewer>
 						</ControlTemplate>
@@ -525,12 +533,15 @@
 			</SemanticZoom.ZoomedOutView>
 		</SemanticZoom>
 
-		<Grid Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+		<Grid x:Name="FooterBarGrid" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
 			  Background="#FF3cb2e2"
-			  Height="60" RenderTransformOrigin="0.5,0.5">
+			  Height="60" RenderTransformOrigin="0.5,1">
+			<Grid.RenderTransform>
+				<CompositeTransform TranslateY="60"/>
+			</Grid.RenderTransform>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="0.8*" />
-				<ColumnDefinition Width="0.2*" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="80" />
 			</Grid.ColumnDefinitions>
 			<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
 				<TextBlock Foreground="#FFFFFFFF" Text="{Binding Path=SelectedRecipients}" 
@@ -538,12 +549,12 @@
 						   VerticalAlignment="Center"/>
 			</ScrollViewer>
 			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"
-					Height="30" Margin="0,0,10,10">
+					Height="40" Margin="0,0,10,10">
 				<Button x:Name="SelectFriendsButton" Style="{StaticResource EmptyButtonStyle}"
 						Click="SelectFriendsButton_OnClick">
 					<Grid x:Name="SelectFriendsGrid" Margin="0" Width="45" Height="36" RenderTransformOrigin="0.5,0.5">
 						<Grid.RenderTransform>
-							<CompositeTransform ScaleX="1.2" ScaleY="1.2"/>
+							<CompositeTransform ScaleX="1" ScaleY="1"/>
 						</Grid.RenderTransform>
 						<Grid.Triggers>
 							<EventTrigger RoutedEvent="Grid.Loaded">
@@ -568,7 +579,7 @@
 								</BeginStoryboard>
 							</EventTrigger>
 						</Grid.Triggers>
-						<Path x:Name="SelectFriendsPathBackground" Stroke="White" StrokeThickness="5" Opacity="0"
+						<Path x:Name="SelectFriendsPathBackground" Stroke="White" StrokeThickness="4" Opacity="0"
 							  Fill="Transparent" Margin="0,0,0,0"
 							  Height="30" Width="36" VerticalAlignment="Center" HorizontalAlignment="Center"
 							  Data="M 0,0 L 20,0 32,12 20,24 0,24 12,12 0,0 Z" 

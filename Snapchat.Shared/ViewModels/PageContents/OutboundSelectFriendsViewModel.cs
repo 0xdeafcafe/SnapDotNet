@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 using Snapchat.CustomTypes;
+using Snapchat.Pages.PageContents;
 using SnapDotNet.Core.Snapchat.Models.AppSpecific;
 using SnapDotNet.Core.Snapchat.Models.New;
+using WinRTXamlToolkit.AwaitableUI;
 
 namespace Snapchat.ViewModels.PageContents
 {
 	public class OutboundSelectFriendsViewModel
 		: BaseViewModel
 	{
-		public OutboundSelectFriendsViewModel(byte[] imageData)
+		public OutboundSelectFriendsViewModel(OutboundSelectFriends view, byte[] imageData)
 		{
-
+			View = view;
 			ImageData = imageData;
 
 			FriendsCollection =
@@ -35,7 +39,9 @@ namespace Snapchat.ViewModels.PageContents
 					.Select(recent => new SelectedOther { OtherName = recent, OtherType = OtherType.Recent })
 					.ToList());
 		}
-		
+
+		public OutboundSelectFriends View { get; private set; }
+
 		public ObservableCollection<SelectFriendskeyGroup<SelectedFriend>> FriendsCollection
 		{
 			get { return _friendsCollection; }
@@ -101,8 +107,13 @@ namespace Snapchat.ViewModels.PageContents
 				if (_selectedRecipients.Contains(friendlyName))
 					_selectedRecipients.Remove(friendlyName);
 			}
-
+			
 			ExplicitOnNotifyPropertyChanged("SelectedRecipients");
+			var state = _selectedRecipients.Any() ? "HasRecipients" : "HasNoRecipients";
+
+			var storyboard = (Storyboard) View.Resources[state];
+			if (storyboard == null) return;
+			storyboard.Begin();
 		}
 
 	}
