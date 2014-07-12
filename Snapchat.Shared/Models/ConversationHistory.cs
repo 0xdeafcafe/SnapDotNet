@@ -14,11 +14,19 @@ namespace Snapchat.Models
 		PendingUpload
 	}
 
+	public enum UploadStatus
+	{
+		Uploading,
+		Error
+	}
+
 	public interface IConversation
 	{
 		ConversationType ConversationType { get; set; }
 
 		String Id { get; set; }
+
+		DateTime LastInteraction { get; set; }
 	}
 
 	public class Conversation
@@ -112,6 +120,13 @@ namespace Snapchat.Models
 		}
 		private ConversationType _conversationType;
 
+		public UploadStatus Status
+		{
+			get { return _status; }
+			set { SetField(ref _status, value); }
+		}
+		private UploadStatus _status;
+
 		public String Id
 		{
 			get { return _id; }
@@ -119,7 +134,25 @@ namespace Snapchat.Models
 		}
 		private String _id;
 
-		// List of Recipients
+		public IList<String> Recipients
+		{
+			get { return _recipients; }
+			set { SetField(ref _recipients, value); }
+		}
+		private IList<String> _recipients;
+
+		public DateTime LastInteraction
+		{
+			get { return _lastInteraction; }
+			set { SetField(ref _lastInteraction, value); }
+		}
+		private DateTime _lastInteraction;
+
+		public String RecipientsList
+		{
+			get { return String.Join(", ", Recipients); }
+		}
+
 		// Bool saying if it's posting to the Story or not
 		// Status of the upload (pending, failed)
 		// Media Id (can be null)
@@ -132,8 +165,9 @@ namespace Snapchat.Models
 	{
 		public ConversationMessages()
 		{
-			_snaps.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Chats"); NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("SortedMessages"); };
-			_chats.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("Chats"); NotifyPropertyChanged("SortedMessages"); };
+			_snaps.CollectionChanged	+= (sender, args) => { NotifyPropertyChanged("Chats"); NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("NewSnaps"); NotifyPropertyChanged("SortedMessages"); };
+			_chats.CollectionChanged	+= (sender, args) => { NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("Chats"); NotifyPropertyChanged("NewSnaps"); NotifyPropertyChanged("SortedMessages"); };
+			_newSnaps.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("Chats"); NotifyPropertyChanged("NewSnaps"); NotifyPropertyChanged("SortedMessages"); };
 		}
 
 		public ObservableCollection<Snap> Snaps
@@ -144,9 +178,23 @@ namespace Snapchat.Models
 				SetField(ref _snaps, value);
 				NotifyPropertyChanged("SortedMessages");
 				NotifyPropertyChanged("Chats");
+				NotifyPropertyChanged("NewSnaps");
 			}
 		}
 		private ObservableCollection<Snap> _snaps = new ObservableCollection<Snap>();
+
+		public ObservableCollection<Snap> NewSnaps
+		{
+			get { return _newSnaps; }
+			set
+			{
+				SetField(ref _newSnaps, value);
+				NotifyPropertyChanged("SortedMessages");
+				NotifyPropertyChanged("Chats");
+				NotifyPropertyChanged("Snaps");
+			}
+		}
+		private ObservableCollection<Snap> _newSnaps = new ObservableCollection<Snap>();
 
 		public ObservableCollection<ChatMessage> Chats
 		{
@@ -156,6 +204,7 @@ namespace Snapchat.Models
 				SetField(ref _chats, value);
 				NotifyPropertyChanged("SortedMessages");
 				NotifyPropertyChanged("Snaps");
+				NotifyPropertyChanged("NewSnaps");
 			}
 		}
 		private ObservableCollection<ChatMessage> _chats = new ObservableCollection<ChatMessage>();
@@ -182,6 +231,7 @@ namespace Snapchat.Models
 				var items = new List<IConversationItem>();
 				items.AddRange(Chats);
 				items.AddRange(Snaps);
+				items.AddRange(NewSnaps);
 				items = items.OrderByDescending(i => i.PostedAt).ToList();
 
 				foreach (var message in items)

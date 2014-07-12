@@ -332,12 +332,17 @@ namespace Snapchat.SnapLogic.Api
 							// Is a snap
 							var snap = new Snap();
 							snap.CreateFromServer(message.Snap);
-							currentConversationCasted.ConversationMessages.Snaps.Add(snap);
+							if (snap.IsIncoming && snap.Status == SnapStatus.Delivered)
+								currentConversationCasted.ConversationMessages.NewSnaps.Add(snap);
+							else
+								currentConversationCasted.ConversationMessages.Snaps.Add(snap);
 						}
 					}
 
 					currentConversationCasted.ConversationMessages.Snaps.SortDescending(s => s.PostedAt);
 					currentConversationCasted.ConversationMessages.Chats.SortDescending(s => s.PostedAt);
+					currentConversationCasted.ConversationMessages.NewSnaps.Sort(s => s.PostedAt);
+					SnapchatData.Conversations.Add(currentConversation);
 					continue;
 				}
 
@@ -411,9 +416,12 @@ namespace Snapchat.SnapLogic.Api
 
 				currentConversation.ConversationMessages.Chats.SortDescending(c => c.PostedAt);
 				currentConversation.ConversationMessages.Snaps.SortDescending(s => s.PostedAt);
+				SnapchatData.Conversations.Add(currentConversation);
 
 				#endregion
 			}
+
+			SnapchatData.Conversations.SortDescending(c => c.LastInteraction);
 
 			#endregion
 
@@ -450,15 +458,15 @@ namespace Snapchat.SnapLogic.Api
 
 		public async void Save()
 		{
-			await SaveAccountDataAsync();
+			await SaveSnapchatDataAsync();
 			
 			// All done b
 		}
 
-		public async Task SaveAccountDataAsync()
+		public async Task SaveSnapchatDataAsync()
 		{
 			// Seralize the Account model and save as json string in Isolated Storage
-			await IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(SnapchatData)));
+			await IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(SnapchatData, Formatting.None)));
 		}
 
 		#endregion
@@ -513,7 +521,7 @@ namespace Snapchat.SnapLogic.Api
 			//		await snap.DownloadSnapBlobAsync(this);
 
 			// yea son
-			await SaveAccountDataAsync();
+			await SaveSnapchatDataAsync();
 		}
 
 		#endregion

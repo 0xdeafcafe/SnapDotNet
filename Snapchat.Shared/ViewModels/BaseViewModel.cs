@@ -46,7 +46,7 @@ namespace Snapchat.ViewModels
 					return String.Empty;
 
 				var pendingCount =
-					updates.Conversations.Sum(
+					updates.Conversations.Where(c => c is Conversation).Sum(
 						conversation => ((Conversation)conversation).ConversationMessages.Snaps.Count(s => s.IsIncoming && s.Status == SnapStatus.Delivered) + ((Conversation)conversation).PendingChatMessages.Count);
 
 				return pendingCount <= 0
@@ -66,7 +66,7 @@ namespace Snapchat.ViewModels
 					return new SolidColorBrush(new Color { A=0xFF, R = 0x00, G = 0x00, B = 0x00 });
 
 				Snap latestSnap = null;
-				foreach (var conversation in updates.Conversations)
+				foreach (var conversation in updates.Conversations.Where(c => c is Conversation))
 				{
 					foreach (var snap in ((Conversation)conversation).ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered))
 					{
@@ -98,7 +98,7 @@ namespace Snapchat.ViewModels
 					return new SolidColorBrush(new Color { A = 0x00, R = 0x00, G = 0x00, B = 0x00 });
 
 				Snap latestSnap = null;
-				foreach (var conversation in updates.Conversations)
+				foreach (var conversation in updates.Conversations.Where(c => c is Conversation))
 				{
 					foreach (var snap in ((Conversation)conversation).ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered))
 					{

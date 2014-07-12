@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 using Snapchat.SnapLogic.Models.New;
 using SnapDotNet.Core.Miscellaneous.Models;
 
@@ -15,6 +16,7 @@ namespace Snapchat.Models
 		}
 		private Account _userAccount;
 
+		[JsonProperty(ItemTypeNameHandling = TypeNameHandling.All)]
 		public ObservableCollection<IConversation> Conversations
 		{
 			get { return _conversations; }

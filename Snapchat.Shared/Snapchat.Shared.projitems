@@ -18,10 +18,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Page Include="$(MSBuildThisFileDirectory)Assets\Vectors\UploadConversationStatusIcons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\RequiresAuthenticationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingUploadIconConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IntegerToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\OutboundSelectFriends\ItemFontWeightFromSelectionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\OutboundSelectFriends\ItemBackgroundFromSelectionConverter.cs" />
@@ -40,6 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\SelectedRecipient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Snap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\SnapchatData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\Conversations\ConversationTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapLogic\Api\Endpoints.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapLogic\Api\Exceptions\InvalidBlobDataException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SnapLogic\Api\Exceptions\InvalidCredentialsException.cs" />

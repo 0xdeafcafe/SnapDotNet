@@ -8,7 +8,7 @@
 				xmlns:converters="using:Snapchat.Converters"
 				xmlns:selectorsConversations="using:Snapchat.Selectors.Conversations"
 				mc:Ignorable="d" Background="White"
-				x:Name="page" FontFamily="Global User Interface">
+				FontFamily="Global User Interface">
 				
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -16,6 +16,10 @@
 				<ResourceDictionary Source="../../Controls/StateTextBlock.xaml"/>
 				<ResourceDictionary Source="../../Controls/SearchTextBox.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			
+			<!-- Upload Converters -->
+			<conversations:PendingUploadIconConverter x:Key="PendingUploadIconConverter" />
+			
 			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
 			<conversations:PendingChatsConverter x:Key="PendingChatsConverter" />
 			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
@@ -59,6 +63,35 @@
 				</Setter>
 			</Style>
 
+			<DataTemplate x:Key="SnapDataTemplate">
+				
+			</DataTemplate>
+			<DataTemplate x:Key="UploadingSnapDataTemplate">
+				<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}">
+					<!-- Tapped="ConvoItem_Tapped" Holding="ConvoItem_OnHolding" -->
+					<Grid Height="50">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="0" />
+							<ColumnDefinition Width="15" />
+							<ColumnDefinition Width="40" />
+							<ColumnDefinition Width="15" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+
+						<Grid Grid.Column="2" VerticalAlignment="Center">
+							<ContentControl Template="{Binding Path=Status, Converter={StaticResource PendingUploadIconConverter}}" 
+											HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" Width="30"/>
+						</Grid>
+
+						<TextBlock Grid.Column="4" Text="{Binding Path=RecipientsList, FallbackValue=matty}" VerticalAlignment="Center"
+								   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" TextTrimming="CharacterEllipsis" />
+					</Grid>
+				</Button>
+			</DataTemplate>
+			<selectorsConversations:ConversationTemplateSelector x:Key="ConversationTemplateSelector" 
+																 SnapDataTemplate="{StaticResource SnapDataTemplate}"
+																 UploadingSnapDataTemplate="{StaticResource UploadingSnapDataTemplate}"/>
+			
 			<DataTemplate x:Key="PendingSnapIconDataTemplate">
 				<ContentControl Width="55"
 								Template="{Binding Path=PendingReceivedSnaps[0], 
@@ -155,100 +188,8 @@
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
-									Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding">
-
-							<!--PointerCanceled="UIElement_OnPointerCanceled"
-							PointerCaptureLost="UIElement_OnPointerCaptureLost"
-							PointerEntered="UIElement_OnPointerEntered"
-							PointerExited="UIElement_OnPointerExited"
-							PointerMoved="UIElement_OnPointerMoved"
-							PointerPressed="UIElement_OnPointerPressed"
-							PointerReleased="UIElement_OnPointerReleased"-->
-
-							<Button.Resources>
-								<Storyboard x:Key="ConvoItemDetailPeekStoryboard">
-									<DoubleAnimation Duration="0:0:0.3" To="1" 
-														 Storyboard.TargetProperty="(UIElement.Opacity)"
-														 Storyboard.TargetName="SnapDetails"/>
-									<DoubleAnimation Duration="0:0:0.3" To="-2" 
-														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
-														 Storyboard.TargetName="SnapUser">
-										<DoubleAnimation.EasingFunction>
-											<CubicEase EasingMode="EaseOut"/>
-										</DoubleAnimation.EasingFunction>
-									</DoubleAnimation>
-									<DoubleAnimation Duration="0:0:0.3" To="2" 
-														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
-														 Storyboard.TargetName="SnapDetails">
-										<DoubleAnimation.EasingFunction>
-											<CubicEase EasingMode="EaseOut"/>
-										</DoubleAnimation.EasingFunction>
-									</DoubleAnimation>
-									<DoubleAnimation BeginTime="0:0:2" To="0" 
-														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" 
-														 Storyboard.TargetName="SnapDetails"/>
-								</Storyboard>
-								<Storyboard x:Key="ConvoItemDetailCloseStoryboard">
-									<DoubleAnimation Duration="0:0:0.3" To="0"
-														 Storyboard.TargetProperty="(UIElement.Opacity)"
-														 Storyboard.TargetName="SnapDetails"/>
-									<DoubleAnimation Duration="0:0:0.3" To="7" 
-														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
-														 Storyboard.TargetName="SnapUser">
-										<DoubleAnimation.EasingFunction>
-											<CubicEase EasingMode="EaseOut"/>
-										</DoubleAnimation.EasingFunction>
-									</DoubleAnimation>
-									<DoubleAnimation Duration="0:0:0.3" To="0" 
-														 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
-														 Storyboard.TargetName="SnapDetails">
-										<DoubleAnimation.EasingFunction>
-											<CubicEase EasingMode="EaseOut"/>
-										</DoubleAnimation.EasingFunction>
-									</DoubleAnimation>
-								</Storyboard>
-							</Button.Resources>
-							<Grid x:Name="ConvoItemGrid" Height="50">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="0" />
-									<ColumnDefinition Width="15" />
-									<ColumnDefinition Width="40" />
-									<ColumnDefinition Width="15" />
-									<ColumnDefinition Width="*" />
-								</Grid.ColumnDefinitions>
-
-								<TextBlock Grid.Column="1"
-										   Text="{Binding Path=PendingSnapCount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
-										   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
-										   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
-
-								<Grid Grid.Column="2" VerticalAlignment="Center">
-									<ContentControl Content="{Binding}" VerticalAlignment="Center" Margin="0,0,0,0"
-													ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
-									<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
-													Template="{StaticResource recieved_message}"
-													Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>
-								</Grid>
-
-								<StackPanel Grid.Column="4" VerticalAlignment="Center">
-									<TextBlock x:Name="SnapUser" Text="{Binding Participants[1], Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
-											   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
-										<TextBlock.RenderTransform>
-											<CompositeTransform TranslateY="7"/>
-										</TextBlock.RenderTransform>
-									</TextBlock>
-
-									<ContentControl x:Name="SnapDetails" Content="{Binding}" Opacity="0"
-													ContentTemplateSelector="{StaticResource SnapInfoTemplateSelector}" 
-													RenderTransformOrigin="0.5,0.5">
-										<ContentControl.RenderTransform>
-											<CompositeTransform TranslateX="0" TranslateY="0"/>
-										</ContentControl.RenderTransform>
-									</ContentControl>
-								</StackPanel>
-							</Grid>
-						</Button>
+						<ContentControl Content="{Binding}"
+										ContentTemplateSelector="{StaticResource ConversationTemplateSelector}" />
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -172,8 +173,7 @@ namespace Snapchat.Pages.PageContents
 
 		private async void SelectFriendsButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			var dataStream = Aes.EncryptData(ViewModel.ImageData, Convert.FromBase64String(Settings.BlobEncryptionKey));
-			//var safeData = Aes.DecryptData(data, Convert.FromBase64String(Settings.BlobEncryptionKey));
+			#region Debug Saving xo
 
 			//// write to file
 			//var folder = KnownFolders.SavedPictures;
@@ -193,25 +193,27 @@ namespace Snapchat.Pages.PageContents
 			//	}
 			//}
 
-			// TODO: this all will be moved into the conversations stuff when I re-do the models for it. This will
-			// allow us to have background snap sending
+			#endregion
 
 			// remove stories from recpients
 			var hasStorySelected = ViewModel.StoriesCollection.First().Selected;
 			if (hasStorySelected)
 				ViewModel.SelectedRecipientCollection.Remove(ViewModel.StoriesCollection.First().OtherName);
-
+			
 			var mediaId = App.SnapchatManager.GenerateMediaId();
-			await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);
-
-			// Send Snap
-			await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, ViewModel.SelectedRecipientCollection.ToArray());
-
-			// Send To Story
-			if (hasStorySelected)
+			App.SnapchatManager.SnapchatData.Conversations.Add(new PendingUpload
 			{
-				// ye
-			}
+				ConversationType = ConversationType.PendingUpload,
+				Id = mediaId,
+				Recipients = ViewModel.SelectedRecipientCollection,
+				Status = UploadStatus.Uploading,
+				LastInteraction = DateTime.Now
+			});
+			App.SnapchatManager.Save();
+
+			//var dataStream = Aes.EncryptData(ViewModel.ImageData, Convert.FromBase64String(Settings.BlobEncryptionKey));
+			//await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);
+			//await App.SnapchatManager.Endpoints.SendMediaAsync(mediaId, ViewModel.SelectedRecipientCollection.ToArray());
 		}
 
 		private static T GetCastedDataContext<T>(object sender)

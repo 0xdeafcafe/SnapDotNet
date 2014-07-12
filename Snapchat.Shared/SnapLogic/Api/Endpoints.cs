@@ -11,10 +11,7 @@ using Snapchat.SnapLogic.Models.New;
 using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Helpers;
-using Snapchat.SnapLogic.Api;
 using Snapchat.SnapLogic.Api.Exceptions;
-using Snapchat.SnapLogic.Models;
-using Snapchat.SnapLogic.Models.New;
 using PublicActivity = Snapchat.SnapLogic.Models.New.Responses.PublicActivity;
 
 namespace Snapchat.SnapLogic.Api

@@ -1,0 +1,23 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<ControlTemplate x:Key="upload_uploading_media">
+		<Viewbox Height="30" Width="30">
+			<ProgressRing IsActive="True" Background="{x:Null}" RenderTransformOrigin="0.5,0.5"
+						  VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="80" MinWidth="80" Width="80" Height="80">
+			</ProgressRing>
+		</Viewbox>
+	</ControlTemplate>
+	
+	<ControlTemplate x:Key="upload_error_media">
+		<Viewbox>
+			<ProgressRing IsActive="True" Background="{x:Null}" RenderTransformOrigin="0.5,0.5">
+				<ProgressRing.RenderTransform>
+					<CompositeTransform ScaleX="0.357142857" ScaleY="0.357142857"/>
+				</ProgressRing.RenderTransform>
+			</ProgressRing>
+		</Viewbox>
+	</ControlTemplate>
+
+</ResourceDictionary>
