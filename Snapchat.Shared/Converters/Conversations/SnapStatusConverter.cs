@@ -2,7 +2,6 @@
 using Windows.UI.Xaml.Data;
 using Snapchat.Models;
 using Snapchat.SnapLogic.Models.New;
-using Snapchat.SnapLogic.Models.New;
 using Snap = Snapchat.SnapLogic.Models.New.Snap;
 
 namespace Snapchat.Converters.Conversations

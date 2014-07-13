@@ -105,7 +105,7 @@ namespace Snapchat.Models
 			get
 			{
 				var senderName = Participants.FirstOrDefault(p => p != App.SnapchatManager.Username);
-				return senderName ?? "Unknown";
+				return senderName ?? App.SnapchatManager.Username;
 			}
 		}
 	}

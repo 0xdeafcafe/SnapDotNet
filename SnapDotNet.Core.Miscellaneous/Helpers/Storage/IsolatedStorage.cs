@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.Storage.Streams;
 
 namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 {
@@ -14,9 +14,8 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
-				using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
-					await writer.WriteAsync(content);
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+				await FileIO.WriteTextAsync(file, content);
 			}
 			catch (Exception exception)
 			{
@@ -28,21 +27,8 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
-
-				using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-				{
-					using (var outputStream = fileStream.GetOutputStreamAt(0))
-					{
-						using (var dataWriter = new DataWriter(outputStream))
-						{
-							dataWriter.WriteBytes(content);
-							await dataWriter.StoreAsync();
-							dataWriter.DetachStream();
-						}
-						await outputStream.FlushAsync();
-					}
-				}
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+				await FileIO.WriteBytesAsync(file, content);
 			}
 			catch (Exception exception)
 			{
@@ -54,19 +40,7 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
-				{
-					using (var outputStream = fileStream.GetOutputStreamAt(0))
-					{
-						using (var dataWriter = new DataWriter(outputStream))
-						{
-							dataWriter.WriteBytes(content);
-							await dataWriter.StoreAsync();
-							dataWriter.DetachStream();
-						}
-						await outputStream.FlushAsync();
-					}
-				}
+				await FileIO.WriteBytesAsync(file, content);
 			}
 			catch (Exception exception)
 			{
@@ -82,10 +56,8 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
-				if (file == null) return null;
-				using (var reader = new StreamReader(await file.OpenStreamForReadAsync()))
-					return await reader.ReadToEndAsync();
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
+				return await FileIO.ReadTextAsync(file);
 			}
 			catch (Exception)
 			{
@@ -97,16 +69,8 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
-				using (var stream = await file.OpenAsync(FileAccessMode.Read))
-				using (var inputStream = stream.GetInputStreamAt(0))
-				using (var reader = new DataReader(inputStream))
-				{
-					var data = new byte[stream.Size];
-					await reader.LoadAsync((uint)data.Length);
-					reader.ReadBytes(data);
-					return data;
-				}
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
+				return (await FileIO.ReadBufferAsync(file)).ToArray();
 			}
 			catch (Exception)
 			{
@@ -118,15 +82,7 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 		{
 			try
 			{
-				using (var stream = await file.OpenAsync(FileAccessMode.Read))
-				using (var inputStream = stream.GetInputStreamAt(0))
-				using (var reader = new DataReader(inputStream))
-				{
-					var data = new byte[stream.Size];
-					await reader.LoadAsync((uint)data.Length);
-					reader.ReadBytes(data);
-					return data;
-				}
+				return (await FileIO.ReadBufferAsync(file)).ToArray();
 			}
 			catch (Exception)
 			{
@@ -138,8 +94,15 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 
 		public static async Task<bool> FileExistsAsync(string fileName)
 		{
-			var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
-			return (file != null);
+			try
+			{
+				await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
+				return true;
+			}
+			catch (FileNotFoundException)
+			{
+				return false;
+			}
 		}
 
 		#region Delete
@@ -150,8 +113,11 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 				await file.DeleteAsync();
 		}
 
-		public static async Task DeleteFileAsync(string fileName)
+		public static async Task DeleteFileAsync(string fileName, bool ignoreFileNotFound)
 		{
+			if (!(await FileExistsAsync(fileName)))
+				return;
+
 			var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
 			if (file != null)
 				await file.DeleteAsync();

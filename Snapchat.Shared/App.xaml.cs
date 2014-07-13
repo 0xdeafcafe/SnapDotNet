@@ -110,7 +110,7 @@ namespace Snapchat
 
 				// Go to Main Page if the user is still authenticated.
 				if (!SnapchatManager.Loaded)
-					await SnapchatManager.LoadAsync();
+					SnapchatManager.LoadAsync();
 				var destinationPage = SnapchatManager.IsAuthenticated() ? typeof (MainPage) : typeof (StartPage);
 
 				// Register for Push Notifications
@@ -241,10 +241,6 @@ namespace Snapchat
 				messageDialog.ShowAsync();
 				RootFrame.Navigate(typeof(StartPage));
 			}
-			catch (InvalidHttpResponseException)
-			{
-				RootFrame.Navigate(typeof(StartPage));
-			}
 			finally
 			{
 				closeStatusAction();
@@ -255,7 +251,7 @@ namespace Snapchat
 			var shouldDownloadSnaps =
 				(downloadMode == AutomaticallyDownloadSnapsMode.Always) ||
 				(downloadMode == AutomaticallyDownloadSnapsMode.WiFi && !NetworkInformationHelper.OnWifiConnection());
-			if (shouldDownloadSnaps) await SnapchatManager.DownloadSnapsAsync();
+			if (shouldDownloadSnaps) SnapchatManager.DownloadSnapsAsync();
 		}
 
 		#endregion

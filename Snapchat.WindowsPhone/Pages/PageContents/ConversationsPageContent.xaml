@@ -64,7 +64,91 @@
 			</Style>
 
 			<DataTemplate x:Key="SnapDataTemplate">
-				
+				<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}"
+						Tapped="ConvoItem_Tapped" DoubleTapped="ConvoItem_DoubleTapped" Holding="ConvoItem_OnHolding">
+					<Button.Resources>
+						<Storyboard x:Key="ConvoItemDetailPeekStoryboard">
+							<DoubleAnimation Duration="0:0:0.3" To="1" 
+											 Storyboard.TargetProperty="(UIElement.Opacity)"
+											 Storyboard.TargetName="SnapDetails"/>
+							<DoubleAnimation Duration="0:0:0.3" To="-2" 
+											 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+											 Storyboard.TargetName="SnapUser">
+								<DoubleAnimation.EasingFunction>
+									<CubicEase EasingMode="EaseOut"/>
+								</DoubleAnimation.EasingFunction>
+							</DoubleAnimation>
+							<DoubleAnimation Duration="0:0:0.3" To="2" 
+											 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+											 Storyboard.TargetName="SnapDetails">
+								<DoubleAnimation.EasingFunction>
+									<CubicEase EasingMode="EaseOut"/>
+								</DoubleAnimation.EasingFunction>
+							</DoubleAnimation>
+							<DoubleAnimation BeginTime="0:0:2" To="0" 
+											 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" 
+											 Storyboard.TargetName="SnapDetails"/>
+						</Storyboard>
+						<Storyboard x:Key="ConvoItemDetailCloseStoryboard">
+							<DoubleAnimation Duration="0:0:0.3" To="0"
+											 Storyboard.TargetProperty="(UIElement.Opacity)"
+											 Storyboard.TargetName="SnapDetails"/>
+							<DoubleAnimation Duration="0:0:0.3" To="7" 
+											 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+											 Storyboard.TargetName="SnapUser">
+								<DoubleAnimation.EasingFunction>
+									<CubicEase EasingMode="EaseOut"/>
+								</DoubleAnimation.EasingFunction>
+							</DoubleAnimation>
+							<DoubleAnimation Duration="0:0:0.3" To="0" 
+											 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" 
+											 Storyboard.TargetName="SnapDetails">
+								<DoubleAnimation.EasingFunction>
+									<CubicEase EasingMode="EaseOut"/>
+								</DoubleAnimation.EasingFunction>
+							</DoubleAnimation>
+						</Storyboard>
+					</Button.Resources>
+					<Grid x:Name="ConvoItemGrid" Height="50">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="0" />
+							<ColumnDefinition Width="15" />
+							<ColumnDefinition Width="40" />
+							<ColumnDefinition Width="15" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+
+						<TextBlock Grid.Column="1"
+								   Text="{Binding Path=ConversationMessages.NewSnaps.Count, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
+								   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
+								   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
+
+						<!--<Grid Grid.Column="2" VerticalAlignment="Center">
+							<ContentControl Content="{Binding}" VerticalAlignment="Center" Margin="0,0,0,0"
+											ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
+							<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
+											Template="{StaticResource recieved_message}"
+											Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>
+						</Grid>-->
+
+						<StackPanel Grid.Column="4" VerticalAlignment="Center">
+							<TextBlock x:Name="SnapUser" Text="{Binding Sender, Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
+									   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
+								<TextBlock.RenderTransform>
+									<CompositeTransform TranslateY="7"/>
+								</TextBlock.RenderTransform>
+							</TextBlock>
+
+							<!--<ContentControl x:Name="SnapDetails" Content="{Binding}" Opacity="0"
+											ContentTemplateSelector="{StaticResource SnapInfoTemplateSelector}" 
+											RenderTransformOrigin="0.5,0.5">
+								<ContentControl.RenderTransform>
+									<CompositeTransform TranslateX="0" TranslateY="0"/>
+								</ContentControl.RenderTransform>
+							</ContentControl>-->
+						</StackPanel>
+					</Grid>
+				</Button>
 			</DataTemplate>
 			<DataTemplate x:Key="UploadingSnapDataTemplate">
 				<Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Style="{StaticResource ConvoListItemStyle}">

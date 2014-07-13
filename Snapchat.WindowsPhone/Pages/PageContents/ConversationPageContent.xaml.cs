@@ -20,7 +20,7 @@ namespace Snapchat.Pages.PageContents
 			timer.Tick += delegate
 			{
 				timer.Stop();
-				ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight);
+				ScrollViewer.ChangeView(0, ScrollViewer.ScrollableHeight, 1.0f);
 			};
 			timer.Start();
 		}

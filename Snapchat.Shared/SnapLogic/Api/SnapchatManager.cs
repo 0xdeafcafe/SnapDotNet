@@ -8,6 +8,7 @@ using Snapchat.Models;
 using Snapchat.SnapLogic.Models.New;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Extensions;
+using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Helpers.Storage;
 using SnapDotNet.Core.Miscellaneous.Models;
 using ChatMessage = Snapchat.Models.ChatMessage;
@@ -108,15 +109,18 @@ namespace Snapchat.SnapLogic.Api
 		{
 			try
 			{
-				SnapchatData = null;
-				await DeleteAsync();
 				await Endpoints.LogoutAsync();
-				return true;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				return false;
+				SnazzyDebug.WriteLine(ex);
 			}
+			finally
+			{
+				SnapchatData = null;
+				DeleteAsync();
+			}
+			return true;
 		}
 
 		public void UpdateAuthToken(string authToken)
@@ -277,14 +281,14 @@ namespace Snapchat.SnapLogic.Api
 			// Add conversations that are not currently there
 			foreach (var newConversation in allUpdates.ConversationResponse.Reverse())
 			{
-				var currentConversation = SnapchatData.Conversations.FirstOrDefault(c => c.Id == newConversation.Id) as Conversation;
+				var currentConversation = SnapchatData.Conversations.FirstOrDefault(c => c != null && c.Id == newConversation.Id) as Conversation;
 
 				#region Add Missing Conversation
 
 				if (currentConversation == null)
 				{
 					// Add Conversation
-					var currentConversationCasted = new Conversation
+					currentConversation = new Conversation
 					{
 						ConversationState = new Snapchat.Models.ConversationState
 						{
@@ -325,7 +329,7 @@ namespace Snapchat.SnapLogic.Api
 							// Is a chat message
 							var chatMessage = new ChatMessage();
 							chatMessage.CreateFromServer(message.ChatMessage);
-							currentConversationCasted.ConversationMessages.Chats.Add(chatMessage);
+							currentConversation.ConversationMessages.Chats.Add(chatMessage);
 						}
 						else if (message.Snap != null)
 						{
@@ -333,16 +337,20 @@ namespace Snapchat.SnapLogic.Api
 							var snap = new Snap();
 							snap.CreateFromServer(message.Snap);
 							if (snap.IsIncoming && snap.Status == SnapStatus.Delivered)
-								currentConversationCasted.ConversationMessages.NewSnaps.Add(snap);
+								currentConversation.ConversationMessages.NewSnaps.Add(snap);
 							else
-								currentConversationCasted.ConversationMessages.Snaps.Add(snap);
+								currentConversation.ConversationMessages.Snaps.Add(snap);
 						}
 					}
 
-					currentConversationCasted.ConversationMessages.Snaps.SortDescending(s => s.PostedAt);
-					currentConversationCasted.ConversationMessages.Chats.SortDescending(s => s.PostedAt);
-					currentConversationCasted.ConversationMessages.NewSnaps.Sort(s => s.PostedAt);
-					SnapchatData.Conversations.Add(currentConversation);
+					currentConversation.ConversationMessages.Snaps.SortDescending(s => s.PostedAt);
+					currentConversation.ConversationMessages.Chats.SortDescending(s => s.PostedAt);
+					currentConversation.ConversationMessages.NewSnaps.Sort(s => s.PostedAt);
+
+					// No idea why, but apparently I need this check...
+					if (currentConversation != null)
+						SnapchatData.Conversations.Add(currentConversation);
+
 					continue;
 				}
 
@@ -355,11 +363,11 @@ namespace Snapchat.SnapLogic.Api
 				currentConversation.IterToken = newConversation.IterToken;
 				currentConversation.LastChatActions = new LastChatActions
 				{
-					LastRead = newConversation.LastChatActions.LastRead,
-					LastReader = newConversation.LastChatActions.LastReader,
-					LastWrite = newConversation.LastChatActions.LastWrite,
-					LastWriteType = newConversation.LastChatActions.LastWriteType,
-					LastWriter = newConversation.LastChatActions.LastWriter
+					LastRead = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastRead : DateTime.Now,
+					LastReader = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastReader : null,
+					LastWrite = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWrite : DateTime.Now,
+					LastWriteType = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWriteType : null,
+					LastWriter = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWriter : null,
 				};
 				currentConversation.LastInteraction = newConversation.LastInteraction;
 				currentConversation.Participants = newConversation.Participants;
@@ -416,7 +424,10 @@ namespace Snapchat.SnapLogic.Api
 
 				currentConversation.ConversationMessages.Chats.SortDescending(c => c.PostedAt);
 				currentConversation.ConversationMessages.Snaps.SortDescending(s => s.PostedAt);
-				SnapchatData.Conversations.Add(currentConversation);
+
+				// No idea why, but apparently I need this check...
+				if (currentConversation != null)
+					SnapchatData.Conversations.Add(currentConversation);
 
 				#endregion
 			}
@@ -456,29 +467,27 @@ namespace Snapchat.SnapLogic.Api
 
 		#region Actions:Save
 
-		public async void Save()
+		public async Task SaveAsync()
 		{
 			await SaveSnapchatDataAsync();
-			
-			// All done b
 		}
 
 		public async Task SaveSnapchatDataAsync()
 		{
 			// Seralize the Account model and save as json string in Isolated Storage
-			await IsolatedStorage.WriteFileAsync(AccountDataFileName, await Task.Factory.StartNew(() => JsonConvert.SerializeObject(SnapchatData, Formatting.None)));
+			await IsolatedStorage.WriteFileAsync(AccountDataFileName, JsonConvert.SerializeObject(SnapchatData));
 		}
 
 		#endregion
 
-		public async Task DeleteAsync()
+		public async void DeleteAsync()
 		{
-			await IsolatedStorage.DeleteFileAsync(AccountDataFileName);
+			await IsolatedStorage.DeleteFileAsync(AccountDataFileName, true);
 			IsolatedStorage.DeleteRoamingSetting(RoamingSnapchatDataContainer, "Username");
 			IsolatedStorage.DeleteRoamingSetting(RoamingSnapchatDataContainer, "AuthToken");
 		}
 
-		public async Task LoadAsync()
+		public async void LoadAsync()
 		{
 			// Deseralize the Account model from IsolatedStorage
 			var accountData = await IsolatedStorage.ReadFileAsync(AccountDataFileName);
@@ -507,7 +516,7 @@ namespace Snapchat.SnapLogic.Api
 				await Endpoints.GetPublicActivityAsync(chunk.Select(f => f.Name).ToArray());
 
 			// Save data to IsolatedStorage
-			Save();
+			await SaveAsync();
 
 			hidependingUiAction();
 		}

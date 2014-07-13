@@ -205,7 +205,7 @@ namespace Snapchat.Pages
 
 			// Load data
 			if (!App.SnapchatManager.Loaded)
-				await App.SnapchatManager.LoadAsync();
+				App.SnapchatManager.LoadAsync();
 
 			// Setup hardware events
 			HardwareButtons.BackPressed += HardwareButtons_BackPressed;

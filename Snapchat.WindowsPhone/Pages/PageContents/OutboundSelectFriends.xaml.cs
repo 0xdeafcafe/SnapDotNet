@@ -209,7 +209,7 @@ namespace Snapchat.Pages.PageContents
 				Status = UploadStatus.Uploading,
 				LastInteraction = DateTime.Now
 			});
-			App.SnapchatManager.Save();
+			await App.SnapchatManager.SaveAsync();
 
 			//var dataStream = Aes.EncryptData(ViewModel.ImageData, Convert.FromBase64String(Settings.BlobEncryptionKey));
 			//await App.SnapchatManager.Endpoints.UploadMediaAsync(MediaType.Image, mediaId, dataStream);

@@ -12,6 +12,7 @@ using SnapDotNet.Core.Miscellaneous.Crypto;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using Snapchat.SnapLogic.Api.Exceptions;
+using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using PublicActivity = Snapchat.SnapLogic.Models.New.Responses.PublicActivity;
 
 namespace Snapchat.SnapLogic.Api
@@ -939,7 +940,7 @@ namespace Snapchat.SnapLogic.Api
 			if (account == null || !account.Logged)
 				throw new InvalidCredentialsException();
 
-			_snapchatManager.Save();
+			await _snapchatManager.SaveAsync();
 
 			return account;
 		}
@@ -965,12 +966,12 @@ namespace Snapchat.SnapLogic.Api
 		/// <returns></returns>
 		public async Task<Response> LogoutAsync()
 		{
-			await _snapchatManager.DeleteAsync();
+			_snapchatManager.DeleteAsync();
 
 			var timestamp = Timestamps.GenerateRetardedTimestamp();
 			var postData = new Dictionary<string, string>
 			{
-				{"username", GetAuthedUsername()},
+				{"username", GetAuthedUsername(true) ?? ""},
 				{"timestamp", timestamp.ToString(CultureInfo.InvariantCulture)},
 				{"json", "{}"}
 			};
@@ -1018,7 +1019,7 @@ namespace Snapchat.SnapLogic.Api
 				throw new InvalidCredentialsException();
 
 			_snapchatManager.Update(allUpdatesResponse);
-			_snapchatManager.Save();
+			await _snapchatManager.SaveAsync();
 
 			return allUpdatesResponse;
 		}
@@ -1067,7 +1068,7 @@ namespace Snapchat.SnapLogic.Api
 						timestamp.ToString(CultureInfo.InvariantCulture));
 
 			_snapchatManager.UpdatePublicActivities(publicActivities);
-			_snapchatManager.Save();
+			await _snapchatManager.SaveAsync();
 
 			return publicActivities;
 		}
@@ -1423,11 +1424,12 @@ namespace Snapchat.SnapLogic.Api
 		/// <summary>
 		/// 
 		/// </summary>
-		private string GetAuthedUsername()
+		private string GetAuthedUsername(bool dontThrow = false)
 		{
 			if (_snapchatManager.SnapchatData != null && _snapchatManager.SnapchatData.UserAccount != null)
 				return _snapchatManager.SnapchatData.UserAccount.Username;
 
+			if (dontThrow) return null;
 			throw new InvalidCredentialsException("There is no username set in the Snapchat Manager.");
 		}
 
