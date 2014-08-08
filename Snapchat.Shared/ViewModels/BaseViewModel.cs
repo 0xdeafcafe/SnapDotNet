@@ -47,7 +47,7 @@ namespace Snapchat.ViewModels
 
 				var pendingCount =
 					updates.Conversations.Where(c => c is Conversation).Sum(
-						conversation => ((Conversation)conversation).ConversationMessages.Snaps.Count(s => s.IsIncoming && s.Status == SnapStatus.Delivered) + ((Conversation)conversation).PendingChatMessages.Count);
+						conversation => ((Conversation)conversation).ConversationMessages.Messages.Count(s => (s is Snap) && ((Snap)s).IsIncoming && ((Snap)s).Status == SnapStatus.Delivered) + ((Conversation)conversation).PendingChatMessages.Count);
 
 				return pendingCount <= 0
 					? ":("
@@ -68,9 +68,9 @@ namespace Snapchat.ViewModels
 				Snap latestSnap = null;
 				foreach (var conversation in updates.Conversations.Where(c => c is Conversation))
 				{
-					foreach (var snap in ((Conversation)conversation).ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered))
+					foreach (var snap in ((Conversation)conversation).ConversationMessages.Messages.Where(s => (s is Snap) && ((Snap)s).IsIncoming && ((Snap)s).Status == SnapStatus.Delivered))
 					{
-						latestSnap = snap;
+						latestSnap = snap as Snap;
 						break;
 					}
 					if (latestSnap != null) 
@@ -100,9 +100,9 @@ namespace Snapchat.ViewModels
 				Snap latestSnap = null;
 				foreach (var conversation in updates.Conversations.Where(c => c is Conversation))
 				{
-					foreach (var snap in ((Conversation)conversation).ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered))
+					foreach (var snap in ((Conversation)conversation).ConversationMessages.Messages.Where(s => (s is Snap) && ((Snap)s).IsIncoming && ((Snap)s).Status == SnapStatus.Delivered))
 					{
-						latestSnap = snap;
+						latestSnap = snap as Snap;
 						break;
 					}
 					if (latestSnap != null)

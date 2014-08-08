@@ -48,7 +48,7 @@ namespace Snapchat.Pages.PageContents
 				if (!_isFingerDown || _selectedConversation == null) return;
 
 				// show nudes
-				MainPage.Singleton.ShowSnapMedia(_selectedConversation.ConversationMessages.Snaps.First());
+				MainPage.Singleton.ShowSnapMedia(_selectedConversation.ConversationMessages.Messages.First(m => m is Snap) as Snap);
 				ScrollViewer.IsEnabled = false;
 
 				Debug.WriteLine("we holdin");
@@ -83,9 +83,11 @@ namespace Snapchat.Pages.PageContents
 
 			var conversation = frameworkElement.DataContext as Conversation;
 			if (conversation == null) return;
-			var pendingSnaps = conversation.ConversationMessages.Snaps.Where(s => s.IsIncoming && s.Status == SnapStatus.Delivered);
+			var pendingSnaps = conversation.ConversationMessages.Messages.Where(s => (s is Snap) && ((Snap)s).IsIncoming && ((Snap)s).Status == SnapStatus.Delivered);
 			if (pendingSnaps == null || !pendingSnaps.Any()) return;
-			await conversation.ConversationMessages.Snaps.Last(s => s.IsIncoming && s.Status == SnapStatus.Delivered).DownloadSnapBlobAsync(App.SnapchatManager);
+			var snap = conversation.ConversationMessages.Messages.Last(s => (s is Snap) && ((Snap)s).IsIncoming && ((Snap)s).Status == SnapStatus.Delivered) as Snap;
+			if (snap != null)
+				await snap.DownloadSnapBlobAsync(App.SnapchatManager);
 		}
 
 		private void ConvoItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
@@ -123,7 +125,7 @@ namespace Snapchat.Pages.PageContents
 			_isFingerDown = true;
 			_selectedConversation = conversation;
 			ScrollViewer.IsEnabled = false;
-			MainPage.Singleton.ShowSnapMedia(_selectedConversation.ConversationMessages.Snaps.First());
+			MainPage.Singleton.ShowSnapMedia(_selectedConversation.ConversationMessages.Messages.First(m => m is Snap) as Snap);
 		}
 
 		private void DetatchConvoData()

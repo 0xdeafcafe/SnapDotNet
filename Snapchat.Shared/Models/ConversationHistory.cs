@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Models;
 
@@ -165,49 +166,20 @@ namespace Snapchat.Models
 	{
 		public ConversationMessages()
 		{
-			_snaps.CollectionChanged	+= (sender, args) => { NotifyPropertyChanged("Chats"); NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("NewSnaps"); NotifyPropertyChanged("SortedMessages"); };
-			_chats.CollectionChanged	+= (sender, args) => { NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("Chats"); NotifyPropertyChanged("NewSnaps"); NotifyPropertyChanged("SortedMessages"); };
-			_newSnaps.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Snaps"); NotifyPropertyChanged("Chats"); NotifyPropertyChanged("NewSnaps"); NotifyPropertyChanged("SortedMessages"); };
+			_messages.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Messages"); NotifyPropertyChanged("SortedMessages"); };
 		}
 
-		public ObservableCollection<Snap> Snaps
+		[JsonProperty(ItemTypeNameHandling = TypeNameHandling.All)]
+		public ObservableCollection<IConversationItem> Messages
 		{
-			get { return _snaps; }
+			get { return _messages; }
 			set
 			{
-				SetField(ref _snaps, value);
+				SetField(ref _messages, value);
 				NotifyPropertyChanged("SortedMessages");
-				NotifyPropertyChanged("Chats");
-				NotifyPropertyChanged("NewSnaps");
 			}
 		}
-		private ObservableCollection<Snap> _snaps = new ObservableCollection<Snap>();
-
-		public ObservableCollection<Snap> NewSnaps
-		{
-			get { return _newSnaps; }
-			set
-			{
-				SetField(ref _newSnaps, value);
-				NotifyPropertyChanged("SortedMessages");
-				NotifyPropertyChanged("Chats");
-				NotifyPropertyChanged("Snaps");
-			}
-		}
-		private ObservableCollection<Snap> _newSnaps = new ObservableCollection<Snap>();
-
-		public ObservableCollection<ChatMessage> Chats
-		{
-			get { return _chats; }
-			set
-			{
-				SetField(ref _chats, value);
-				NotifyPropertyChanged("SortedMessages");
-				NotifyPropertyChanged("Snaps");
-				NotifyPropertyChanged("NewSnaps");
-			}
-		}
-		private ObservableCollection<ChatMessage> _chats = new ObservableCollection<ChatMessage>();
+		private ObservableCollection<IConversationItem> _messages = new ObservableCollection<IConversationItem>(); 
 
 		public MessagingAuthentication MessagingAuthentication
 		{
@@ -228,13 +200,7 @@ namespace Snapchat.Models
 				var conversationThread = new ObservableCollection<IConversationThreadItem>();
 				UserHeader currentUserData = null;
 
-				var items = new List<IConversationItem>();
-				items.AddRange(Chats);
-				items.AddRange(Snaps);
-				items.AddRange(NewSnaps);
-				items = items.OrderByDescending(i => i.PostedAt).ToList();
-
-				foreach (var message in items)
+				foreach (var message in Messages.OrderByDescending(i => i.PostedAt))
 				{
 					var postedAt = message.PostedAt;
 					var sentBy = message.Sender;

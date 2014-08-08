@@ -5,7 +5,7 @@
 	xmlns:conversations="using:Snapchat.Converters.Conversations">
 	<Application.Resources>
 		<ResourceDictionary>
-			<conversations:SnapColourConverter x:Key="SnapColourConverter" />
+			<!--<conversations:SnapColourConverter x:Key="SnapColourConverter" />-->
 			
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Assets/Vectors/SnapStatusIcons.xaml"/>

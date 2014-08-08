@@ -21,7 +21,6 @@
 			<conversations:PendingUploadIconConverter x:Key="PendingUploadIconConverter" />
 			
 			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
-			<conversations:PendingChatsConverter x:Key="PendingChatsConverter" />
 			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
 			<conversations:FriendlySnapCountConverter x:Key="FriendlySnapCountConverter" />
 			<converters:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
@@ -119,17 +118,18 @@
 						</Grid.ColumnDefinitions>
 
 						<TextBlock Grid.Column="1"
-								   Text="{Binding Path=ConversationMessages.NewSnaps.Count, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
+								   Text="{Binding Path=ConversationMessages.Messages.Count, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
 								   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
 								   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
 
-						<!--<Grid Grid.Column="2" VerticalAlignment="Center">
-							<ContentControl Content="{Binding}" VerticalAlignment="Center" Margin="0,0,0,0"
-											ContentTemplateSelector="{StaticResource SnapIconTemplateSelector}"/>
-							<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
+						<Grid Grid.Column="2" VerticalAlignment="Center">
+							<!-- Received snap notification -->
+							<ContentControl Template="{Binding Path=ConversationMessages.Messages[0].Status}" VerticalAlignment="Center" Margin="0,0,0,0" />
+							
+							<!--<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
 											Template="{StaticResource recieved_message}"
-											Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>
-						</Grid>-->
+											Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>-->
+						</Grid>
 
 						<StackPanel Grid.Column="4" VerticalAlignment="Center">
 							<TextBlock x:Name="SnapUser" Text="{Binding Sender, Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
@@ -176,7 +176,7 @@
 																 SnapDataTemplate="{StaticResource SnapDataTemplate}"
 																 UploadingSnapDataTemplate="{StaticResource UploadingSnapDataTemplate}"/>
 			
-			<DataTemplate x:Key="PendingSnapIconDataTemplate">
+			<!--<DataTemplate x:Key="PendingSnapIconDataTemplate">
 				<ContentControl Width="55"
 								Template="{Binding Path=PendingReceivedSnaps[0], 
 												   UpdateSourceTrigger=PropertyChanged, 
@@ -214,7 +214,7 @@
 			</DataTemplate>
 			<selectorsConversations:SnapTemplateSelector x:Key="SnapInfoTemplateSelector"
 														 PendingSnapDataTemplate="{StaticResource PendingSnapInfoDataTemplate}"
-														 HistoricSnapDataTemplate="{StaticResource HistoricSnapInfoDataTemplate}"/>
+														 HistoricSnapDataTemplate="{StaticResource HistoricSnapInfoDataTemplate}"/>-->
 
 		</ResourceDictionary>
 	</UserControl.Resources>

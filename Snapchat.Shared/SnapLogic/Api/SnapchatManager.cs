@@ -317,8 +317,7 @@ namespace Snapchat.SnapLogic.Api
 								Mac = newConversation.ConversationMessages.MessagingAuthentication.Mac,
 								Payload = newConversation.ConversationMessages.MessagingAuthentication.Payload
 							},
-							Chats = new ObservableCollection<ChatMessage>(),
-							Snaps = new ObservableCollection<Snap>()
+							Messages = new ObservableCollection<IConversationItem>()
 						}
 					};
 
@@ -329,23 +328,18 @@ namespace Snapchat.SnapLogic.Api
 							// Is a chat message
 							var chatMessage = new ChatMessage();
 							chatMessage.CreateFromServer(message.ChatMessage);
-							currentConversation.ConversationMessages.Chats.Add(chatMessage);
+							currentConversation.ConversationMessages.Messages.Add(chatMessage);
 						}
 						else if (message.Snap != null)
 						{
 							// Is a snap
 							var snap = new Snap();
 							snap.CreateFromServer(message.Snap);
-							if (snap.IsIncoming && snap.Status == SnapStatus.Delivered)
-								currentConversation.ConversationMessages.NewSnaps.Add(snap);
-							else
-								currentConversation.ConversationMessages.Snaps.Add(snap);
+								currentConversation.ConversationMessages.Messages.Add(snap);
 						}
 					}
 
-					currentConversation.ConversationMessages.Snaps.SortDescending(s => s.PostedAt);
-					currentConversation.ConversationMessages.Chats.SortDescending(s => s.PostedAt);
-					currentConversation.ConversationMessages.NewSnaps.Sort(s => s.PostedAt);
+					currentConversation.ConversationMessages.Messages.Sort(s => s.PostedAt);
 
 					// No idea why, but apparently I need this check...
 					if (currentConversation != null)
@@ -381,10 +375,8 @@ namespace Snapchat.SnapLogic.Api
 				currentConversation.ConversationType = ConversationType.Person2Person;
 				if (currentConversation.ConversationMessages == null)
 					currentConversation.ConversationMessages = new Snapchat.Models.ConversationMessages();
-				if (currentConversation.ConversationMessages.Chats == null)
-					currentConversation.ConversationMessages.Chats = new ObservableCollection<ChatMessage>();
-				if (currentConversation.ConversationMessages.Snaps == null)
-					currentConversation.ConversationMessages.Snaps = new ObservableCollection<Snap>();
+				if (currentConversation.ConversationMessages.Messages == null)
+					currentConversation.ConversationMessages.Messages = new ObservableCollection<IConversationItem>();
 
 				// Messages
 				foreach (var message in newConversation.ConversationMessages.Messages)
@@ -392,24 +384,24 @@ namespace Snapchat.SnapLogic.Api
 					if (message.ChatMessage != null)
 					{
 						// We a chat message
-						var existingChatMessage = currentConversation.ConversationMessages.Chats.FirstOrDefault(s => s.Id == message.ChatMessage.Id);
+						var existingChatMessage = currentConversation.ConversationMessages.Messages.FirstOrDefault(s => s.Id == message.ChatMessage.Id) as ChatMessage;
 						if (existingChatMessage != null) continue; // TODO: Does anything here need updating? Don't think so xox (inside and else)
 
 						// Insert chat
 						var chat = new ChatMessage();
 						chat.CreateFromServer(message.ChatMessage);
-						currentConversation.ConversationMessages.Chats.Add(chat);
+						currentConversation.ConversationMessages.Messages.Add(chat);
 					}
 					else if (message.Snap != null)
 					{
 						// We a snap
-						var existingSnap = currentConversation.ConversationMessages.Snaps.FirstOrDefault(s => s.Id == message.Snap.Id);
+						var existingSnap = currentConversation.ConversationMessages.Messages.FirstOrDefault(s => s.Id == message.Snap.Id) as Snap;
 						if (existingSnap == null)
 						{
 							// Insert snap
 							var snap = new Snap();
 							snap.CreateFromServer(message.Snap);
-							currentConversation.ConversationMessages.Snaps.Add(snap);
+							currentConversation.ConversationMessages.Messages.Add(snap);
 						}
 						else if (!message.Snap.IsIncoming)
 						{
@@ -422,8 +414,7 @@ namespace Snapchat.SnapLogic.Api
 					}
 				}
 
-				currentConversation.ConversationMessages.Chats.SortDescending(c => c.PostedAt);
-				currentConversation.ConversationMessages.Snaps.SortDescending(s => s.PostedAt);
+				currentConversation.ConversationMessages.Messages.SortDescending(c => c.PostedAt);
 
 				// No idea why, but apparently I need this check...
 				if (currentConversation != null)
