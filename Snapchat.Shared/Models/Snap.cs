@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Snapchat.SnapLogic.Api;
 using Snapchat.SnapLogic.Api.Exceptions;
 using Snapchat.SnapLogic.Helpers;
@@ -119,6 +123,27 @@ namespace Snapchat.Models
 		}
 
 		#region Helpers
+
+		[IgnoreDataMember]
+		public ControlTemplate IconResource
+		{
+			get
+			{
+				var resourceName = String.Format("StatusIcon{0}{1}", IsIncoming ? "Incoming" : "Outgoing", Status.ToString());
+				return (ControlTemplate) Application.Current.Resources[resourceName];
+			}
+		}
+
+		[IgnoreDataMember]
+		public SolidColorBrush IconColourBrush
+		{
+			get
+			{
+				return IsImage
+					? new SolidColorBrush(Color.FromArgb(0xFF, 0xE9, 0x27, 0x54))
+					: new SolidColorBrush(Color.FromArgb(0xFF, 0x9B, 0x55, 0xA0));
+			}
+		}
 
 		[IgnoreDataMember]
 		public Boolean IsIncoming

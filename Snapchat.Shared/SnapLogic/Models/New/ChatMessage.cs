@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Newtonsoft.Json;
 using Snapchat.Models;
 using Snapchat.SnapLogic.Converters.Json;
@@ -44,6 +46,18 @@ namespace Snapchat.SnapLogic.Models.New
 		public String Type { get; set; }
 
 		#region Helpers
+
+		[IgnoreDataMember]
+		public ControlTemplate IconResource
+		{
+			get { return null; }
+		}
+
+		[IgnoreDataMember]
+		public SolidColorBrush IconColourBrush
+		{
+			get { return null; }
+		}
 
 		[IgnoreDataMember]
 		public String Sender

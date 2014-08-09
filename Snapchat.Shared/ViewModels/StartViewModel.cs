@@ -8,7 +8,6 @@ using Windows.UI.Xaml.Controls;
 using Snapchat.Common;
 using Snapchat.Pages;
 using SnapDotNet.Core.Miscellaneous.Helpers;
-using SnapDotNet.Core.Miscellaneous.Models.Atlas;
 using Snapchat.SnapLogic.Api.Exceptions;
 
 namespace Snapchat.ViewModels
@@ -29,7 +28,7 @@ namespace Snapchat.ViewModels
 			get { return _currentUsername; }
 			set { TryChangeValue(ref _currentUsername, value); }
 		}
-		private string _currentUsername;
+		private string _currentUsername = "wumbotestalex";
 
 		/// <summary>
 		/// Gets or sets the current password entered by the user.
@@ -39,7 +38,7 @@ namespace Snapchat.ViewModels
 			get { return _currentPassword; }
 			set { TryChangeValue(ref _currentPassword, value); }
 		}
-		private string _currentPassword;
+		private string _currentPassword = "testing123";
 
 		/// <summary>
 		/// Gets the command to log into Snapchat.

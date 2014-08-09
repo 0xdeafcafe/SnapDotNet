@@ -14,13 +14,11 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="../../Controls/StateTextBlock.xaml"/>
-				<ResourceDictionary Source="../../Controls/SearchTextBox.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 			
 			<!-- Upload Converters -->
 			<conversations:PendingUploadIconConverter x:Key="PendingUploadIconConverter" />
 			
-			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
 			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
 			<conversations:FriendlySnapCountConverter x:Key="FriendlySnapCountConverter" />
 			<converters:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
@@ -110,32 +108,32 @@
 					</Button.Resources>
 					<Grid x:Name="ConvoItemGrid" Height="50">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="0" />
 							<ColumnDefinition Width="15" />
-							<ColumnDefinition Width="40" />
-							<ColumnDefinition Width="15" />
+							<ColumnDefinition Width="20" />
+							<ColumnDefinition Width="30" />
+							<ColumnDefinition Width="10" />
 							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
 
-						<TextBlock Grid.Column="1"
-								   Text="{Binding Path=ConversationMessages.Messages.Count, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
+						<TextBlock Text="{Binding Path=ConversationMessages.Messages.Count, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource FriendlySnapCountConverter}}" 
 								   FontFamily="Segoe WP" FontSize="12" Margin="0,0,-10,0" FontWeight="Light"
 								   VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FF999999" />
 
-						<Grid Grid.Column="2" VerticalAlignment="Center">
+						<Grid Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
 							<!-- Received snap notification -->
-							<ContentControl Template="{Binding Path=ConversationMessages.Messages[0].Status}" VerticalAlignment="Center" Margin="0,0,0,0" />
+							<ContentControl Template="{Binding Path=ConversationMessages.Messages[0].IconResource}" 
+											VerticalAlignment="Center" HorizontalAlignment="Center" />
 							
 							<!--<ContentControl VerticalAlignment="Center" Margin="16,0,0,0"
 											Template="{StaticResource recieved_message}"
 											Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>-->
 						</Grid>
 
-						<StackPanel Grid.Column="4" VerticalAlignment="Center">
+						<StackPanel Grid.Column="4" VerticalAlignment="Center" Margin="0,-3,0,0">
 							<TextBlock x:Name="SnapUser" Text="{Binding Sender, Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
 									   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
 								<TextBlock.RenderTransform>
-									<CompositeTransform TranslateY="7"/>
+									<CompositeTransform TranslateY="0"/>
 								</TextBlock.RenderTransform>
 							</TextBlock>
 
@@ -241,7 +239,6 @@
 				<ItemsControl.Template>
 					<ControlTemplate TargetType="ItemsControl">
 						<StackPanel>
-							
 							<!-- Refresh animation -->
 							<Grid x:Name="flashy" Background="Red" Height="150" Margin="0,-150,0,0" Loaded="flashy_Loaded">
 								<Grid.Triggers>

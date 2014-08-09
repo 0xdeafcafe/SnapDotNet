@@ -2,12 +2,16 @@
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Snapchat.SnapLogic.Api;
 using Snapchat.SnapLogic.Api.Exceptions;
 using Snapchat.SnapLogic.Helpers;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
 using SnapDotNet.Core.Miscellaneous.Helpers;
 using SnapDotNet.Core.Miscellaneous.Models;
+using Windows.UI.Xaml;
 
 namespace Snapchat.Models
 {
@@ -120,6 +124,34 @@ namespace Snapchat.Models
 		}
 
 		#region Helpers
+
+		[IgnoreDataMember]
+		public ControlTemplate IconResource
+		{
+			get
+			{
+				var resourceName = "StatusIcon{0}{1}";
+				var status = SavedStates[App.SnapchatManager.Account.Username].Version == 0 ? "Delivered" : "Opened";
+
+				resourceName = Body.Type == MessageBodyType.Screenshot
+					? String.Format(resourceName, "ChatScreenshot", "")
+					: String.Format(resourceName, IsIncoming ? "Incoming" : "Outgoing", status);
+
+				return (ControlTemplate) Application.Current.Resources[resourceName];
+			}
+		}
+
+		[IgnoreDataMember]
+		public SolidColorBrush IconColourBrush
+		{
+			get { return new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2)); }
+		}
+
+		[IgnoreDataMember]
+		public Boolean IsIncoming
+		{
+			get { return App.SnapchatManager.Account.Username != Sender; }
+		}
 
 		[IgnoreDataMember]
 		public String Sender

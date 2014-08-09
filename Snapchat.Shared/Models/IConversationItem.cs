@@ -1,4 +1,6 @@
 ﻿using System;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace Snapchat.Models
 {
@@ -9,5 +11,9 @@ namespace Snapchat.Models
 		DateTime PostedAt { get; set; }
 
 		String Sender { get; }
+
+		ControlTemplate IconResource { get; }
+
+		SolidColorBrush IconColourBrush { get; }
 	}
 }

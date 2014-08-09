@@ -23,8 +23,6 @@
 			<conversation:MessageStateConverter x:Key="MessageStateToBackgroundConverter" IsForBorderThickness="False" />
 			<conversation:UserHeaderChildIsSavedConverter x:Key="UserHeaderChildIsSavedConverter" />
 			
-			<conversations:SnapIconConverter x:Key="SnapIconConverter" />
-
 			<converters:DebugConverter x:Key="DebugConverter" />
 
 			<DataTemplate x:Key="TimeSeperatorDataTemplate">
