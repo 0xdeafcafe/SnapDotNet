@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -99,7 +100,7 @@ namespace SnapDotNet.Core.Miscellaneous.Helpers.Storage
 				await ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
 				return true;
 			}
-			catch (FileNotFoundException)
+			catch (Exception)
 			{
 				return false;
 			}
