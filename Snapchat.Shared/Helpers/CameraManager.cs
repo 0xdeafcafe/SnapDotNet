@@ -157,7 +157,7 @@ namespace Snapchat.Helpers
 
 		public async Task<WriteableBitmap> CapturePhotoAsync()
 		{
-			Debug.WriteLine("Attempting Photo Capture. Using Instant: " + IsNotUsingInstantCapture);
+			Debug.WriteLine("Attempting Photo Capture. Using Instant: " + !IsNotUsingInstantCapture);
 			var bitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
 
 			try
@@ -338,7 +338,7 @@ namespace Snapchat.Helpers
 				{
 					VideoSource = ScreenCapture.GetForCurrentView().VideoSource
 				});
-				_isUsingInstantCapture = true;
+				!_isNotUsingInstantCapture = true;
 				Debug.WriteLine("Initialized screen media capture!");
 				Debug.WriteLine("Instant screen capture is enabled");
 			}
@@ -367,7 +367,7 @@ namespace Snapchat.Helpers
 			//_deviceCapture.VideoDeviceController.FocusControl.Configure(new FocusSettings { AutoFocusRange = AutoFocusRange.Normal, Mode = FocusMode.Continuous });
 
 			// Set up low-lag photo capture
-			if (!IsUsingInstantCapture)
+			if (IsNotUsingInstantCapture)
 			{
 				Debug.WriteLine("Preparing low-lag photo capture");
 				var imageEncoding = ImageEncodingProperties.CreateJpeg();
