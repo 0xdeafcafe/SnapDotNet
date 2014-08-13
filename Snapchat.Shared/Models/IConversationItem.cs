@@ -15,5 +15,7 @@ namespace Snapchat.Models
 		ControlTemplate IconResource { get; }
 
 		SolidColorBrush IconColourBrush { get; }
+
+		String StatusFriendly { get; }
 	}
 }

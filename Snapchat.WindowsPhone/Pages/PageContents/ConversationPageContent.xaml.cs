@@ -52,21 +52,18 @@ namespace Snapchat.Pages.PageContents
 			var messageContainer = frameworkElement.DataContext as MessageContainer;
 			if (messageContainer == null) return;
 
-			var containsKey = messageContainer.ChatMessage.SavedStates.ContainsKey(App.SnapchatManager.Username);
-			var isSaved = containsKey && messageContainer.ChatMessage.SavedStates[App.SnapchatManager.Username].Saved;
+			var isSaved = messageContainer.ChatMessage.LocalSavedState.Saved;
 
 			if (isSaved)
 			{
-				messageContainer.ChatMessage.SavedStates[App.SnapchatManager.Username].Saved = false;
-				messageContainer.ChatMessage.SavedStates[App.SnapchatManager.Username].Version++;
+				messageContainer.ChatMessage.LocalSavedState.Saved = false;
+				messageContainer.ChatMessage.LocalSavedState.Version++;
 				// fire event
 			}
 			else
 			{
-				if (!containsKey)
-					messageContainer.ChatMessage.SavedStates.Add(App.SnapchatManager.Username, new SavedState { Version = 0 });
-				messageContainer.ChatMessage.SavedStates[App.SnapchatManager.Username].Saved = true;
-				messageContainer.ChatMessage.SavedStates[App.SnapchatManager.Username].Version++;
+				messageContainer.ChatMessage.LocalSavedState.Saved = true;
+				messageContainer.ChatMessage.LocalSavedState.Version++;
 				// fire event
 			}
 			messageContainer.ChatMessage.NotifyPropertyChanged("SavedState");

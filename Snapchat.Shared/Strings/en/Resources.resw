@@ -224,7 +224,6 @@
   </data>
   <data name="FriendHasNoBestFriends.Text" xml:space="preserve">
     <value>No Best Friends</value>
-    <comment>html hex code for crying emoticon xox</comment>
   </data>
   <data name="FriendsPageTitleTextBlock.Text" xml:space="preserve">
     <value>my friends</value>
@@ -441,5 +440,8 @@
   </data>
   <data name="UpgradeToProButton.Content" xml:space="preserve">
     <value>Unlock this feature</value>
+  </data>
+  <data name="SnapStatusSending" xml:space="preserve">
+    <value>Sending...</value>
   </data>
 </root>

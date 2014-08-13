@@ -89,7 +89,9 @@ namespace Snapchat.Models
 			set
 			{
 				SetField(ref _status, value);
+				NotifyPropertyChanged("StatusFriendly");
 				NotifyPropertyChanged("IsDownloading");
+				NotifyPropertyChanged("IconResource");
 				NotifyPropertyChanged("HasMedia");
 				NotifyPropertyChanged("Id");
 			}
@@ -131,6 +133,53 @@ namespace Snapchat.Models
 			{
 				var resourceName = String.Format("StatusIcon{0}{1}", IsIncoming ? "Incoming" : "Outgoing", Status.ToString());
 				return (ControlTemplate) Application.Current.Resources[resourceName];
+			}
+		}
+
+		[IgnoreDataMember]
+		public String StatusFriendly
+		{
+			get
+			{
+				if (IsIncoming)
+				{
+					switch (Status)
+					{
+						case SnapStatus.Delivered:
+							return App.Strings.GetString("SnapStatusTapLoad");
+
+						case SnapStatus.Downloading:
+							return App.Strings.GetString("SnapStatusDownloading");
+
+						//case SnapStatus.None:
+						default:
+							return App.Strings.GetString("SnapStatusNone");
+
+						case SnapStatus.Opened:
+							return App.Strings.GetString("SnapStatusOpened");
+
+						case SnapStatus.Screenshotted:
+							return App.Strings.GetString("SnapStatusScreenshot");
+					}
+				}
+
+				// You sent this
+				switch (Status)
+				{
+					case SnapStatus.Delivered:
+					case SnapStatus.Sent:
+						return App.Strings.GetString("SnapStatusDelivered");
+
+					//case SnapStatus.None:
+					default:
+						return App.Strings.GetString("SnapStatusNone");
+
+					case SnapStatus.Opened:
+						return App.Strings.GetString("SnapStatusOpened");
+
+					case SnapStatus.Screenshotted:
+						return App.Strings.GetString("SnapStatusScreenshot");
+				}
 			}
 		}
 

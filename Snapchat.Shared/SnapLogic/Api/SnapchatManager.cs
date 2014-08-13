@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Data.Json;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Snapchat.Models;
 using Snapchat.SnapLogic.Models.New;
 using SnapDotNet.Core.Miscellaneous.CustomTypes;
@@ -48,9 +50,11 @@ namespace Snapchat.SnapLogic.Api
 				if (SnapchatData != null && SnapchatData.UserAccount != null)
 					return SnapchatData.UserAccount.Username;
 
-				return null;
+				// Probally null, but yolo
+				return _usernameFallback;
 			}
 		}
+		private String _usernameFallback = null;
 
 		public Account Account
 		{
@@ -335,92 +339,94 @@ namespace Snapchat.SnapLogic.Api
 							// Is a snap
 							var snap = new Snap();
 							snap.CreateFromServer(message.Snap);
-								currentConversation.ConversationMessages.Messages.Add(snap);
+							currentConversation.ConversationMessages.Messages.Add(snap);
 						}
 					}
 
 					currentConversation.ConversationMessages.Messages.Sort(s => s.PostedAt);
-
-					// No idea why, but apparently I need this check...
-					if (currentConversation != null)
-						SnapchatData.Conversations.Add(currentConversation);
-
-					continue;
 				}
 
-				#endregion
+					#endregion
+
+				else
 
 				#region Update Existing Conversation
 
-				// Update Conversation
-				currentConversation.Id = newConversation.Id;
-				currentConversation.IterToken = newConversation.IterToken;
-				currentConversation.LastChatActions = new LastChatActions
 				{
-					LastRead = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastRead : DateTime.Now,
-					LastReader = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastReader : null,
-					LastWrite = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWrite : DateTime.Now,
-					LastWriteType = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWriteType : null,
-					LastWriter = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWriter : null,
-				};
-				currentConversation.LastInteraction = newConversation.LastInteraction;
-				currentConversation.Participants = newConversation.Participants;
-				currentConversation.ConversationState = new Snapchat.Models.ConversationState
-				{
-					UserChatReleases = newConversation.ConversationState.UserChatReleases,
-					UserSnapReleases = newConversation.ConversationState.UserSnapReleases,
-					UserSequences = newConversation.ConversationState.UserSequences
-				};
-				currentConversation.PendingChatMessages = newConversation.PendingChatsFor;
-				currentConversation.ConversationType = ConversationType.Person2Person;
-				if (currentConversation.ConversationMessages == null)
-					currentConversation.ConversationMessages = new Snapchat.Models.ConversationMessages();
-				if (currentConversation.ConversationMessages.Messages == null)
-					currentConversation.ConversationMessages.Messages = new ObservableCollection<IConversationItem>();
-
-				// Messages
-				foreach (var message in newConversation.ConversationMessages.Messages)
-				{
-					if (message.ChatMessage != null)
+					// Update Conversation
+					currentConversation.Id = newConversation.Id;
+					currentConversation.IterToken = newConversation.IterToken;
+					currentConversation.LastChatActions = new LastChatActions
 					{
-						// We a chat message
-						var existingChatMessage = currentConversation.ConversationMessages.Messages.FirstOrDefault(s => s.Id == message.ChatMessage.Id) as ChatMessage;
-						if (existingChatMessage != null) continue; // TODO: Does anything here need updating? Don't think so xox (inside and else)
-
-						// Insert chat
-						var chat = new ChatMessage();
-						chat.CreateFromServer(message.ChatMessage);
-						currentConversation.ConversationMessages.Messages.Add(chat);
-					}
-					else if (message.Snap != null)
+						LastRead = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastRead : DateTime.Now,
+						LastReader = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastReader : null,
+						LastWrite = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWrite : DateTime.Now,
+						LastWriteType = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWriteType : null,
+						LastWriter = newConversation.LastChatActions != null ? newConversation.LastChatActions.LastWriter : null,
+					};
+					currentConversation.LastInteraction = newConversation.LastInteraction;
+					currentConversation.Participants = newConversation.Participants;
+					currentConversation.ConversationState = new Snapchat.Models.ConversationState
 					{
-						// We a snap
-						var existingSnap = currentConversation.ConversationMessages.Messages.FirstOrDefault(s => s.Id == message.Snap.Id) as Snap;
-						if (existingSnap == null)
-						{
-							// Insert snap
-							var snap = new Snap();
-							snap.CreateFromServer(message.Snap);
-							currentConversation.ConversationMessages.Messages.Add(snap);
-						}
-						else if (!message.Snap.IsIncoming)
-						{
-							if (existingSnap.Status == message.Snap.Status) continue;
+						UserChatReleases = newConversation.ConversationState.UserChatReleases,
+						UserSnapReleases = newConversation.ConversationState.UserSnapReleases,
+						UserSequences = newConversation.ConversationState.UserSequences
+					};
+					currentConversation.PendingChatMessages = newConversation.PendingChatsFor;
+					currentConversation.ConversationType = ConversationType.Person2Person;
+					if (currentConversation.ConversationMessages == null)
+						currentConversation.ConversationMessages = new Snapchat.Models.ConversationMessages();
+					if (currentConversation.ConversationMessages.Messages == null)
+						currentConversation.ConversationMessages.Messages = new ObservableCollection<IConversationItem>();
 
-							// Update status, and timestamps
-							existingSnap.Status = message.Snap.Status;
-							existingSnap.Timestamp = message.Snap.Timestamp;
+					// Messages
+					foreach (var message in newConversation.ConversationMessages.Messages)
+					{
+						if (message.ChatMessage != null)
+						{
+							// We a chat message
+							var existingChatMessage =
+								currentConversation.ConversationMessages.Messages.FirstOrDefault(s => s.Id == message.ChatMessage.Id) as
+									ChatMessage;
+							if (existingChatMessage != null)
+								continue; // TODO: Does anything here need updating? Don't think so xox (inside and else)
+
+							// Insert chat
+							var chat = new ChatMessage();
+							chat.CreateFromServer(message.ChatMessage);
+							currentConversation.ConversationMessages.Messages.Add(chat);
+						}
+						else if (message.Snap != null)
+						{
+							// We a snap
+							var existingSnap =
+								currentConversation.ConversationMessages.Messages.FirstOrDefault(s => s.Id == message.Snap.Id) as Snap;
+							if (existingSnap == null)
+							{
+								// Insert snap
+								var snap = new Snap();
+								snap.CreateFromServer(message.Snap);
+								currentConversation.ConversationMessages.Messages.Add(snap);
+							}
+							else if (!message.Snap.IsIncoming)
+							{
+								if (existingSnap.Status == message.Snap.Status) continue;
+
+								// Update status, and timestamps
+								existingSnap.Status = message.Snap.Status;
+								existingSnap.Timestamp = message.Snap.Timestamp;
+							}
 						}
 					}
+
+					currentConversation.ConversationMessages.Messages.SortDescending(c => c.PostedAt);
 				}
 
-				currentConversation.ConversationMessages.Messages.SortDescending(c => c.PostedAt);
+				#endregion
 
 				// No idea why, but apparently I need this check...
 				if (currentConversation != null)
 					SnapchatData.Conversations.Add(currentConversation);
-
-				#endregion
 			}
 
 			SnapchatData.Conversations.SortDescending(c => c.LastInteraction);
@@ -486,11 +492,25 @@ namespace Snapchat.SnapLogic.Api
 			{
 				try
 				{
+					var snapchatData = (dynamic) JObject.Parse(accountData);
+					_usernameFallback = snapchatData.UserAccount.Username;
+				}
+				catch (Exception exception)
+				{
+					Debug.WriteLine(exception.ToString());
+				}
+
+				try
+				{
 					SnapchatData = JsonConvert.DeserializeObject<SnapchatData>(accountData);
 				}
 				catch (Exception exception)
 				{
 					Debug.WriteLine(exception.ToString());
+				}
+				finally
+				{
+					_usernameFallback = null;
 				}
 			}
 

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Windows.UI;
@@ -22,12 +24,23 @@ namespace Snapchat.Models
 		Media
 	}
 
+	public enum MessageStatus
+	{
+		Sending,
+		Recieved,
+		Read
+	}
+
 	public class ChatMessage
 		: NotifyPropertyChangedBase, IConversationItem
 	{
 		public ChatMessage()
 		{
-			_savedStates.MapChanged += (sender, args) => NotifyPropertyChanged("SavedStates");
+			_remoteSavedStates.MapChanged += (sender, args) =>
+			{
+				NotifyPropertyChanged("SavedStates");
+				NotifyPropertyChanged("IconResource");
+			};
 		}
 
 		public Body Body
@@ -58,20 +71,28 @@ namespace Snapchat.Models
 		}
 		private String _id;
 
-		public ObservableDictionary<string, SavedState> SavedStates
+		public SavedState LocalSavedState
 		{
-			get { return _savedStates; }
-			set { SetField(ref _savedStates, value); }
+			get { return _localSavedState; }
+			set
+			{
+				SetField(ref _localSavedState, value);
+				UpdateStatus();
+			}
 		}
-		private ObservableDictionary<string, SavedState> _savedStates = new ObservableDictionary<string, SavedState>();
+		private SavedState _localSavedState;
 
-		public Boolean Saved
+		public ObservableDictionary<string, SavedState> RemoteSavedStates
 		{
-			get { return _saved; }
-			set { SetField(ref _saved, value); }
+			get { return _remoteSavedStates; }
+			set
+			{
+				SetField(ref _remoteSavedStates, value);
+				UpdateStatus();
+			}
 		}
-		private Boolean _saved;
-
+		private ObservableDictionary<string, SavedState> _remoteSavedStates = new ObservableDictionary<string, SavedState>();
+		
 		public String SequenceNumber
 		{
 			get { return _sequenceNumber; }
@@ -92,6 +113,13 @@ namespace Snapchat.Models
 			set { SetField(ref _type, value); }
 		}
 		private String _type;
+
+		public MessageStatus Status
+		{
+			get { return _status; }
+			set { SetField(ref _status, value); }
+		}
+		private MessageStatus _status;
 
 		public void CreateFromServer(SnapLogic.Models.New.ChatMessage serverChatMessage)
 		{
@@ -117,13 +145,41 @@ namespace Snapchat.Models
 				To = serverChatMessage.Header.To
 			};
 			PostedAt = serverChatMessage.PostedAt;
-			Saved = serverChatMessage.SavedStates != null && serverChatMessage.SavedStates[App.SnapchatManager.Username].Saved;
-			SavedStates = new ObservableDictionary<string, SavedState>();
-			foreach (var savedState in serverChatMessage.SavedStates ?? new ObservableDictionary<string, SnapLogic.Models.New.SavedState>())
-				SavedStates.Add(savedState.Key, new SavedState { Saved = savedState.Value.Saved, Version = savedState.Value.Version });
+			if (serverChatMessage.SavedStates == null) serverChatMessage.SavedStates = new ObservableDictionary<string, SnapLogic.Models.New.SavedState>();
+			var hasLocalSavedState = serverChatMessage.SavedStates.ContainsKey(Sender);
+			if (hasLocalSavedState)
+			{
+				var localSavedState = serverChatMessage.SavedStates[Sender];
+				LocalSavedState = new SavedState {Saved = localSavedState.Saved, Version = localSavedState.Version};
+			}
+			else
+				LocalSavedState = new SavedState {Saved = false, Version = 0};
+
+			RemoteSavedStates = new ObservableDictionary<string, SavedState>();
+			foreach (var savedState in serverChatMessage.SavedStates.Where(s => s.Key != Sender))
+				RemoteSavedStates.Add(savedState.Key, new SavedState { Saved = savedState.Value.Saved, Version = savedState.Value.Version });
+
+			UpdateStatus();
 		}
 
 		#region Helpers
+
+		public void UpdateStatus()
+		{
+			Status = MessageStatus.Recieved;
+
+			if (IsIncoming)
+			{
+				if (LocalSavedState.Saved)
+					Status = MessageStatus.Read;
+			}
+			else
+			{
+				var remoteSavedState = RemoteSavedStates.FirstOrDefault();
+				if (remoteSavedState.Value != null && remoteSavedState.Value.Version > 0)
+					Status = MessageStatus.Read;
+			}
+		}
 
 		[IgnoreDataMember]
 		public ControlTemplate IconResource
@@ -131,7 +187,7 @@ namespace Snapchat.Models
 			get
 			{
 				var resourceName = "StatusIcon{0}{1}";
-				var status = SavedStates[App.SnapchatManager.Account.Username].Version == 0 ? "Delivered" : "Opened";
+				var status = LocalSavedState.Version == 0 ? "Delivered" : "Opened";
 
 				resourceName = Body.Type == MessageBodyType.Screenshot
 					? String.Format(resourceName, "ChatScreenshot", "")
@@ -150,13 +206,57 @@ namespace Snapchat.Models
 		[IgnoreDataMember]
 		public Boolean IsIncoming
 		{
-			get { return App.SnapchatManager.Account.Username != Sender; }
+			get { return App.SnapchatManager.Username != Sender; }
 		}
 
 		[IgnoreDataMember]
 		public String Sender
 		{
 			get { return Header.From; }
+		}
+
+		[IgnoreDataMember]
+		public String StatusFriendly
+		{
+			get
+			{
+				if (Body.Type == MessageBodyType.Screenshot)
+					return App.Strings.GetString("SnapStatusScreenshot");
+
+				if (IsIncoming)
+				{
+					switch (Status)
+					{
+						default:
+							return App.Strings.GetString("SnapStatusNone");
+
+						case MessageStatus.Read:
+							return App.Strings.GetString("SnapStatusOpened");
+
+						case MessageStatus.Recieved:
+							return App.Strings.GetString("SnapStatusDelivered");
+
+						case MessageStatus.Sending:
+							return App.Strings.GetString("SnapStatusSending");
+					}
+				}
+
+				// You sent this
+				switch (Status)
+				{
+					case MessageStatus.Recieved:
+						return App.Strings.GetString("SnapStatusDelivered");
+
+					default:
+						return App.Strings.GetString("SnapStatusNone");
+
+					case MessageStatus.Sending:
+						return App.Strings.GetString("SnapStatusSending");
+
+					case MessageStatus.Read:
+						return App.Strings.GetString("SnapStatusOpened");
+				}
+			}
 		}
 
 		#endregion

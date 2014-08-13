@@ -65,6 +65,12 @@ namespace Snapchat.SnapLogic.Models.New
 			get { return Header.From; }
 		}
 
+		[IgnoreDataMember]
+		public String StatusFriendly
+		{
+			get { return null; }
+		}
+
 		#endregion
 	}
 

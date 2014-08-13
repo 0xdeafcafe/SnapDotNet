@@ -166,7 +166,7 @@ namespace Snapchat.Models
 	{
 		public ConversationMessages()
 		{
-			_messages.CollectionChanged += (sender, args) => { NotifyPropertyChanged("Messages"); NotifyPropertyChanged("SortedMessages"); };
+			_messages.CollectionChanged += (sender, args) => { NotifyPropertyChanged("UnreadContent"); NotifyPropertyChanged("HasPendingContent"); NotifyPropertyChanged("Messages"); NotifyPropertyChanged("SortedMessages"); };
 		}
 
 		[JsonProperty(ItemTypeNameHandling = TypeNameHandling.All)]
@@ -176,7 +176,9 @@ namespace Snapchat.Models
 			set
 			{
 				SetField(ref _messages, value);
+				NotifyPropertyChanged("UnreadContent");
 				NotifyPropertyChanged("SortedMessages");
+				NotifyPropertyChanged("HasPendingContent");
 			}
 		}
 		private ObservableCollection<IConversationItem> _messages = new ObservableCollection<IConversationItem>(); 
@@ -187,7 +189,7 @@ namespace Snapchat.Models
 			set { SetField(ref _messagingAuthentication, value); }
 		}
 		private MessagingAuthentication _messagingAuthentication;
-
+		
 		#region Helpers
 
 		[IgnoreDataMember]
@@ -233,6 +235,38 @@ namespace Snapchat.Models
 					conversationThread.Add(currentUserData);
 
 				return conversationThread;
+			}
+		}
+
+		[IgnoreDataMember]
+		public Boolean HasPendingContent
+		{
+			get { return UnreadContentCount > 0; }
+		}
+
+		[IgnoreDataMember]
+		public int UnreadContentCount
+		{
+			get
+			{
+				var count = 0;
+				foreach (var message in Messages)
+				{
+					if (message is Snap)
+					{
+						var snap = message as Snap;
+						if (snap.IsIncoming && (snap.Status == SnapStatus.Delivered || snap.Status == SnapStatus.Downloading))
+							count++;
+					}
+					else if (message is ChatMessage)
+					{
+						var chatMessage = message as ChatMessage;
+						if (chatMessage.IsIncoming && chatMessage.Status == MessageStatus.Recieved)
+							count++;
+					}
+				}
+
+				return count;
 			}
 		}
 

@@ -22,8 +22,23 @@
 			<conversations:FriendlyFriendNameConverter x:Key="FriendlyFriendNameConverter" />
 			<conversations:FriendlySnapCountConverter x:Key="FriendlySnapCountConverter" />
 			<converters:FriendlyTimeConverter x:Key="FriendlyTimeConverter" />
-			<conversations:SnapStatusConverter x:Key="SnapStatusConverter" />
 
+			<converters:BooleanToStyleConverter x:Key="SnapUsernameBooleanToStyleConverter">
+				<converters:BooleanToStyleConverter.TrueStyle>
+					<Style TargetType="TextBlock">
+						<Setter Property="FontWeight" Value="SemiBold"></Setter>
+					</Style>
+				</converters:BooleanToStyleConverter.TrueStyle>
+				<converters:BooleanToStyleConverter.FalseStyle>
+					<Style TargetType="TextBlock">
+						<Setter Property="FontWeight" Value="Normal"></Setter>
+					</Style>
+				</converters:BooleanToStyleConverter.FalseStyle>
+			</converters:BooleanToStyleConverter>
+
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" IsInverted="False" />
+			<converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
+			
 			<Style x:Key="ConvoListItemStyle" TargetType="Button">
 				<Setter Property="BorderBrush" Value="#eeeeee"/>
 				<Setter Property="Background" Value="Transparent"/>
@@ -108,8 +123,8 @@
 					</Button.Resources>
 					<Grid x:Name="ConvoItemGrid" Height="50">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="15" />
 							<ColumnDefinition Width="20" />
+							<ColumnDefinition Width="10" />
 							<ColumnDefinition Width="30" />
 							<ColumnDefinition Width="10" />
 							<ColumnDefinition Width="*" />
@@ -129,21 +144,25 @@
 											Visibility="{Binding Converter={StaticResource PendingChatsConverter}, FallbackValue='Visible'}"/>-->
 						</Grid>
 
-						<StackPanel Grid.Column="4" VerticalAlignment="Center" Margin="0,-3,0,0">
-							<TextBlock x:Name="SnapUser" Text="{Binding Sender, Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=matty}" 
-									   FontFamily="Segoe WP" FontWeight="Normal" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5">
+						<StackPanel Grid.Column="4" VerticalAlignment="Center" Margin="0,0,0,0">
+							<TextBlock x:Name="SnapUser" FontFamily="Segoe WP" Foreground="Black" FontSize="20" RenderTransformOrigin="0.5,0.5"
+									   Text="{Binding Path=Sender, Converter={StaticResource FriendlyFriendNameConverter}, FallbackValue=nicole}"
+									   Style="{Binding Path=ConversationMessages.HasPendingContent, Converter={StaticResource SnapUsernameBooleanToStyleConverter}}">
 								<TextBlock.RenderTransform>
-									<CompositeTransform TranslateY="0"/>
+									<CompositeTransform TranslateY="7"/>
 								</TextBlock.RenderTransform>
 							</TextBlock>
 
-							<!--<ContentControl x:Name="SnapDetails" Content="{Binding}" Opacity="0"
-											ContentTemplateSelector="{StaticResource SnapInfoTemplateSelector}" 
-											RenderTransformOrigin="0.5,0.5">
-								<ContentControl.RenderTransform>
+							<StackPanel x:Name="SnapDetails" Orientation="Horizontal" RenderTransformOrigin="0.5,0.5" Opacity="0">
+								<StackPanel.RenderTransform>
 									<CompositeTransform TranslateX="0" TranslateY="0"/>
-								</ContentControl.RenderTransform>
-							</ContentControl>-->
+								</StackPanel.RenderTransform>
+								<TextBlock>
+									<Run Text="{Binding Path=ConversationMessages.Messages[0].PostedAt, Converter={StaticResource FriendlyTimeConverter}}" />
+									<Run Text="-" />
+									<Run Text="{Binding Path=ConversationMessages.Messages[0].StatusFriendly}" />
+								</TextBlock>
+							</StackPanel>
 						</StackPanel>
 					</Grid>
 				</Button>

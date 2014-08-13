@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToStyleConverter.cs" />
     <Page Include="$(MSBuildThisFileDirectory)Assets\Vectors\UploadConversationStatusIcons.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -77,10 +78,7 @@
     </Page>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlyFriendNameConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\PendingChatsConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\FriendlySnapCountConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapStatusConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversations\SnapColourConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\CaseConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\FriendlyFriendNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Conversation\FriendlyTimeConverter.cs" />
