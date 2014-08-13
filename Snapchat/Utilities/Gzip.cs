@@ -1,50 +1,90 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
+using System.IO;
+using System.IO.Compression;
 using System.Text;
+using System.Threading.Tasks;
+using Windows.Security.Cryptography;
 using Windows.Storage.Streams;
 
 namespace SnapDotNet.Utilities
 {
-	public static class Gzip
+	/// <summary>
+	/// Provides static methods for compressing and decompressing data using GZip.
+	/// </summary>
+	public static class GZip
 	{
-		public static string Decompress(IInputStream compressedData, Encoding encoding)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static async Task<byte[]> DecompressAsync(IBuffer data)
 		{
-			throw new NotImplementedException();
-		}
-		/*public static byte[] Compress(byte[] decompressedData)
-		{
-			if (decompressedData == null) return null;
-			var textStream = new MemoryStream();
-			var zip = new GZipStream(textStream, CompressionMode.Compress);
-			zip.Write(decompressedData, 0, decompressedData.Length);
-			return textStream.ToArray();
-		}
+			Contract.Requires<ArgumentNullException>(data != null);
 
-		public static byte[] CompressToString(string decompressedData, Encoding encoding = null)
-		{
-			encoding = encoding ?? Encoding.UTF8;
-			var textBytes = encoding.GetBytes(decompressedData);
-			return Compress(textBytes);
+			byte[] buffer;
+			CryptographicBuffer.CopyToByteArray(data, out buffer);
+			return await DecompressAsync(buffer);
 		}
 
-
-		public static byte[] Decompress(byte[] compressedData)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static async Task<byte[]> DecompressAsync(byte[] data)
 		{
-			if (compressedData == null) return null;
-			var inputStream = new MemoryStream(compressedData);
-			var outputStream = new MemoryStream();
-			var zip = new GZipStream(inputStream, CompressionMode.Decompress);
-			var bytes = new byte[4096];
-			int n;
-			while ((n = zip.Read(bytes, 0, bytes.Length)) != 0)
-				outputStream.Write(bytes, 0, n);
-			return outputStream.ToArray();
+			Contract.Requires<ArgumentNullException>(data != null);
+
+			using (var stream = new MemoryStream(data))
+			using (var gzip = new GZipStream(stream, CompressionMode.Decompress))
+			using (var outputStream = new MemoryStream())
+			{
+				await gzip.CopyToAsync(outputStream);
+				return outputStream.ToArray();
+			}
 		}
 
-		public static string DecompressToString(byte[] compressedData, Encoding encoding = null)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="encoding"></param>
+		/// <returns></returns>
+		public static async Task<string> DecompressToStringAsync(IBuffer data, Encoding encoding)
 		{
-			encoding = encoding ?? Encoding.UTF8;
-			var decompressedData = Decompress(compressedData);
-			return encoding.GetString(decompressedData, 0, decompressedData.Length);
-		}*/
+			Contract.Requires<ArgumentNullException>(data != null && encoding != null);
+			return encoding.GetString(await DecompressAsync(data), 0, unchecked((int) data.Length));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns></returns>
+		public static async Task<byte[]> CompressAsync(byte[] data)
+		{
+			Contract.Requires<ArgumentNullException>(data != null);
+
+			using (var outputStream = new MemoryStream())
+			using (var gzip = new GZipStream(outputStream, CompressionMode.Compress))
+			{
+				await gzip.WriteAsync(data, 0, data.Length);
+				return outputStream.ToArray();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="encoding"></param>
+		/// <returns></returns>
+		public static async Task<byte[]> CompressAsync(string data, Encoding encoding)
+		{
+			Contract.Requires<ArgumentNullException>(data != null && encoding != null);
+			return await CompressAsync(encoding.GetBytes(data));
+		}
 	}
 }

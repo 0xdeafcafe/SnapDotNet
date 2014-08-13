@@ -80,6 +80,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controls\SnazzyHub.cs" />
     <Compile Include="Dialogs\LogInDialog.xaml.cs">
       <DependentUpon>LogInDialog.xaml</DependentUpon>
     </Compile>
@@ -110,6 +111,7 @@
     <Content Include="Assets\StoreLogo.scale-240.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />
     <Content Include="StoreManifest.xml" />
+    <Content Include="VoiceCommandDefinition.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Snapchat\SnapDotNet.csproj">
@@ -138,6 +140,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
@@ -152,6 +158,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

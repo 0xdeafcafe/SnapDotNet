@@ -5,6 +5,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:controls="using:ColdSnap.Controls"
 	xmlns:vm="using:ColdSnap.ViewModels"
     mc:Ignorable="d"
 
@@ -14,21 +15,7 @@
 		<vm:MainPageViewModel/>
 	</d:DesignProperties.DataContext>
 	
-	<Grid x:Name="LayoutRoot">
-
-		<Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!-- Title Panel -->
-		<StackPanel Grid.Row="0" Margin="19,0,0,0">
-			<TextBlock Text="ColdSnap" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-			<TextBlock Text="friends" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-		</StackPanel>
+	<controls:SnazzyHub>
 		
-		<Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-			<TextBlock Text="{Binding Account.Username}"/>
-        </Grid>
-    </Grid>
+	</controls:SnazzyHub>
 </Page>
