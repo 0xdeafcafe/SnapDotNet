@@ -1,0 +1,33 @@
+﻿<ContentDialog
+	x:Class="ColdSnap.Dialogs.SignUpDialog"
+	x:Uid="SignUpContentDialog"
+	
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:dvm="using:ColdSnap.ViewModels.Dialogs"
+	
+	Title="SIGN UP"
+	PrimaryButtonText="continue"  
+	SecondaryButtonText="cancel"
+	Background="#FF00A2FF">
+	
+	<ContentDialog.DataContext>
+		<dvm:SignUpDialogViewModel/>
+	</ContentDialog.DataContext>
+
+    <StackPanel>
+        <TextBox Name="email"
+				 x:Uid="EmailAddressTextBox"
+				 Header="Email"
+				 InputScope="EmailSmtpAddress"/>
+		<PasswordBox Name="password"
+					 x:Uid="PasswordBox"
+					 Header="Password"/>
+		<DatePicker Name="birthday"
+					x:Uid="BirthdayDatePicker"
+					Header="Birthday"
+					Margin="0,8,0,0"
+					MaxYear="{Binding MaxBirthdayYear}"
+					Date="{Binding MaxBirthdayYear}"/>
+	</StackPanel>
+</ContentDialog>
