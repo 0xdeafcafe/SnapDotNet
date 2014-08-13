@@ -23,7 +23,7 @@ namespace Snapchat.Helpers
 		private MediaCapture _deviceCapture, _screenCapture;
 		private CaptureElement _captureElement;
 		private int _currentVideoDevice, _currentAudioDevice;
-		private bool _isUsingInstantCapture;
+
 		private LowLagPhotoCapture _lowLagPhotoCapture;
 		private bool _isDisposed;
 
@@ -32,6 +32,12 @@ namespace Snapchat.Helpers
 			Dispose();
 		}
 
+		/// <summary>
+		/// Set true to NOT capture via UI screenshot. Fallback alternative is lowlagcapture
+		/// </summary>
+		/// TODO: make less mess
+		public bool IsNotUsingInstantCapture { get; set; }
+		
 		/// <summary>
 		/// Gets a boolean value indicating whether a front camera is available.
 		/// </summary>
@@ -151,12 +157,12 @@ namespace Snapchat.Helpers
 
 		public async Task<WriteableBitmap> CapturePhotoAsync()
 		{
-			Debug.WriteLine("Attempting Photo Capture. Using Instant: " + _isUsingInstantCapture);
+			Debug.WriteLine("Attempting Photo Capture. Using Instant: " + !IsNotUsingInstantCapture);
 			var bitmap = new WriteableBitmap((int) PhotoCaptureWidth, (int) PhotoCaptureHeight);
 
 			try
 			{
-				if (_isUsingInstantCapture)
+				if (!IsNotUsingInstantCapture)
 				{
 					// TODO: Hide all FrameworkElements that isn't a parent in the hierarchy of the capture element's visual tree.
 
@@ -332,7 +338,7 @@ namespace Snapchat.Helpers
 				{
 					VideoSource = ScreenCapture.GetForCurrentView().VideoSource
 				});
-				_isUsingInstantCapture = true;
+				!_isNotUsingInstantCapture = true;
 				Debug.WriteLine("Initialized screen media capture!");
 				Debug.WriteLine("Instant screen capture is enabled");
 			}
@@ -361,7 +367,7 @@ namespace Snapchat.Helpers
 			//_deviceCapture.VideoDeviceController.FocusControl.Configure(new FocusSettings { AutoFocusRange = AutoFocusRange.Normal, Mode = FocusMode.Continuous });
 
 			// Set up low-lag photo capture
-			if (!_isUsingInstantCapture)
+			if (IsNotUsingInstantCapture)
 			{
 				Debug.WriteLine("Preparing low-lag photo capture");
 				var imageEncoding = ImageEncodingProperties.CreateJpeg();
