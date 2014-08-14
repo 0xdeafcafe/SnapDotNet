@@ -135,6 +135,7 @@ namespace ColdSnap.Pages
 			progress.Text = App.Strings.GetString("StatusLoggingIn");
 			await progress.ShowAsync();
 
+			string errorMessage = null;
 			try
 			{
 				// Try to log in with the given credentials.
@@ -145,24 +146,26 @@ namespace ColdSnap.Pages
 			}
 			catch (InvalidCredentialsException)
 			{
-				(new MessageDialog(App.Strings.GetString("InvalidCredentialsException"))).ShowAsync();
+				errorMessage = App.Strings.GetString("InvalidCredentialsException");
 			}
 			catch
 			{
-				(new MessageDialog(App.Strings.GetString("UnknownLogInException"))).ShowAsync();
+				errorMessage = App.Strings.GetString("UnknownLogInException");
 			}
-			finally
-			{
-				// Clear the password field.
-				_logInDialog.Password = String.Empty;
 
-				// Hide progress indicator.
-				progress.Text = String.Empty;
-				progress.HideAsync();
+			// Display error message if there's one.
+			if (errorMessage != null)
+				await new MessageDialog(errorMessage).ShowAsync();
 
-				sender.IsEnabled = sender.IsPrimaryButtonEnabled = sender.IsSecondaryButtonEnabled = true;
-				deferral.Complete();
-			}
+			// Clear the password field.
+			_logInDialog.Password = String.Empty;
+
+			// Hide progress indicator.
+			progress.Text = String.Empty;
+			progress.HideAsync();
+
+			sender.IsEnabled = sender.IsPrimaryButtonEnabled = sender.IsSecondaryButtonEnabled = true;
+			deferral.Complete();
 		}
 	}
 }

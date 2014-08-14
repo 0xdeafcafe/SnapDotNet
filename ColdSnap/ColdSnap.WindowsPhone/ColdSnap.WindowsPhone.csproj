@@ -120,7 +120,12 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Controls\SnazzyHub.cs" />
+    <Compile Include="Controls\SnazzyHub.xaml.cs">
+      <DependentUpon>SnazzyHub.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SnazzyHubSection.xaml.cs">
+      <DependentUpon>SnazzyHubSection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\LogInDialog.xaml.cs">
       <DependentUpon>LogInDialog.xaml</DependentUpon>
     </Compile>
@@ -160,6 +165,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\SnazzyHub.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SnazzyHubSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Dialogs\LogInDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -179,10 +192,6 @@
     <Page Include="Pages\StartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
