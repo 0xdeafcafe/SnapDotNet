@@ -1,33 +1,37 @@
-﻿using ColdSnap.Common;
-using System;
-using System.Diagnostics;
-using System.Windows.Input;
+﻿using System;
 using Windows.System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
 namespace ColdSnap.Dialogs
 {
-	public sealed partial class LogInDialog : ContentDialog
+	public sealed partial class LogInDialog
 	{
+#if DEBUG
+		public static DependencyProperty UsernameProperty = DependencyProperty.Register("Username", typeof(string), typeof(LogInDialog), new PropertyMetadata("wumbotestalex"));
+		public static DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof(string), typeof(LogInDialog), new PropertyMetadata("testing123"));
+#else
 		public static DependencyProperty UsernameProperty = DependencyProperty.Register("Username", typeof(string), typeof(LogInDialog), new PropertyMetadata(String.Empty));
 		public static DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof(string), typeof(LogInDialog), new PropertyMetadata(String.Empty));
+#endif
 
 		public LogInDialog()
 		{
 			InitializeComponent();
 
 			IsPrimaryButtonEnabled = false;
+#if DEBUG
+			IsPrimaryButtonEnabled = true;
+#endif
 			SecondaryButtonClick += delegate { Password = String.Empty; };
 
-			this.username.TextChanged += delegate
+			username.TextChanged += delegate
 			{
-				IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(this.username.Text) && !String.IsNullOrWhiteSpace(this.password.Password);
+				IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(username.Text) && !String.IsNullOrWhiteSpace(password.Password);
 			};
-			this.password.PasswordChanged += delegate
+			password.PasswordChanged += delegate
 			{
-				IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(this.username.Text) && !String.IsNullOrWhiteSpace(this.password.Password);
+				IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(username.Text) && !String.IsNullOrWhiteSpace(password.Password);
 			};
 		}
 
@@ -46,13 +50,13 @@ namespace ColdSnap.Dialogs
 		private void Username_KeyDown(object sender, KeyRoutedEventArgs e)
 		{
 			if (e.Key == VirtualKey.Enter)
-				this.password.Focus(Windows.UI.Xaml.FocusState.Keyboard);
+				password.Focus(FocusState.Keyboard);
 		}
 
 		private void Password_KeyDown(object sender, KeyRoutedEventArgs e)
 		{
 			if (e.Key == VirtualKey.Enter)
-				this.forgotPasswordButton.Focus(Windows.UI.Xaml.FocusState.Keyboard);
+				forgotPasswordButton.Focus(FocusState.Keyboard);
 		}
 	}
 }

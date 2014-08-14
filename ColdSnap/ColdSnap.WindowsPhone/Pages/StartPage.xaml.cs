@@ -3,8 +3,6 @@ using ColdSnap.Dialogs;
 using ColdSnap.ViewModels;
 using SnapDotNet;
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
@@ -18,9 +16,9 @@ namespace ColdSnap.Pages
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class StartPage : Page
+	public sealed partial class StartPage
 	{
-		private NavigationHelper _navigationHelper;
+		private readonly NavigationHelper _navigationHelper;
 		private readonly StartPageViewModel _viewModel = new StartPageViewModel();
 
 		private LogInDialog _logInDialog;
@@ -147,11 +145,11 @@ namespace ColdSnap.Pages
 			}
 			catch (InvalidCredentialsException)
 			{
-				var showMessageTask = (new MessageDialog(App.Strings.GetString("InvalidCredentialsException"))).ShowAsync();
+				(new MessageDialog(App.Strings.GetString("InvalidCredentialsException"))).ShowAsync();
 			}
 			catch
 			{
-				var showMessageTask = (new MessageDialog(App.Strings.GetString("UnknownLogInException"))).ShowAsync();
+				(new MessageDialog(App.Strings.GetString("UnknownLogInException"))).ShowAsync();
 			}
 			finally
 			{
@@ -160,7 +158,7 @@ namespace ColdSnap.Pages
 
 				// Hide progress indicator.
 				progress.Text = String.Empty;
-				var hideProgressTask = progress.HideAsync();
+				progress.HideAsync();
 
 				sender.IsEnabled = sender.IsPrimaryButtonEnabled = sender.IsSecondaryButtonEnabled = true;
 				deferral.Complete();
