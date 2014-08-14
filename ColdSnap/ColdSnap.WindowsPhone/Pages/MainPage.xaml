@@ -19,7 +19,13 @@
 	<controls:SnazzyHub>
 		<controls:SnazzyHubSection AccentColor="#FF3cb2e2" Header="coldsnap">
 			<DataTemplate>
-				
+				<Grid>
+					<TextBlock Foreground="Black" Text="{Binding Path=Account.Username}" />
+					
+					<Button x:Name="OpenConversationButton" Content="test" 
+							BorderBrush="Black" Foreground="Black" 
+							Click="OpenConversationButton_OnClick"/>
+				</Grid>
 			</DataTemplate>
 		</controls:SnazzyHubSection>
 
