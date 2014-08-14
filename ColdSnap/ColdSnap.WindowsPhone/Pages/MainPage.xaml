@@ -9,17 +9,30 @@
 	xmlns:vm="using:ColdSnap.ViewModels"
     mc:Ignorable="d"
 
-	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-	
+	Background="#FFFFFFFF"
+>
+
 	<d:DesignProperties.DataContext>
 		<vm:MainPageViewModel/>
 	</d:DesignProperties.DataContext>
 
-	<Grid x:Name="LayoutRoot">
-		<controls:SnazzyHub>
-			<controls:SnazzyHubSection Header="Hey">
-				
-			</controls:SnazzyHubSection>
-		</controls:SnazzyHub>
-	</Grid>
+	<controls:SnazzyHub DefaultSectionIndex="1">
+		<controls:SnazzyHubSection AccentColor="#FF3cb2e2" Header="coldsnap">
+			<DataTemplate>
+				<Rectangle Fill="Purple"/>
+			</DataTemplate>
+		</controls:SnazzyHubSection>
+
+		<controls:SnazzyHubSection AccentColor="#00FFFFFF">
+			<DataTemplate>
+				<Rectangle Fill="Yellow"/>
+			</DataTemplate>
+		</controls:SnazzyHubSection>
+
+		<controls:SnazzyHubSection AccentColor="#FF9b55a0" Header="friends">
+			<DataTemplate>
+				<Rectangle Fill="Black"/>
+			</DataTemplate>
+		</controls:SnazzyHubSection>
+	</controls:SnazzyHub>
 </Page>

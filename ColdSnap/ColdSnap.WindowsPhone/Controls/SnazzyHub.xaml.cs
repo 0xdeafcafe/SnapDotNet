@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 namespace ColdSnap.Controls
 {
@@ -8,6 +9,22 @@ namespace ColdSnap.Controls
 		public SnazzyHub()
 		{
 			InitializeComponent();
+			Loaded += delegate { UpdateHeader(); };
+		}
+
+		private void SnazzyScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+		{
+
+		}
+
+		private void SnazzyScrollViewer_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
+		{
+			
+		}
+
+		private void UpdateHeader()
+		{
+
 		}
 	}
 }

@@ -11,13 +11,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ColdSnap.Shared", "ColdSnap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColdSnap.WindowsPhone", "ColdSnap\ColdSnap.WindowsPhone\ColdSnap.WindowsPhone.csproj", "{E11D601E-F292-460E-B127-E777CF2BE0D8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ABFA59BC-4097-4174-B000-0D443CB892FB}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ColdSnap\ColdSnap.Shared\ColdSnap.Shared.projitems*{c709a23c-501a-448e-8e21-79a3729ecd2c}*SharedItemsImports = 13

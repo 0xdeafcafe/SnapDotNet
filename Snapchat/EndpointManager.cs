@@ -116,7 +116,7 @@ namespace SnapDotNet
 			var client = new HttpClient();
 			data = data ?? new Dictionary<string, string>();
 			
-			// Do Timestamp stuff
+			// Do timestamp stuff
 			var timestamp = DateTime.UtcNow.ToJScriptTime().ToString(CultureInfo.InvariantCulture);
 			data["timestamp"] = timestamp;
 

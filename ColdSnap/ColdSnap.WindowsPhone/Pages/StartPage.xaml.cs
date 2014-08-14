@@ -162,7 +162,7 @@ namespace ColdSnap.Pages
 
 			// Hide progress indicator.
 			progress.Text = String.Empty;
-			progress.HideAsync();
+			await progress.HideAsync();
 
 			sender.IsEnabled = sender.IsPrimaryButtonEnabled = sender.IsSecondaryButtonEnabled = true;
 			deferral.Complete();
