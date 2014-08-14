@@ -73,9 +73,14 @@ namespace SnapDotNet
 			// Obtain the JSON data (and decompress it if it is gzipped).
 			string jsonData;
 			if (response.Content.Headers.ContentEncoding.Contains(HttpContentCodingHeaderValue.Parse("gzip")))
-				jsonData = Gzip.Decompress(await response.Content.ReadAsInputStreamAsync(), Encoding.UTF8);
+			{
+				var compressedData = await response.Content.ReadAsBufferAsync();
+				jsonData = await GZip.DecompressToStringAsync(compressedData, Encoding.UTF8);
+			}
 			else
+			{
 				jsonData = await response.Content.ReadAsStringAsync();
+			}
 
 			// Deserialize the JSON data and return it.
 			Debug.WriteLine("[Endpoint Manager] Incoming json data: {0}", jsonData);
