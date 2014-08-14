@@ -14,8 +14,12 @@
 	<d:DesignProperties.DataContext>
 		<vm:MainPageViewModel/>
 	</d:DesignProperties.DataContext>
-	
-	<controls:SnazzyHub>
-		
-	</controls:SnazzyHub>
+
+	<Grid x:Name="LayoutRoot">
+		<controls:SnazzyHub>
+			<controls:SnazzyHubSection Header="Hey">
+				
+			</controls:SnazzyHubSection>
+		</controls:SnazzyHub>
+	</Grid>
 </Page>
