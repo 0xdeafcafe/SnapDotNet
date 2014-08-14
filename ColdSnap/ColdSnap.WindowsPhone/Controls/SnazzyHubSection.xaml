@@ -11,6 +11,7 @@
     d:DesignWidth="400"
 >
 	<HubSection.Resources>
+		<controls:HeaderToHeaderTemplateHeightConverter x:Key="HeaderToHeaderTemplateHeightConverter"/>
 		<x:Int32 x:Key="HubSectionHeaderCharacterSpacing">-10</x:Int32>
 		<x:Double x:Key="HubSectionHeaderFontSize">19</x:Double>
 		<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
@@ -34,7 +35,7 @@
 								<CompositeTransform x:Name="WrappingTransform"/>
 							</Grid.RenderTransform>
 							<Rectangle x:Name="HubHeaderPlaceholder" Grid.Row="0"/>
-							<ContentControl x:Name="Header" CharacterSpacing="{StaticResource HubSectionHeaderCharacterSpacing}" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" FontWeight="SemiBold" FontSize="{StaticResource HubSectionHeaderFontSize}" FontFamily="{StaticResource PhoneFontFamilyNormal}" HorizontalAlignment="Stretch" Margin="{StaticResource HubSectionHeaderMarginThickness}" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+							<ContentControl x:Name="Header" Height="{Binding Header, Converter={StaticResource HeaderToHeaderTemplateHeightConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}" CharacterSpacing="{StaticResource HubSectionHeaderCharacterSpacing}" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" FontWeight="SemiBold" FontSize="{StaticResource HubSectionHeaderFontSize}" FontFamily="{StaticResource PhoneFontFamilyNormal}" HorizontalAlignment="Stretch" Margin="{StaticResource HubSectionHeaderMarginThickness}" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
 								<ContentControl.RenderTransform>
 									<CompositeTransform x:Name="StickyHeaderTransform"/>
 								</ContentControl.RenderTransform>
@@ -46,7 +47,9 @@
 			</Setter>
 			<Setter Property="HeaderTemplate">
 				<Setter.Value>
-					<DataTemplate/>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="15,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
+					</DataTemplate>
 				</Setter.Value>
 			</Setter>
 		</Style>

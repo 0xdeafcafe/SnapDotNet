@@ -26,4 +26,18 @@ namespace ColdSnap.Controls
 			set { SetValue(AccentColorProperty, value); }
 		}
 	}
+
+	public sealed class HeaderToHeaderTemplateHeightConverter
+		: IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, string language)
+		{
+			return value == null ? 0 : 80;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, string language)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
