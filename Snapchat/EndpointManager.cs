@@ -17,7 +17,7 @@ using UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
 
 namespace SnapDotNet
 {
-	internal class EndpointManager
+	internal sealed class EndpointManager
 	{
 		/// <summary>
 		/// Contains a <see cref="EndpointManager"/> for each endpoint library.
@@ -37,7 +37,7 @@ namespace SnapDotNet
 		/// <summary>
 		/// Gets or sets the base URI of the API.
 		/// </summary>
-		protected virtual Uri BaseUri { get; set; }
+		private Uri BaseUri { get; set; }
 
 		/// <summary>
 		/// Sends a POST request to an API endpoint, and deserializes the response into the type
@@ -49,7 +49,7 @@ namespace SnapDotNet
 		public async Task<TResult> PostAsync<TResult>(string endpointName, Dictionary<string, string> data)
 		{
 			Contract.Requires<ArgumentNullException>(endpointName != null);
-			return await PostAsync<TResult>(endpointName, data, ApiSettings.StaticToken, DateTime.Now, null);
+			return await PostAsync<TResult>(endpointName, data, ApiSettings.StaticToken, null);
 		}
 
 		/// <summary>
@@ -59,17 +59,16 @@ namespace SnapDotNet
 		/// <param name="endpointName">The name of the endpoint.</param>
 		/// <param name="data">A dictionary containing the data to include in the POST request.</param>
 		/// <param name="token">The token that will be used to generate a request token.</param>
-		/// <param name="timestamp">The timestamp of the request.</param>
 		/// <param name="headers">
 		/// A dictionary containing additional headers to include in the POST request.
 		/// </param>
 		/// <typeparam name="TResult">The type of the response.</typeparam>
 		/// <returns>Upon success, the deserialized response data.</returns>
-		public async Task<TResult> PostAsync<TResult>(string endpointName, Dictionary<string, string> data, string token, DateTime timestamp, Dictionary<string, string> headers)
+		public async Task<TResult> PostAsync<TResult>(string endpointName, Dictionary<string, string> data, string token, Dictionary<string, string> headers)
 		{
 			Contract.Requires<ArgumentNullException>(endpointName != null);
 
-			var response = await PostAsync(endpointName, data, token, timestamp, headers);
+			var response = await PostAsync(endpointName, data, token, headers);
 
 			// Obtain the JSON data (and decompress it if it is gzipped).
 			string jsonData;
@@ -80,7 +79,7 @@ namespace SnapDotNet
 
 			// Deserialize the JSON data and return it.
 			Debug.WriteLine("[Endpoint Manager] Incoming json data: {0}", jsonData);
-			return await Task.Run<TResult>(() => { return JsonConvert.DeserializeObject<TResult>(jsonData); });
+			return await Task.Run(() => JsonConvert.DeserializeObject<TResult>(jsonData));
 		}
 
 		/// <summary>
@@ -92,7 +91,7 @@ namespace SnapDotNet
 		public async Task<HttpResponseMessage> PostAsync(string endpointName, Dictionary<string, string> data)
 		{
 			Contract.Requires<ArgumentNullException>(endpointName != null);
-			return await PostAsync(endpointName, data, ApiSettings.StaticToken, DateTime.Now, null);
+			return await PostAsync(endpointName, data, ApiSettings.StaticToken, null);
 		}
 
 		/// <summary>
@@ -101,20 +100,23 @@ namespace SnapDotNet
 		/// <param name="endpointName">The name of the endpoint.</param>
 		/// <param name="data">A dictionary containing the data to include in the POST request.</param>
 		/// <param name="token">The token that will be used to generate a request token.</param>
-		/// <param name="timestamp">The timestamp of the request.</param>
 		/// <param name="headers">
 		/// A dictionary containing additional headers to include in the POST request.
 		/// </param>
 		/// <returns>Upon success, a <see cref="HttpResponseMessage"/> obtained from the API.</returns>
-		public async Task<HttpResponseMessage> PostAsync(string endpointName, Dictionary<string, string> data, string token, DateTime timestamp, Dictionary<string, string> headers)
+		public async Task<HttpResponseMessage> PostAsync(string endpointName, Dictionary<string, string> data, string token, Dictionary<string, string> headers)
 		{
 			Contract.Requires<ArgumentNullException>(endpointName != null);
 
 			var client = new HttpClient();
-			
-			// Generate request token.
 			data = data ?? new Dictionary<string, string>();
-			data["req_token"] = GenerateRequestToken(token, timestamp.ToJScriptTime().ToString(CultureInfo.InvariantCulture));
+			
+			// Do Timestamp stuff
+			var timestamp = DateTime.UtcNow.ToJScriptTime().ToString(CultureInfo.InvariantCulture);
+			data["timestamp"] = timestamp;
+
+			// Generate request token.
+			data["req_token"] = GenerateRequestToken(token, timestamp);
 
 			// Set up HTTP request headers.
 			client.DefaultRequestHeaders.TryAppendWithoutValidation("User-Agent", ApiSettings.UserAgent);
@@ -153,7 +155,7 @@ namespace SnapDotNet
 			Contract.Requires<ArgumentNullException>(postData != null && staticToken != null);
 
 			// SHA-256 hashing function
-			Func<string, string> hash = (string data) =>
+			Func<string, string> hash = data =>
 			{
 				var input = CryptographicBuffer.ConvertStringToBinary(data, BinaryStringEncoding.Utf8);
 				var hashedData = HashAlgorithmProvider.OpenAlgorithm("SHA256").HashData(input);
@@ -164,12 +166,11 @@ namespace SnapDotNet
 			var s2 = hash(staticToken + ApiSettings.Secret);
 
 			var output = new StringBuilder();
-			for (int i = 0; i < ApiSettings.HashingPattern.Length; i++)
+			for (var i = 0; i < ApiSettings.HashingPattern.Length; i++)
 			{
-				if (ApiSettings.HashingPattern[i] == '0')
-					output.Append(s1[i]);
-				else
-					output.Append(s2[i]);
+				output.Append(ApiSettings.HashingPattern[i] == '0' 
+					? s1[i] 
+					: s2[i]);
 			}
 			return output.ToString();
 		}

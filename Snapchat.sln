@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapDotNet", "Snapchat\SnapDotNet.csproj", "{9EB37E7E-B7A0-493A-BE2D-90DB855FAF7D}"
 EndProject
@@ -10,6 +10,13 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ColdSnap.Shared", "ColdSnap\ColdSnap.Shared\ColdSnap.Shared.shproj", "{C709A23C-501A-448E-8E21-79A3729ECD2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColdSnap.WindowsPhone", "ColdSnap\ColdSnap.WindowsPhone\ColdSnap.WindowsPhone.csproj", "{E11D601E-F292-460E-B127-E777CF2BE0D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ABFA59BC-4097-4174-B000-0D443CB892FB}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

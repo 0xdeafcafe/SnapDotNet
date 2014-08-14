@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
-using System.Globalization;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Windows.Web.Http;
 
 namespace SnapDotNet
@@ -38,8 +36,7 @@ namespace SnapDotNet
 			var data = new Dictionary<string, string>
 			{
 				{ "username", username },
-				{ "password", password },
-				{ "timestamp", DateTime.Now.ToJScriptTime().ToString(CultureInfo.InvariantCulture) }
+				{ "password", password }
 			};
 
 			try
@@ -72,8 +69,8 @@ namespace SnapDotNet
 			{
 				if (ex.HttpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
 					throw new InvalidCredentialsException();
-				else
-					throw;
+
+				throw;
 			}
 		}
 
@@ -133,7 +130,7 @@ namespace SnapDotNet
 		/// verify this user's phone number.
 		/// </summary>
 		/// <seealso cref="PhoneNumber"/>
-		/// <seealso cref="ShouldCallToVerifyNumber"/>
+		/// <seealso cref="ShouldCallToVerifyPhoneNumber"/>
 		/// <seealso cref="ShouldTextToVerifyPhoneNumber"/>
 		/// <seealso cref="VerificationPhoneNumber"/>
 		[JsonProperty]
