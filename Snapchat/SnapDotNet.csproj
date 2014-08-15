@@ -83,6 +83,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="ApiSettings.cs" />
     <Compile Include="Responses\AccountResponse.cs" />
+    <Compile Include="Responses\FriendResponces.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Responses\Response.cs" />
     <Compile Include="Utilities\Gzip.cs" />

@@ -54,5 +54,13 @@ namespace SnapDotNet.Utilities
 		{
 			PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
+
+		/// <summary>
+		/// Raises the <see cref="PropertyChanged"/> event.
+		/// </summary>
+		protected void OnPropertyChangedExplicit(string propertyName)
+		{
+			PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 }

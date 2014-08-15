@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
 using System;
@@ -13,7 +14,10 @@ namespace SnapDotNet
 	public sealed class Account
 		: ObservableObject
 	{
-		private Account() { }
+		private Account()
+		{
+			_bests.CollectionChanged += delegate { OnPropertyChangedExplicit("Bests"); };
+		}
 
 		/// <summary>
 		/// Authenticates a user using the given <paramref name="username"/> and <paramref name="password"/>,
@@ -74,6 +78,18 @@ namespace SnapDotNet
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task UpdateAccountAsync()
+		{
+			Contract.Requires<NullReferenceException>(Username != null && AuthToken != null);
+			Debug.WriteLine("[Snapchat API] Updating account [username: {0} | auth-token: {1}]", Username, AuthToken);
+
+
+		}
+
 		// NOTE: JsonProperty attribute is needed to force JsonConvert to assign values to
 		// properties with non-public setters so it can be deserialized too.
 
@@ -98,6 +114,17 @@ namespace SnapDotNet
 			private set { SetValue(ref _email, value); }
 		}
 		private string _email;
+
+		/// <summary>
+		/// Gets the best friends associated with this account.
+		/// </summary>
+		[JsonProperty]
+		public ObservableCollection<string> Bests
+		{
+			get { return _bests; }
+			private set { SetValue(ref _bests, value); }
+		}
+		private ObservableCollection<string> _bests = new ObservableCollection<string>();
 
 		/// <summary>
 		/// Gets this user's birthday.
@@ -227,9 +254,22 @@ namespace SnapDotNet
 		public int SnapsReceived
 		{
 			get { return _snapsReceived; }
-			private set { SetValue(ref _snapsReceived, value); }
+			private set
+			{
+				SetValue(ref _snapsReceived, value);
+				OnPropertyChangedExplicit("SnapBandwidthSplit");
+			}
 		}
 		private int _snapsReceived;
+
+		/// <summary>
+		/// Gets the number of Snaps send and received, in the format; {Sent} | {Recieved}
+		/// </summary>
+		[JsonIgnore]
+		public String SnapBandwidthSplit
+		{
+			get { return String.Format("{0} | {1}", SnapsSent, SnapsReceived); }
+		}
 
 		/// <summary>
 		/// Gets the number of Snaps this user has sent.
@@ -238,7 +278,11 @@ namespace SnapDotNet
 		public int SnapsSent
 		{
 			get { return _snapsSent; }
-			private set { SetValue(ref _snapsSent, value); }
+			private set
+			{ 
+				SetValue(ref _snapsSent, value);
+				OnPropertyChangedExplicit("SnapBandwidthSplit");
+			}
 		}
 		private int _snapsSent;
 
@@ -280,9 +324,6 @@ namespace SnapDotNet
 
 		//[DataMember(Name = "added_friends")]
 		//public ObservableCollection<AddedFriend> AddedFriends { get; set; }
-
-		[DataMember(Name = "bests")]
-		public ObservableCollection<string> BestFriends { get; set; }
 
 		//[DataMember(Name = "friends")]
 		//public ObservableCollection<Friend> Friends { get; set; }

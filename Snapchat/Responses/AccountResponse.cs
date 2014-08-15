@@ -2,7 +2,6 @@
 using SnapDotNet.Converters.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 namespace SnapDotNet.Responses
@@ -15,14 +14,14 @@ namespace SnapDotNet.Responses
 		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime AddedFriendsTimestamp { get; set; }
 
-		//[DataMember(Name = "added_friends")]
-		//public ObservableCollection<AddedFriend> AddedFriends { get; set; }
+		[DataMember(Name = "added_friends")]
+		public AddedFriend[] AddedFriends { get; set; }
 
 		[DataMember(Name = "auth_token")]
 		public string AuthToken { get; set; }
 
 		[DataMember(Name = "bests")]
-		public ObservableCollection<string> BestFriends { get; set; }
+		public string[] BestFriends { get; set; }
 
 		[DataMember(Name = "can_view_mature_content")]
 		public bool CanViewMatureContent { get; set; }
@@ -40,8 +39,8 @@ namespace SnapDotNet.Responses
 		[DataMember(Name = "email")]
 		public string Email { get; set; }
 
-		//[DataMember(Name = "friends")]
-		//public ObservableCollection<Friend> Friends { get; set; }
+		[DataMember(Name = "friends")]
+		public Friend[] Friends { get; set; }
 
 		[DataMember(Name = "last_replayed_snap_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]
@@ -63,10 +62,10 @@ namespace SnapDotNet.Responses
 		public int SnapsReceived { get; set; }
 
 		[DataMember(Name = "recents")]
-		public ObservableCollection<string> RecentFriends { get; set; }
+		public string[] RecentFriends { get; set; }
 
 		[DataMember(Name = "requests")]
-		public ObservableCollection<string> FriendRequests { get; set; }
+		public string[] FriendRequests { get; set; }
 
 		[DataMember(Name = "score")]
 		public int Score { get; set; }
@@ -112,6 +111,5 @@ namespace SnapDotNet.Responses
 		// visual_filters
 		// smart_filters
 		// power_save_mode
-
 	}
 }
