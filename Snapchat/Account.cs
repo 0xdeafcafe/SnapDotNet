@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
 using System;
@@ -14,10 +13,11 @@ namespace SnapDotNet
 	public sealed class Account
 		: ObservableObject
 	{
-		private Account()
-		{
-			_bests.CollectionChanged += delegate { OnPropertyChangedExplicit("Bests"); };
-		}
+		// NOTE: JsonProperty attribute is needed to force JsonConvert to assign values to
+		// properties with non-public setters so it can be deserialized too.
+
+		
+		private Account() { }
 
 		/// <summary>
 		/// Authenticates a user using the given <paramref name="username"/> and <paramref name="password"/>,
@@ -79,19 +79,64 @@ namespace SnapDotNet
 		}
 
 		/// <summary>
-		/// 
+		/// Gets all updates for the authenticated user, given <see cref="Username"/> and <see cref="AuthToken"/>
 		/// </summary>
-		/// <returns></returns>
+		/// <exception cref="InvalidCredentialsException">
+		/// Given set of credentials is incorrect.
+		/// </exception>
 		public async Task UpdateAccountAsync()
 		{
 			Contract.Requires<NullReferenceException>(Username != null && AuthToken != null);
 			Debug.WriteLine("[Snapchat API] Updating account [username: {0} | auth-token: {1}]", Username, AuthToken);
 
+			var data = new Dictionary<string, string>
+			{
+				{ "username", Username }
+			};
 
+			try
+			{
+				var response = await EndpointManager.Managers["loq"].PostAsync<AllUpdatesResponse>("all_updates", data, AuthToken);
+				if (response == null)
+					throw new InvalidCredentialsException();
+
+				// Parse account data
+				UpdateAccount(response.AccountResponse);
+
+				// TODO: Parse the rest of the data
+			}
+			catch (InvalidHttpResponseException ex)
+			{
+				if (ex.HttpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
+					throw new InvalidCredentialsException();
+
+				throw;
+			}
 		}
 
-		// NOTE: JsonProperty attribute is needed to force JsonConvert to assign values to
-		// properties with non-public setters so it can be deserialized too.
+		/// <summary>
+		/// Update the data in this model from <paramref name="accountResponse"/>
+		/// </summary>
+		/// <param name="accountResponse">The Account Response to update from</param>
+		private void UpdateAccount(AccountResponse accountResponse)
+		{
+			AuthToken = accountResponse.AuthToken;
+			Username = accountResponse.Username;
+			Email = accountResponse.Email;
+			PhoneNumber = accountResponse.PhoneNumber;
+			LastReplayed = accountResponse.LastReplayedSnapTimestamp;
+			PhoneNumberVerificationKey = accountResponse.PhoneNumberVerificationKey;
+			VerificationPhoneNumber = accountResponse.SnapchatPhoneNumber;
+			ShouldTextToVerifyPhoneNumber = accountResponse.ShouldSendTextToVerifyNumber;
+			ShouldCallToVerifyPhoneNumber = accountResponse.ShouldCallToVerifyNumber;
+			SearchableByPhoneNumber = accountResponse.SearchableByPhoneNumber;
+			Score = accountResponse.Score;
+			SnapsReceived = accountResponse.SnapsReceived;
+			SnapsSent = accountResponse.SnapsSent;
+			Birthday = accountResponse.Birthday;
+
+			// TODO: Save the fields that are missing to this model
+		}
 
 		/// <summary>
 		/// Gets the username associated with this account.
@@ -114,17 +159,6 @@ namespace SnapDotNet
 			private set { SetValue(ref _email, value); }
 		}
 		private string _email;
-
-		/// <summary>
-		/// Gets the best friends associated with this account.
-		/// </summary>
-		[JsonProperty]
-		public ObservableCollection<string> Bests
-		{
-			get { return _bests; }
-			private set { SetValue(ref _bests, value); }
-		}
-		private ObservableCollection<string> _bests = new ObservableCollection<string>();
 
 		/// <summary>
 		/// Gets this user's birthday.
@@ -242,6 +276,7 @@ namespace SnapDotNet
 		/// <summary>
 		/// Gets a boolean value indicating whether this user can replay a Snap.
 		/// </summary>
+		[JsonIgnore]
 		public bool CanReplaySnap
 		{
 			get { return (DateTime.UtcNow - LastReplayed).TotalHours > 24; }
@@ -313,7 +348,7 @@ namespace SnapDotNet
 		/// Gets or sets the auth token for the current session.
 		/// </summary>
 		[JsonProperty]
-		internal string AuthToken
+		public string AuthToken
 		{
 			get { return _authToken; }
 			private set { SetValue(ref _authToken, value); }
@@ -324,9 +359,6 @@ namespace SnapDotNet
 
 		//[DataMember(Name = "added_friends")]
 		//public ObservableCollection<AddedFriend> AddedFriends { get; set; }
-
-		//[DataMember(Name = "friends")]
-		//public ObservableCollection<Friend> Friends { get; set; }
 
 		[DataMember(Name = "notification_sound_setting")]
 		public string NotificationSoundSetting { get; set; }

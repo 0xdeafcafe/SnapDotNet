@@ -15,7 +15,7 @@ namespace SnapDotNet.Responses
 		public DateTime AddedFriendsTimestamp { get; set; }
 
 		[DataMember(Name = "added_friends")]
-		public AddedFriend[] AddedFriends { get; set; }
+		public AddedFriendResponse[] AddedFriends { get; set; }
 
 		[DataMember(Name = "auth_token")]
 		public string AuthToken { get; set; }
@@ -40,7 +40,7 @@ namespace SnapDotNet.Responses
 		public string Email { get; set; }
 
 		[DataMember(Name = "friends")]
-		public Friend[] Friends { get; set; }
+		public FriendResponse[] Friends { get; set; }
 
 		[DataMember(Name = "last_replayed_snap_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]

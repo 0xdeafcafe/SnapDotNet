@@ -59,6 +59,20 @@ namespace SnapDotNet
 		/// <param name="endpointName">The name of the endpoint.</param>
 		/// <param name="data">A dictionary containing the data to include in the POST request.</param>
 		/// <param name="token">The token that will be used to generate a request token.</param>
+		/// <returns>Upon success, the deserialized response data.</returns>
+		public async Task<TResult> PostAsync<TResult>(string endpointName, Dictionary<string, string> data, string token)
+		{
+			Contract.Requires<ArgumentNullException>(endpointName != null && token != null);
+			return await PostAsync<TResult>(endpointName, data, token, null);
+		}
+
+		/// <summary>
+		/// Sends a POST request to an API endpoint, and deserializes the response into the type
+		/// specified by <see cref="TResult"/>.
+		/// </summary>
+		/// <param name="endpointName">The name of the endpoint.</param>
+		/// <param name="data">A dictionary containing the data to include in the POST request.</param>
+		/// <param name="token">The token that will be used to generate a request token.</param>
 		/// <param name="headers">
 		/// A dictionary containing additional headers to include in the POST request.
 		/// </param>

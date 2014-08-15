@@ -6,31 +6,10 @@ using SnapDotNet.Converters.Json;
 namespace SnapDotNet.Responses
 {
 	/// <summary>
-	/// Actions concerning other snapchat users
-	/// </summary>
-	public enum FriendAction
-	{
-		Add,
-		Delete,
-		Block,
-		Unblock
-	}
-
-	/// <summary>
-	/// Indicates the state of a friend request.
-	/// </summary>
-	public enum FriendRequestState
-	{
-		Accepted,
-		Pending,
-		Blocked
-	}
-
-	/// <summary>
 	/// Represents a friend that was added.
 	/// </summary>
 	[DataContract]
-	public class AddedFriend
+	internal sealed class AddedFriendResponse
 	{
 		/// <summary>
 		/// Gets or sets the timestamp specifying the date and time the friendship started.
@@ -55,14 +34,14 @@ namespace SnapDotNet.Responses
 		/// Gets or sets the state of the friend request sent to this person.
 		/// </summary>
 		[DataMember(Name = "type")]
-		public FriendRequestState FriendRequestState { get; set; }
+		public int FriendRequestState { get; set; }
 	}
 
 	/// <summary>
 	/// Represents a friend.
 	/// </summary>
 	[DataContract]
-	public class Friend
+	internal sealed class FriendResponse
 	{
 		/// <summary>
 		/// Gets or sets whether this friend allows you to see custom stories.
@@ -86,6 +65,6 @@ namespace SnapDotNet.Responses
 		/// Gets or sets the state of the friend request sent to this person.
 		/// </summary>
 		[DataMember(Name = "type")]
-		public FriendRequestState FriendRequestState { get; set; }
+		public int FriendRequestState { get; set; }
 	}
 }

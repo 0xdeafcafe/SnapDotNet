@@ -10,6 +10,7 @@ namespace ColdSnap.ViewModels
 		public async Task<Account> LogInAsync(string username, string password)
 		{
 			var account = await Account.AuthenticateAsync(username, password);
+			await account.UpdateAccountAsync();
 			await StateManager.Local.SaveAccountStateAsync(account);
 			return account;
 		}
