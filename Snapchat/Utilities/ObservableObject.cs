@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -56,11 +57,18 @@ namespace SnapDotNet.Utilities
 		}
 
 		/// <summary>
-		/// Raises the <see cref="PropertyChanged"/> event.
+		/// Calls the <see cref="OnPropertyChanged" /> method when items inside an observable collection are modified.
 		/// </summary>
-		protected void OnPropertyChangedExplicit(string propertyName)
+		/// <param name="e">The CollectionChanged event of the Observable Collection</param>
+		/// <param name="collectionName">The name of the observable collection.</param>
+		protected void OnObservableCollectionChanged(NotifyCollectionChangedEventArgs e, string collectionName)
 		{
-			PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			if (e.Action == NotifyCollectionChangedAction.Remove)
+				foreach (ObservableObject item in e.OldItems)
+					item.PropertyChanged -= delegate { OnPropertyChanged(collectionName); }; // Removed items
+			else if (e.Action == NotifyCollectionChangedAction.Add)
+				foreach (ObservableObject item in e.NewItems)
+					item.PropertyChanged += delegate { OnPropertyChanged(collectionName); }; // Added items
 		}
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using SnapDotNet.Models;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
@@ -16,8 +18,10 @@ namespace SnapDotNet
 		// NOTE: JsonProperty attribute is needed to force JsonConvert to assign values to
 		// properties with non-public setters so it can be deserialized too.
 
-		
-		private Account() { }
+		private Account()
+		{
+			_friends.CollectionChanged += (sender, e) => { OnObservableCollectionChanged(e, "Friends"); };
+		}
 
 		/// <summary>
 		/// Authenticates a user using the given <paramref name="username"/> and <paramref name="password"/>,
@@ -172,6 +176,17 @@ namespace SnapDotNet
 		private DateTime _birthday;
 
 		/// <summary>
+		/// Gets the users friends.
+		/// </summary>
+		[JsonProperty]
+		public ObservableCollection<Friend> Friends
+		{
+			get { return _friends; }
+			set { SetValue(ref _friends, value); } 
+		}
+		private ObservableCollection<Friend> _friends = new ObservableCollection<Friend>();
+
+		/// <summary>
 		/// Gets the phone number associated with this account.
 		/// </summary>
 		/// <seealso cref="PhoneNumberVerificationKey"/>
@@ -292,7 +307,7 @@ namespace SnapDotNet
 			private set
 			{
 				SetValue(ref _snapsReceived, value);
-				OnPropertyChangedExplicit("SnapBandwidthSplit");
+				OnPropertyChanged("SnapBandwidthSplit");
 			}
 		}
 		private int _snapsReceived;
@@ -301,7 +316,7 @@ namespace SnapDotNet
 		/// Gets the number of Snaps send and received, in the format; {Sent} | {Recieved}
 		/// </summary>
 		[JsonIgnore]
-		public String SnapBandwidthSplit
+		public string SnapBandwidthSplit
 		{
 			get { return String.Format("{0} | {1}", SnapsSent, SnapsReceived); }
 		}
@@ -316,7 +331,7 @@ namespace SnapDotNet
 			private set
 			{ 
 				SetValue(ref _snapsSent, value);
-				OnPropertyChangedExplicit("SnapBandwidthSplit");
+				OnPropertyChanged("SnapBandwidthSplit");
 			}
 		}
 		private int _snapsSent;
