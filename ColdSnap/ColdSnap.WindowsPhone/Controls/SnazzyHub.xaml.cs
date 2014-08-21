@@ -1,14 +1,15 @@
-﻿using System;
-using Windows.UI;
+﻿using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace ColdSnap.Controls
 {
-	public sealed partial class SnazzyHub : Hub
+	public sealed partial class SnazzyHub
 	{
-		public static readonly DependencyProperty CurrentAccentColorProperty = DependencyProperty.Register("CurrentAccentColor", typeof(SolidColorBrush), typeof(SnazzyHub), new PropertyMetadata(new SolidColorBrush(Colors.Blue)));
+		public static readonly DependencyProperty CurrentAccentColorProperty =
+			DependencyProperty.Register("CurrentAccentColor", typeof (SolidColorBrush), typeof (SnazzyHub),
+				new PropertyMetadata(new SolidColorBrush(Colors.Blue)));
 
 		public SnazzyHub()
 		{

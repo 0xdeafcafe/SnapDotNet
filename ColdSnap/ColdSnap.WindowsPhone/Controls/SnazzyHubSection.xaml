@@ -14,8 +14,7 @@
 		<x:Int32 x:Key="HubSectionHeaderCharacterSpacing">-10</x:Int32>
 		<x:Double x:Key="HubSectionHeaderFontSize">19</x:Double>
 		<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
-		<Thickness x:Key="HubSectionHeaderMarginThickness">0,0,0,0</Thickness>
-		<Thickness x:Key="HubSectionMarginThickness">0,0,0,0</Thickness>
+		<Thickness x:Key="HubSectionMarginThickness">0</Thickness>
 		<Style x:Key="HubSectionStyle" TargetType="HubSection">
 			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -34,12 +33,12 @@
 								<CompositeTransform x:Name="WrappingTransform"/>
 							</Grid.RenderTransform>
 							<Rectangle x:Name="HubHeaderPlaceholder" Grid.Row="0"/>
-							<ContentControl x:Name="Header" Height="{Binding Header, Converter={StaticResource HeaderToHeaderTemplateHeightConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}" CharacterSpacing="{StaticResource HubSectionHeaderCharacterSpacing}" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" FontWeight="SemiBold" FontSize="{StaticResource HubSectionHeaderFontSize}" FontFamily="{StaticResource PhoneFontFamilyNormal}" HorizontalAlignment="Stretch" Margin="{StaticResource HubSectionHeaderMarginThickness}" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+							<ContentControl x:Name="Header" Height="{Binding Header, Converter={StaticResource HeaderToHeaderTemplateHeightConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}" CharacterSpacing="{StaticResource HubSectionHeaderCharacterSpacing}" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" FontWeight="SemiBold" FontSize="{StaticResource HubSectionHeaderFontSize}" FontFamily="{StaticResource PhoneFontFamilyNormal}" HorizontalAlignment="Stretch" Margin="0" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
 								<ContentControl.RenderTransform>
 									<CompositeTransform x:Name="StickyHeaderTransform"/>
 								</ContentControl.RenderTransform>
 							</ContentControl>
-							<ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Grid.Row="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							<ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0" Grid.Row="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 						</Grid>
 					</ControlTemplate>
 				</Setter.Value>

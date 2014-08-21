@@ -5,7 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	
+	Background="#FFFFFFFF"
+>
+	
 	<Page.Transitions>
 		<TransitionCollection>
 			<NavigationThemeTransition>
@@ -16,27 +19,19 @@
 		</TransitionCollection>
 	</Page.Transitions>
 
-	<Grid>
-		<Grid.ChildrenTransitions>
-			<TransitionCollection>
-				<EntranceThemeTransition/>
-			</TransitionCollection>
-		</Grid.ChildrenTransitions>
-
+	<Grid Margin="0,-27,0,0">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="80"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<!-- Title Panel -->
-		<StackPanel Grid.Row="0" Margin="19,0,0,0">
-			<TextBlock Text="coldsnap" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-			<TextBlock Text="conversation test" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-		</StackPanel>
-
-		<!--TODO: Content should be placed within the following grid-->
-		<Grid Grid.Row="1" Margin="19,9.5,19,0">
-			
-		</Grid>
+		<Rectangle Fill="#FFFF0000"/>
+		<TextBlock Text="matt saville" TextTrimming="CharacterEllipsis" Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="15,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40">
+			<TextBlock.Transitions>
+				<TransitionCollection>
+					<EntranceThemeTransition FromHorizontalOffset="200"/>
+				</TransitionCollection>
+			</TextBlock.Transitions>
+		</TextBlock>
 	</Grid>
 </Page>

@@ -1,13 +1,11 @@
 ﻿using System;
 using Windows.UI;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 
 namespace ColdSnap.Controls
 {
-	public sealed partial class SnazzyHubSection : HubSection
+	public partial class SnazzyHubSection
 	{
 		public static DependencyProperty AccentColorProperty = DependencyProperty.Register("AccentColor", typeof(Color), typeof(SnazzyHubSection), null);
 

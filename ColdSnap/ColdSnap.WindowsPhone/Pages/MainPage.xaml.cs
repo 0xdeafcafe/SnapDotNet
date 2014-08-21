@@ -94,10 +94,5 @@ namespace ColdSnap.Pages
 		}
 
 		#endregion
-
-		private void OpenConversationButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			Frame.Navigate(typeof (ConversationPage));
-		}
 	}
 }
