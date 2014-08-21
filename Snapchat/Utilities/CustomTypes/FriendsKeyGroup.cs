@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using SnapDotNet.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +6,8 @@ using Windows.UI;
 
 namespace SnapDotNet.Utilities.CustomTypes
 {
-	public class FriendsKeyGroup : List<Friend>, IAlphaKeyGroup<Friend>
+	public class FriendsKeyGroup
+		: List<Friend>, IAlphaKeyGroup<Friend>
 	{
 		public FriendsKeyGroup() { }
 
@@ -49,14 +49,14 @@ namespace SnapDotNet.Utilities.CustomTypes
 		{
 			var list = CreateGroups();
 
-			Debug.WriteLine("[FriendsKeyGroup Logic] Starting to Create Groups, based off of {0} friends", items.Count);
+			Debug.WriteLine("[FriendsKeyGroup] Starting to Create Groups, based off of {0} friends", items.Count);
 
 			foreach (var friend in items)
 			{
 				if (friend.FriendRequestState == FriendRequestState.Blocked)
 				{
 					list.Find(a => a.Key == "!").Add(friend);
-					Debug.WriteLine("[FriendsKeyGroup Logic] Added friend {0} to Blocked", friend.FriendlyName);
+					Debug.WriteLine("[FriendsKeyGroup] Added friend {0} to Blocked", friend.FriendlyName);
 				}
 				else
 				{
@@ -64,12 +64,12 @@ namespace SnapDotNet.Utilities.CustomTypes
 					if (char.IsLetter(key))
 					{
 						list.Find(a => a.Key == key.ToString().ToLowerInvariant()).Add(friend);
-						Debug.WriteLine("[FriendsKeyGroup Logic] Added friend {0} with key {1} to {2}", friend.FriendlyName, key, key);
+						Debug.WriteLine("[FriendsKeyGroup] Added friend {0} with key {1} to {2}", friend.FriendlyName, key, key);
 					}
 					else
 					{
 						list.Find(a => a.Key == "#").Add(friend);
-						Debug.WriteLine("[FriendsKeyGroup Logic] Added friend {0} with key {1} to {2}", friend.FriendlyName, key, "numbers");
+						Debug.WriteLine("[FriendsKeyGroup] Added friend {0} with key {1} to {2}", friend.FriendlyName, key, "numbers");
 					}
 				}
 			}

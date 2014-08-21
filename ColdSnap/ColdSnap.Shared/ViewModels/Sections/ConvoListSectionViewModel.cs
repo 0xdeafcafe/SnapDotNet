@@ -1,6 +1,6 @@
 ﻿namespace ColdSnap.ViewModels.Sections
 {
-	public class ConvoListSectionViewModel
+	public class FriendsSectionViewModel
 		: BaseViewModel
 	{
 

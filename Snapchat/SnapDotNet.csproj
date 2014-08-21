@@ -83,7 +83,7 @@
     <Compile Include="Converters\Json\UnixDateTimeConverter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ApiSettings.cs" />
-    <Compile Include="Models\Friend.cs" />
+    <Compile Include="Friend.cs" />
     <Compile Include="Responses\AccountResponse.cs" />
     <Compile Include="Responses\AllUpdatesResponse.cs" />
     <Compile Include="Responses\ChatMessageResponses.cs" />

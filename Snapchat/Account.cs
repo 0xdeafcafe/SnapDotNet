@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using SnapDotNet.Models;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
 using SnapDotNet.Utilities.CustomTypes;
@@ -20,149 +19,9 @@ namespace SnapDotNet
 		// NOTE: JsonProperty attribute is needed to force JsonConvert to assign values to
 		// properties with non-public setters so it can be deserialized too.
 
-		private Account()
-		{
-			_friends.CollectionChanged += (sender, e) => OnObservableCollectionChanged(e, "Friends", CreateSortedFriends);
-		}
+		private Account() { }
 
-		/// <summary>
-		/// Authenticates a user using the given <paramref name="username"/> and <paramref name="password"/>,
-		/// and retrieves an <see cref="Account"/> object containing the account data.
-		/// </summary>
-		/// <param name="username">The username.</param>
-		/// <param name="password">The password.</param>
-		/// <returns>
-		/// If authenticated, an <see cref="Account"/> object containing the account data.
-		/// </returns>
-		/// <exception cref="InvalidCredentialsException">
-		/// Given set of credentials is incorrect.
-		/// </exception>
-		[Pure]
-		public static async Task<Account> AuthenticateAsync(string username, string password)
-		{
-			Contract.Requires<ArgumentNullException>(username != null && password != null);
-			Debug.WriteLine("[Snapchat API] Authenticating account [username: {0} | password: {1}]", username, password);
-
-			var data = new Dictionary<string, string>
-			{
-				{ "username", username },
-				{ "password", password }
-			};
-
-			try
-			{
-				var response = await EndpointManager.Managers["bq"].PostAsync<AccountResponse>("login", data);
-				if (response == null || !response.IsLogged)
-					throw new InvalidCredentialsException();
-
-				// Only get the relevant data and do some processing to make properties like
-				// friends more accessible to the view/view models.
-				return new Account
-				{
-					AuthToken = response.AuthToken,
-					Username = response.Username,
-					Email = response.Email,
-					PhoneNumber = response.PhoneNumber,
-					LastReplayed = response.LastReplayedSnapTimestamp,
-					PhoneNumberVerificationKey = response.PhoneNumberVerificationKey,
-					VerificationPhoneNumber = response.SnapchatPhoneNumber,
-					ShouldTextToVerifyPhoneNumber = response.ShouldSendTextToVerifyNumber,
-					ShouldCallToVerifyPhoneNumber = response.ShouldCallToVerifyNumber,
-					SearchableByPhoneNumber = response.SearchableByPhoneNumber,
-					Score = response.Score,
-					SnapsReceived = response.SnapsReceived,
-					SnapsSent = response.SnapsSent,
-					Birthday = response.Birthday
-				};
-			}
-			catch (InvalidHttpResponseException ex)
-			{
-				if (ex.HttpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
-					throw new InvalidCredentialsException();
-
-				throw;
-			}
-		}
-
-		/// <summary>
-		/// Gets all updates for the authenticated user, given <see cref="Username"/> and <see cref="AuthToken"/>
-		/// </summary>
-		/// <exception cref="InvalidCredentialsException">
-		/// Given set of credentials is incorrect.
-		/// </exception>
-		public async Task UpdateAccountAsync()
-		{
-			Contract.Requires<NullReferenceException>(Username != null && AuthToken != null);
-			Debug.WriteLine("[Snapchat API] Updating account [username: {0} | auth-token: {1}]", Username, AuthToken);
-
-			var data = new Dictionary<string, string>
-			{
-				{ "username", Username }
-			};
-
-			try
-			{
-				var response = await EndpointManager.Managers["loq"].PostAsync<AllUpdatesResponse>("all_updates", data, AuthToken);
-				if (response == null)
-					throw new InvalidCredentialsException();
-
-				// Parse account data
-				UpdateAccount(response.AccountResponse);
-
-				// TODO: Parse the rest of the data
-			}
-			catch (InvalidHttpResponseException ex)
-			{
-				if (ex.HttpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
-					throw new InvalidCredentialsException();
-
-				throw;
-			}
-		}
-
-		/// <summary>
-		/// Update the data in this model from <paramref name="accountResponse"/>
-		/// </summary>
-		/// <param name="accountResponse">The Account Response to update from</param>
-		private void UpdateAccount(AccountResponse accountResponse)
-		{
-			AuthToken = accountResponse.AuthToken;
-			Username = accountResponse.Username;
-			Email = accountResponse.Email;
-			PhoneNumber = accountResponse.PhoneNumber;
-			LastReplayed = accountResponse.LastReplayedSnapTimestamp;
-			PhoneNumberVerificationKey = accountResponse.PhoneNumberVerificationKey;
-			VerificationPhoneNumber = accountResponse.SnapchatPhoneNumber;
-			ShouldTextToVerifyPhoneNumber = accountResponse.ShouldSendTextToVerifyNumber;
-			ShouldCallToVerifyPhoneNumber = accountResponse.ShouldCallToVerifyNumber;
-			SearchableByPhoneNumber = accountResponse.SearchableByPhoneNumber;
-			Score = accountResponse.Score;
-			SnapsReceived = accountResponse.SnapsReceived;
-			SnapsSent = accountResponse.SnapsSent;
-			Birthday = accountResponse.Birthday;
-
-			// TODO: Save the fields that are missing to this model
-
-			#region Friends
-			// TODO: Maybe make this code modular, shove it in a helper somewhere. It's kinda repetitve.
-
-			// remove removed friends
-			var removedFriends = Friends.Where(f => accountResponse.Friends.FirstOrDefault(f1 => f1.Name == f.Name) == null);
-			foreach (var removedFriend in removedFriends)
-				Friends.Remove(removedFriend);
-
-			// add new friends
-			var newFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) == null);
-			foreach (var newFriend in newFriends)
-				Friends.Add(Friend.Create(newFriend));
-
-			// update existing friends
-			var existingFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) != null);
-			foreach (var existingFriend in existingFriends)
-				Friends.FirstOrDefault(f => existingFriend.Name == f.Name).Update(existingFriend);
-
-			#endregion
-		}
+		#region Properties
 
 		/// <summary>
 		/// Gets the username associated with this account.
@@ -204,14 +63,9 @@ namespace SnapDotNet
 		public ObservableCollection<Friend> Friends
 		{
 			get { return _friends; }
-			set
-			{
-				SetValue(ref _friends, value);
-
-				CreateSortedFriends();
-			}
+			private set { SetValue(ref _friends, value); }
 		}
-		private ObservableCollection<Friend> _friends = new ObservableCollection<Friend>();
+		private ObservableCollection<Friend> _friends;
 
 		/// <summary>
 		/// 
@@ -220,17 +74,17 @@ namespace SnapDotNet
 		public List<FriendsKeyGroup> SortedFriends
 		{
 			get { return _sortedFriends; }
-			set
+			private set
 			{
 				if (value.Count > 30)
 				{
-					
+					// Matt: wut?
 				}
 
 				SetValue(ref _sortedFriends, value);
 			}
 		}
-		private List<FriendsKeyGroup> _sortedFriends = new List<FriendsKeyGroup>();
+		private List<FriendsKeyGroup> _sortedFriends;
 
 		/// <summary>
 		/// Gets the phone number associated with this account.
@@ -436,15 +290,149 @@ namespace SnapDotNet
 			public string StoryPrivacySetting { get; set; }
 		*/
 
-		#region Helpers
+		#endregion
 
-		private void CreateSortedFriends()
+		/// <summary>
+		/// Authenticates a user using the given <paramref name="username"/> and <paramref name="password"/>,
+		/// and retrieves an <see cref="Account"/> object containing the account data.
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="password">The password.</param>
+		/// <returns>
+		/// If authenticated, an <see cref="Account"/> object containing the account data.
+		/// </returns>
+		/// <exception cref="InvalidCredentialsException">
+		/// Given set of credentials is incorrect.
+		/// </exception>
+		[Pure]
+		public static async Task<Account> AuthenticateAsync(string username, string password)
 		{
-			// TODO: Make this more efficient, right now it gets called n times when initally loading the profile. (where n is the number of friends the user has).
-			// srsly. It makes the output look shit - http://i.imgur.com/PSGvzuA.png
+			Contract.Requires<ArgumentNullException>(username != null && password != null);
+			Debug.WriteLine("[Snapchat API] Authenticating account [username: {0} | password: {1}]", username, password);
+
+			var data = new Dictionary<string, string>
+			{
+				{ "username", username },
+				{ "password", password }
+			};
+
+			try
+			{
+				var response = await EndpointManager.Managers["bq"].PostAsync<AccountResponse>("login", data);
+				if (response == null || !response.IsLogged)
+					throw new InvalidCredentialsException();
+
+				// Only get the relevant data and do some processing to make properties like
+				// friends more accessible to the view/view models.
+				var account = new Account
+				{
+					AuthToken = response.AuthToken,
+					Username = response.Username,
+					Email = response.Email,
+					PhoneNumber = response.PhoneNumber,
+					LastReplayed = response.LastReplayedSnapTimestamp,
+					PhoneNumberVerificationKey = response.PhoneNumberVerificationKey,
+					VerificationPhoneNumber = response.SnapchatPhoneNumber,
+					ShouldTextToVerifyPhoneNumber = response.ShouldSendTextToVerifyNumber,
+					ShouldCallToVerifyPhoneNumber = response.ShouldCallToVerifyNumber,
+					SearchableByPhoneNumber = response.SearchableByPhoneNumber,
+					Score = response.Score,
+					SnapsReceived = response.SnapsReceived,
+					SnapsSent = response.SnapsSent,
+					Birthday = response.Birthday
+				};
+				account.CreateSortedFriends();
+				return account;
+			}
+			catch (InvalidHttpResponseException ex)
+			{
+				if (ex.HttpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
+					throw new InvalidCredentialsException();
+
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Gets all updates for the authenticated user, given <see cref="Username"/> and <see cref="AuthToken"/>
+		/// </summary>
+		/// <exception cref="InvalidCredentialsException">
+		/// Given set of credentials is incorrect.
+		/// </exception>
+		public async Task UpdateAccountAsync()
+		{
+			Contract.Requires<NullReferenceException>(Username != null && AuthToken != null);
+			Debug.WriteLine("[Snapchat API] Updating account [username: {0} | auth-token: {1}]", Username, AuthToken);
+
+			var data = new Dictionary<string, string>
+			{
+				{ "username", Username }
+			};
+
+			try
+			{
+				var response = await EndpointManager.Managers["loq"].PostAsync<AllUpdatesResponse>("all_updates", data, AuthToken);
+				if (response == null)
+					throw new InvalidCredentialsException();
+
+				// Parse account data
+				UpdateAccount(response.AccountResponse);
+
+				// TODO: Parse the rest of the data
+			}
+			catch (InvalidHttpResponseException ex)
+			{
+				if (ex.HttpResponseMessage.StatusCode == HttpStatusCode.Unauthorized)
+					throw new InvalidCredentialsException();
+
+				throw;
+			}
+		}
+
+		internal void CreateSortedFriends()
+		{
 			SortedFriends = FriendsKeyGroup.CreateGroups(Friends);
 		}
 
-		#endregion
+		/// <summary>
+		/// Update the data in this model from <paramref name="accountResponse"/>
+		/// </summary>
+		/// <param name="accountResponse">The Account Response to update from</param>
+		private void UpdateAccount(AccountResponse accountResponse)
+		{
+			AuthToken = accountResponse.AuthToken;
+			Username = accountResponse.Username;
+			Email = accountResponse.Email;
+			PhoneNumber = accountResponse.PhoneNumber;
+			LastReplayed = accountResponse.LastReplayedSnapTimestamp;
+			PhoneNumberVerificationKey = accountResponse.PhoneNumberVerificationKey;
+			VerificationPhoneNumber = accountResponse.SnapchatPhoneNumber;
+			ShouldTextToVerifyPhoneNumber = accountResponse.ShouldSendTextToVerifyNumber;
+			ShouldCallToVerifyPhoneNumber = accountResponse.ShouldCallToVerifyNumber;
+			SearchableByPhoneNumber = accountResponse.SearchableByPhoneNumber;
+			Score = accountResponse.Score;
+			SnapsReceived = accountResponse.SnapsReceived;
+			SnapsSent = accountResponse.SnapsSent;
+			Birthday = accountResponse.Birthday;
+
+			// TODO: Save the fields that are missing to this model
+
+			// Remove removed friends.
+			var removedFriends = Friends.Where(f => accountResponse.Friends.FirstOrDefault(f1 => f1.Name == f.Name) == null);
+			foreach (var removedFriend in removedFriends)
+				Friends.Remove(removedFriend);
+
+			// Add new friends.
+			var newFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) == null);
+			foreach (var newFriend in newFriends)
+				Friends.Add(Friend.Create(newFriend));
+
+			// Update existing friends
+			var existingFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) != null);
+			foreach (var existingFriend in existingFriends)
+				Friends.FirstOrDefault(f => existingFriend.Name == f.Name).Update(existingFriend);
+
+			CreateSortedFriends();
+		}
 	}
 }

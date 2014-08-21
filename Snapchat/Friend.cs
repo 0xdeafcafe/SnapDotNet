@@ -4,9 +4,8 @@ using SnapDotNet.Utilities;
 using SnapDotNet.Responses;
 using System.Diagnostics.Contracts;
 
-namespace SnapDotNet.Models
+namespace SnapDotNet
 {
-
 	/// <summary>
 	/// Indicates the state of a friend request.
 	/// </summary>

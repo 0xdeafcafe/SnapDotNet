@@ -79,7 +79,12 @@ namespace SnapDotNet
 				Debug.WriteLine("[State Manager] Loading account state from {0}", Location.Path);
 				var file = await Location.GetFileAsync(AccountStateFileName);
 				var jsonData = await FileIO.ReadTextAsync(file, UnicodeEncoding.Utf8);
-				return await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<Account>(jsonData));
+				var account = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<Account>(jsonData));
+
+				if (account.SortedFriends == null)
+					account.CreateSortedFriends();
+
+				return account;
 			}
 			catch (FileNotFoundException)
 			{

@@ -132,6 +132,9 @@
     <Compile Include="Dialogs\SignUpDialog.xaml.cs">
       <DependentUpon>SignUpDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ManageFriendsPage.xaml.cs">
+      <DependentUpon>ManageFriendsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ConversationPage.xaml.cs">
       <DependentUpon>ConversationPage.xaml</DependentUpon>
     </Compile>
@@ -192,6 +195,10 @@
     <Page Include="Dialogs\SignUpDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManageFriendsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\ConversationPage.xaml">
       <SubType>Designer</SubType>

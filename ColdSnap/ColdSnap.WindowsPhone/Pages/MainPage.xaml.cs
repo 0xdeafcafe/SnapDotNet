@@ -5,6 +5,7 @@ using ColdSnap.ViewModels;
 using SnapDotNet;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using ColdSnap.ViewModels.Sections;
 
 namespace ColdSnap.Pages
 {
@@ -53,6 +54,9 @@ namespace ColdSnap.Pages
 		private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
 			ViewModel.Account = e.NavigationParameter as Account ?? await StateManager.Local.LoadAccountStateAsync();
+
+			foreach (var section in this.hub.Sections)
+				((dynamic) section.DataContext).Account = ViewModel.Account;
 		}
 
 		/// <summary>

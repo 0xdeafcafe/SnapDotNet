@@ -1,38 +1,29 @@
 ﻿using ColdSnap.Common;
-using ColdSnap.ViewModels;
-using SnapDotNet;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace ColdSnap.Pages
 {
-	public sealed partial class ConversationPage
+	public sealed partial class ManageFriendsPage
 	{
-		private readonly ConversationPageViewModel _viewModel = new ConversationPageViewModel();
+		private readonly NavigationHelper _navigationHelper;
 
-		public ConversationPage()
+		public ManageFriendsPage()
 		{
 			InitializeComponent();
 
-			NavigationHelper = new NavigationHelper(this);
-			NavigationHelper.LoadState += NavigationHelper_LoadState;
-			NavigationHelper.SaveState += NavigationHelper_SaveState;
-
-			DataContext = ViewModel;
+			_navigationHelper = new NavigationHelper(this);
+			_navigationHelper.LoadState += NavigationHelper_LoadState;
+			_navigationHelper.SaveState += NavigationHelper_SaveState;
 		}
 
 		/// <summary>
 		/// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
 		/// </summary>
-		public NavigationHelper NavigationHelper { get; private set; }
-
-		/// <summary>
-		/// Gets the view model of this page.
-		/// </summary>
-		public ConversationPageViewModel ViewModel
+		public NavigationHelper NavigationHelper
 		{
-			get { return _viewModel; }
+			get { return _navigationHelper; }
 		}
 
 		/// <summary>
@@ -48,7 +39,6 @@ namespace ColdSnap.Pages
 		/// session.  The state will be null the first time a page is visited.</param>
 		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
-			ViewModel.Account = e.NavigationParameter as Account;
 		}
 
 		/// <summary>
@@ -61,7 +51,6 @@ namespace ColdSnap.Pages
 		/// serializable state.</param>
 		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
 		{
-			
 		}
 
 		#region NavigationHelper registration
@@ -81,12 +70,12 @@ namespace ColdSnap.Pages
 		/// handlers that cannot cancel the navigation request.</param>
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			NavigationHelper.OnNavigatedTo(e);
+			_navigationHelper.OnNavigatedTo(e);
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
 		{
-			NavigationHelper.OnNavigatedFrom(e);
+			_navigationHelper.OnNavigatedFrom(e);
 		}
 
 		#endregion
