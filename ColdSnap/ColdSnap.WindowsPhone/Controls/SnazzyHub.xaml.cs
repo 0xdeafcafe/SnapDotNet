@@ -38,9 +38,11 @@ namespace ColdSnap.Controls
 
 		private void SnazzyScrollViewer_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
 		{
+			if (CurrentAccentColor == null)
+				return;
+
 			var scrollViewer = sender as ScrollViewer;
 			
-			// TODO: Set header color to 
 		}
 
 		private void SetHeaderColor()
