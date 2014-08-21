@@ -1,5 +1,6 @@
 ﻿<controls:SnazzyHubSection
 	x:Class="ColdSnap.Pages.Sections.ConvoListSection"
+	x:Uid="ConvoListSection"
 	
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,19 +10,26 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	
-	AccentColor="#FF3cb2e2" Header="coldsnap">
+	AccentColor="#FF3cb2e2"
+	Header="coldsnap"
+>
 
 	<d:DesignProperties.DataContext>
 		<sections:ConvoListSectionViewModel/>
 	</d:DesignProperties.DataContext>
 	
 	<DataTemplate>
-		<Grid>
+		<StackPanel>
+			<TextBlock Foreground="Black">Account data has been deserialized or loaded when username appears below</TextBlock>
 			<TextBlock Foreground="Black" Text="{Binding Path=Account.Username}" />
 
-			<Button x:Name="OpenConversationButton" Content="test" 
+			<Button x:Name="OpenConversationButton" Content="open convo page" 
 							BorderBrush="Black" Foreground="Black" 
 							Click="OpenConversationButton_OnClick"/>
-		</Grid>
+
+			<Button x:Name="OpenAddFriendsButton" Content="open add friends page" 
+							BorderBrush="Black" Foreground="Black" 
+							Click="OpenAddFriendsButton_OnClick"/>
+		</StackPanel>
 	</DataTemplate>
 </controls:SnazzyHubSection>

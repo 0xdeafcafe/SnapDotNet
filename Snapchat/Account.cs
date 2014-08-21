@@ -65,7 +65,7 @@ namespace SnapDotNet
 			get { return _friends; }
 			private set { SetValue(ref _friends, value); }
 		}
-		private ObservableCollection<Friend> _friends;
+		private ObservableCollection<Friend> _friends = new ObservableCollection<Friend>();
 
 		/// <summary>
 		/// 
@@ -84,7 +84,7 @@ namespace SnapDotNet
 				SetValue(ref _sortedFriends, value);
 			}
 		}
-		private List<FriendsKeyGroup> _sortedFriends;
+		private List<FriendsKeyGroup> _sortedFriends = new List<FriendsKeyGroup>();
 
 		/// <summary>
 		/// Gets the phone number associated with this account.

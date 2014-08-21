@@ -120,11 +120,17 @@
   <data name="BirthdayDatePicker.Header" xml:space="preserve">
     <value>Birthday</value>
   </data>
+  <data name="ConvoListSection.Header" xml:space="preserve">
+    <value>snapchat</value>
+  </data>
   <data name="EmailAddressTextBox.Header" xml:space="preserve">
     <value>Email</value>
   </data>
   <data name="EmailOrUsernameTextBox.Header" xml:space="preserve">
     <value>Email or username</value>
+  </data>
+  <data name="FriendsSection.Header" xml:space="preserve">
+    <value>my friends</value>
   </data>
   <data name="InvalidCredentialsException" xml:space="preserve">
     <value>Username or password is incorrect</value>

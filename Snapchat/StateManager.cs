@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -81,7 +82,7 @@ namespace SnapDotNet
 				var jsonData = await FileIO.ReadTextAsync(file, UnicodeEncoding.Utf8);
 				var account = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<Account>(jsonData));
 
-				if (account.SortedFriends == null)
+				if (account.SortedFriends == null || (account.Friends.Count > 0 && account.SortedFriends.Count == 0))
 					account.CreateSortedFriends();
 
 				return account;
