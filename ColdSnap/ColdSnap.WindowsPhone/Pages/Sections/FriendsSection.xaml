@@ -17,58 +17,57 @@
 		<sections:FriendsSectionViewModel/>
 	</d:DesignProperties.DataContext>
 
-	<controls:SnazzyHubSection.Resources>
-		<ResourceDictionary>
-			<JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
-			<JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
-			<CollectionViewSource x:Key="FriendGroups"
+	<DataTemplate>
+		<Grid>
+			<Grid.Resources>
+				<ResourceDictionary>
+					<JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
+					<JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
+					<CollectionViewSource x:Key="FriendGroups"
 							  IsSourceGrouped="True"
 							  Source="{Binding Account.SortedFriends, Mode=OneWay}"/>
 
-			<DataTemplate x:Name="ItemTemplate">
-				<Border d:DataContext="{d:DesignInstance Type=models:Friend}"
+					<DataTemplate x:Name="ItemTemplate">
+						<Border d:DataContext="{d:DesignInstance Type=models:Friend}"
 					Background="Transparent" BorderBrush="#FFf5f5f5" BorderThickness="0,0,0,1"
 					Height="62" Padding="18,0,0,0">
-					<TextBlock Text="{Binding Path=FriendlyName}"
+							<TextBlock Text="{Binding Path=FriendlyName}"
 						   VerticalAlignment="Center"
 						   FontSize="18" Foreground="#333333"
 						   FontWeight="Normal"
 						   FontFamily="Segoe WP"/>
-				</Border>
-			</DataTemplate>
-			<DataTemplate x:Name="GroupHeaderTemplate">
-				<Grid d:DataContext="{d:DesignInstance Type=customTypes:FriendsKeyGroup}"
-				  Height="30">
-					<Grid.Background>
-						<SolidColorBrush Color="{Binding Path=BackgroundColour}" />
-					</Grid.Background>
+						</Border>
+					</DataTemplate>
+					<DataTemplate x:Name="GroupHeaderTemplate">
+						<Grid d:DataContext="{d:DesignInstance Type=customTypes:FriendsKeyGroup}" Height="30">
+							<Grid.Background>
+								<SolidColorBrush Color="{Binding Path=BackgroundColour}" />
+							</Grid.Background>
 
-					<TextBlock FontWeight="Bold" Text="{Binding Path=FriendlyKey}"
+							<TextBlock FontWeight="Bold" Text="{Binding Path=FriendlyKey}"
 						   Margin="17,0,0,0" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" 
 						   FontFamily="Segoe WP">
-						<TextBlock.Foreground>
-							<SolidColorBrush Color="{Binding Path=ForegroundColour}" />
-						</TextBlock.Foreground>
-					</TextBlock>
-				</Grid>
-			</DataTemplate>
-			<DataTemplate x:Name="JumpListTemplate">
-				<Border Padding="5">
-					<Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
+								<TextBlock.Foreground>
+									<SolidColorBrush Color="{Binding Path=ForegroundColour}" />
+								</TextBlock.Foreground>
+							</TextBlock>
+						</Grid>
+					</DataTemplate>
+					<DataTemplate x:Name="JumpListTemplate">
+						<Border Padding="5">
+							<Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
 							Width="82" Height="82" HorizontalAlignment="Left">
-						
-						<TextBlock Text="{Binding Path=Group.Key}" 
+
+								<TextBlock Text="{Binding Path=Group.Key}" 
 								   Foreground="{Binding Converter={StaticResource ForegroundConverter}}" 
 								   FontSize="48" Padding="6" 
 								   HorizontalAlignment="Left" VerticalAlignment="Center"/>
-					</Border>
-				</Border>
-			</DataTemplate>
-		</ResourceDictionary>
-	</controls:SnazzyHubSection.Resources>
-	
-	<DataTemplate>
-		<Grid Margin="-19,0,0,0"> <!-- TODO: This is workaround, to fix a weird 19px margin bug... -->
+							</Border>
+						</Border>
+					</DataTemplate>
+				</ResourceDictionary>
+			</Grid.Resources>
+			
 			<SemanticZoom>
 				<SemanticZoom.ZoomedInView>
 					<ListView IsHoldingEnabled="True"

@@ -58,8 +58,8 @@
 				<Setter.Value>
 					<DataTemplate>
 						<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" 
-								   HorizontalAlignment="Center" VerticalAlignment="Center" 
-								   Margin="0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
+								   HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+								   Margin="13,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
 					</DataTemplate>
 				</Setter.Value>
 			</Setter>

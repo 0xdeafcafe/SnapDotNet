@@ -43,6 +43,8 @@ namespace ColdSnap.Controls
 				return;
 
 			var scrollViewer = sender as ScrollViewer;
+			var offset = scrollViewer.HorizontalOffset;
+
 			
 		}
 

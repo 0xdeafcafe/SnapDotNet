@@ -19,7 +19,6 @@
 		<sections:ConvoListSection/>
 		<sections:CameraSection/>
 		<sections:FriendsSection/>
-		<sections:ManageFriendsSection />
 
 	</controls:SnazzyHub>
 </Page>
