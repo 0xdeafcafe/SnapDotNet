@@ -68,7 +68,7 @@
 	</controls:SnazzyHubSection.Resources>
 	
 	<DataTemplate>
-		<Grid>
+		<Grid Margin="-19,0,0,0"> <!-- TODO: This is workaround, to fix a weird 19px margin bug... -->
 			<SemanticZoom>
 				<SemanticZoom.ZoomedInView>
 					<ListView IsHoldingEnabled="True"

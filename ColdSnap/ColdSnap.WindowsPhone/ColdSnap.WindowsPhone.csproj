@@ -138,6 +138,9 @@
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Sections\ManageFriendsSection.xaml.cs">
+      <DependentUpon>ManageFriendsSection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Sections\CameraSection.xaml.cs">
       <DependentUpon>CameraSection.xaml</DependentUpon>
     </Compile>
@@ -200,6 +203,10 @@
     <Page Include="Pages\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sections\ManageFriendsSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Sections\CameraSection.xaml">
       <Generator>MSBuild:Compile</Generator>
