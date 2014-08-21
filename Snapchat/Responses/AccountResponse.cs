@@ -40,7 +40,7 @@ namespace SnapDotNet.Responses
 		public string Email { get; set; }
 
 		[DataMember(Name = "friends")]
-		public FriendResponse[] Friends { get; set; }
+		public List<FriendResponse> Friends { get; set; }
 
 		[DataMember(Name = "last_replayed_snap_timestamp")]
 		[JsonConverter(typeof(UnixDateTimeConverter))]

@@ -1,8 +1,8 @@
 ﻿namespace ColdSnap.Pages.Sections
 {
-	public sealed partial class CameraSection
+	public sealed partial class FriendsSection
 	{
-		public CameraSection()
+		public FriendsSection()
 		{
 			InitializeComponent();
 		}

@@ -2,11 +2,13 @@
 using SnapDotNet.Models;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
+using SnapDotNet.Utilities.CustomTypes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 
@@ -20,7 +22,7 @@ namespace SnapDotNet
 
 		private Account()
 		{
-			_friends.CollectionChanged += (sender, e) => { OnObservableCollectionChanged(e, "Friends"); };
+			_friends.CollectionChanged += (sender, e) => OnObservableCollectionChanged(e, "Friends", CreateSortedFriends);
 		}
 
 		/// <summary>
@@ -70,7 +72,7 @@ namespace SnapDotNet
 					Score = response.Score,
 					SnapsReceived = response.SnapsReceived,
 					SnapsSent = response.SnapsSent,
-					Birthday = response.Birthday,
+					Birthday = response.Birthday
 				};
 			}
 			catch (InvalidHttpResponseException ex)
@@ -140,6 +142,26 @@ namespace SnapDotNet
 			Birthday = accountResponse.Birthday;
 
 			// TODO: Save the fields that are missing to this model
+
+			#region Friends
+			// TODO: Maybe make this code modular, shove it in a helper somewhere. It's kinda repetitve.
+
+			// remove removed friends
+			var removedFriends = Friends.Where(f => accountResponse.Friends.FirstOrDefault(f1 => f1.Name == f.Name) == null);
+			foreach (var removedFriend in removedFriends)
+				Friends.Remove(removedFriend);
+
+			// add new friends
+			var newFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) == null);
+			foreach (var newFriend in newFriends)
+				Friends.Add(Friend.Create(newFriend));
+
+			// update existing friends
+			var existingFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) != null);
+			foreach (var existingFriend in existingFriends)
+				Friends.FirstOrDefault(f => existingFriend.Name == f.Name).Update(existingFriend);
+
+			#endregion
 		}
 
 		/// <summary>
@@ -182,9 +204,33 @@ namespace SnapDotNet
 		public ObservableCollection<Friend> Friends
 		{
 			get { return _friends; }
-			set { SetValue(ref _friends, value); } 
+			set
+			{
+				SetValue(ref _friends, value);
+
+				CreateSortedFriends();
+			}
 		}
 		private ObservableCollection<Friend> _friends = new ObservableCollection<Friend>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public List<FriendsKeyGroup> SortedFriends
+		{
+			get { return _sortedFriends; }
+			set
+			{
+				if (value.Count > 30)
+				{
+					
+				}
+
+				SetValue(ref _sortedFriends, value);
+			}
+		}
+		private List<FriendsKeyGroup> _sortedFriends = new List<FriendsKeyGroup>();
 
 		/// <summary>
 		/// Gets the phone number associated with this account.
@@ -329,7 +375,7 @@ namespace SnapDotNet
 		{
 			get { return _snapsSent; }
 			private set
-			{ 
+			{
 				SetValue(ref _snapsSent, value);
 				OnPropertyChanged("SnapBandwidthSplit");
 			}
@@ -371,23 +417,34 @@ namespace SnapDotNet
 		private string _authToken;
 
 		/*
+			[DataMember(Name = "added_friends")]
+			public ObservableCollection<AddedFriend> AddedFriends { get; set; }
 
-		//[DataMember(Name = "added_friends")]
-		//public ObservableCollection<AddedFriend> AddedFriends { get; set; }
+			[DataMember(Name = "notification_sound_setting")]
+			public string NotificationSoundSetting { get; set; }
 
-		[DataMember(Name = "notification_sound_setting")]
-		public string NotificationSoundSetting { get; set; }
+			[DataMember(Name = "recents")]
+			public ObservableCollection<string> RecentFriends { get; set; }
 
-		[DataMember(Name = "recents")]
-		public ObservableCollection<string> RecentFriends { get; set; }
+			[DataMember(Name = "requests")]
+			public ObservableCollection<string> FriendRequests { get; set; }
 
-		[DataMember(Name = "requests")]
-		public ObservableCollection<string> FriendRequests { get; set; }
+			[DataMember(Name = "snap_p")]
+			public string AccountPrivacySetting { get; set; }
 
-		[DataMember(Name = "snap_p")]
-		public string AccountPrivacySetting { get; set; }
+			[DataMember(Name = "story_privacy")]
+			public string StoryPrivacySetting { get; set; }
+		*/
 
-		[DataMember(Name = "story_privacy")]
-		public string StoryPrivacySetting { get; set; }*/
+		#region Helpers
+
+		private void CreateSortedFriends()
+		{
+			// TODO: Make this more efficient, right now it gets called n times when initally loading the profile. (where n is the number of friends the user has).
+			// srsly. It makes the output look shit - http://i.imgur.com/PSGvzuA.png
+			SortedFriends = FriendsKeyGroup.CreateGroups(Friends);
+		}
+
+		#endregion
 	}
 }

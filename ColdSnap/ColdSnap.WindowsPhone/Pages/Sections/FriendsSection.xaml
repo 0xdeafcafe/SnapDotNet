@@ -1,0 +1,110 @@
+﻿<controls:SnazzyHubSection
+	x:Class="ColdSnap.Pages.Sections.FriendsSection"
+	
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controls="using:ColdSnap.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:sections="using:ColdSnap.ViewModels.Sections"
+	xmlns:models="using:SnapDotNet.Models"
+	xmlns:customTypes="using:SnapDotNet.Utilities.CustomTypes"
+	mc:Ignorable="d"
+
+	AccentColor="#FF9b55a0" Header="my friends">
+
+	<d:DesignProperties.DataContext>
+		<sections:FriendsSectionViewModel/>
+	</d:DesignProperties.DataContext>
+
+	<controls:SnazzyHubSection.Resources>
+		<ResourceDictionary>
+			<JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
+			<JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
+			<CollectionViewSource x:Key="FriendGroups"
+							  IsSourceGrouped="True"
+							  Source="{Binding Account.SortedFriends, Mode=OneWay}"/>
+
+			<DataTemplate x:Name="ItemTemplate">
+				<Border d:DataContext="{d:DesignInstance Type=models:Friend}"
+					Background="Transparent" BorderBrush="#FFf5f5f5" BorderThickness="0,0,0,1"
+					Height="62" Padding="18,0,0,0">
+					<TextBlock Text="{Binding Path=FriendlyName}"
+						   VerticalAlignment="Center"
+						   FontSize="18" Foreground="#333333"
+						   FontWeight="Normal"
+						   FontFamily="Segoe WP"/>
+				</Border>
+			</DataTemplate>
+			<DataTemplate x:Name="GroupHeaderTemplate">
+				<Grid d:DataContext="{d:DesignInstance Type=customTypes:FriendsKeyGroup}"
+				  Height="30">
+					<Grid.Background>
+						<SolidColorBrush Color="{Binding Path=BackgroundColour}" />
+					</Grid.Background>
+
+					<TextBlock FontWeight="Bold" Text="{Binding Path=FriendlyKey}"
+						   Margin="17,0,0,0" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" 
+						   FontFamily="Segoe WP">
+						<TextBlock.Foreground>
+							<SolidColorBrush Color="{Binding Path=ForegroundColour}" />
+						</TextBlock.Foreground>
+					</TextBlock>
+				</Grid>
+			</DataTemplate>
+			<DataTemplate x:Name="JumpListTemplate">
+				<Border Padding="5">
+					<Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
+							Width="82" Height="82" HorizontalAlignment="Left">
+						
+						<TextBlock Text="{Binding Path=Group.Key}" 
+								   Foreground="{Binding Converter={StaticResource ForegroundConverter}}" 
+								   FontSize="48" Padding="6" 
+								   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+					</Border>
+				</Border>
+			</DataTemplate>
+		</ResourceDictionary>
+	</controls:SnazzyHubSection.Resources>
+	
+	<DataTemplate>
+		<Grid Margin="-19,0,0,0"> <!-- TODO: This is workaround, to fix a weird 19px margin bug... -->
+			<SemanticZoom>
+				<SemanticZoom.ZoomedInView>
+					<ListView IsHoldingEnabled="True"
+							  ItemsSource="{Binding Source={StaticResource FriendGroups}}"
+							  ItemTemplate="{StaticResource ItemTemplate}">
+						<ListView.ItemContainerStyle>
+							<Style TargetType="ListViewItem" BasedOn="{StaticResource NoTiltListViewStyle}">
+								<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+							</Style>
+						</ListView.ItemContainerStyle>
+						<ListView.Template>
+							<ControlTemplate TargetType="ListView">
+								<ScrollViewer>
+									<ItemsPresenter />
+								</ScrollViewer>
+							</ControlTemplate>
+						</ListView.Template>
+						<ListView.GroupStyle>
+							<GroupStyle HidesIfEmpty="True"
+										HeaderTemplate="{StaticResource GroupHeaderTemplate}">
+								<GroupStyle.HeaderContainerStyle>
+									<Style TargetType="ListViewHeaderItem">
+										<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+									</Style>
+								</GroupStyle.HeaderContainerStyle>
+							</GroupStyle>
+						</ListView.GroupStyle>
+					</ListView>
+				</SemanticZoom.ZoomedInView>
+				<SemanticZoom.ZoomedOutView>
+					<GridView Background="Black" 
+							  ItemsSource="{Binding Source={StaticResource FriendGroups}, Path=CollectionGroups}"
+							  ItemTemplate="{StaticResource JumpListTemplate}">
+					</GridView>
+				</SemanticZoom.ZoomedOutView>
+			</SemanticZoom>
+		</Grid>
+	</DataTemplate>
+</controls:SnazzyHubSection>

@@ -1,22 +1,19 @@
 ﻿<HubSection
-    x:Class="ColdSnap.Controls.SnazzyHubSection"
+	x:Class="ColdSnap.Controls.SnazzyHubSection"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controls="using:ColdSnap.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	d:DesignHeight="666.66"
+	d:DesignWidth="400">
 	
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:ColdSnap.Controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="666.66"
-    d:DesignWidth="400"
->
 	<HubSection.Resources>
 		<controls:HeaderToHeaderTemplateHeightConverter x:Key="HeaderToHeaderTemplateHeightConverter"/>
 		<x:Int32 x:Key="HubSectionHeaderCharacterSpacing">-10</x:Int32>
-		<x:Double x:Key="HubSectionHeaderFontSize">19</x:Double>
 		<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
-		<Thickness x:Key="HubSectionHeaderMarginThickness">0,0,0,0</Thickness>
-		<Thickness x:Key="HubSectionMarginThickness">0,0,0,0</Thickness>
+		<Thickness x:Key="HubSectionMarginThickness">0</Thickness>
 		<Style x:Key="HubSectionStyle" TargetType="HubSection">
 			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -35,12 +32,24 @@
 								<CompositeTransform x:Name="WrappingTransform"/>
 							</Grid.RenderTransform>
 							<Rectangle x:Name="HubHeaderPlaceholder" Grid.Row="0"/>
-							<ContentControl x:Name="Header" Height="{Binding Header, Converter={StaticResource HeaderToHeaderTemplateHeightConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}" CharacterSpacing="{StaticResource HubSectionHeaderCharacterSpacing}" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" FontWeight="SemiBold" FontSize="{StaticResource HubSectionHeaderFontSize}" FontFamily="{StaticResource PhoneFontFamilyNormal}" HorizontalAlignment="Stretch" Margin="{StaticResource HubSectionHeaderMarginThickness}" Grid.Row="1" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+							<ContentControl x:Name="Header" Height="{Binding Header, Converter={StaticResource HeaderToHeaderTemplateHeightConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+											CharacterSpacing="{StaticResource HubSectionHeaderCharacterSpacing}" 
+											ContentTemplate="{TemplateBinding HeaderTemplate}" 
+											Content="{TemplateBinding Header}" FontWeight="SemiBold" 
+											FontSize="19" 
+											FontFamily="{StaticResource PhoneFontFamilyNormal}" 
+											HorizontalAlignment="Stretch" Margin="0" Grid.Row="1" 
+											HorizontalContentAlignment="Stretch" 
+											VerticalContentAlignment="Stretch">
 								<ContentControl.RenderTransform>
 									<CompositeTransform x:Name="StickyHeaderTransform"/>
 								</ContentControl.RenderTransform>
 							</ContentControl>
-							<ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Grid.Row="2" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							<ContentPresenter x:Name="ContentPresenter" 
+											  ContentTemplate="{TemplateBinding ContentTemplate}" 
+											  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+											  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+											  Grid.Row="2" />
 						</Grid>
 					</ControlTemplate>
 				</Setter.Value>
@@ -48,7 +57,9 @@
 			<Setter Property="HeaderTemplate">
 				<Setter.Value>
 					<DataTemplate>
-						<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="15,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
+						<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" 
+								   HorizontalAlignment="Center" VerticalAlignment="Center" 
+								   Margin="0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
 					</DataTemplate>
 				</Setter.Value>
 			</Setter>

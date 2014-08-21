@@ -1,6 +1,8 @@
 ﻿using System;
 using Newtonsoft.Json;
 using SnapDotNet.Utilities;
+using SnapDotNet.Responses;
+using System.Diagnostics.Contracts;
 
 namespace SnapDotNet.Models
 {
@@ -84,5 +86,36 @@ namespace SnapDotNet.Models
 			set { SetValue(ref _friendRequestState, value); }
 		}
 		private FriendRequestState _friendRequestState;
+
+		/// <summary>
+		/// Update the model based on a <see cref="FriendResponse" />.
+		/// </summary>
+		/// <param name="friendResponse">The <see cref="FriendResponse" /> to update the Friend model from.</param>
+		internal void Update(FriendResponse friendResponse)
+		{
+			CanSeeCustomStories = friendResponse.CanSeeCustomStories;
+			Name = friendResponse.Name;
+			DisplayName = friendResponse.DisplayName;
+			FriendRequestState = (FriendRequestState) friendResponse.FriendRequestState;
+        }
+
+		/// <summary>
+		/// Create a Friend model based on a <see cref="FriendResponse" />.
+		/// </summary>
+		/// <param name="friendResponse">The <see cref="FriendResponse" /> to create the Friend model from.</param>
+		/// <returns></returns>
+		[Pure]
+		internal static Friend Create(FriendResponse friendResponse)
+		{
+			Contract.Requires<ArgumentNullException>(friendResponse != null);
+
+			return new Friend
+			{
+				CanSeeCustomStories = friendResponse.CanSeeCustomStories,
+				DisplayName = friendResponse.DisplayName,
+				Name = friendResponse.Name,
+				FriendRequestState = (FriendRequestState) friendResponse.FriendRequestState
+			};
+		}
 	}
 }
