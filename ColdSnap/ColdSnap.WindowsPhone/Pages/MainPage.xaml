@@ -6,6 +6,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:controls="using:ColdSnap.Controls"
+	xmlns:sections="using:ColdSnap.Pages.Sections"
 	xmlns:vm="using:ColdSnap.ViewModels"
     mc:Ignorable="d"
 
@@ -17,34 +18,10 @@
 	</d:DesignProperties.DataContext>
 
 	<controls:SnazzyHub>
-		<controls:SnazzyHubSection AccentColor="#FF3cb2e2" Header="coldsnap">
-			<DataTemplate>
-				<Grid>
-					<TextBlock Foreground="Black" Text="{Binding Path=Account.Username}" />
-					
-					<Button x:Name="OpenConversationButton" Content="test" 
-							BorderBrush="Black" Foreground="Black" 
-							Click="OpenConversationButton_OnClick"/>
-				</Grid>
-			</DataTemplate>
-		</controls:SnazzyHubSection>
 
-		<controls:SnazzyHubSection AccentColor="#00FFFFFF">
-			<DataTemplate>
-				<Rectangle Fill="Black"/>
-			</DataTemplate>
-		</controls:SnazzyHubSection>
+		<sections:ConvoListSection/>
+		<sections:CameraSection/>
+		<sections:StoriesSection/>
 
-		<controls:SnazzyHubSection AccentColor="#FF9b55a0" Header="my friends">
-			<DataTemplate>
-				
-			</DataTemplate>
-		</controls:SnazzyHubSection>
-
-		<controls:SnazzyHubSection AccentColor="#FFFF8000" Header="add friends">
-			<DataTemplate>
-				
-			</DataTemplate>
-		</controls:SnazzyHubSection>
 	</controls:SnazzyHub>
 </Page>
