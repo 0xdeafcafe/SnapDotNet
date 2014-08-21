@@ -22,7 +22,7 @@ namespace SnapDotNet
 
 		private Account()
 		{
-			_friends.CollectionChanged += (sender, e) => { OnObservableCollectionChanged(e, "Friends", CreateSortedFriends); };
+			_friends.CollectionChanged += (sender, e) => OnObservableCollectionChanged(e, "Friends", CreateSortedFriends);
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace SnapDotNet
 			// add new friends
 			var newFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) == null);
 			foreach (var newFriend in newFriends)
-				Friends.Add(Friend.CreateFriendFromResponse(newFriend));
+				Friends.Add(Friend.Create(newFriend));
 
 			// update existing friends
 			var existingFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) != null);
@@ -417,24 +417,24 @@ namespace SnapDotNet
 		private string _authToken;
 
 		/*
+			[DataMember(Name = "added_friends")]
+			public ObservableCollection<AddedFriend> AddedFriends { get; set; }
 
-		//[DataMember(Name = "added_friends")]
-		//public ObservableCollection<AddedFriend> AddedFriends { get; set; }
+			[DataMember(Name = "notification_sound_setting")]
+			public string NotificationSoundSetting { get; set; }
 
-		[DataMember(Name = "notification_sound_setting")]
-		public string NotificationSoundSetting { get; set; }
+			[DataMember(Name = "recents")]
+			public ObservableCollection<string> RecentFriends { get; set; }
 
-		[DataMember(Name = "recents")]
-		public ObservableCollection<string> RecentFriends { get; set; }
+			[DataMember(Name = "requests")]
+			public ObservableCollection<string> FriendRequests { get; set; }
 
-		[DataMember(Name = "requests")]
-		public ObservableCollection<string> FriendRequests { get; set; }
+			[DataMember(Name = "snap_p")]
+			public string AccountPrivacySetting { get; set; }
 
-		[DataMember(Name = "snap_p")]
-		public string AccountPrivacySetting { get; set; }
-
-		[DataMember(Name = "story_privacy")]
-		public string StoryPrivacySetting { get; set; }*/
+			[DataMember(Name = "story_privacy")]
+			public string StoryPrivacySetting { get; set; }
+		*/
 
 		#region Helpers
 

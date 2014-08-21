@@ -105,8 +105,10 @@ namespace SnapDotNet.Models
 		/// <param name="friendResponse">The <see cref="FriendResponse" /> to create the Friend model from.</param>
 		/// <returns></returns>
 		[Pure]
-		internal static Friend CreateFriendFromResponse(FriendResponse friendResponse)
+		internal static Friend Create(FriendResponse friendResponse)
 		{
+			Contract.Requires<ArgumentNullException>(friendResponse != null);
+
 			return new Friend
 			{
 				CanSeeCustomStories = friendResponse.CanSeeCustomStories,
