@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -61,7 +62,7 @@ namespace SnapDotNet.Utilities
 		/// </summary>
 		/// <param name="e">The CollectionChanged event of the Observable Collection</param>
 		/// <param name="collectionName">The name of the observable collection.</param>
-		protected void OnObservableCollectionChanged(NotifyCollectionChangedEventArgs e, string collectionName)
+		protected void OnObservableCollectionChanged(NotifyCollectionChangedEventArgs e, string collectionName, Action optionalPostAction = null)
 		{
 			if (e.Action == NotifyCollectionChangedAction.Remove)
 				foreach (ObservableObject item in e.OldItems)
@@ -69,6 +70,9 @@ namespace SnapDotNet.Utilities
 			else if (e.Action == NotifyCollectionChangedAction.Add)
 				foreach (ObservableObject item in e.NewItems)
 					item.PropertyChanged += delegate { OnPropertyChanged(collectionName); }; // Added items
-		}
+
+			if (optionalPostAction != null)
+				optionalPostAction();
+        }
 	}
 }

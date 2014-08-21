@@ -1,15 +1,14 @@
 ﻿<HubSection
-    x:Class="ColdSnap.Controls.SnazzyHubSection"
+	x:Class="ColdSnap.Controls.SnazzyHubSection"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controls="using:ColdSnap.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	d:DesignHeight="666.66"
+	d:DesignWidth="400">
 	
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:ColdSnap.Controls"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="666.66"
-    d:DesignWidth="400"
->
 	<HubSection.Resources>
 		<controls:HeaderToHeaderTemplateHeightConverter x:Key="HeaderToHeaderTemplateHeightConverter"/>
 		<x:Int32 x:Key="HubSectionHeaderCharacterSpacing">-10</x:Int32>
@@ -48,7 +47,9 @@
 			<Setter Property="HeaderTemplate">
 				<Setter.Value>
 					<DataTemplate>
-						<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="15,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
+						<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" 
+								   HorizontalAlignment="Center" VerticalAlignment="Center" 
+								   Margin="0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
 					</DataTemplate>
 				</Setter.Value>
 			</Setter>

@@ -92,6 +92,8 @@
     <Compile Include="Responses\MessagingGatewayResponses.cs" />
     <Compile Include="Responses\SnapResponse.cs" />
     <Compile Include="Responses\StoriesResponces.cs" />
+    <Compile Include="Utilities\CustomTypes\FriendsKeyGroup.cs" />
+    <Compile Include="Utilities\CustomTypes\IAlphaKeyGroup.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Responses\Response.cs" />
     <Compile Include="Utilities\Gzip.cs" />
