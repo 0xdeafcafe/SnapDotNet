@@ -33,6 +33,9 @@
 			<Button x:Name="OpenConversationButton" Content="open convo page" 
 							BorderBrush="Black" Foreground="Black" 
 							Click="OpenConversationButton_OnClick"/>
+			<Button x:Name="OpenSettingsButton" Content="open settings" 
+							BorderBrush="Black" Foreground="Black" 
+							Click="OpenSettingsButton_Click"/>
 		</StackPanel>
 	</DataTemplate>
 </controls:SnazzyHubSection>

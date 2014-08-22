@@ -37,5 +37,10 @@ namespace ColdSnap.Pages.Sections
 		{
 			Window.Current.Navigate(typeof(ConversationPage), ViewModel.Account);
 		}
+
+		private void OpenSettingsButton_Click(object sender, RoutedEventArgs e)
+		{
+			Window.Current.Navigate(typeof(SettingsPage), ViewModel.Account);
+		}
 	}
 }

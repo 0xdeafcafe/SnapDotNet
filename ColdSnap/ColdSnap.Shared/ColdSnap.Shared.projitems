@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Sections\CameraSectionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Sections\ConvoListSectionViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Sections\FriendsSectionViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartPageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
