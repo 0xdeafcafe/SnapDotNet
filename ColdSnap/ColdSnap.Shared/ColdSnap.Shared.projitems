@@ -20,6 +20,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SuspensionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConversationPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Dialogs\SignUpDialogViewModel.cs" />

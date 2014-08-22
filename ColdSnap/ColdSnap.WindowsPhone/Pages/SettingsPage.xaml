@@ -57,16 +57,15 @@
 			<PivotItem x:Uid="SettingsProfileGroup" Header="PROFILE">
 				<ScrollViewer>
 					<StackPanel>
-						<TextBox x:Uid="SettingsUsernameTextBox" Header="Username" InputScope="EmailSmtpAddress"/>
-						<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" />
-						<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber"/>
+						<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Account.Email}"/>
+						<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Account.PhoneNumber}"/>
 						<ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends" Margin="0,7,0,0">
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
 						</ComboBox>
 						<TextBlock Margin="0,7,0,0" x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="12 hours and 30 minutes"/>
+						<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
 					</StackPanel>
 				</ScrollViewer>
 			</PivotItem>
@@ -119,8 +118,8 @@
 			<PivotItem x:Uid="SettingsTileGroup" Header="TILE">
 				<Grid>
 					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="True"/>
-						<ToggleSwitch x:Uid="SettingsTileTransaprency" Header="Tile Transparency" IsOn="False"/>
+						<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="{Binding LiveTileEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsTileTransaprency" Header="Tile Transparency" IsOn="{Binding TileTransparencyEnabled, Mode=TwoWay}"/>
 
 					</StackPanel>
 
@@ -159,7 +158,7 @@
 										</Grid.ColumnDefinitions>
 
 										<!-- the live tile! -->
-										<Grid Background="#FF3cb2e2" Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3">
+										<Grid Background="{Binding TileTransparencyUiExampleBrush, FallbackValue='#FF3cb2e2'}" Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3">
 											<TextBlock x:Uid="SettingsTileAppName" Text="ColdSnap" FontFamily="Segoe WP" FontWeight="Normal" 
 													   Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="5" />
 
