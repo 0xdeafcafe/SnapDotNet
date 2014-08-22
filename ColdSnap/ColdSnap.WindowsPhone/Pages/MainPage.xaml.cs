@@ -53,7 +53,10 @@ namespace ColdSnap.Pages
 		/// session.  The state will be null the first time a page is visited.</param>
 		private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
-			ViewModel.Account = e.NavigationParameter as Account ?? await StateManager.Local.LoadAccountStateAsync();
+			if (e.NavigationParameter as Account == null && e.PageState != null && e.PageState.ContainsKey("Account"))
+				ViewModel.Account = e.PageState["Account"] as Account;
+			else
+				ViewModel.Account = await StateManager.Local.LoadAccountStateAsync();
 
 			foreach (var section in this.hub.Sections)
 				((dynamic) section.DataContext).Account = ViewModel.Account;
@@ -69,7 +72,8 @@ namespace ColdSnap.Pages
 		/// serializable state.</param>
 		private async void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
 		{
-			await StateManager.Local.SaveAccountStateAsync(ViewModel.Account);
+			e.PageState.Add("Account", ViewModel.Account);
+			//await StateManager.Local.SaveAccountStateAsync(ViewModel.Account);
 		}
 
 		#region NavigationHelper registration
