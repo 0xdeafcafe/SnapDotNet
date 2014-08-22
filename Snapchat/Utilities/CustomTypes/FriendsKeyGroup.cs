@@ -45,7 +45,7 @@ namespace SnapDotNet.Utilities.CustomTypes
 			return list;
 		}
 
-		public static List<FriendsKeyGroup> CreateGroups(ObservableCollection<Friend> items)
+		public static ObservableCollection<FriendsKeyGroup> CreateGroups(ObservableCollection<Friend> items)
 		{
 			var list = CreateGroups();
 
@@ -77,7 +77,7 @@ namespace SnapDotNet.Utilities.CustomTypes
 			//foreach (var group in list)
 			//	group.OrderByDescending(g => g.FriendlyName[0]);
 
-			return list;
+			return new ObservableCollection<FriendsKeyGroup>(list);
 		}
 	}
 }

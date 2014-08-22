@@ -71,20 +71,12 @@ namespace SnapDotNet
 		/// 
 		/// </summary>
 		[JsonIgnore]
-		public List<FriendsKeyGroup> SortedFriends
+		public ObservableCollection<FriendsKeyGroup> SortedFriends
 		{
 			get { return _sortedFriends; }
-			private set
-			{
-				if (value.Count > 30)
-				{
-					// Matt: wut?
-				}
-
-				SetValue(ref _sortedFriends, value);
-			}
+			private set { SetValue(ref _sortedFriends, value); }
 		}
-		private List<FriendsKeyGroup> _sortedFriends = new List<FriendsKeyGroup>();
+		private ObservableCollection<FriendsKeyGroup> _sortedFriends = new ObservableCollection<FriendsKeyGroup>();
 
 		/// <summary>
 		/// Gets the phone number associated with this account.

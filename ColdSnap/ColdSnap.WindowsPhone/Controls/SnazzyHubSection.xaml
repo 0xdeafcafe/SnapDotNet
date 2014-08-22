@@ -24,10 +24,11 @@
 			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
 			<Setter Property="VerticalAlignment" Value="Stretch"/>
+			<Setter Property="Background" Value="#FFFFFFFF"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="HubSection">
-						<Grid Margin="{StaticResource HubSectionMarginThickness}">
+						<Grid Margin="{StaticResource HubSectionMarginThickness}" Background="{TemplateBinding Background}">
 							<Grid.RowDefinitions>
 								<RowDefinition Height="auto"/>
 								<RowDefinition Height="auto"/>

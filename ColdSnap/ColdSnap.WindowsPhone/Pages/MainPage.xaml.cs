@@ -6,6 +6,7 @@ using SnapDotNet;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using ColdSnap.ViewModels.Sections;
+using ColdSnap.Controls;
 
 namespace ColdSnap.Pages
 {
@@ -51,15 +52,13 @@ namespace ColdSnap.Pages
 		/// <see cref="Frame.Navigate(Type, object)"/> when this page was initially requested and
 		/// a dictionary of state preserved by this page during an earlier
 		/// session.  The state will be null the first time a page is visited.</param>
-		private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
-			if (e.NavigationParameter as Account == null && e.PageState != null && e.PageState.ContainsKey("Account"))
-				ViewModel.Account = e.PageState["Account"] as Account;
-			else
-				ViewModel.Account = await StateManager.Local.LoadAccountStateAsync();
+			if (e.NavigationParameter is Account)
+				ViewModel.Account = e.NavigationParameter as Account;
 
-			foreach (var section in this.hub.Sections)
-				((dynamic) section.DataContext).Account = ViewModel.Account;
+			foreach (SnazzyHubSection section in this.hub.Sections)
+				section.LoadState(e);
 		}
 
 		/// <summary>
@@ -70,10 +69,10 @@ namespace ColdSnap.Pages
 		/// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
 		/// <param name="e">Event data that provides an empty dictionary to be populated with
 		/// serializable state.</param>
-		private async void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
 		{
-			e.PageState.Add("Account", ViewModel.Account);
-			//await StateManager.Local.SaveAccountStateAsync(ViewModel.Account);
+			foreach (SnazzyHubSection section in this.hub.Sections)
+				section.SaveState(e);
 		}
 
 		#region NavigationHelper registration

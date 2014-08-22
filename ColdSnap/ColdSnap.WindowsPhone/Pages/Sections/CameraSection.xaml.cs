@@ -1,4 +1,5 @@
-﻿using ColdSnap.ViewModels.Sections;
+﻿using ColdSnap.Common;
+using ColdSnap.ViewModels.Sections;
 
 namespace ColdSnap.Pages.Sections
 {
@@ -16,6 +17,16 @@ namespace ColdSnap.Pages.Sections
 		public CameraSectionViewModel ViewModel
 		{
 			get { return DataContext as CameraSectionViewModel; }
+		}
+
+		public override void LoadState(LoadStateEventArgs e)
+		{
+
+		}
+
+		public override void SaveState(SaveStateEventArgs e)
+		{
+
 		}
 	}
 }

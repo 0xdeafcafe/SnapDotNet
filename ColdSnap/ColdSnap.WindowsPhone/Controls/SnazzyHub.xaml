@@ -67,7 +67,7 @@
 							<!-- dummy scrollviewer so hub's code won't fuck anything up -->
 							<ScrollViewer x:Name="ScrollViewer" IsEnabled="False"/>
 							
-							<ScrollViewer x:Name="SnazzyScrollViewer" ViewChanged="SnazzyScrollViewer_ViewChanged" ViewChanging="SnazzyScrollViewer_ViewChanging" HorizontalScrollMode="Auto" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Center" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Hidden" Grid.RowSpan="2" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" ZoomMode="Disabled" VerticalSnapPointsType="MandatorySingle">
+							<ScrollViewer x:Name="SnazzyScrollViewer" ViewChanged="SnazzyScrollViewer_ViewChanged" HorizontalScrollMode="Auto" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Center" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Hidden" Grid.RowSpan="2" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" ZoomMode="Disabled" VerticalSnapPointsType="MandatorySingle">
 								<ItemsStackPanel x:Name="Panel" CacheLength="6" Orientation="{TemplateBinding Orientation}"/>
 							</ScrollViewer>
 

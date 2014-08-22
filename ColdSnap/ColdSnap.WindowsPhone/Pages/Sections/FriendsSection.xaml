@@ -21,7 +21,7 @@
 	</d:DesignProperties.DataContext>
 
 	<DataTemplate>
-		<Grid>
+		<Grid x:Name="grid">
 			<Grid.Resources>
 				<ResourceDictionary>
 					<JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
@@ -32,13 +32,13 @@
 
 					<DataTemplate x:Name="ItemTemplate">
 						<Border d:DataContext="{d:DesignInstance Type=sdn:Friend}"
-					Background="Transparent" BorderBrush="#FFf5f5f5" BorderThickness="0,0,0,1"
-					Height="62" Padding="18,0,0,0">
+								Background="Transparent" BorderBrush="#FFf5f5f5" BorderThickness="0,0,0,1"
+								Height="62" Padding="18,0,0,0">
 							<TextBlock Text="{Binding Path=FriendlyName}"
-						   VerticalAlignment="Center"
-						   FontSize="18" Foreground="#333333"
-						   FontWeight="Normal"
-						   FontFamily="Segoe WP"/>
+									   VerticalAlignment="Center"
+									   FontSize="18" Foreground="#333333"
+									   FontWeight="Normal"
+									   FontFamily="Segoe WP"/>
 						</Border>
 					</DataTemplate>
 					<DataTemplate x:Name="GroupHeaderTemplate">
@@ -74,8 +74,8 @@
 			<SemanticZoom>
 				<SemanticZoom.ZoomedInView>
 					<ListView IsHoldingEnabled="True"
-							  ItemsSource="{Binding Source={StaticResource FriendGroups}}"
-							  ItemTemplate="{StaticResource ItemTemplate}">
+							  ItemTemplate="{StaticResource ItemTemplate}"
+							  ItemsSource="{Binding Source={StaticResource FriendGroups}}">
 						<ListView.ItemContainerStyle>
 							<Style TargetType="ListViewItem" BasedOn="{StaticResource NoTiltListViewStyle}">
 								<Setter Property="HorizontalContentAlignment" Value="Stretch" />

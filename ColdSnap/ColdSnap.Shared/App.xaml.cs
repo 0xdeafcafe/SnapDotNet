@@ -78,16 +78,11 @@ namespace ColdSnap
 
             if (rootFrame.Content == null)
             {
-				// Determine the initial page based on the existence of the Snapchat account state.
-				var destinationPage = await StateManager.Local.ContainsStoredAccountStateAsync() ? typeof(MainPage) : typeof(StartPage);
-
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                if (!rootFrame.Navigate(destinationPage, e.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
+				// Navigate to starting page.
+				if (await StateManager.Local.ContainsStoredAccountStateAsync())
+					rootFrame.Navigate(typeof(MainPage), await StateManager.Local.LoadAccountStateAsync());
+				else
+					rootFrame.Navigate(typeof(StartPage), null);
             }
 
             // Ensure the current window is active

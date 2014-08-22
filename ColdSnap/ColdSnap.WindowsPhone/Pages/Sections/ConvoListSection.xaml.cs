@@ -1,5 +1,6 @@
 ﻿using ColdSnap.Common;
 using ColdSnap.ViewModels.Sections;
+using SnapDotNet;
 using System;
 using Windows.UI.Xaml;
 
@@ -19,6 +20,17 @@ namespace ColdSnap.Pages.Sections
 		public ConvoListSectionViewModel ViewModel
 		{
 			get { return DataContext as ConvoListSectionViewModel; }
+		}
+
+		public override void LoadState(LoadStateEventArgs e)
+		{
+			if (e.NavigationParameter is Account)
+				ViewModel.Account = e.NavigationParameter as Account;
+		}
+
+		public override void SaveState(SaveStateEventArgs e)
+		{
+
 		}
 
 		private void OpenConversationButton_OnClick(object sender, RoutedEventArgs e)

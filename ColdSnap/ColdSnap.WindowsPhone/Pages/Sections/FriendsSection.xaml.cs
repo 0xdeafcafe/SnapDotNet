@@ -1,4 +1,7 @@
-﻿using ColdSnap.ViewModels.Sections;
+﻿using ColdSnap.Common;
+using ColdSnap.ViewModels.Sections;
+using SnapDotNet;
+using Windows.UI.Xaml.Data;
 
 namespace ColdSnap.Pages.Sections
 {
@@ -16,6 +19,17 @@ namespace ColdSnap.Pages.Sections
 		public FriendsSectionViewModel ViewModel
 		{
 			get { return DataContext as FriendsSectionViewModel; }
+		}
+
+		public override void LoadState(LoadStateEventArgs e)
+		{
+			if (e.NavigationParameter is Account)
+				ViewModel.Account = e.NavigationParameter as Account;
+		}
+
+		public override void SaveState(SaveStateEventArgs e)
+		{
+			
 		}
 	}
 }

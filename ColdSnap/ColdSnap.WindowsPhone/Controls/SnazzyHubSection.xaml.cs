@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ColdSnap.Common;
+using System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
@@ -23,6 +24,9 @@ namespace ColdSnap.Controls
 			get { return (Color) GetValue(AccentColorProperty); }
 			set { SetValue(AccentColorProperty, value); }
 		}
+
+		public virtual void LoadState(LoadStateEventArgs e) { }
+		public virtual void SaveState(SaveStateEventArgs e) { }
 	}
 
 	public sealed class HeaderToHeaderTemplateHeightConverter
