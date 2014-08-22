@@ -18,6 +18,12 @@
 			</NavigationThemeTransition>
 		</TransitionCollection>
 	</Page.Transitions>
+	
+	<Page.BottomAppBar>
+		<CommandBar Background="#FFFF8000" ClosedDisplayMode="Minimal">
+			
+		</CommandBar>
+	</Page.BottomAppBar>
 
 	<Grid>
 		<Grid.RowDefinitions>

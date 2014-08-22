@@ -15,6 +15,12 @@
 		<vm:ConversationPageViewModel/>
 	</d:DesignProperties.DataContext>
 
+	<Page.BottomAppBar>
+		<CommandBar Background="#FFFF0000" ClosedDisplayMode="Minimal">
+
+		</CommandBar>
+	</Page.BottomAppBar>
+
 	<Page.Transitions>
 		<TransitionCollection>
 			<NavigationThemeTransition>
