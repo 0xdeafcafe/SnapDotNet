@@ -1,7 +1,9 @@
 ﻿using ColdSnap.Common;
 using ColdSnap.ViewModels.Sections;
 using SnapDotNet;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
 
 namespace ColdSnap.Pages.Sections
 {
@@ -30,6 +32,11 @@ namespace ColdSnap.Pages.Sections
 		public override void SaveState(SaveStateEventArgs e)
 		{
 			
+		}
+
+		private void AddFriendsButton_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			Window.Current.Navigate(typeof(ManageFriendsPage), ViewModel.Account);
 		}
 	}
 }

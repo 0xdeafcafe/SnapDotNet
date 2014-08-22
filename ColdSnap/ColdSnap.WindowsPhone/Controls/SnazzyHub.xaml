@@ -9,6 +9,8 @@
     mc:Ignorable="d"
     d:DesignHeight="666.66"
     d:DesignWidth="400"
+	
+	BorderThickness="0"
 >
 	<Hub.Resources>
 		<Thickness x:Key="HubHeaderMarginThickness">0,0,0,0</Thickness>
@@ -65,10 +67,10 @@
 							<Rectangle Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Fill="{Binding CurrentAccentColor, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
 
 							<!-- dummy scrollviewer so hub's code won't fuck anything up -->
-							<ScrollViewer x:Name="ScrollViewer" IsEnabled="False"/>
+							<ScrollViewer x:Name="ScrollViewer" IsEnabled="False" Visibility="Collapsed"/>
 							
-							<ScrollViewer x:Name="SnazzyScrollViewer" ViewChanged="SnazzyScrollViewer_ViewChanged" HorizontalScrollMode="Auto" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Center" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Hidden" Grid.RowSpan="2" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" ZoomMode="Disabled" VerticalSnapPointsType="MandatorySingle">
-								<ItemsStackPanel x:Name="Panel" CacheLength="6" Orientation="{TemplateBinding Orientation}"/>
+							<ScrollViewer x:Name="SnazzyScrollViewer" Loaded="SnazzyScrollViewer_Loaded" ViewChanged="SnazzyScrollViewer_ViewChanged" HorizontalScrollMode="Auto" HorizontalSnapPointsType="MandatorySingle" HorizontalSnapPointsAlignment="Far" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Hidden" Grid.RowSpan="2" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" ZoomMode="Disabled" VerticalSnapPointsType="MandatorySingle">
+								<ItemsStackPanel x:Name="Panel" CacheLength="3" Orientation="{TemplateBinding Orientation}"/>
 							</ScrollViewer>
 
 							<Canvas Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top">

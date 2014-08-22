@@ -37,10 +37,5 @@ namespace ColdSnap.Pages.Sections
 		{
 			Window.Current.Navigate(typeof(ConversationPage), ViewModel.Account);
 		}
-
-		private void OpenAddFriendsButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			Window.Current.Navigate(typeof(ManageFriendsPage), ViewModel.Account);
-		}
 	}
 }

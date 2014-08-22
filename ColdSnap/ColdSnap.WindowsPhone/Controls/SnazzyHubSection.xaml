@@ -28,7 +28,7 @@
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="HubSection">
-						<Grid Margin="{StaticResource HubSectionMarginThickness}" Background="{TemplateBinding Background}">
+						<Grid Margin="{StaticResource HubSectionMarginThickness}" >
 							<Grid.RowDefinitions>
 								<RowDefinition Height="auto"/>
 								<RowDefinition Height="auto"/>

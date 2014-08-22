@@ -57,6 +57,12 @@ namespace ColdSnap.Pages
 			if (e.NavigationParameter is Account)
 				ViewModel.Account = e.NavigationParameter as Account;
 
+			if (e.PageState != null)
+			{
+				if (e.PageState.ContainsKey("CurrentSectionIndex"))
+					this.hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]));
+			}
+
 			foreach (SnazzyHubSection section in this.hub.Sections)
 				section.LoadState(e);
 		}
@@ -71,6 +77,8 @@ namespace ColdSnap.Pages
 		/// serializable state.</param>
 		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
 		{
+			e.PageState["CurrentSectionIndex"] = this.hub.CurrentSectionIndex;
+
 			foreach (SnazzyHubSection section in this.hub.Sections)
 				section.SaveState(e);
 		}

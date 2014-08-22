@@ -24,10 +24,77 @@
 		<Grid x:Name="grid">
 			<Grid.Resources>
 				<ResourceDictionary>
+					<Style x:Key="AddFriendsButtonStyle" TargetType="Button">
+						<Setter Property="Background" Value="Transparent"/>
+						<Setter Property="Padding" Value="5"/>
+						<Setter Property="MinHeight" Value="0"/>
+						<Setter Property="MinWidth" Value="0"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Grid x:Name="Grid" IsHitTestVisible="True" Background="Transparent">
+										<VisualStateManager.VisualStateGroups>
+											<VisualStateGroup x:Name="CommonStates">
+												<VisualState x:Name="Normal">
+													<Storyboard>
+														<DoubleAnimation Duration="0:0:0.2" To="1" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+															<DoubleAnimation.EasingFunction>
+																<BackEase Amplitude="1" EasingMode="EaseOut"/>
+															</DoubleAnimation.EasingFunction>
+														</DoubleAnimation>
+														<DoubleAnimation Duration="0:0:0.2" To="1" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+															<DoubleAnimation.EasingFunction>
+																<BackEase Amplitude="1" EasingMode="EaseOut"/>
+															</DoubleAnimation.EasingFunction>
+														</DoubleAnimation>
+													</Storyboard>
+												</VisualState>
+												<VisualState x:Name="Pressed">
+													<Storyboard>
+														<DoubleAnimation Duration="0:0:0.2" To="1.4" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+															<DoubleAnimation.EasingFunction>
+																<BackEase Amplitude="1" EasingMode="EaseOut"/>
+															</DoubleAnimation.EasingFunction>
+														</DoubleAnimation>
+														<DoubleAnimation Duration="0:0:0.2" To="1.4" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+															<DoubleAnimation.EasingFunction>
+																<BackEase Amplitude="1" EasingMode="EaseOut"/>
+															</DoubleAnimation.EasingFunction>
+														</DoubleAnimation>
+													</Storyboard>
+												</VisualState>
+											</VisualStateGroup>
+										</VisualStateManager.VisualStateGroups>
+										<Grid x:Name="InnerGrid" RenderTransformOrigin="0.5,0.5">
+											<Grid.RenderTransform>
+												<CompositeTransform ScaleX="1" ScaleY="1" />
+											</Grid.RenderTransform>
+											<ContentPresenter x:Name="ContentPresenter" 
+												  AutomationProperties.AccessibilityView="Raw" 
+												  ContentTemplate="{TemplateBinding ContentTemplate}" 
+												  Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
+												  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+												  Margin="{TemplateBinding Padding}" 
+												  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+											</ContentPresenter>
+										</Grid>
+									</Grid>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+
 					<JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
 					<JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
-					<CollectionViewSource x:Key="FriendGroups"
-							  IsSourceGrouped="True"
+					<CollectionViewSource x:Key="FriendGroups" IsSourceGrouped="True"
 							  />
 					<!--Source="{Binding Account.SortedFriends, Mode=OneWay}"-->
 
@@ -71,6 +138,17 @@
 					</DataTemplate>
 				</ResourceDictionary>
 			</Grid.Resources>
+
+			<Button Style="{StaticResource AddFriendsButtonStyle}"
+					HorizontalAlignment="Right" VerticalAlignment="Top"
+					Margin="10,-45"
+					Tapped="AddFriendsButton_Tapped">
+				<SymbolIcon Foreground="White" Symbol="AddFriend" RenderTransformOrigin="0.5,0.5">
+					<SymbolIcon.RenderTransform>
+						<CompositeTransform ScaleX="1.5" ScaleY="1.5"/>
+					</SymbolIcon.RenderTransform>
+				</SymbolIcon>
+			</Button>
 
 			<SemanticZoom>
 				<SemanticZoom.ZoomedInView>

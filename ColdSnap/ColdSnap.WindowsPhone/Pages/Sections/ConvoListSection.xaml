@@ -26,10 +26,6 @@
 			<Button x:Name="OpenConversationButton" Content="open convo page" 
 							BorderBrush="Black" Foreground="Black" 
 							Click="OpenConversationButton_OnClick"/>
-
-			<Button x:Name="OpenAddFriendsButton" Content="open add friends page" 
-							BorderBrush="Black" Foreground="Black" 
-							Click="OpenAddFriendsButton_OnClick"/>
 		</StackPanel>
 	</DataTemplate>
 </controls:SnazzyHubSection>
