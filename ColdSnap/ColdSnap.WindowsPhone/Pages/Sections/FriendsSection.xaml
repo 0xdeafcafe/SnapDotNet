@@ -20,6 +20,13 @@
 		<sections:FriendsSectionViewModel/>
 	</d:DesignProperties.DataContext>
 
+	<controls:SnazzyHubSection.PrimaryCommands>
+	</controls:SnazzyHubSection.PrimaryCommands>
+
+	<controls:SnazzyHubSection.SecondaryCommands>
+		<AppBarButton Label="idk..."/>
+	</controls:SnazzyHubSection.SecondaryCommands>
+
 	<DataTemplate>
 		<Grid x:Name="grid">
 			<Grid.Resources>

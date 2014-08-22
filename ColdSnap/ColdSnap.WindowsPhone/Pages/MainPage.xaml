@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page x:Name="page"
 	x:Class="ColdSnap.Pages.MainPage"
 	
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -17,9 +17,13 @@
 	<d:DesignProperties.DataContext>
 		<vm:MainPageViewModel/>
 	</d:DesignProperties.DataContext>
+	
+	<Page.BottomAppBar>
+		<CommandBar/>
+	</Page.BottomAppBar>
 
 	<controls:SnazzyHub x:Name="hub">
-		
+
 		<sections:ConvoListSection/>
 		<sections:CameraSection/>
 		<sections:FriendsSection/>

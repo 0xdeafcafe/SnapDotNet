@@ -19,7 +19,7 @@
 		</TransitionCollection>
 	</Page.Transitions>
 
-	<Grid Margin="0,-27,0,0">
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="80"/>
 			<RowDefinition Height="*"/>

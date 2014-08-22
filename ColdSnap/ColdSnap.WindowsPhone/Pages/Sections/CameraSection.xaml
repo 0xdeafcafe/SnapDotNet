@@ -10,12 +10,21 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	
-	AccentColor="#00FFFFFF"
+	AccentColor="#66333333"
+	AppBarClosedDisplayMode="Compact"
 >
 	
 	<d:DesignProperties.DataContext>
 		<sections:CameraSectionViewModel/>
 	</d:DesignProperties.DataContext>
+	
+	<controls:SnazzyHubSection.PrimaryCommands>
+		<AppBarButton Label="Capture"/>
+	</controls:SnazzyHubSection.PrimaryCommands>
+	
+	<controls:SnazzyHubSection.SecondaryCommands>
+		
+	</controls:SnazzyHubSection.SecondaryCommands>
 
 	<DataTemplate>
 		<Rectangle Fill="Black"/>

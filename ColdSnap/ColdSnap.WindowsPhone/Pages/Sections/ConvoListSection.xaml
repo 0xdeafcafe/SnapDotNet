@@ -17,7 +17,14 @@
 	<d:DesignProperties.DataContext>
 		<sections:ConvoListSectionViewModel/>
 	</d:DesignProperties.DataContext>
-	
+
+	<controls:SnazzyHubSection.PrimaryCommands>
+	</controls:SnazzyHubSection.PrimaryCommands>
+
+	<controls:SnazzyHubSection.SecondaryCommands>
+		<AppBarButton Label="settings..."/>
+	</controls:SnazzyHubSection.SecondaryCommands>
+
 	<DataTemplate>
 		<StackPanel>
 			<TextBlock Foreground="Black">Account data has been deserialized or loaded when username appears below</TextBlock>

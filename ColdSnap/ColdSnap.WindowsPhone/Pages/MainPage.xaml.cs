@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using ColdSnap.ViewModels.Sections;
 using ColdSnap.Controls;
+using Windows.UI.ViewManagement;
 
 namespace ColdSnap.Pages
 {
@@ -20,6 +21,7 @@ namespace ColdSnap.Pages
 		public MainPage()
 		{
 			InitializeComponent();
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 
 			NavigationHelper = new NavigationHelper(this);
 			NavigationHelper.LoadState += NavigationHelper_LoadState;
