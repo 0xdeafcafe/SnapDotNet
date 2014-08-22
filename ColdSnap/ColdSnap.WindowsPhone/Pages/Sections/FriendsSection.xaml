@@ -28,7 +28,8 @@
 					<JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
 					<CollectionViewSource x:Key="FriendGroups"
 							  IsSourceGrouped="True"
-							  Source="{Binding Account.SortedFriends, Mode=OneWay}"/>
+							  />
+					<!--Source="{Binding Account.SortedFriends, Mode=OneWay}"-->
 
 					<DataTemplate x:Name="ItemTemplate">
 						<Border d:DataContext="{d:DesignInstance Type=sdn:Friend}"
