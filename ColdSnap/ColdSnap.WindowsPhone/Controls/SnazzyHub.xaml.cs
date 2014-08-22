@@ -33,19 +33,10 @@ namespace ColdSnap.Controls
 
 		private void SnazzyScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
 		{
-			if (!e.IsIntermediate)
-				SetHeaderColor();
-		}
-
-		private void SnazzyScrollViewer_ViewChanging(object sender, ScrollViewerViewChangingEventArgs e)
-		{
-			if (CurrentAccentColor == null)
-				return;
-
-			var scrollViewer = sender as ScrollViewer;
-			var offset = scrollViewer.HorizontalOffset;
-
-			
+			// Get current section.
+			int sectionIndex = (int) ((sender as ScrollViewer).HorizontalOffset / ActualWidth);
+			var currentSection = (Sections[sectionIndex] as SnazzyHubSection);
+			CurrentAccentColor = new SolidColorBrush(currentSection.AccentColor);
 		}
 
 		private void SetHeaderColor()
