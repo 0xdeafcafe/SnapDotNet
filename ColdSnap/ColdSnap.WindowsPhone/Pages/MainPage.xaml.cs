@@ -1,11 +1,10 @@
 ﻿using System;
-using Windows.UI.Xaml;
+using System.Linq;
 using ColdSnap.Common;
 using ColdSnap.ViewModels;
 using SnapDotNet;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using ColdSnap.ViewModels.Sections;
 using ColdSnap.Controls;
 using Windows.UI.ViewManagement;
 
@@ -60,12 +59,10 @@ namespace ColdSnap.Pages
 				ViewModel.Account = e.NavigationParameter as Account;
 
 			if (e.PageState != null)
-			{
 				if (e.PageState.ContainsKey("CurrentSectionIndex"))
-					this.hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]));
-			}
+					hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]));
 
-			foreach (SnazzyHubSection section in this.hub.Sections)
+			foreach (var section in hub.Sections.Cast<SnazzyHubSection>())
 				section.LoadState(e);
 		}
 
@@ -79,9 +76,9 @@ namespace ColdSnap.Pages
 		/// serializable state.</param>
 		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
 		{
-			e.PageState["CurrentSectionIndex"] = this.hub.CurrentSectionIndex;
+			e.PageState["CurrentSectionIndex"] = hub.CurrentSectionIndex;
 
-			foreach (SnazzyHubSection section in this.hub.Sections)
+			foreach (var section in hub.Sections.Cast<SnazzyHubSection>())
 				section.SaveState(e);
 		}
 

@@ -10,11 +10,11 @@
 	mc:Ignorable="d"
 	
 	d:DesignHeight="666.66"
-	d:DesignWidth="400"
->
+	d:DesignWidth="400">
 
 	<HubSection.Resources>
 		<SolidColorBrush x:Key="AccentColorBrush" Color="{Binding AccentColor, ElementName=hubSection}"/>
+		<ContentControl x:Key="RightHeaderContent" Template="{Binding Path=RightHeaderDataTemplate, ElementName=hubSection}" />
 		<controls:HeaderToHeaderTemplateHeightConverter x:Key="HeaderToHeaderTemplateHeightConverter"/>
 		<x:Int32 x:Key="HubSectionHeaderCharacterSpacing">-10</x:Int32>
 		<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
@@ -64,9 +64,24 @@
 				<Setter.Value>
 					<DataTemplate>
 						<Grid Background="{StaticResource AccentColorBrush}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+
+							<ContentControl ContentTemplate="{Binding Path=LeftHeaderDataTemplate, ElementName=hubSection}"
+											VerticalAlignment="Bottom" HorizontalAlignment="Left"
+											Grid.Column="0" />
+							
 							<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" 
-								   HorizontalAlignment="Left" VerticalAlignment="Bottom" 
-								   Margin="13,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
+									   HorizontalAlignment="Center" VerticalAlignment="Center" 
+									   Grid.Column="0" Grid.ColumnSpan="3"
+									   Margin="13,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
+
+							<ContentControl ContentTemplate="{Binding Path=RightHeaderDataTemplate, ElementName=hubSection}"
+											VerticalAlignment="Bottom" HorizontalAlignment="Right"
+											Grid.Column="2" />
 						</Grid>
 					</DataTemplate>
 				</Setter.Value>

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Newtonsoft.Json;
 using SnapDotNet.Utilities;
 using SnapDotNet.Responses;
@@ -51,7 +55,12 @@ namespace SnapDotNet
 		public string Name
 		{
 			get { return _name; }
-			set { SetValue(ref _name, value); }
+			set
+			{
+				OnPropertyChanged("FriendlyName");
+				OnPropertyChanged("HasDisplayName");
+				SetValue(ref _name, value);
+			}
 		}
 		private string _name;
 
@@ -65,18 +74,32 @@ namespace SnapDotNet
 		}
 
 		/// <summary>
+		/// Gets if this friend has a <see cref="DisplayName"/>.
+		/// </summary>
+		[JsonIgnore]
+		public bool HasDisplayName
+		{
+			get { return Name != FriendlyName; }
+		}
+
+		/// <summary>
 		/// Gets or sets the display name of this friend.
 		/// </summary>
 		[JsonProperty]
 		public string DisplayName
 		{
 			get { return _displayName; }
-			set { SetValue(ref _displayName, value); }
+			set
+			{
+				OnPropertyChanged("FriendlyName");
+				OnPropertyChanged("HasDisplayName");
+				SetValue(ref _displayName, value);
+			}
 		}
 		private string _displayName;
 
 		/// <summary>
-		/// Gets or sets the state of the friend request sent to this person.
+		/// Gets or sets the state of the friend request sent to this friend.
 		/// </summary>
 		[JsonProperty]
 		public FriendRequestState FriendRequestState
@@ -85,6 +108,37 @@ namespace SnapDotNet
 			set { SetValue(ref _friendRequestState, value); }
 		}
 		private FriendRequestState _friendRequestState;
+
+		/// <summary>
+		/// Gets or sets the score of this friend.
+		/// </summary>
+		[JsonProperty]
+		public uint Score
+		{
+			get { return _score; }
+			set { SetValue(ref _score, value); }
+		}
+		private uint _score;
+
+		/// <summary>
+		/// Gets or sets the best friends of this friend.
+		/// </summary>
+		[JsonProperty]
+		public ObservableCollection<string> BestFriends
+		{
+			get { return _bestFriends; }
+			set { SetValue(ref _bestFriends, value); }
+		}
+		private ObservableCollection<string> _bestFriends = new ObservableCollection<string>();
+
+		/// <summary>
+		/// Gets if this friend has any <seealso cref="BestFriends"/>.
+		/// </summary>
+		[JsonIgnore]
+		public bool HasBestFriends
+		{
+			get { return BestFriends.Any(); }
+		}
 
 		/// <summary>
 		/// Update the model based on a <see cref="FriendResponse" />.
@@ -97,6 +151,24 @@ namespace SnapDotNet
 			DisplayName = friendResponse.DisplayName;
 			FriendRequestState = (FriendRequestState) friendResponse.FriendRequestState;
         }
+
+		/// <summary>
+		/// Update the public activity of the model based on a <see cref="PublicActivityResponse" />.
+		/// </summary>
+		/// <param name="publicActivityResponse">The <see cref="FriendResponse" /> to update the public activity from.</param>
+		/// <param name="friends">A list of friends to check</param>
+		internal void UpdatePublicActivies(PublicActivityResponse publicActivityResponse, IEnumerable<Friend> friends)
+		{
+			Score = publicActivityResponse.Score;
+
+			BestFriends.Clear();
+			foreach (var bestFriend in publicActivityResponse.BestFriends)
+			{
+				var friend = friends.FirstOrDefault(f => f.Name == bestFriend);
+				BestFriends.Add(friend != null ? friend.FriendlyName : bestFriend);
+			}
+			OnPropertyChanged("HasBestFriendsName");
+		}
 
 		/// <summary>
 		/// Create a Friend model based on a <see cref="FriendResponse" />.

@@ -45,13 +45,13 @@ namespace SnapDotNet.Utilities.CustomTypes
 			return list;
 		}
 
-		public static ObservableCollection<FriendsKeyGroup> CreateGroups(ObservableCollection<Friend> items)
+		public static ObservableCollection<FriendsKeyGroup> CreateGroups(ObservableCollection<Friend> items, string userToIgnore)
 		{
 			var list = CreateGroups();
 
 			Debug.WriteLine("[FriendsKeyGroup] Starting to Create Groups, based off of {0} friends", items.Count);
 
-			foreach (var friend in items)
+			foreach (var friend in items.Where(friend => friend.Name != userToIgnore))
 			{
 				if (friend.FriendRequestState == FriendRequestState.Blocked)
 				{

@@ -15,6 +15,11 @@ namespace ColdSnap.Controls
 		public static DependencyProperty SecondaryCommandsProperty = DependencyProperty.Register("SecondaryCommands", typeof(ObservableCollection<ICommandBarElement>), typeof(SnazzyHubSection), new PropertyMetadata(new ObservableCollection<ICommandBarElement>()));
 		public static DependencyProperty AppBarClosedDisplayModeProperty = DependencyProperty.Register("AppBarClosedDisplayMode", typeof(AppBarClosedDisplayMode), typeof(SnazzyHubSection), new PropertyMetadata(AppBarClosedDisplayMode.Minimal));
 
+		public static DependencyProperty LeftHeaderTemplateProperty = DependencyProperty.Register("LeftHeaderTemplate",
+			typeof(DataTemplate), typeof(SnazzyHubSection), null);
+		public static DependencyProperty RightHeaderTemplateProperty = DependencyProperty.Register("RightHeaderTemplate",
+			typeof(DataTemplate), typeof(SnazzyHubSection), null);
+
 		public SnazzyHubSection()
 		{
 			Width = Window.Current.Bounds.Width;
@@ -52,6 +57,18 @@ namespace ColdSnap.Controls
 		{
 			get { return (AppBarClosedDisplayMode) GetValue(AppBarClosedDisplayModeProperty); }
 			set { SetValue(AppBarClosedDisplayModeProperty, value); }
+		}
+
+		public DataTemplate LeftHeaderDataTemplate
+		{
+			get { return (DataTemplate) GetValue(LeftHeaderTemplateProperty); }
+			set { SetValue(LeftHeaderTemplateProperty, value); }
+		}
+
+		public DataTemplate RightHeaderDataTemplate
+		{
+			get { return (DataTemplate) GetValue(RightHeaderTemplateProperty); }
+			set { SetValue(RightHeaderTemplateProperty, value); }
 		}
 
 		public virtual void LoadState(LoadStateEventArgs e) { }

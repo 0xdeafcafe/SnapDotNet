@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SnapDotNet.Extentions;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
 using SnapDotNet.Utilities.CustomTypes;
@@ -19,6 +20,9 @@ namespace SnapDotNet
 		// NOTE: JsonProperty attribute is needed to force JsonConvert to assign values to
 		// properties with non-public setters so it can be deserialized too.
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private Account() { }
 
 		#region Properties
@@ -371,6 +375,9 @@ namespace SnapDotNet
 				UpdateAccount(response.AccountResponse);
 
 				// TODO: Parse the rest of the data
+
+				// Update Public Activities
+				await UpdateFriendsPublicActivityAsync();
 			}
 			catch (InvalidHttpResponseException ex)
 			{
@@ -381,9 +388,12 @@ namespace SnapDotNet
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		internal void CreateSortedFriends()
 		{
-			SortedFriends = FriendsKeyGroup.CreateGroups(Friends);
+			SortedFriends = FriendsKeyGroup.CreateGroups(Friends, Username);
 		}
 
 		/// <summary>
@@ -425,6 +435,35 @@ namespace SnapDotNet
 				Friends.FirstOrDefault(f => existingFriend.Name == f.Name).Update(existingFriend);
 
 			CreateSortedFriends();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task UpdateFriendsPublicActivityAsync()
+		{
+			var publicActivities = new Dictionary<string, PublicActivityResponse>();
+			foreach (var chunk in Friends.Chunk(30))
+			{
+				var data = new Dictionary<string, string>
+				{
+					{"username", Username},
+					{"friend_usernames", JsonConvert.SerializeObject(chunk.Select(u => u.Name))}
+				};
+
+				var response = await EndpointManager.Managers["bq"].PostAsync<Dictionary<string, PublicActivityResponse>>("bests", data, AuthToken);
+				if (response == null)
+					throw new InvalidCredentialsException();
+				foreach (var publicActivity in response)
+					publicActivities.Add(publicActivity.Key, publicActivity.Value);
+			}
+
+			foreach (var publicActivity in publicActivities)
+			{
+				var selectedFriend = Friends.FirstOrDefault(f => f.Name == publicActivity.Key);
+				selectedFriend.UpdatePublicActivies(publicActivity.Value, Friends.ToList());
+			}
 		}
 	}
 }

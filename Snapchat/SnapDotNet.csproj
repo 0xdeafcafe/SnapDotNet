@@ -83,6 +83,7 @@
     <Compile Include="Converters\Json\UnixDateTimeConverter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ApiSettings.cs" />
+    <Compile Include="Extentions\EnumerableExtentions.cs" />
     <Compile Include="Friend.cs" />
     <Compile Include="Responses\AccountResponse.cs" />
     <Compile Include="Responses\AllUpdatesResponse.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Responses\ConversationResponces.cs" />
     <Compile Include="Responses\FriendResponces.cs" />
     <Compile Include="Responses\MessagingGatewayResponses.cs" />
+    <Compile Include="Responses\PublicActivityResponse.cs" />
     <Compile Include="Responses\SnapResponse.cs" />
     <Compile Include="Responses\StoriesResponces.cs" />
     <Compile Include="Utilities\CustomTypes\FriendsKeyGroup.cs" />
@@ -110,7 +112,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

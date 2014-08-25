@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
 using Windows.UI;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -14,7 +11,7 @@ namespace ColdSnap.Controls
 	{
 		public static readonly DependencyProperty CurrentAccentColorProperty =
 			DependencyProperty.Register("CurrentAccentColor", typeof (SolidColorBrush), typeof (SnazzyHub),
-				new PropertyMetadata(new SolidColorBrush(Colors.Blue)));
+				new PropertyMetadata(new SolidColorBrush(Colors.CornflowerBlue)));
 
 		public static DependencyProperty GlobalCommandsProperty =
 			DependencyProperty.Register("GlobalCommands", typeof(ObservableCollection<ICommandBarElement>), typeof(SnazzyHub),

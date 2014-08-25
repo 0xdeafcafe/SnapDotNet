@@ -1,14 +1,19 @@
-﻿using ColdSnap.Common;
+﻿using System.Linq;
+using Windows.UI.Xaml.Controls;
+using ColdSnap.Common;
+using ColdSnap.Controls;
+using ColdSnap.Helpers;
 using ColdSnap.ViewModels.Sections;
 using SnapDotNet;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 
 namespace ColdSnap.Pages.Sections
 {
 	public sealed partial class FriendsSection
 	{
+		private ListView _friendsListView;
+
 		public FriendsSection()
 		{
 			InitializeComponent();
@@ -37,6 +42,57 @@ namespace ColdSnap.Pages.Sections
 		private void AddFriendsButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
 			Window.Current.Navigate(typeof(ManageFriendsPage), ViewModel.Account);
+		}
+
+		private void ExpanderView_OnExpanded(object sender, bool e)
+		{
+			var expander = sender as ExpanderView;
+			if (expander == null) return;
+
+			if (_friendsListView.Items == null) return;
+
+			// Hide the others
+			foreach (
+				var itemExpander in
+					_friendsListView.Items.Select(item => _friendsListView.ContainerFromItem(item))
+						.Select(VariousHelpers.FindVisualChild<ExpanderView>)
+						.Where(itemExpander => itemExpander.Tag != expander.Tag))
+			{
+				itemExpander.Contract();
+			}
+		}
+
+		private void EditFriendButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			var button = sender as Button;
+			if (button == null) return;
+			var context = button.DataContext as Friend;
+			if (context == null) return;
+
+			var flyout = new MenuFlyout();
+			if (flyout.Items == null) return;
+			flyout.Items.Add(new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextRemove"), CommandParameter = context });
+			flyout.Items.Add(new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextChangeName"), Command = ViewModel.ChangeDisplayNameCommand, CommandParameter = context });
+			flyout.Items.Add(context.FriendRequestState == FriendRequestState.Blocked
+				? new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextUnblock"), CommandParameter = context }
+				: new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextBlock"), CommandParameter = context });
+
+			flyout.Opening += delegate
+			{
+				VisualStateManager.GoToState(button, "FlyoutOpening", false);
+			};
+			flyout.Closed += delegate
+			{
+				VisualStateManager.GoToState(button, "FlyoutClosed", false);
+			};
+
+			flyout.ShowAt(button);
+		}
+
+		private void FriendsList_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			// This is a hack to gain access to the ListView from outside the DataTemplate ;_;
+			_friendsListView = (ListView) sender;
 		}
 	}
 }

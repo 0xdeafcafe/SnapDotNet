@@ -120,14 +120,50 @@
   <data name="BirthdayDatePicker.Header" xml:space="preserve">
     <value>Birthday</value>
   </data>
+  <data name="ChangeDisplayNameContentDialog.Header" xml:space="preserve">
+    <value>CHANGE DISPLAY NAME</value>
+  </data>
+  <data name="ChangeDisplayNameContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>change</value>
+  </data>
+  <data name="ChangeDisplayNameContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>cancel</value>
+  </data>
+  <data name="ChangeDisplayNameTextBox.Header" xml:space="preserve">
+    <value>New Display Name</value>
+  </data>
   <data name="ConvoListSection.Header" xml:space="preserve">
     <value>snapchat</value>
+  </data>
+  <data name="DisplayChangeWarningRun1.Text" xml:space="preserve">
+    <value>Changing this will change how your friend's name displayed in the application.</value>
+  </data>
+  <data name="DisplayChangeWarningRun2.Text" xml:space="preserve">
+    <value>To remove a display name, just change it to an empty name.</value>
   </data>
   <data name="EmailAddressTextBox.Header" xml:space="preserve">
     <value>Email</value>
   </data>
   <data name="EmailOrUsernameTextBox.Header" xml:space="preserve">
     <value>Email or username</value>
+  </data>
+  <data name="FriendContextBlock" xml:space="preserve">
+    <value>Block Friend</value>
+  </data>
+  <data name="FriendContextChangeName" xml:space="preserve">
+    <value>Change Display Name</value>
+  </data>
+  <data name="FriendContextRemove" xml:space="preserve">
+    <value>Remove Friend</value>
+  </data>
+  <data name="FriendContextUnblock" xml:space="preserve">
+    <value>Unblock Friend</value>
+  </data>
+  <data name="FriendsNoBestFriends.Text" xml:space="preserve">
+    <value>No Best Friends</value>
+  </data>
+  <data name="FriendsScore.Text" xml:space="preserve">
+    <value>Score:</value>
   </data>
   <data name="FriendsSection.Header" xml:space="preserve">
     <value>my friends</value>

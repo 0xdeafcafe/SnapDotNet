@@ -126,6 +126,9 @@
     <Compile Include="Controls\SnazzyHubSection.xaml.cs">
       <DependentUpon>SnazzyHubSection.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ChangeDisplayNameDialog.xaml.cs">
+      <DependentUpon>ChangeDisplayNameDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\LogInDialog.xaml.cs">
       <DependentUpon>LogInDialog.xaml</DependentUpon>
     </Compile>
@@ -185,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SnazzyHubSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ChangeDisplayNameDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
