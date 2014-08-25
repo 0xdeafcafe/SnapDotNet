@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SnapDotNet.Utilities;
 using SnapDotNet.Responses;
@@ -138,6 +139,39 @@ namespace SnapDotNet
 		public bool HasBestFriends
 		{
 			get { return BestFriends.Any(); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="newDisplayName"></param>
+		/// <param name="account"></param>
+		public async Task<bool> UpdateDisplayName(string newDisplayName, Account account)
+		{
+			try
+			{
+				var data = new Dictionary<string, string>
+				{
+					{"username", account.Username},
+					{"action", "display"},
+					{"friend", Name},
+					{"display", newDisplayName}
+				};
+
+				var response = await EndpointManager.Managers["bq"].PostAsync<Response>("friend", data, account.AuthToken);
+				if (response == null || !response.IsLogged)
+					throw new InvalidCredentialsException();
+
+				var success = !String.IsNullOrEmpty(response.Message);
+				if (success)
+					DisplayName = newDisplayName;
+				
+				return success;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 
 		/// <summary>

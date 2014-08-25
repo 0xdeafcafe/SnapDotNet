@@ -28,6 +28,13 @@
 										<DoubleAnimation Duration="0:0:0.25" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
 
 										<DoubleAnimation Duration="0:0:0.25" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="AdditionalHeaderContentGrid">
+											<DiscreteObjectKeyFrame KeyTime="0">
+												<DiscreteObjectKeyFrame.Value>
+													<Visibility>Visible</Visibility>
+												</DiscreteObjectKeyFrame.Value>
+											</DiscreteObjectKeyFrame>
+										</ObjectAnimationUsingKeyFrames>
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="Contracted">
@@ -39,18 +46,25 @@
 										<DoubleAnimation Duration="0:0:0.25" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
 
 										<DoubleAnimation Duration="0:0:0.25" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="AdditionalHeaderContentGrid">
+											<DiscreteObjectKeyFrame KeyTime="0:0:0.25">
+												<DiscreteObjectKeyFrame.Value>
+													<Visibility>Collapsed</Visibility>
+												</DiscreteObjectKeyFrame.Value>
+											</DiscreteObjectKeyFrame>
+										</ObjectAnimationUsingKeyFrames>
 									</Storyboard>
 								</VisualState>
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 
-						<Grid x:Name="HeaderGrid" Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}"
-							  IsHitTestVisible="True" Background="Transparent">
+						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="Auto"/>
 							</Grid.ColumnDefinitions>
-							<Grid Grid.Column="0" Margin="18,0,0,0">
+							<Grid x:Name="HeaderGrid" Grid.Column="0" Margin="18,0,0,0"
+								  IsHitTestVisible="True" Background="Transparent">
 								<Grid Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
 									<TextBlock FontWeight="Normal"
 											   Text="{Binding HeaderText, RelativeSource={RelativeSource TemplatedParent}}"

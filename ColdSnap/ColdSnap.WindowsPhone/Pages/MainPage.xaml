@@ -24,7 +24,7 @@
 		</CommandBar>
 	</Page.BottomAppBar>
 
-	<controls:SnazzyHub DefaultSectionIndex="1">
+	<controls:SnazzyHub x:Name="Hub">
 
 		<sections:ConvoListSection/>
 		<sections:CameraSection/>

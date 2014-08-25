@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using ColdSnap.Common;
 using ColdSnap.Helpers;
+using SnapDotNet;
 
 namespace ColdSnap.ViewModels
 {
@@ -21,9 +22,10 @@ namespace ColdSnap.ViewModels
 
 		public async void RefreshContent()
 		{
-			await ProgressHelper.ShowStatusBarAsync("Updating...");
+			await ProgressHelper.ShowStatusBarAsync(App.Strings.GetString("StatusBarUpdating"));
 
-			await Account.UpdateAccountAsync();
+			await Account.UpdateAccountAsync(); 
+			await StateManager.Local.SaveAccountStateAsync(Account);
 
 			await ProgressHelper.HideStatusBarAsync();
 		}

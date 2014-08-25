@@ -1,24 +1,23 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml;
 
 namespace ColdSnap.Dialogs
 {
 	public sealed partial class ChangeDisplayNameDialog
 	{
+		public static DependencyProperty NewDisplayNameProperty = DependencyProperty.Register("NewDisplayName", typeof (string),
+			typeof (LogInDialog), new PropertyMetadata(string.Empty));
+
 		public ChangeDisplayNameDialog(string currentName)
 		{
 			InitializeComponent();
 
-			DisplayNameTextBox.Text = currentName;
-			NewDisplayName = null;
+			NewDisplayName = currentName;
 		}
 
-		private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+		public string NewDisplayName
 		{
-			NewDisplayName = DisplayNameTextBox.Text;
+			get { return (string) GetValue(NewDisplayNameProperty); }
+			set { SetValue(NewDisplayNameProperty, value); }
 		}
-
-		private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args) {  }
-
-		public string NewDisplayName { get; set; }
 	}
 }

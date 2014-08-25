@@ -60,9 +60,9 @@ namespace ColdSnap.Pages
 
 			if (e.PageState != null)
 				if (e.PageState.ContainsKey("CurrentSectionIndex"))
-					hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]));
+					Hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]));
 
-			foreach (var section in hub.Sections.Cast<SnazzyHubSection>())
+			foreach (var section in Hub.Sections.Cast<SnazzyHubSection>())
 				section.LoadState(e);
 		}
 
@@ -76,9 +76,9 @@ namespace ColdSnap.Pages
 		/// serializable state.</param>
 		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
 		{
-			e.PageState["CurrentSectionIndex"] = hub.CurrentSectionIndex;
+			e.PageState["CurrentSectionIndex"] = Hub.CurrentSectionIndex;
 
-			foreach (var section in hub.Sections.Cast<SnazzyHubSection>())
+			foreach (var section in Hub.Sections.Cast<SnazzyHubSection>())
 				section.SaveState(e);
 		}
 

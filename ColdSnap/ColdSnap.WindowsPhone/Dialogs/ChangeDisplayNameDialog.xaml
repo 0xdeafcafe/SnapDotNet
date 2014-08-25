@@ -14,14 +14,15 @@
 	Background="#FF9B55A0">
 
 	<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-		<TextBox x:Uid="ChangeDisplayNameTextBox" x:Name="DisplayNameTextBox" Header="New Display Name" />
+		<TextBox x:Uid="ChangeDisplayNameTextBox" Header="New Display Name"
+				 Text="{Binding Path=NewDisplayName, Mode=TwoWay}"/>
 
 		<!-- Content body -->
 		<TextBlock Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
-			<Run x:Uid="DisplayChangeWarningRun1" Text="Changing this will change how your friend's name displayed in the application." />
+			<Run x:Uid="ChangeDisplayNameWarningRun1" Text="Changing this will change how your friend's name displayed in the application." />
 			<LineBreak />
 			<LineBreak />
-			<Run x:Uid="DisplayChangeWarningRun2" Text="To remove a display name, just change it to an empty name." />
+			<Run x:Uid="ChangeDisplayNameWarningRun2" Text="To remove a display name, just change it to an empty name." />
 		</TextBlock>
 	</StackPanel>
 </ContentDialog>

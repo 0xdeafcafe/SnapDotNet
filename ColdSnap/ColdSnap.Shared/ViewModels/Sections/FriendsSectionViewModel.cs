@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using ColdSnap.Common;
 using ColdSnap.Dialogs;
@@ -30,10 +31,21 @@ namespace ColdSnap.ViewModels.Sections
 			if (response != ContentDialogResult.Primary || dialog.NewDisplayName == null)
 				return;
 
-			await ProgressHelper.ShowStatusBarAsync("Updating Display Name...");
-			var newName = dialog.NewDisplayName;
-
+			await ProgressHelper.ShowStatusBarAsync(App.Strings.GetString("StatusBarChangeDisplayName"));
+			var success = await friend.UpdateDisplayName(dialog.NewDisplayName, Account);
 			await ProgressHelper.HideStatusBarAsync();
+			if (!success)
+			{
+				// tell user it went tits up
+				var alertDialog = new MessageDialog(App.Strings.GetString("MessageDialogChangeDisplayFailedTitle"),
+					App.Strings.GetString("MessageDialogChangeDisplayFailedContent"));
+				await alertDialog.ShowAsync();
+			}
+			else
+			{
+				// Save
+				await StateManager.Local.SaveAccountStateAsync(Account);
+			}
 		}
 	}
 }
