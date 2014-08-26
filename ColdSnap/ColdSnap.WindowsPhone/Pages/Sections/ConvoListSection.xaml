@@ -36,6 +36,7 @@
 			<Grid>
 				<Button Style="{StaticResource FluidButtonStyle}"
 						HorizontalAlignment="Left" VerticalAlignment="Bottom"
+						Click="GoToCameraButton_OnClick"
 						Margin="0,0,0,-3">
 					<Grid Width="60" Height="48" RenderTransformOrigin="0.5,0.5">
 						<Grid.RenderTransform>
@@ -56,6 +57,7 @@
 			<Grid>
 				<Button Style="{StaticResource FluidButtonStyle}"
 						HorizontalAlignment="Right" VerticalAlignment="Bottom"
+						Click="GoToSettingsButton_OnClick"
 						Margin="0,0,-2,-4" Width="60" Height="60">
 					<Viewbox Width="24">
 						<Grid>
@@ -86,9 +88,6 @@
 			<Button x:Name="OpenConversationButton" Content="open convo page" 
 							BorderBrush="Black" Foreground="Black" 
 							Click="OpenConversationButton_OnClick"/>
-			<Button x:Name="OpenSettingsButton" Content="open settings" 
-							BorderBrush="Black" Foreground="Black" 
-							Click="OpenSettingsButton_Click"/>
 		</StackPanel>
 	</DataTemplate>
 </controls:SnazzyHubSection>

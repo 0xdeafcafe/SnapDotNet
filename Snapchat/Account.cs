@@ -406,7 +406,16 @@ namespace SnapDotNet
 
 		public void UpdateSortedFriends()
 		{
-			
+			var modifiedFriends = new ObservableCollection<Friend>((from @group in SortedFriends
+				from friend in @group
+				where
+					@group.Key == "!" && friend.FriendRequestState != FriendRequestState.Blocked ||
+					@group.Key != "!" && friend.FriendRequestState == FriendRequestState.Blocked ||
+					@group.Key == "#" && !Char.IsNumber(friend.FriendlyName[0]) || @group.Key != friend.FriendlyName[0].ToString()
+				select friend).ToList());
+
+			FriendsKeyGroup.RemoveEntries(SortedFriends, modifiedFriends);
+			FriendsKeyGroup.InsertEntries(SortedFriends, modifiedFriends, Username);
 		}
 
 		/// <summary>
@@ -459,7 +468,8 @@ namespace SnapDotNet
 				var friend = Friends.FirstOrDefault(f => existingFriend.Name == f.Name);
 				if (friend == null) continue;
 
-				var updateSortedFriends = friend.FriendRequestState != (FriendRequestState) existingFriend.FriendRequestState;
+				var updateSortedFriends = (friend.FriendRequestState != (FriendRequestState) existingFriend.FriendRequestState ||
+				                           friend.DisplayName != existingFriend.DisplayName);
 				friend.Update(existingFriend);
 				if (!updateSortedFriends) continue;
 

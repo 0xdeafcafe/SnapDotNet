@@ -27,19 +27,21 @@ namespace ColdSnap.Pages.Sections
 				ViewModel.Account = e.NavigationParameter as Account;
 		}
 
-		public override void SaveState(SaveStateEventArgs e)
-		{
-
-		}
+		public override void SaveState(SaveStateEventArgs e) {  }
 
 		private void OpenConversationButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			Window.Current.Navigate(typeof(ConversationPage), ViewModel.Account);
 		}
 
-		private void OpenSettingsButton_Click(object sender, RoutedEventArgs e)
+		private void GoToSettingsButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			Window.Current.Navigate(typeof(SettingsPage), ViewModel.Account);
+		}
+
+		private void GoToCameraButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			MainPage.Singleton.GoToHubSection(HubContent.Camera);
 		}
 	}
 }
