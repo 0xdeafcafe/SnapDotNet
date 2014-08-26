@@ -1,4 +1,5 @@
-﻿using ColdSnap.Common;
+﻿using Windows.UI.Xaml;
+using ColdSnap.Common;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -37,9 +38,7 @@ namespace ColdSnap.Pages
 		/// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
 		/// a dictionary of state preserved by this page during an earlier
 		/// session.  The state will be null the first time a page is visited.</param>
-		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
-		{
-		}
+		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e) { }
 
 		/// <summary>
 		/// Preserves state associated with this page in case the application is suspended or the
@@ -49,9 +48,7 @@ namespace ColdSnap.Pages
 		/// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
 		/// <param name="e">Event data that provides an empty dictionary to be populated with
 		/// serializable state.</param>
-		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
-		{
-		}
+		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e) {  }
 
 		#region NavigationHelper registration
 
@@ -79,5 +76,10 @@ namespace ColdSnap.Pages
 		}
 
 		#endregion
+
+		private void GoBackButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			Frame.GoBack();
+		}
 	}
 }

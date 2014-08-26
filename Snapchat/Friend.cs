@@ -143,6 +143,34 @@ namespace SnapDotNet
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="account"></param>
+		public async Task<bool> UpdateFriend(FriendAction action, Account account)
+		{
+			try
+			{
+				var data = new Dictionary<string, string>
+				{
+					{ "username", account.Username },
+					{ "action", action.ToString().ToLowerInvariant() },
+					{ "friend", Name }
+				};
+
+				var response = await EndpointManager.Managers["bq"].PostAsync<Response>("friend", data, account.AuthToken);
+				if (response == null || !response.IsLogged)
+					throw new InvalidCredentialsException();
+
+				return !String.IsNullOrEmpty(response.Message);
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="newDisplayName"></param>
 		/// <param name="account"></param>
 		public async Task<bool> UpdateDisplayName(string newDisplayName, Account account)
@@ -164,7 +192,7 @@ namespace SnapDotNet
 				var success = !String.IsNullOrEmpty(response.Message);
 				if (success)
 					DisplayName = newDisplayName;
-				
+
 				return success;
 			}
 			catch

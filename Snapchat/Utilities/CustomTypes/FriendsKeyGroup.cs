@@ -92,27 +92,10 @@ namespace SnapDotNet.Utilities.CustomTypes
 
 			foreach (var friend in items)
 			{
-				if (friend.FriendRequestState == FriendRequestState.Blocked)
+				foreach (var @group in groups.Where(@group => @group.Contains(friend)))
 				{
-					groups.FirstOrDefault(a => a.Key == "!").Contains(friend);
-					groups.FirstOrDefault(a => a.Key == "!").Remove(friend);
-					Debug.WriteLine("[FriendsKeyGroup] Removing friend {0} from Blocked", friend.FriendlyName);
-				}
-				else
-				{
-					var key = friend.FriendlyName.ToUpperInvariant()[0];
-					if (char.IsLetter(key))
-					{
-						groups.FirstOrDefault(a => a.Key == key.ToString().ToLowerInvariant()).Contains(friend);
-						groups.FirstOrDefault(a => a.Key == key.ToString().ToLowerInvariant()).Remove(friend);
-						Debug.WriteLine("[FriendsKeyGroup] Removing friend {0} with key {1} from {2}", friend.FriendlyName, key, key);
-					}
-					else
-					{
-						groups.FirstOrDefault(a => a.Key == "#").Contains(friend);
-						groups.FirstOrDefault(a => a.Key == "#").Add(friend);
-						Debug.WriteLine("[FriendsKeyGroup] Removing friend {0} with key {1} from {2}", friend.FriendlyName, key, "numbers");
-					}
+					@group.Remove(friend);
+					Debug.WriteLine("[FriendsKeyGroup] Removing friend {0} from {1}", friend.FriendlyName, @group.FriendlyKey);
 				}
 			}
 		}

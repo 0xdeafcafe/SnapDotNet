@@ -27,6 +27,7 @@ namespace ColdSnap.Pages
 		public StartPage()
 		{
 			InitializeComponent();
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 			DataContext = ViewModel;
 
 			_navigationHelper = new NavigationHelper(this);

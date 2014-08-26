@@ -20,7 +20,7 @@
 	</Page.Transitions>
 	
 	<Page.BottomAppBar>
-		<CommandBar Background="#FFFF8000" ClosedDisplayMode="Minimal">
+		<CommandBar Background="#FF85428B" ClosedDisplayMode="Minimal">
 			
 		</CommandBar>
 	</Page.BottomAppBar>
@@ -31,13 +31,33 @@
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 
-		<Rectangle Fill="#FFFF8000"/>
-		<TextBlock Text="add friends" TextTrimming="CharacterEllipsis" Foreground="#FFFFFFFF" VerticalAlignment="Bottom" Margin="15,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40">
-			<TextBlock.Transitions>
-				<TransitionCollection>
-					<EntranceThemeTransition FromHorizontalOffset="200"/>
-				</TransitionCollection>
-			</TextBlock.Transitions>
-		</TextBlock>
+
+		<!-- Header -->
+		<Border Background="White" BorderBrush="#f5f5f5" BorderThickness="0,0,0,1">
+			<Grid>
+				<Button Style="{StaticResource FluidButtonStyle}"
+						Click="GoBackButton_OnClick"
+						HorizontalAlignment="Left" VerticalAlignment="Bottom"
+						Height="28" Width="17"
+						Margin="20,0,0,12" Padding="0">
+					<Path Fill="Transparent"  
+						  Stroke="#FF85428B" StrokeThickness="2" StrokeLineJoin="Round"
+						  StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"
+						  Data="M 13,0 0,11 13,21"/>
+				</Button>
+
+				<TextBlock Text="add friends" TextTrimming="CharacterEllipsis" 
+						   Foreground="#FF85428B" 
+						   Margin="15,0,0,5" FontWeight="SemiLight" FontFamily="Segoe WP" 
+						   FontSize="40"
+						   VerticalAlignment="Bottom" HorizontalAlignment="Center">
+					<TextBlock.Transitions>
+						<TransitionCollection>
+							<EntranceThemeTransition FromHorizontalOffset="200"/>
+						</TransitionCollection>
+					</TextBlock.Transitions>
+				</TextBlock>
+			</Grid>
+		</Border>
 	</Grid>
 </Page>

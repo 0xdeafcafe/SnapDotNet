@@ -7,10 +7,12 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	RequestedTheme="Dark">
-	
 	<Application.Resources>
 		<ResourceDictionary>
 			<converters:DebugConverter x:Key="DebugConverter" />
+
+			<SolidColorBrush x:Key="PivotHeaderForegroundSelectedBrush" Color="#FF00a182" />
+			<SolidColorBrush x:Key="PivotHeaderForegroundUnselectedBrush" Color="#FF80d0c1" />
 
 			<Style x:Key="FluidButtonStyle" TargetType="Button">
 				<Setter Property="Background" Value="Transparent"/>

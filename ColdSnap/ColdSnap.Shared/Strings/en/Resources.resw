@@ -180,11 +180,23 @@
   <data name="LogInContentDialog.SecondaryButtonText" xml:space="preserve">
     <value>cancel</value>
   </data>
+  <data name="MessageDialogBlockFriendFailedContent" xml:space="preserve">
+    <value>There was an error blocking your friend. Check your connection and try again.</value>
+  </data>
+  <data name="MessageDialogBlockFriendFailedTitle" xml:space="preserve">
+    <value>UNABLE TO BLOCK FRIEND</value>
+  </data>
   <data name="MessageDialogChangeDisplayFailedContent" xml:space="preserve">
     <value>There was an error updating the display name. Check the name is valid and try again.</value>
   </data>
   <data name="MessageDialogChangeDisplayFailedTitle" xml:space="preserve">
     <value>UNABLE TO CHANGE DISPLAY NAME</value>
+  </data>
+  <data name="MessageDialogUnBlockFriendFailedContent" xml:space="preserve">
+    <value>There was an error unblocking your friend. Check your connection and try again.</value>
+  </data>
+  <data name="MessageDialogUnBlockFriendFailedTitle" xml:space="preserve">
+    <value>UNABLE TO UNBLOCK FRIEND</value>
   </data>
   <data name="PasswordBox.Header" xml:space="preserve">
     <value>Password</value>
@@ -201,8 +213,14 @@
   <data name="SignUpContentDialog.Title" xml:space="preserve">
     <value>SIGN UP</value>
   </data>
+  <data name="StatusBarBlockFriend" xml:space="preserve">
+    <value>Blocking Friend...</value>
+  </data>
   <data name="StatusBarChangeDisplayName" xml:space="preserve">
     <value>Updating Display Name...</value>
+  </data>
+  <data name="StatusBarUnBlockFriend" xml:space="preserve">
+    <value>Unblocking Friend...</value>
   </data>
   <data name="StatusBarUpdating" xml:space="preserve">
     <value>Updating...</value>

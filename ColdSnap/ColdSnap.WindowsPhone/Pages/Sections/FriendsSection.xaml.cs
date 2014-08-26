@@ -75,8 +75,8 @@ namespace ColdSnap.Pages.Sections
 			flyout.Items.Add(new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextRemove"), CommandParameter = context });
 			flyout.Items.Add(new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextChangeName"), Command = ViewModel.ChangeDisplayNameCommand, CommandParameter = context });
 			flyout.Items.Add(context.FriendRequestState == FriendRequestState.Blocked
-				? new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextUnblock"), CommandParameter = context }
-				: new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextBlock"), CommandParameter = context });
+				? new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextUnblock"), Command = ViewModel.UnBlockFriendCommand, CommandParameter = context }
+				: new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextBlock"), Command = ViewModel.BlockFriendCommand, CommandParameter = context });
 
 			flyout.ShowAt(button);
 		}

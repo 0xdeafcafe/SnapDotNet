@@ -406,13 +406,19 @@ namespace SnapDotNet
 
 		public void UpdateSortedFriends()
 		{
-			var modifiedFriends = new ObservableCollection<Friend>((from @group in SortedFriends
-				from friend in @group
-				where
-					@group.Key == "!" && friend.FriendRequestState != FriendRequestState.Blocked ||
-					@group.Key != "!" && friend.FriendRequestState == FriendRequestState.Blocked ||
-					@group.Key == "#" && !Char.IsNumber(friend.FriendlyName[0]) || @group.Key != friend.FriendlyName[0].ToString()
-				select friend).ToList());
+			List<Friend> list = new List<Friend>();
+			foreach (FriendsKeyGroup @group in SortedFriends)
+				foreach (Friend friend in @group)
+				{
+					var res1 = @group.Key == "!" && friend.FriendRequestState != FriendRequestState.Blocked;
+					var res2 = @group.Key != "!" && friend.FriendRequestState == FriendRequestState.Blocked;
+					var res3 = @group.Key == "#" && !Char.IsNumber(friend.FriendlyName[0]);
+					var res4 = @group.Key != friend.FriendlyName[0].ToString().ToLowerInvariant() && friend.FriendRequestState != FriendRequestState.Blocked;
+					
+					if (res1 || res2 || res3 || res4)
+						list.Add(friend);
+				}
+			var modifiedFriends = new ObservableCollection<Friend>(list);
 
 			FriendsKeyGroup.RemoveEntries(SortedFriends, modifiedFriends);
 			FriendsKeyGroup.InsertEntries(SortedFriends, modifiedFriends, Username);
@@ -440,6 +446,9 @@ namespace SnapDotNet
 			Birthday = accountResponse.Birthday;
 
 			// TODO: Save the fields that are missing to this model
+
+			if (SortedFriends == null)
+				CreateSortedFriends();
 
 			// Remove removed friends.
 			var removedFriends = Friends.Where(f => accountResponse.Friends.FirstOrDefault(f1 => f1.Name == f.Name) == null);
