@@ -10,6 +10,7 @@ namespace ColdSnap.Controls
 		public static DependencyProperty HeaderTextDependencyProperty;
 		public static DependencyProperty SubHeaderTextDependencyProperty;
 		public static DependencyProperty ShowSubHeaderDependencyProperty;
+		public static DependencyProperty PrimaryHeaderContentTemplateDependencyProperty;
 		public static DependencyProperty AdditionalHeaderContentTemplateDependencyProperty;
 		public static DependencyProperty ExpandableContentTemplateDependencyProperty;
 		public static DependencyProperty HeaderHeightDependencyProperty;
@@ -28,6 +29,7 @@ namespace ColdSnap.Controls
 			SubHeaderTextDependencyProperty = DependencyProperty.Register("SubHeaderText", typeof(String), typeof(ExpanderView), new PropertyMetadata(""));
 			ShowSubHeaderDependencyProperty = DependencyProperty.Register("ShowSubHeader", typeof(Boolean), typeof(ExpanderView), new PropertyMetadata(false));
 
+			PrimaryHeaderContentTemplateDependencyProperty = DependencyProperty.Register("PrimaryHeaderContentTemplate", typeof(DataTemplate), typeof(ExpanderView), new PropertyMetadata(null));
 			AdditionalHeaderContentTemplateDependencyProperty = DependencyProperty.Register("AdditionalHeaderContentTemplate", typeof(DataTemplate), typeof(ExpanderView), new PropertyMetadata(null));
 
 			ExpandableContentTemplateDependencyProperty = DependencyProperty.Register("ExpandableContentTemplate", typeof(DataTemplate), typeof(ExpanderView), new PropertyMetadata(null));
@@ -121,6 +123,15 @@ namespace ColdSnap.Controls
 		{
 			get { return (Boolean)GetValue(ShowSubHeaderDependencyProperty); }
 			set { SetValue(ShowSubHeaderDependencyProperty, value); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public DataTemplate PrimaryHeaderContentTemplate
+		{
+			get { return (DataTemplate)GetValue(PrimaryHeaderContentTemplateDependencyProperty); }
+			set { SetValue(PrimaryHeaderContentTemplateDependencyProperty, value); }
 		}
 
 		/// <summary>

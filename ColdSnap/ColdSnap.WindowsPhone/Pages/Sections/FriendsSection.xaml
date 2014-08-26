@@ -11,6 +11,7 @@
 	xmlns:sdn="using:SnapDotNet"
 	xmlns:customTypes="using:SnapDotNet.Utilities.CustomTypes"
 	xmlns:converters="using:ColdSnap.Converters"
+	xmlns:controls1="using:WinRTXamlToolkit.Controls"
 	mc:Ignorable="d"
 
 	AccentColor="#FF9b55a0"
@@ -157,6 +158,15 @@
 										</Grid>
 									</DataTemplate>
 								</controls:ExpanderView.AdditionalHeaderContentTemplate>
+								<controls:ExpanderView.PrimaryHeaderContentTemplate>
+									<DataTemplate>
+										<Grid>
+											<controls1:PieSlice Width="46" Height="46">
+												
+											</controls1:PieSlice>
+										</Grid>
+									</DataTemplate>
+								</controls:ExpanderView.PrimaryHeaderContentTemplate>
 								<controls:ExpanderView.ExpandableContentTemplate>
 									<DataTemplate>
 										<Grid Background="#eeeeee">

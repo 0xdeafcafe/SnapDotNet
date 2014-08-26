@@ -94,6 +94,7 @@
     <Compile Include="Responses\PublicActivityResponse.cs" />
     <Compile Include="Responses\SnapResponse.cs" />
     <Compile Include="Responses\StoriesResponces.cs" />
+    <Compile Include="Story.cs" />
     <Compile Include="Utilities\CustomTypes\FriendsKeyGroup.cs" />
     <Compile Include="Utilities\CustomTypes\IAlphaKeyGroup.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />

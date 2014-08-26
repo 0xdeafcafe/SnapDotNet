@@ -6,20 +6,6 @@ using SnapDotNet.Converters.Json;
 
 namespace SnapDotNet.Responses
 {
-	/// <summary>
-	/// Indicates the media type of a snap.
-	/// </summary>
-	public enum MediaType
-	{
-		Image,
-		Video,
-		VideoNoAudio,
-		FriendRequest,
-		FriendRequestImage,
-		FriendRequestVideo,
-		FriendRequestVideoNoAudio
-	}
-
 	[DataContract]
 	internal sealed class StoriesResponse
 	{
@@ -140,7 +126,7 @@ namespace SnapDotNet.Responses
 		public string MediaKey { get; set; }
 
 		[DataMember(Name = "media_type")]
-		public MediaType MediaType { get; set; }
+		public int MediaType { get; set; }
 
 		[DataMember(Name = "media_url")]
 		public string MediaUrl { get; set; }

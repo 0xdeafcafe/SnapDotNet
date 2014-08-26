@@ -37,6 +37,11 @@ namespace SnapDotNet
 	public sealed class Friend
 		: ObservableObject
 	{
+		public Friend()
+		{
+			_stories.CollectionChanged += (sender, args) => OnObservableCollectionChanged(args, "Stories");
+		}
+
 		/// <summary>
 		/// Gets or sets whether this friend allows you to see custom stories.
 		/// </summary>
@@ -47,6 +52,17 @@ namespace SnapDotNet
 			set { SetValue(ref _canSeeCustomStories, value); }
 		}
 		private bool _canSeeCustomStories;
+
+		/// <summary>
+		/// Gets or sets if this friend contains mature content.
+		/// </summary>
+		[JsonProperty]
+		public bool ContainsMatureContent
+		{
+			get { return _contiansMatureContent; }
+			set { SetValue(ref _contiansMatureContent, value); }
+		}
+		private bool _contiansMatureContent;
 
 		/// <summary>
 		/// Gets or sets the name of this friend.
@@ -132,6 +148,17 @@ namespace SnapDotNet
 		private ObservableCollection<string> _bestFriends = new ObservableCollection<string>();
 
 		/// <summary>
+		/// Gets or sets the stories belonging to this friend.
+		/// </summary>
+		[JsonProperty]
+		public ObservableCollection<FriendStory> Stories
+		{
+			get { return _stories; }
+			set { SetValue(ref _stories, value); }
+		}
+		private ObservableCollection<FriendStory> _stories = new ObservableCollection<FriendStory>();
+
+		/// <summary>
 		/// Gets if this friend has any <seealso cref="BestFriends"/>.
 		/// </summary>
 		[JsonIgnore]
@@ -139,6 +166,8 @@ namespace SnapDotNet
 		{
 			get { return BestFriends.Any(); }
 		}
+		
+		#region Update Model Data
 
 		/// <summary>
 		/// 
@@ -201,17 +230,23 @@ namespace SnapDotNet
 			}
 		}
 
+		#endregion
+		
+		#region Update Model from Responces
+
 		/// <summary>
 		/// Update the model based on a <see cref="FriendResponse" />.
 		/// </summary>
 		/// <param name="friendResponse">The <see cref="FriendResponse" /> to update the Friend model from.</param>
 		internal void Update(FriendResponse friendResponse)
 		{
+			Contract.Requires<ArgumentNullException>(friendResponse != null);
+
 			CanSeeCustomStories = friendResponse.CanSeeCustomStories;
 			Name = friendResponse.Name;
 			DisplayName = friendResponse.DisplayName;
-			FriendRequestState = (FriendRequestState) friendResponse.FriendRequestState;
-        }
+			FriendRequestState = (FriendRequestState)friendResponse.FriendRequestState;
+		}
 
 		/// <summary>
 		/// Update the public activity of the model based on a <see cref="PublicActivityResponse" />.
@@ -220,6 +255,8 @@ namespace SnapDotNet
 		/// <param name="friends">A list of friends to check</param>
 		internal void UpdatePublicActivies(PublicActivityResponse publicActivityResponse, IEnumerable<Friend> friends)
 		{
+			Contract.Requires<ArgumentNullException>(publicActivityResponse != null || friends != null);
+
 			Score = publicActivityResponse.Score;
 
 			BestFriends.Clear();
@@ -231,6 +268,33 @@ namespace SnapDotNet
 			OnPropertyChanged("HasBestFriendsName");
 		}
 
+		/// <summary>
+		/// Update the model's story data based on a <see cref="FriendStoryResponse" />.
+		/// </summary>
+		/// <param name="friendStoryResponse">The <see cref="FriendStoryResponse" /> to update the Friend model's story data from.</param>
+		internal void UpdateStories(FriendStoryResponse friendStoryResponse)
+		{
+			Contract.Requires<ArgumentNullException>(friendStoryResponse != null);
+
+			// Check new ones, insert them
+			foreach (var friendStory in friendStoryResponse.Stories.Where(friendStory => Stories.FirstOrDefault(s => s.Id == friendStory.Story.Id) == null))
+				Stories.Insert(0, FriendStory.Create(friendStory));
+
+			// Check active ones, update them
+			foreach (var friendStory in Stories)
+			{
+				var friendStoryMetadata = friendStoryResponse.Stories.FirstOrDefault(s => s.Story.Id == friendStory.Id);
+				if (friendStoryMetadata == null) continue;
+				friendStory.Update(friendStoryMetadata);
+			}
+
+			// Check expired ones, remove them
+			foreach (var redundantStory in Stories.Where(s => friendStoryResponse.Stories.FirstOrDefault(s1 => s1.Story.Id == s.Id) == null || s.Expired))
+				Stories.Remove(redundantStory);
+		}
+
+		#endregion
+		
 		/// <summary>
 		/// Create a Friend model based on a <see cref="FriendResponse" />.
 		/// </summary>
