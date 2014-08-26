@@ -1,7 +1,6 @@
 ﻿using ColdSnap.Common;
 using ColdSnap.ViewModels.Sections;
 using SnapDotNet;
-using System;
 using Windows.UI.Xaml;
 
 namespace ColdSnap.Pages.Sections

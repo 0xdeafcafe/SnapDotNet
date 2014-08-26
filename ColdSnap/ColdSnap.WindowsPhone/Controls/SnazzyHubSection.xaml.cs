@@ -11,10 +11,13 @@ namespace ColdSnap.Controls
 	public partial class SnazzyHubSection
 	{
 		public static DependencyProperty AccentColorProperty = DependencyProperty.Register("AccentColor", typeof(Color), typeof(SnazzyHubSection), null);
+		public static DependencyProperty HeaderForegroundProperty = DependencyProperty.Register("HeaderForeground", typeof(Color), typeof(SnazzyHubSection), new PropertyMetadata(Colors.White));
 		public static DependencyProperty PrimaryCommandsProperty = DependencyProperty.Register("PrimaryCommands", typeof(ObservableCollection<ICommandBarElement>), typeof(SnazzyHubSection), new PropertyMetadata(new ObservableCollection<ICommandBarElement>()));
 		public static DependencyProperty SecondaryCommandsProperty = DependencyProperty.Register("SecondaryCommands", typeof(ObservableCollection<ICommandBarElement>), typeof(SnazzyHubSection), new PropertyMetadata(new ObservableCollection<ICommandBarElement>()));
 		public static DependencyProperty AppBarClosedDisplayModeProperty = DependencyProperty.Register("AppBarClosedDisplayMode", typeof(AppBarClosedDisplayMode), typeof(SnazzyHubSection), new PropertyMetadata(AppBarClosedDisplayMode.Minimal));
 
+		public static DependencyProperty HeaderTitleTemplateProperty = DependencyProperty.Register("HeaderTitleTemplate",
+			typeof(DataTemplate), typeof(SnazzyHubSection), null);
 		public static DependencyProperty LeftHeaderTemplateProperty = DependencyProperty.Register("LeftHeaderTemplate",
 			typeof(DataTemplate), typeof(SnazzyHubSection), null);
 		public static DependencyProperty RightHeaderTemplateProperty = DependencyProperty.Register("RightHeaderTemplate",
@@ -33,6 +36,15 @@ namespace ColdSnap.Controls
 		{
 			get { return (Color) GetValue(AccentColorProperty); }
 			set { SetValue(AccentColorProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the header foreground for this section.
+		/// </summary>
+		public Color HeaderForeground
+		{
+			get { return (Color)GetValue(HeaderForegroundProperty); }
+			set { SetValue(HeaderForegroundProperty, value); }
 		}
 
 		/// <summary>
@@ -57,6 +69,11 @@ namespace ColdSnap.Controls
 		{
 			get { return (AppBarClosedDisplayMode) GetValue(AppBarClosedDisplayModeProperty); }
 			set { SetValue(AppBarClosedDisplayModeProperty, value); }
+		}
+		public DataTemplate HeaderTitleDataTemplate
+		{
+			get { return (DataTemplate)GetValue(HeaderTitleTemplateProperty); }
+			set { SetValue(HeaderTitleTemplateProperty, value); }
 		}
 
 		public DataTemplate LeftHeaderDataTemplate

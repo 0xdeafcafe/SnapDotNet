@@ -138,7 +138,7 @@
   <data name="ChangeDisplayNameWarningRun2.Text" xml:space="preserve">
     <value>To remove a display name, just change it to an empty name.</value>
   </data>
-  <data name="ConvoListSection.Header" xml:space="preserve">
+  <data name="ConvoListSectionHeader.PrimaryText" xml:space="preserve">
     <value>snapchat</value>
   </data>
   <data name="EmailAddressTextBox.Header" xml:space="preserve">

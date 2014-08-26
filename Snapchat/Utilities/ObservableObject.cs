@@ -60,19 +60,25 @@ namespace SnapDotNet.Utilities
 		/// <summary>
 		/// Calls the <see cref="OnPropertyChanged" /> method when items inside an observable collection are modified.
 		/// </summary>
-		/// <param name="e">The CollectionChanged event of the Observable Collection</param>
+		/// <param name="e">The CollectionChanged event of the Observable Collection.</param>
 		/// <param name="collectionName">The name of the observable collection.</param>
+		/// <param name="optionalPostAction">An optional action to also fire on propertu changed.</param>
 		protected void OnObservableCollectionChanged(NotifyCollectionChangedEventArgs e, string collectionName, Action optionalPostAction = null)
 		{
-			if (e.Action == NotifyCollectionChangedAction.Remove)
-				foreach (ObservableObject item in e.OldItems)
-					item.PropertyChanged -= delegate { OnPropertyChanged(collectionName); }; // Removed items
-			else if (e.Action == NotifyCollectionChangedAction.Add)
-				foreach (ObservableObject item in e.NewItems)
-					item.PropertyChanged += delegate { OnPropertyChanged(collectionName); }; // Added items
+			if (optionalPostAction == null)
+				optionalPostAction = delegate { };
 
-			if (optionalPostAction != null)
-				optionalPostAction();
-        }
+			switch (e.Action)
+			{
+				case NotifyCollectionChangedAction.Remove:
+					foreach (ObservableObject item in e.OldItems)
+						item.PropertyChanged -= delegate { OnPropertyChanged(collectionName); optionalPostAction(); }; // Removed items
+					break;
+				case NotifyCollectionChangedAction.Add:
+					foreach (ObservableObject item in e.NewItems)
+						item.PropertyChanged += delegate { OnPropertyChanged(collectionName); optionalPostAction(); }; // Added items
+					break;
+			}
+		}
 	}
 }

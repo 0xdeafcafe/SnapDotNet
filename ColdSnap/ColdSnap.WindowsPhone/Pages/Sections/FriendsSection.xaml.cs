@@ -34,14 +34,17 @@ namespace ColdSnap.Pages.Sections
 				ViewModel.Account = e.NavigationParameter as Account;
 		}
 
-		public override void SaveState(SaveStateEventArgs e)
-		{
-			
-		}
+		public override void SaveState(SaveStateEventArgs e) { }
 
 		private void AddFriendsButton_Tapped(object sender, TappedRoutedEventArgs e)
 		{
+			// TODO: Fix the COM-Exception this causes xox
 			Window.Current.Navigate(typeof(ManageFriendsPage), ViewModel.Account);
+		}
+
+		private void GoToCameraButton_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			MainPage.Singleton.GoToHubSection(HubContent.Camera);
 		}
 
 		private void ExpanderView_OnExpanded(object sender, bool e)
@@ -57,9 +60,7 @@ namespace ColdSnap.Pages.Sections
 					_friendsListView.Items.Select(item => _friendsListView.ContainerFromItem(item))
 						.Select(VariousHelpers.FindVisualChild<ExpanderView>)
 						.Where(itemExpander => itemExpander.Tag != expander.Tag))
-			{
 				itemExpander.Contract();
-			}
 		}
 
 		private void EditFriendButton_OnClick(object sender, RoutedEventArgs e)
@@ -76,15 +77,6 @@ namespace ColdSnap.Pages.Sections
 			flyout.Items.Add(context.FriendRequestState == FriendRequestState.Blocked
 				? new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextUnblock"), CommandParameter = context }
 				: new MenuFlyoutItem { Text = App.Strings.GetString("FriendContextBlock"), CommandParameter = context });
-
-			flyout.Opening += delegate
-			{
-				VisualStateManager.GoToState(button, "FlyoutOpening", false);
-			};
-			flyout.Closed += delegate
-			{
-				VisualStateManager.GoToState(button, "FlyoutClosed", false);
-			};
 
 			flyout.ShowAt(button);
 		}

@@ -46,6 +46,8 @@ namespace ColdSnap.ViewModels.Sections
 				// Save
 				await StateManager.Local.SaveAccountStateAsync(Account);
 			}
+
+			Account.UpdateSortedFriends();
 		}
 	}
 }

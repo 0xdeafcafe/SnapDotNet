@@ -1,6 +1,5 @@
 ﻿<controls:SnazzyHubSection
 	x:Class="ColdSnap.Pages.Sections.ConvoListSection"
-	x:Uid="ConvoListSection"
 	
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -11,12 +10,66 @@
 	mc:Ignorable="d"
 	
 	AccentColor="#FF3cb2e2"
-	Header="coldsnap"
->
-
+	HeaderForeground="Transparent"
+	Header="{Binding Path=Account.SnapBandwidthSplit, FallbackValue='69 | 69'}">
+	
 	<d:DesignProperties.DataContext>
 		<sections:ConvoListSectionViewModel/>
 	</d:DesignProperties.DataContext>
+	
+	<controls:SnazzyHubSection.HeaderTitleDataTemplate>
+		<DataTemplate>
+			<controls:StateTextBlock x:Uid="ConvoListSectionHeader"
+									 PrimaryText="snapchat" 
+									 Foreground="White" 
+									 SecondaryText="{Binding}"
+									 HorizontalAlignment="Center" VerticalAlignment="Bottom"
+									 Margin="0,0,0,5" FontWeight="SemiLight"
+									 FontFamily="Segoe WP" 
+									 PrimaryFontSize="40"
+									 SecondaryMarginCorrection="0,12,0,0"
+									 SecondaryFontSize="30" />
+		</DataTemplate>
+	</controls:SnazzyHubSection.HeaderTitleDataTemplate>
+	<controls:SnazzyHubSection.LeftHeaderDataTemplate>
+		<DataTemplate>
+			<Grid>
+				<Button Style="{StaticResource FluidButtonStyle}"
+						HorizontalAlignment="Left" VerticalAlignment="Bottom"
+						Margin="0,0,0,-3">
+					<Grid Width="60" Height="48" RenderTransformOrigin="0.5,0.5">
+						<Grid.RenderTransform>
+							<CompositeTransform ScaleX="0.5" ScaleY="0.5"/>
+						</Grid.RenderTransform>
+						<Border Width="60" Height="46" Background="White" CornerRadius="4">
+							<Ellipse Stroke="#FF3cb2e2" StrokeThickness="5"
+									 Width="24" Height="24" 
+									 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+						</Border>
+					</Grid>
+				</Button>
+			</Grid>
+		</DataTemplate>
+	</controls:SnazzyHubSection.LeftHeaderDataTemplate>
+	<controls:SnazzyHubSection.RightHeaderDataTemplate>
+		<DataTemplate>
+			<Grid>
+				<Button Style="{StaticResource FluidButtonStyle}"
+						HorizontalAlignment="Right" VerticalAlignment="Bottom"
+						Margin="0,0,-2,-4" Width="60" Height="60">
+					<Viewbox Width="24">
+						<Grid>
+							<Path Data="F 1 M 14.015,44.819 L 14.367,45.022 C 13.908,48.318 13.908,51.655 14.374,54.976 L 14.018,55.184 C 7.576,58.905 5.359,67.178 9.08,73.625 11.482,77.788 15.967,80.376 20.781,80.376 23.137,80.376 25.469,79.748 27.519,78.564 L 27.873,78.359 C 30.515,80.424 33.405,82.094 36.496,83.344 L 36.496,83.749 C 36.496,91.192 42.551,97.25 49.997,97.25 57.44,97.25 63.498,91.192 63.498,83.749 L 63.498,83.351 C 65.095,82.712 66.603,81.982 67.997,81.176 69.401,80.365 70.785,79.423 72.131,78.368 L 72.475,78.568 C 74.524,79.753 76.853,80.378 79.211,80.378 L 79.211,80.378 C 84.025,80.378 88.513,77.79 90.915,73.624 92.717,70.502 93.195,66.866 92.263,63.383 91.33,59.897 89.099,56.987 85.976,55.185 L 85.627,54.982 C 86.088,51.677 86.086,48.339 85.622,45.019 L 85.974,44.814 C 89.099,43.012 91.332,40.102 92.265,36.616 93.201,33.135 92.722,29.497 90.917,26.377 88.513,22.212 84.03,19.624 79.216,19.624 76.858,19.624 74.528,20.249 72.475,21.433 L 72.121,21.638 C 69.475,19.57 66.584,17.9 63.498,16.655 L 63.498,16.25 C 63.493,8.806 57.438,2.749 49.997,2.749 46.393,2.749 43,4.153 40.451,6.704 37.897,9.255 36.493,12.646 36.496,16.247 L 36.493,16.647 C 34.904,17.284 33.395,18.014 31.994,18.822 30.568,19.647 29.203,20.575 27.86,21.632 L 27.516,21.434 C 25.465,20.25 23.136,19.622 20.78,19.622 15.966,19.622 11.481,22.21 9.07401,26.375 5.353,32.827 7.571,41.099 14.015,44.819 Z" 
+								  Fill="#FFFFFF"/>
+							<Border x:Name="CentralEllipse" VerticalAlignment="Center" HorizontalAlignment="Center" 
+									Width="30" Height="30" Background="#FF3cb2e2" CornerRadius="25"
+									Margin="8,7,0,0" />
+						</Grid>
+					</Viewbox>
+				</Button>
+			</Grid>
+		</DataTemplate>
+	</controls:SnazzyHubSection.RightHeaderDataTemplate>
 
 	<controls:SnazzyHubSection.PrimaryCommands>
 	</controls:SnazzyHubSection.PrimaryCommands>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -58,9 +57,9 @@ namespace SnapDotNet
 			get { return _name; }
 			set
 			{
+				SetValue(ref _name, value);
 				OnPropertyChanged("FriendlyName");
 				OnPropertyChanged("HasDisplayName");
-				SetValue(ref _name, value);
 			}
 		}
 		private string _name;
@@ -92,9 +91,9 @@ namespace SnapDotNet
 			get { return _displayName; }
 			set
 			{
+				SetValue(ref _displayName, value);
 				OnPropertyChanged("FriendlyName");
 				OnPropertyChanged("HasDisplayName");
-				SetValue(ref _displayName, value);
 			}
 		}
 		private string _displayName;

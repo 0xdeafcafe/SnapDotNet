@@ -23,7 +23,11 @@ namespace SnapDotNet
 		/// <summary>
 		/// 
 		/// </summary>
-		private Account() { }
+		private Account()
+		{
+			_friends.CollectionChanged +=
+				(sender, args) => OnObservableCollectionChanged(args, "Friends", () => OnPropertyChanged("SortedFriends"));
+		}
 
 		#region Properties
 
@@ -67,7 +71,11 @@ namespace SnapDotNet
 		public ObservableCollection<Friend> Friends
 		{
 			get { return _friends; }
-			private set { SetValue(ref _friends, value); }
+			private set
+			{
+				SetValue(ref _friends, value);
+				OnPropertyChanged("SortedFriends");
+			}
 		}
 		private ObservableCollection<Friend> _friends = new ObservableCollection<Friend>();
 
@@ -78,9 +86,9 @@ namespace SnapDotNet
 		public ObservableCollection<FriendsKeyGroup> SortedFriends
 		{
 			get { return _sortedFriends; }
-			private set { SetValue(ref _sortedFriends, value); }
+			set { SetValue(ref _sortedFriends, value); }
 		}
-		private ObservableCollection<FriendsKeyGroup> _sortedFriends = new ObservableCollection<FriendsKeyGroup>();
+		private ObservableCollection<FriendsKeyGroup> _sortedFriends;
 
 		/// <summary>
 		/// Gets the phone number associated with this account.
@@ -337,7 +345,7 @@ namespace SnapDotNet
 					SnapsSent = response.SnapsSent,
 					Birthday = response.Birthday
 				};
-				account.CreateSortedFriends();
+				//account.CreateSortedFriends();
 				return account;
 			}
 			catch (InvalidHttpResponseException ex)
@@ -391,9 +399,14 @@ namespace SnapDotNet
 		/// <summary>
 		/// 
 		/// </summary>
-		internal void CreateSortedFriends()
+		public void CreateSortedFriends()
 		{
 			SortedFriends = FriendsKeyGroup.CreateGroups(Friends, Username);
+		}
+
+		public void UpdateSortedFriends()
+		{
+			
 		}
 
 		/// <summary>
@@ -421,20 +434,39 @@ namespace SnapDotNet
 
 			// Remove removed friends.
 			var removedFriends = Friends.Where(f => accountResponse.Friends.FirstOrDefault(f1 => f1.Name == f.Name) == null);
+			var removeFriendsModel = new List<Friend>();
 			foreach (var removedFriend in removedFriends)
-				Friends.Remove(removedFriend);
+			{
+				Friends.Add(removedFriend);
+				removeFriendsModel.Add(removedFriend);
+			}
+			FriendsKeyGroup.RemoveEntries(SortedFriends, removeFriendsModel);
 
 			// Add new friends.
 			var newFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) == null);
-			foreach (var newFriend in newFriends)
-				Friends.Add(Friend.Create(newFriend));
+			var newFriendsModel = new List<Friend>();
+			foreach (var friend in newFriends.Select(Friend.Create))
+			{
+				Friends.Add(friend);
+				newFriendsModel.Add(friend);
+			}
+			FriendsKeyGroup.InsertEntries(SortedFriends, newFriendsModel, Username);
 
 			// Update existing friends
 			var existingFriends = accountResponse.Friends.Where(f1 => Friends.FirstOrDefault(f => f.Name == f1.Name) != null);
 			foreach (var existingFriend in existingFriends)
-				Friends.FirstOrDefault(f => existingFriend.Name == f.Name).Update(existingFriend);
+			{
+				var friend = Friends.FirstOrDefault(f => existingFriend.Name == f.Name);
+				if (friend == null) continue;
 
-			CreateSortedFriends();
+				var updateSortedFriends = friend.FriendRequestState != (FriendRequestState) existingFriend.FriendRequestState;
+				friend.Update(existingFriend);
+				if (!updateSortedFriends) continue;
+
+				// Update Sorted Friends
+				FriendsKeyGroup.RemoveEntries(SortedFriends, new List<Friend> { friend });
+				FriendsKeyGroup.InsertEntries(SortedFriends, new List<Friend> { friend }, Username);
+			}
 		}
 
 		/// <summary>

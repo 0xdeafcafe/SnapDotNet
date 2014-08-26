@@ -10,6 +10,13 @@ using Windows.UI.ViewManagement;
 
 namespace ColdSnap.Pages
 {
+	public enum HubContent
+	{
+		Convo,
+		Camera,
+		Friends
+	}
+
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
@@ -27,6 +34,8 @@ namespace ColdSnap.Pages
 			NavigationHelper.SaveState += NavigationHelper_SaveState;
 
 			DataContext = ViewModel;
+
+			Singleton = this;
 		}
 
 		/// <summary>
@@ -40,6 +49,20 @@ namespace ColdSnap.Pages
 		public MainPageViewModel ViewModel
 		{
 			get { return _viewModel; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public static MainPage Singleton;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="hubContent"></param>
+		public void GoToHubSection(HubContent hubContent)
+		{
+			Hub.SetSectionIndex((int) hubContent);
 		}
 
 		/// <summary>

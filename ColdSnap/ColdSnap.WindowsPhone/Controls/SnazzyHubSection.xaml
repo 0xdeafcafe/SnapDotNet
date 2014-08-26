@@ -1,5 +1,5 @@
 ﻿<HubSection
-	x:Name="hubSection"
+	x:Name="HubSection"
 	x:Class="ColdSnap.Controls.SnazzyHubSection"
 	
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -13,8 +13,8 @@
 	d:DesignWidth="400">
 
 	<HubSection.Resources>
-		<SolidColorBrush x:Key="AccentColorBrush" Color="{Binding AccentColor, ElementName=hubSection}"/>
-		<ContentControl x:Key="RightHeaderContent" Template="{Binding Path=RightHeaderDataTemplate, ElementName=hubSection}" />
+		<SolidColorBrush x:Key="AccentColorBrush" Color="{Binding AccentColor, ElementName=HubSection}"/>
+		<SolidColorBrush x:Key="HeaderForegroundBrush" Color="{Binding HeaderForeground, ElementName=HubSection}"/>
 		<controls:HeaderToHeaderTemplateHeightConverter x:Key="HeaderToHeaderTemplateHeightConverter"/>
 		<x:Int32 x:Key="HubSectionHeaderCharacterSpacing">-10</x:Int32>
 		<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
@@ -25,6 +25,7 @@
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
 			<Setter Property="VerticalAlignment" Value="Stretch"/>
 			<Setter Property="Background" Value="#FFFFFFFF"/>
+			<Setter Property="Foreground" Value="#FFFFFFFF"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="HubSection">
@@ -65,21 +66,24 @@
 					<DataTemplate>
 						<Grid Background="{StaticResource AccentColorBrush}">
 							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto" />
 								<ColumnDefinition Width="*" />
-								<ColumnDefinition Width="*" />
-								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto" />
 							</Grid.ColumnDefinitions>
 
-							<ContentControl ContentTemplate="{Binding Path=LeftHeaderDataTemplate, ElementName=hubSection}"
+							<ContentControl ContentTemplate="{Binding Path=LeftHeaderDataTemplate, ElementName=HubSection}"
 											VerticalAlignment="Bottom" HorizontalAlignment="Left"
 											Grid.Column="0" />
-							
-							<TextBlock Text="{Binding}" Foreground="#FFFFFFFF" 
-									   HorizontalAlignment="Center" VerticalAlignment="Center" 
-									   Grid.Column="0" Grid.ColumnSpan="3"
-									   Margin="13,0,0,0" FontWeight="Light" FontFamily="Segoe WP" FontSize="40"/>
 
-							<ContentControl ContentTemplate="{Binding Path=RightHeaderDataTemplate, ElementName=hubSection}"
+							<TextBlock Text="{Binding}" Foreground="{StaticResource HeaderForegroundBrush}" 
+									   VerticalAlignment="Bottom" HorizontalAlignment="Center"
+									   Grid.Column="0" Grid.ColumnSpan="3"
+									   Margin="0,0,0,5" FontWeight="SemiLight" FontFamily="Segoe WP" FontSize="40"/>
+							<ContentControl ContentTemplate="{Binding Path=HeaderTitleDataTemplate, ElementName=HubSection}"
+											VerticalAlignment="Bottom" HorizontalAlignment="Center"
+											Grid.Column="1" />
+
+							<ContentControl ContentTemplate="{Binding Path=RightHeaderDataTemplate, ElementName=HubSection}"
 											VerticalAlignment="Bottom" HorizontalAlignment="Right"
 											Grid.Column="2" />
 						</Grid>
