@@ -141,7 +141,7 @@ namespace ColdSnap.ViewModels.Sections
 
 			// this way, we can keep our inpc shit xox
 			ActiveStories.Clear();
-			foreach (var story in friend.Stories.Reverse())
+			foreach (var story in friend.Stories)
 				ActiveStories.Add(story);
 
 			ProgressToNextStory(true);
@@ -149,10 +149,14 @@ namespace ColdSnap.ViewModels.Sections
 
 		public void ProgressToNextStory(bool first = false)
 		{
-			if (ActiveStories == null || !ActiveStories.Any()) return;
-			if (!first) ActiveStories.RemoveAt(0);
+			if (!ActiveStories.Any()) return;
+			if (ActiveStory == null) return;
+			if (!first)
+			{
+				ActiveStory.DisposeStory();
+				ActiveStories.RemoveAt(0);
+			}
 			OnPropertyChanged("ActiveStory");
-
 			if (ActiveStory == null)
 			{
 				HideStories();
@@ -167,6 +171,7 @@ namespace ColdSnap.ViewModels.Sections
 			if (ActiveStories == null || !ActiveStories.Any()) return;
 			ActiveStory.DisposeStory();
 			ActiveStories.Clear();
+			OnPropertyChanged("ActiveStory");
 		}
 
 		#endregion

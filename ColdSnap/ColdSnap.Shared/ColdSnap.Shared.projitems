@@ -33,7 +33,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Sections\Friends\StoryAngleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\StatusBarHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\VariousFunctions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\Sections\Friends\StoryMediaTypeSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConversationPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Dialogs\SignUpDialogViewModel.cs" />

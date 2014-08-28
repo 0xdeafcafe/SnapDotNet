@@ -2,7 +2,9 @@
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Newtonsoft.Json;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
@@ -233,6 +235,31 @@ namespace SnapDotNet
 			get { return DateTime.UtcNow > ExpiresAt; }
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public bool IsImage
+		{
+			get
+			{
+				switch (MediaType)
+				{
+					case MediaType.FriendRequestVideo:
+					case MediaType.FriendRequestVideoNoAudio:
+					case MediaType.Video:
+					case MediaType.VideoNoAudio:
+						return false;
+
+					default:
+						return true;
+				}
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		[JsonIgnore]
 		public int SecondsRemaining
 		{
@@ -240,6 +267,17 @@ namespace SnapDotNet
 			set { SetValue(ref _secondsRemaining, value); }
 		}
 		private int _secondsRemaining;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public double PercentageLeft
+		{
+			get { return _percentageLeft; }
+			set { SetValue(ref _percentageLeft, value); }
+		}
+		private double _percentageLeft;
 
 		#endregion
 
@@ -361,6 +399,31 @@ namespace SnapDotNet
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public string PathToMediaData
+		{
+			get
+			{
+				var baseFilePath = StorageManager.Local.StorageFolder.Path;
+				var fileName = StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story).GenerateFileName();
+				return Path.Combine(baseFilePath, fileName);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonIgnore]
+		public MediaElement MediaElement
+		{
+			get { return _mediaElement; }
+			set { SetValue(ref _mediaElement, value); }
+		}
+		private MediaElement _mediaElement;
+
 		#endregion
 
 		#region UI Helpers
@@ -370,30 +433,59 @@ namespace SnapDotNet
 		private DispatcherTimer _mediaElapsedTimer;
 		private DispatcherTimer _mediaIntervalTimer;
 
-		public void InitalizeStory(MediaElapsedEventHandler mediaElapsed)
+		public async void InitalizeStory(MediaElapsedEventHandler mediaElapsed)
 		{
 			// Attach Elpased Event
 			MediaElapsed += mediaElapsed;
 
 			// Set Seconds Remaining
 			SecondsRemaining = (int) SecondLength;
+			PercentageLeft = 100;
+
+			if (!IsImage)
+			{
+				// Create Media Element
+				MediaElement = new MediaElement
+				{
+					AutoPlay = true
+				};
+				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story);
+				var storageFile = await StorageManager.Local.StorageFolder.GetFileAsync(storageObject.GenerateFileName());
+				var stream = await storageFile.OpenAsync(FileAccessMode.Read);
+				MediaElement.Loaded += delegate
+				{
+					MediaElement.SetSource(stream, "video/mp4");
+				};
+				MediaElement.MediaEnded += delegate
+				{
+					MediaElapsed(this);
+				};
+			}
 
 			_mediaIntervalTimer = new DispatcherTimer{ Interval = new TimeSpan(0, 0, 1)};
 			_mediaIntervalTimer.Tick += (sender, o) =>
 			{
+				if (_mediaIntervalTimer == null) return;
+
 				if (SecondsRemaining > 1)
 					SecondsRemaining--;
 				else
 					SecondsRemaining = 1;
+
+				// calulcate percentage based off of this bae
+				PercentageLeft = (SecondsRemaining / SecondLength) * 100;
 			};
 			_mediaElapsedTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, (int) SecondLength)};
 			_mediaElapsedTimer.Tick += (sender, o) =>
 			{
+				if (_mediaElapsedTimer == null) return;
+
 				_mediaElapsedTimer.Stop();
 				_mediaIntervalTimer.Stop();
 
 				// fire event
-				MediaElapsed(this);
+				if (IsImage)
+					MediaElapsed(this); // If it isn't an image, we fire this inside the MediaElement
 			};
 			_mediaIntervalTimer.Start();
 			_mediaElapsedTimer.Start();
@@ -407,10 +499,15 @@ namespace SnapDotNet
 			if (_mediaElapsedTimer != null)
 				_mediaElapsedTimer.Stop();
 
+			if (MediaElement != null)
+				MediaElement.Stop();
+
 			_mediaIntervalTimer = null;
 			_mediaElapsedTimer = null;
+			MediaElement = null;
 
 			SecondsRemaining = (int) SecondLength;
+			PercentageLeft = 100;
 			MediaElapsed = null;
 		}
 

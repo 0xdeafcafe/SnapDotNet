@@ -11,7 +11,7 @@ namespace ColdSnap.Converters
 
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			if (!IsInverted)
+			if (IsInverted)
 				return (value == null) ? Visibility.Visible : Visibility.Collapsed;
 
 			return (value != null) ? Visibility.Visible : Visibility.Collapsed;

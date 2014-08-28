@@ -13,6 +13,7 @@
 	xmlns:converters="using:ColdSnap.Converters"
 	xmlns:controls1="using:WinRTXamlToolkit.Controls"
 	xmlns:friends="using:ColdSnap.Converters.Sections.Friends"
+	xmlns:friends1="using:ColdSnap.Selectors.Sections.Friends"
 	mc:Ignorable="d"
 
 	AccentColor="#FF9b55a0"
@@ -78,7 +79,6 @@
 	</controls:SnazzyHubSection.PrimaryCommands>
 
 	<controls:SnazzyHubSection.SecondaryCommands>
-		<AppBarButton Label="idk..."/>
 	</controls:SnazzyHubSection.SecondaryCommands>
 
 	<DataTemplate>
@@ -157,14 +157,11 @@
 								<controls:ExpanderView.HeaderCoverContentTemplate>
 									<DataTemplate>
 										<Button Style="{StaticResource CleanButtonStyle}" 
-												ManipulationMode="All"
+												VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+												VerticalContentAlignment="Stretch"
 												
 												PointerEntered="UIElement_OnPointerEntered"
-												PointerCaptureLost="UIElement_OnPointerCaptureLost"
-												
-												ManipulationStarted="UIElement_OnManipulationStarted"
-												ManipulationCompleted="UIElement_OnManipulationCompleted" 
-												ManipulationStarting="UIElement_ManipulationStarting">
+												PointerCaptureLost="UIElement_OnPointerCaptureLost">
 											<Grid Background="#4CFF0000" /> <!-- Marks the clickable area - Debug Only -->
 										</Button>
 									</DataTemplate>
@@ -306,10 +303,30 @@
 					</SemanticZoom>
 				</StackPanel>
 			</ScrollViewer>
-			
-			<Grid Margin="0,-80,0,0" IsHitTestVisible="False"
+
+			<!-- StoryOverlayGrid -->
+			<Grid x:Name="StoryOverlayGrid" Margin="0,-80,0,0" Tapped="UIElement_OnTapped" 
+				  IsHitTestVisible="True" Background="Transparent"
 				  Visibility="{Binding Path=ActiveStory, Converter={StaticResource NullToVisibilityConverter}, FallbackValue=Collapsed}">
-				<Image Source="{Binding Path=ActiveStory.MediaData, Converter={StaticResource BytesToBitmapImageConverter}}" Stretch="UniformToFill" IsHitTestVisible="False" />
+				<Grid.Resources>
+					<DataTemplate x:Key="ImageMediaTemplate">
+						<Image d:DataContext="{d:DesignInstance Type=sdn:Story}"
+							   Source="{Binding Path=MediaData, Converter={StaticResource BytesToBitmapImageConverter}}" 
+							   Stretch="UniformToFill" IsHitTestVisible="False" />
+					</DataTemplate>
+					<DataTemplate x:Key="VideoMediaTemplate">
+						<Grid d:DataContext="{d:DesignInstance Type=sdn:Story}" Background="#FF000000">
+							<ContentControl Content="{Binding Path=MediaElement}" />
+						</Grid>
+					</DataTemplate>
+					
+					<friends1:StoryMediaTypeSelector x:Key="StoryMediaTypeSelector" 
+													 ImageDataTemplate="{StaticResource ImageMediaTemplate}"
+													 VideoDataTemplate="{StaticResource VideoMediaTemplate}"/>
+				</Grid.Resources>
+
+				<ContentControl Content="{Binding Path=ActiveStory}"
+								ContentTemplateSelector="{StaticResource StoryMediaTypeSelector}" />
 
 				<!-- User Interface -->
 				<Grid Width="50" Height="50" Margin="0,9,9,0"
@@ -320,10 +337,10 @@
 					</Grid>
 					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-3,0,0"
 							   FontFamily="Segoe WP" FontWeight="SemiBold" FontSize="20" 
-							   Text="{Binding Path=ActiveStory.SecondsRemaining}"/>
+							   Text="{Binding Path=ActiveStory.SecondsRemaining, FallbackValue=''}"/>
 				</Grid>
 				<ProgressBar VerticalAlignment="Top" HorizontalAlignment="Right" 
-							 Width="50" Value="50"
+							 Width="50" Value="{Binding Path=ActiveStory.PercentageLeft, FallbackValue=0}"
 							 Margin="0,62,9,0" />
 			</Grid>
 		</Grid>

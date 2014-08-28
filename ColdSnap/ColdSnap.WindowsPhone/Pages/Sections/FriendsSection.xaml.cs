@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using ColdSnap.Common;
@@ -88,21 +89,9 @@ namespace ColdSnap.Pages.Sections
 			_friendsListView = (ListView) sender;
 		}
 
-		private void UIElement_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
-		{
-			Debug.WriteLine("[UI Element] Friend Expander Maniuplation Starting");
-		}
-
-		private void UIElement_OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
-		{
-			Debug.WriteLine("[UI Element] Friend Expander Maniuplation Started");
-		}
-
-		private void UIElement_OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-		{
-			Debug.WriteLine("[UI Element] Friend Expander Maniuplation Completed");
-		}
-
+		private DispatcherTimer _isFingerStillChillinTimer;
+		private bool _fingerDown;
+		private Button _selectedButton;
 		private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
 		{
 			Debug.WriteLine("[UI Element] Friend Expander Pointer Entered");
@@ -112,20 +101,53 @@ namespace ColdSnap.Pages.Sections
 			var friend = button.DataContext as Friend;
 			if (friend == null) return;
 
-			// prep story
-			ViewModel.PrepareStory(friend);
+			_isFingerStillChillinTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 300)};
+			_isFingerStillChillinTimer.Tick += delegate
+			{
+				_isFingerStillChillinTimer.Stop();
 
-			e.Handled = false;
+				if (!_fingerDown) return;
+
+				// prep manipulation mode
+				if (_selectedButton != null)
+					_selectedButton.ManipulationMode = ManipulationModes.All;
+
+				// prep story
+				ViewModel.PrepareStory(friend);
+
+				// hide command bar
+				MainPage.Singleton.HideCommandBar();
+				StatusBarHelpers.HideStatusBar();
+			};
+			_selectedButton = button;
+			_fingerDown = true;
+			_isFingerStillChillinTimer.Start();
 		}
 
 		private void UIElement_OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
 		{
 			Debug.WriteLine("[UI Element] Friend Expander Pointer Capture Lost ;_;");
 
+			// Hide yo finger
+			_fingerDown = false;
+
+			// nop manipulation mode
+			if (_selectedButton != null)
+				_selectedButton.ManipulationMode = ManipulationModes.None;
+
 			// hide story
 			ViewModel.HideStories();
 
-			e.Handled = false;
+			// show command bar
+			MainPage.Singleton.ShowCommandBar();
+			StatusBarHelpers.ShowStatusBar();
+		}
+
+		private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
+		{
+			Debug.WriteLine("[StoryOverlayGrid] Tapped Event Fired");
+
+			ViewModel.ProgressToNextStory();
 		}
 	}
 }

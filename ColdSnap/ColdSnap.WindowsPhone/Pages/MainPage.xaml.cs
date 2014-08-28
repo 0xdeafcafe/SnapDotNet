@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Windows.UI.Xaml;
 using ColdSnap.Common;
 using ColdSnap.ViewModels;
 using SnapDotNet;
@@ -63,6 +64,18 @@ namespace ColdSnap.Pages
 		public void GoToHubSection(HubContent hubContent)
 		{
 			Hub.SetSectionIndex((int) hubContent);
+		}
+
+		public void HideCommandBar()
+		{
+			if (BottomCommandBar != null)
+				BottomCommandBar.Visibility = Visibility.Collapsed;
+		}
+
+		public void ShowCommandBar()
+		{
+			if (BottomCommandBar != null)
+				BottomCommandBar.Visibility = Visibility.Visible;
 		}
 
 		/// <summary>
