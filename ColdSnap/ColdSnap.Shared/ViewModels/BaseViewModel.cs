@@ -1,5 +1,5 @@
-﻿using ColdSnap.Common;
-using SnapDotNet;
+﻿using SnapDotNet;
+using SnapDotNet.Utilities;
 
 namespace ColdSnap.ViewModels
 {

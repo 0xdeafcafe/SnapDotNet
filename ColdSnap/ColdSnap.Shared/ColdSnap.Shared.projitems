@@ -17,15 +17,20 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Common\NavigationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SuspensionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ProgressGlobe.xaml.cs">
+      <DependentUpon>ProgressGlobe.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BytesToBitmapImageConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\DebugConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NumberWithDelimiterConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Sections\Friends\StoryAngleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\VariousFunctions.cs" />
@@ -43,6 +48,10 @@
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\ProgressGlobe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -56,5 +65,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Placeholder\Story.scale-240.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Placeholder\StoryThumbnail.scale-240.png" />
   </ItemGroup>
 </Project>

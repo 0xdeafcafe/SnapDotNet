@@ -42,6 +42,8 @@ namespace SnapDotNet
 			_stories.CollectionChanged += (sender, args) => OnObservableCollectionChanged(args, "Stories");
 		}
 
+		#region Properties
+
 		/// <summary>
 		/// Gets or sets whether this friend allows you to see custom stories.
 		/// </summary>
@@ -166,7 +168,9 @@ namespace SnapDotNet
 		{
 			get { return BestFriends.Any(); }
 		}
-		
+
+		#endregion
+
 		#region Update Model Data
 
 		/// <summary>
@@ -277,8 +281,8 @@ namespace SnapDotNet
 			Contract.Requires<ArgumentNullException>(friendStoryResponse != null);
 
 			// Check new ones, insert them
-			foreach (var friendStory in friendStoryResponse.Stories.Where(friendStory => Stories.FirstOrDefault(s => s.Id == friendStory.Story.Id) == null))
-				Stories.Insert(0, FriendStory.Create(friendStory));
+			foreach (var friendStory in friendStoryResponse.Stories.OrderByDescending(s => s.Story.TimeLeft).Where(friendStory => Stories.FirstOrDefault(s => s.Id == friendStory.Story.Id) == null))
+				Stories.Add(FriendStory.Create(friendStory));
 
 			// Check active ones, update them
 			foreach (var friendStory in Stories)

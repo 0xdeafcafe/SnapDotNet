@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SnapDotNet.Utilities
@@ -54,6 +55,9 @@ namespace SnapDotNet.Utilities
 		/// </param>
 		protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
 		{
+			// Enable this if you HAVE to. It's spams the shit out of the output.
+			//Debug.WriteLine("[INPC] Property Changed Event Fired under {0}", propertyName);
+
 			PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 

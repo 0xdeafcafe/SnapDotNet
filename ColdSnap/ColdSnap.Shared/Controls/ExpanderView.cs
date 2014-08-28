@@ -8,6 +8,7 @@ namespace ColdSnap.Controls
 	public sealed class ExpanderView : ContentControl
 	{
 		public static DependencyProperty HeaderTextDependencyProperty;
+		public static DependencyProperty HeaderCoverContentTemplateDependencyProperty;
 		public static DependencyProperty SubHeaderTextDependencyProperty;
 		public static DependencyProperty ShowSubHeaderDependencyProperty;
 		public static DependencyProperty PrimaryHeaderContentTemplateDependencyProperty;
@@ -26,6 +27,7 @@ namespace ColdSnap.Controls
 		static ExpanderView()
 		{
 			HeaderTextDependencyProperty = DependencyProperty.Register("HeaderText", typeof(String), typeof(ExpanderView), new PropertyMetadata(""));
+			HeaderCoverContentTemplateDependencyProperty = DependencyProperty.Register("HeaderCoverContentTemplate", typeof(DataTemplate), typeof(ExpanderView), new PropertyMetadata(null));
 			SubHeaderTextDependencyProperty = DependencyProperty.Register("SubHeaderText", typeof(String), typeof(ExpanderView), new PropertyMetadata(""));
 			ShowSubHeaderDependencyProperty = DependencyProperty.Register("ShowSubHeader", typeof(Boolean), typeof(ExpanderView), new PropertyMetadata(false));
 
@@ -85,7 +87,7 @@ namespace ColdSnap.Controls
 		{
 			VisualStateManager.GoToState(this, "Contracted", true);
 
-			this.FindDescendantByName("HeaderGrid").Tapped += delegate
+			this.FindDescendantByName("HeaderEventCover").Tapped += delegate
 			{
 				if (IsExpanded)
 					Contract();
@@ -105,6 +107,15 @@ namespace ColdSnap.Controls
 		{
 			get { return (String)GetValue(HeaderTextDependencyProperty); }
 			set { SetValue(HeaderTextDependencyProperty, value); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public DataTemplate HeaderCoverContentTemplate
+		{
+			get { return (DataTemplate)GetValue(HeaderCoverContentTemplateDependencyProperty); }
+			set { SetValue(HeaderCoverContentTemplateDependencyProperty, value); }
 		}
 
 		/// <summary>

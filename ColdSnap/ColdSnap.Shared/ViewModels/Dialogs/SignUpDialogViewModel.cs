@@ -1,5 +1,5 @@
-﻿using ColdSnap.Common;
-using System;
+﻿using System;
+using SnapDotNet.Utilities;
 
 namespace ColdSnap.ViewModels.Dialogs
 {

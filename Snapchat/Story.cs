@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using System.IO;
+using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Newtonsoft.Json;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
@@ -228,6 +231,187 @@ namespace SnapDotNet
 		public bool Expired
 		{
 			get { return DateTime.UtcNow > ExpiresAt; }
+		}
+
+		[JsonIgnore]
+		public int SecondsRemaining
+		{
+			get { return _secondsRemaining; }
+			set { SetValue(ref _secondsRemaining, value); }
+		}
+		private int _secondsRemaining;
+
+		#endregion
+
+		#region Data Helpers
+
+		/// <summary>
+		/// Gets if the story media data is saved locally.
+		/// </summary>
+		[JsonIgnore]
+		public bool LocalMedia
+		{
+			get { return StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story) != null; }
+		}
+
+		/// <summary>
+		/// Gets if the story thumbnail data is saved locally.
+		/// </summary>
+		[JsonIgnore]
+		public bool LocalThumbnail
+		{
+			get { return StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryThumbnail) != null; }
+		}
+
+		/// <summary>
+		/// Gets this stories media data.
+		/// </summary>
+		public async Task<byte[]> GetMediaAsync()
+		{
+			if (LocalMedia)
+				return await StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story).ReadDataAsync();
+
+			try
+			{
+				var mediaData = await EndpointManager.Managers["bq"].GetAsync(String.Format("story_blob?story_id={0}", MediaId));
+				if (Compressed) mediaData = await GZip.DecompressAsync(mediaData);
+				mediaData = Aes.DecryptDataWithIv(mediaData, Convert.FromBase64String(MediaKey), Convert.FromBase64String(MediaIv));
+
+				// create storage object, downlaod thumbnail, insert object, write media
+				var storageObject = new StorageObject
+				{
+					ExpiresAt = DateTime.UtcNow.AddDays(2),
+					SnapchatId = Id,
+					StorageType = StorageType.Story
+				};
+				StorageManager.Local.AddStorageObject(storageObject);
+				storageObject.WriteDataAsync(mediaData);
+
+				OnPropertyChanged("LocalMedia");
+
+				return mediaData;
+			}
+			catch
+			{
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Gets this stories thumbnail data.
+		/// </summary>
+		public async Task<byte[]> GetThumbnailAsync()
+		{
+			if (LocalMedia)
+			{
+				return await StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryThumbnail).ReadDataAsync();
+			}
+
+			try
+			{
+				var thumbnailData =
+					await EndpointManager.Managers["bq"].GetAsync(String.Format("story_thumbnail?story_id={0}", MediaId));
+				if (Compressed) thumbnailData = await GZip.DecompressAsync(thumbnailData);
+				thumbnailData = Aes.DecryptDataWithIv(thumbnailData, Convert.FromBase64String(MediaKey), Convert.FromBase64String(ThumbnailIv));
+
+				// create storage object, downlaod thumbnail, insert object, write media
+				var storageObject = new StorageObject
+				{
+					ExpiresAt = DateTime.UtcNow.AddDays(2),
+					SnapchatId = Id,
+					StorageType = StorageType.StoryThumbnail
+				};
+				StorageManager.Local.AddStorageObject(storageObject);
+				storageObject.WriteDataAsync(thumbnailData);
+
+				OnPropertyChanged("LocalThumbnail");
+				OnPropertyChanged("Thumbnail");
+
+				return thumbnailData;
+			}
+			catch
+			{
+				OnPropertyChanged("LocalThumbnail");
+				OnPropertyChanged("Thumbnail");
+				return null;
+			}
+		}
+		
+		/// <summary>
+		/// Gets this stories thumbnail data.
+		/// </summary>
+		[JsonIgnore]
+		public byte[] ThumbnailData
+		{
+			get
+			{
+				return AsyncHelpers.RunSync(GetThumbnailAsync);
+			}
+		}
+
+		/// <summary>
+		/// Gets this stories media data.
+		/// </summary>
+		[JsonIgnore]
+		public byte[] MediaData
+		{
+			get
+			{
+				return AsyncHelpers.RunSync(GetMediaAsync);
+			}
+		}
+
+		#endregion
+
+		#region UI Helpers
+
+		public delegate void MediaElapsedEventHandler(object sender);
+		private event MediaElapsedEventHandler MediaElapsed;
+		private DispatcherTimer _mediaElapsedTimer;
+		private DispatcherTimer _mediaIntervalTimer;
+
+		public void InitalizeStory(MediaElapsedEventHandler mediaElapsed)
+		{
+			// Attach Elpased Event
+			MediaElapsed += mediaElapsed;
+
+			// Set Seconds Remaining
+			SecondsRemaining = (int) SecondLength;
+
+			_mediaIntervalTimer = new DispatcherTimer{ Interval = new TimeSpan(0, 0, 1)};
+			_mediaIntervalTimer.Tick += (sender, o) =>
+			{
+				if (SecondsRemaining > 1)
+					SecondsRemaining--;
+				else
+					SecondsRemaining = 1;
+			};
+			_mediaElapsedTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, (int) SecondLength)};
+			_mediaElapsedTimer.Tick += (sender, o) =>
+			{
+				_mediaElapsedTimer.Stop();
+				_mediaIntervalTimer.Stop();
+
+				// fire event
+				MediaElapsed(this);
+			};
+			_mediaIntervalTimer.Start();
+			_mediaElapsedTimer.Start();
+		}
+
+		public void DisposeStory()
+		{
+			if (_mediaIntervalTimer != null)
+				_mediaIntervalTimer.Stop();
+
+			if (_mediaElapsedTimer != null)
+				_mediaElapsedTimer.Stop();
+
+			_mediaIntervalTimer = null;
+			_mediaElapsedTimer = null;
+
+			SecondsRemaining = (int) SecondLength;
+			MediaElapsed = null;
 		}
 
 		#endregion

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SnapDotNet
+﻿namespace SnapDotNet
 {
 	internal static class ApiSettings
 	{

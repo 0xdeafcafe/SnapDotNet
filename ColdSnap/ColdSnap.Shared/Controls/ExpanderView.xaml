@@ -58,19 +58,20 @@
 							</VisualStateGroup>
 						</VisualStateManager.VisualStateGroups>
 
-						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}">
+						<Grid Height="{Binding HeaderHeight, RelativeSource={RelativeSource TemplatedParent}}"
+							  Margin="18,0,0,0">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="Auto"/>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition Width="Auto"/>
 							</Grid.ColumnDefinitions>
 
-							<ContentControl x:Name="PrimaryHeaderContentGrid" Grid.Column="2" 
+							<ContentControl x:Name="PrimaryHeaderContentGrid" Grid.Column="0" 
 											ContentTemplate="{Binding PrimaryHeaderContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
 											VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
 											HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
-
-							<Grid x:Name="HeaderGrid" Grid.Column="1" Margin="18,0,0,0"
+							
+							<Grid x:Name="HeaderGrid" Grid.Column="1"
 								  IsHitTestVisible="True" Background="Transparent">
 								<Grid Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
 									<TextBlock FontWeight="Normal"
@@ -98,6 +99,12 @@
 									</TextBlock>
 								</Grid>
 							</Grid>
+							
+							<!-- This shit can detect events that happen on-top of the header woohoo! -->
+							<ContentControl x:Name="HeaderEventCover" Grid.Column="0" Grid.ColumnSpan="2" 
+											ContentTemplate="{Binding HeaderCoverContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+											VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+											HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
 
 							<ContentControl x:Name="AdditionalHeaderContentGrid" Grid.Column="2" 
 											ContentTemplate="{Binding AdditionalHeaderContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"

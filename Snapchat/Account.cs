@@ -443,7 +443,7 @@ namespace SnapDotNet
 				UpdateAccount(response.AccountResponse);
 
 				// Deal with Stories data
-				UpdateStories(response.StoriesResponse);
+				await UpdateStories(response.StoriesResponse);
 
 				// TODO: Parse the rest of the data
 
@@ -529,7 +529,7 @@ namespace SnapDotNet
 		/// Update the data in this model from <paramref name="storiesResponse"/>
 		/// </summary>
 		/// <param name="storiesResponse">The Stories Reponse to update from</param>
-		private void UpdateStories(StoriesResponse storiesResponse)
+		private async Task UpdateStories(StoriesResponse storiesResponse)
 		{
 			Contract.Requires<ArgumentNullException>(storiesResponse != null);
 
@@ -539,6 +539,18 @@ namespace SnapDotNet
 				var friend = Friends.FirstOrDefault(f => f.Name == friendStory.Username);
 				if (friend == null) continue;
 				friend.UpdateStories(friendStory);
+			}
+
+			// Download Snaps, depending on user settings
+			const bool alwaysDownload = true; // hehe
+
+			foreach (var friend in Friends)
+			{
+				foreach (var story in friend.Stories)
+				{
+					await story.GetThumbnailAsync();
+					await story.GetMediaAsync();
+				}
 			}
 		}
 

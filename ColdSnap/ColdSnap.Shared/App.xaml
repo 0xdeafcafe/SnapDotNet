@@ -10,6 +10,7 @@
 	<Application.Resources>
 		<ResourceDictionary>
 			<converters:DebugConverter x:Key="DebugConverter" />
+			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
 			<SolidColorBrush x:Key="PivotHeaderForegroundSelectedBrush" Color="#FF00a182" />
 			<SolidColorBrush x:Key="PivotHeaderForegroundUnselectedBrush" Color="#FF80d0c1" />
@@ -81,7 +82,67 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
-			
+
+			<Style x:Key="CleanButtonStyle" TargetType="Button">
+				<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="Button">
+							<Grid x:Name="Grid" Background="Transparent">
+								<VisualStateManager.VisualStateGroups>
+									<VisualStateGroup x:Name="CommonStates">
+										<VisualStateGroup.Transitions>
+											<VisualTransition From="Pressed" To="PointerOver">
+												<Storyboard>
+													<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+												</Storyboard>
+											</VisualTransition>
+											<VisualTransition From="PointerOver" To="Normal">
+												<Storyboard>
+													<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+												</Storyboard>
+											</VisualTransition>
+											<VisualTransition From="Pressed" To="Normal">
+												<Storyboard>
+													<PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+												</Storyboard>
+											</VisualTransition>
+										</VisualStateGroup.Transitions>
+										<VisualState x:Name="Normal"/>
+										<VisualState x:Name="PointerOver"/>
+										<VisualState x:Name="Pressed">
+											<Storyboard>
+												<PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentGrid">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+												</ObjectAnimationUsingKeyFrames>
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="Disabled">
+											<Storyboard>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentGrid">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+												</ObjectAnimationUsingKeyFrames>
+											</Storyboard>
+										</VisualState>
+									</VisualStateGroup>
+								</VisualStateManager.VisualStateGroups>
+								<Grid x:Name="ContentGrid" Background="Transparent">
+									<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw"
+													  ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" />
+								</Grid>
+							</Grid>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Styles/NoTiltListViewStyle.xaml"/>
 				<ResourceDictionary Source="Controls/ExpanderView.xaml"/>

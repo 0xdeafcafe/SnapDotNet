@@ -12,6 +12,7 @@
 	xmlns:customTypes="using:SnapDotNet.Utilities.CustomTypes"
 	xmlns:converters="using:ColdSnap.Converters"
 	xmlns:controls1="using:WinRTXamlToolkit.Controls"
+	xmlns:friends="using:ColdSnap.Converters.Sections.Friends"
 	mc:Ignorable="d"
 
 	AccentColor="#FF9b55a0"
@@ -131,10 +132,12 @@
 						</Setter>
 					</Style>
 
+					<converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
 					<converters:NumberWithDelimiterConverter x:Key="NumberWithDelimiterConverter" />
 					<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-					<converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
-
+					<converters:BytesToBitmapImageConverter x:Key="BytesToBitmapImageConverter" />
+					<friends:StoryAngleConverter x:Key="StoryAngleConverter" />
+					
 					<JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
 					<JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
 					<CollectionViewSource x:Key="FriendGroups" IsSourceGrouped="True"
@@ -151,6 +154,21 @@
 												   HeaderHeight="60"
 												   ContentHeight="105"
 												   Expanded="ExpanderView_OnExpanded">
+								<controls:ExpanderView.HeaderCoverContentTemplate>
+									<DataTemplate>
+										<Button Style="{StaticResource CleanButtonStyle}" 
+												ManipulationMode="All"
+												
+												PointerEntered="UIElement_OnPointerEntered"
+												PointerCaptureLost="UIElement_OnPointerCaptureLost"
+												
+												ManipulationStarted="UIElement_OnManipulationStarted"
+												ManipulationCompleted="UIElement_OnManipulationCompleted" 
+												ManipulationStarting="UIElement_ManipulationStarting">
+											<Grid Background="#4CFF0000" /> <!-- Marks the clickable area - Debug Only -->
+										</Button>
+									</DataTemplate>
+								</controls:ExpanderView.HeaderCoverContentTemplate>
 								<controls:ExpanderView.AdditionalHeaderContentTemplate>
 									<DataTemplate>
 										<Grid VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,30,0">
@@ -161,9 +179,24 @@
 								<controls:ExpanderView.PrimaryHeaderContentTemplate>
 									<DataTemplate>
 										<Grid>
-											<controls1:PieSlice Width="46" Height="46">
-												
-											</controls1:PieSlice>
+											<ItemsControl ItemsSource="{Binding Path=Stories}">
+												<ItemsControl.ItemsPanel>
+													<ItemsPanelTemplate>
+														<Grid/>
+													</ItemsPanelTemplate>
+												</ItemsControl.ItemsPanel>
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<controls1:PieSlice Radius="25" EndAngle="360" Margin="0,0,8,0"
+																			StartAngle="{Binding Path=ExpiresAt, Converter={StaticResource StoryAngleConverter}}">
+															<controls1:PieSlice.Fill>
+																<ImageBrush Stretch="UniformToFill" 
+																			ImageSource="{Binding Path=ThumbnailData, Converter={StaticResource BytesToBitmapImageConverter}}"/>
+															</controls1:PieSlice.Fill>
+														</controls1:PieSlice>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
 										</Grid>
 									</DataTemplate>
 								</controls:ExpanderView.PrimaryHeaderContentTemplate>
@@ -208,7 +241,7 @@
 							</Grid.Background>
 
 							<TextBlock FontWeight="Bold" Text="{Binding Path=FriendlyKey}"
-									   Margin="17,0,0,0" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Left" 
+									   Margin="17,0,0,0" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Left" 
 									   FontFamily="Segoe WP">
 								<TextBlock.Foreground>
 									<SolidColorBrush Color="{Binding Path=ForegroundColour}" />
@@ -219,7 +252,7 @@
 					<DataTemplate x:Name="JumpListTemplate">
 						<Border Padding="5">
 							<Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
-							Width="82" Height="82" HorizontalAlignment="Left">
+									Width="82" Height="82" HorizontalAlignment="Left">
 
 								<TextBlock Text="{Binding Path=Group.Key}" 
 										   Foreground="{Binding Converter={StaticResource ForegroundConverter}}" 
@@ -231,44 +264,68 @@
 				</ResourceDictionary>
 			</Grid.Resources>
 			
-			<SemanticZoom>
-				<SemanticZoom.ZoomedInView>
-					<ListView x:Name="FriendsList" IsHoldingEnabled="False"
-							  Loaded="FriendsList_OnLoaded"
-							  ItemTemplate="{StaticResource ItemTemplate}"
-							  ItemsSource="{Binding Source={StaticResource FriendGroups}}" 
-							  IsSwipeEnabled="False" IsRightTapEnabled="False" IsDoubleTapEnabled="False">
-						<ListView.ItemContainerStyle>
-							<Style TargetType="ListViewItem" BasedOn="{StaticResource NoTiltListViewStyle}">
-								<Setter Property="HorizontalContentAlignment" Value="Stretch" />
-							</Style>
-						</ListView.ItemContainerStyle>
-						<ListView.Template>
-							<ControlTemplate TargetType="ListView">
-								<ScrollViewer>
-									<ItemsPresenter Margin="0,0,0,25" />
-								</ScrollViewer>
-							</ControlTemplate>
-						</ListView.Template>
-						<ListView.GroupStyle>
-							<GroupStyle HidesIfEmpty="True"
-										HeaderTemplate="{StaticResource GroupHeaderTemplate}">
-								<GroupStyle.HeaderContainerStyle>
-									<Style TargetType="ListViewHeaderItem">
+			<ScrollViewer>
+				<StackPanel>
+					<SemanticZoom>
+						<SemanticZoom.ZoomedInView>
+							<ListView x:Name="FriendsList" IsHoldingEnabled="False"
+									  Loaded="FriendsList_OnLoaded"
+									  ItemTemplate="{StaticResource ItemTemplate}"
+									  ItemsSource="{Binding Source={StaticResource FriendGroups}}" 
+									  IsSwipeEnabled="False" IsRightTapEnabled="False" IsDoubleTapEnabled="False">
+								<ListView.ItemContainerStyle>
+									<Style TargetType="ListViewItem" BasedOn="{StaticResource NoTiltListViewStyle}">
 										<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 									</Style>
-								</GroupStyle.HeaderContainerStyle>
-							</GroupStyle>
-						</ListView.GroupStyle>
-					</ListView>
-				</SemanticZoom.ZoomedInView>
-				<SemanticZoom.ZoomedOutView>
-					<GridView Background="Black" 
-							  ItemsSource="{Binding Source={StaticResource FriendGroups}, Path=CollectionGroups}"
-							  ItemTemplate="{StaticResource JumpListTemplate}">
-					</GridView>
-				</SemanticZoom.ZoomedOutView>
-			</SemanticZoom>
+								</ListView.ItemContainerStyle>
+								<ListView.Template>
+									<ControlTemplate TargetType="ListView">
+										<ScrollViewer>
+											<ItemsPresenter Margin="0,0,0,25" />
+										</ScrollViewer>
+									</ControlTemplate>
+								</ListView.Template>
+								<ListView.GroupStyle>
+									<GroupStyle HidesIfEmpty="True"
+												HeaderTemplate="{StaticResource GroupHeaderTemplate}">
+										<GroupStyle.HeaderContainerStyle>
+											<Style TargetType="ListViewHeaderItem">
+												<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+											</Style>
+										</GroupStyle.HeaderContainerStyle>
+									</GroupStyle>
+								</ListView.GroupStyle>
+							</ListView>
+						</SemanticZoom.ZoomedInView>
+						<SemanticZoom.ZoomedOutView>
+							<GridView Background="#AAFFFFFF" 
+									  ItemsSource="{Binding Source={StaticResource FriendGroups}, Path=CollectionGroups}"
+									  ItemTemplate="{StaticResource JumpListTemplate}">
+							</GridView>
+						</SemanticZoom.ZoomedOutView>
+					</SemanticZoom>
+				</StackPanel>
+			</ScrollViewer>
+			
+			<Grid Margin="0,-80,0,0" IsHitTestVisible="False"
+				  Visibility="{Binding Path=ActiveStory, Converter={StaticResource NullToVisibilityConverter}, FallbackValue=Collapsed}">
+				<Image Source="{Binding Path=ActiveStory.MediaData, Converter={StaticResource BytesToBitmapImageConverter}}" Stretch="UniformToFill" IsHitTestVisible="False" />
+
+				<!-- User Interface -->
+				<Grid Width="50" Height="50" Margin="0,9,9,0"
+					  VerticalAlignment="Top" HorizontalAlignment="Right">
+					<Grid>
+						<Ellipse Stroke="#FF808080" StrokeThickness="2" Fill="Transparent"/>
+						<Ellipse StrokeThickness="4" Stroke="Transparent" Fill="#FF000000" Opacity="0.5" />
+					</Grid>
+					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-3,0,0"
+							   FontFamily="Segoe WP" FontWeight="SemiBold" FontSize="20" 
+							   Text="{Binding Path=ActiveStory.SecondsRemaining}"/>
+				</Grid>
+				<ProgressBar VerticalAlignment="Top" HorizontalAlignment="Right" 
+							 Width="50" Value="50"
+							 Margin="0,62,9,0" />
+			</Grid>
 		</Grid>
 	</DataTemplate>
 </controls:SnazzyHubSection>

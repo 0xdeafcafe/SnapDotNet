@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +19,22 @@ namespace ColdSnap.ViewModels.Sections
 			ChangeDisplayNameCommand = new RelayCommand<Friend>(ChangeDisplayName);
 			BlockFriendCommand = new RelayCommand<Friend>(BlockFriend);
 			UnBlockFriendCommand = new RelayCommand<Friend>(UnBlockFriend);
+
+			_activeStories.CollectionChanged += (sender, args) => OnObservableCollectionChanged(args, "ActiveStories",() => OnPropertyChanged("ActiveStory"));
+		}
+
+		#region Properties
+
+		public ObservableCollection<Story> ActiveStories
+		{
+			get { return _activeStories; }
+			set { SetValue(ref _activeStories, value); }
+		}
+		private ObservableCollection<Story> _activeStories = new ObservableCollection<Story>();
+
+		public Story ActiveStory
+		{
+			get { return ActiveStories.FirstOrDefault(); }
 		}
 
 		public ICommand ChangeDisplayNameCommand
@@ -39,6 +57,10 @@ namespace ColdSnap.ViewModels.Sections
 			set { SetValue(ref _unBlockFriendCommand, value); }
 		}
 		private ICommand _unBlockFriendCommand;
+
+		#endregion
+
+		#region Friend Actions
 
 		public async void ChangeDisplayName(Friend friend)
 		{
@@ -108,5 +130,45 @@ namespace ColdSnap.ViewModels.Sections
 			}
 			Account.UpdateSortedFriends();
 		}
+
+		#endregion
+
+		#region Stories Logic
+
+		public void PrepareStory(Friend friend)
+		{
+			if (!friend.Stories.Any()) return;
+
+			// this way, we can keep our inpc shit xox
+			ActiveStories.Clear();
+			foreach (var story in friend.Stories.Reverse())
+				ActiveStories.Add(story);
+
+			ProgressToNextStory(true);
+		}
+
+		public void ProgressToNextStory(bool first = false)
+		{
+			if (ActiveStories == null || !ActiveStories.Any()) return;
+			if (!first) ActiveStories.RemoveAt(0);
+			OnPropertyChanged("ActiveStory");
+
+			if (ActiveStory == null)
+			{
+				HideStories();
+				return;
+			}
+
+			ActiveStory.InitalizeStory(sender => ProgressToNextStory()); // story is over! roll onto the next!
+		}
+
+		public void HideStories()
+		{
+			if (ActiveStories == null || !ActiveStories.Any()) return;
+			ActiveStory.DisposeStory();
+			ActiveStories.Clear();
+		}
+
+		#endregion
 	}
 }

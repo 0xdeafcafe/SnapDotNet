@@ -84,6 +84,8 @@ namespace SnapDotNet
 				if (account.SortedFriends == null || (account.Friends.Count > 0 && account.SortedFriends.Count == 0))
 					account.CreateSortedFriends();
 
+				// TODO: initalize async updating
+
 				return account;
 			}
 			catch (FileNotFoundException)

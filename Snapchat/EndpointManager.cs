@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
+using Newtonsoft.Json;
 using SnapDotNet.Utilities;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,8 @@ namespace SnapDotNet
 		/// Gets or sets the base URI of the API.
 		/// </summary>
 		private Uri BaseUri { get; set; }
+
+		#region POST
 
 		/// <summary>
 		/// Sends a POST request to an API endpoint, and deserializes the response into the type
@@ -162,6 +165,62 @@ namespace SnapDotNet
 			Debug.WriteLine("[Endpoint Manager] Invalid HTTP response (reason: {0})", response.ReasonPhrase);
 			throw new InvalidHttpResponseException(response.ReasonPhrase, response);
 		}
+
+		#endregion
+
+		#region GET
+
+		public async Task<byte[]> GetAsync(string endpointName)
+		{
+			Contract.Requires<ArgumentNullException>(endpointName != null);
+
+			var response = await GetAsync(endpointName, null);
+
+			// Obtain the JSON data (and decompress it if it is gzipped).
+			byte[] data;
+			if (response.Content.Headers.ContentEncoding.Contains(HttpContentCodingHeaderValue.Parse("gzip")))
+			{
+				var compressedData = await response.Content.ReadAsBufferAsync();
+				data = await GZip.DecompressAsync(compressedData);
+			}
+			else
+			{
+				data = (await response.Content.ReadAsBufferAsync()).ToArray();
+			}
+
+			// Deserialize the JSON data and return it.
+			Debug.WriteLine("[Endpoint Manager] Incoming data");
+			return data;
+		}
+
+		public async Task<HttpResponseMessage> GetAsync(string endpointName, Dictionary<string, string> headers)
+		{
+			Contract.Requires<ArgumentNullException>(endpointName != null);
+
+			var client = new HttpClient();
+			client.DefaultRequestHeaders.TryAppendWithoutValidation("User-Agent", ApiSettings.UserAgent);
+			client.DefaultRequestHeaders.TryAppendWithoutValidation("Content-Length", "160");
+			client.DefaultRequestHeaders.TryAppendWithoutValidation("Accept", "*/*");
+			client.DefaultRequestHeaders.TryAppendWithoutValidation("Accept-Encoding", "gzip,deflate");
+			if (headers != null)
+				foreach (var header in headers)
+					client.DefaultRequestHeaders.Add(header.Key, header.Value);
+
+			// Encode the data and build endpoint URI.
+			var endpoint = new Uri(BaseUri, endpointName);
+
+			// GET to endpoint and return the response if it succeeded.
+			Debug.WriteLine("[Endpoint Manager] GET to {0}", endpoint);
+			var response = await client.GetAsync(endpoint);
+			if (response.StatusCode == HttpStatusCode.Ok)
+				return response;
+
+			// Something bad happened.
+			Debug.WriteLine("[Endpoint Manager] Invalid HTTP response (reason: {0})", response.ReasonPhrase);
+			throw new InvalidHttpResponseException(response.ReasonPhrase, response);
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Generates a request token from the given POST data and static token.

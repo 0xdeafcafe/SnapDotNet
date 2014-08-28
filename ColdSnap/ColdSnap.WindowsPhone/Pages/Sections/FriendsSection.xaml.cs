@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using ColdSnap.Common;
 using ColdSnap.Controls;
@@ -85,6 +86,46 @@ namespace ColdSnap.Pages.Sections
 		{
 			// This is a hack to gain access to the ListView from outside the DataTemplate ;_;
 			_friendsListView = (ListView) sender;
+		}
+
+		private void UIElement_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
+		{
+			Debug.WriteLine("[UI Element] Friend Expander Maniuplation Starting");
+		}
+
+		private void UIElement_OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+		{
+			Debug.WriteLine("[UI Element] Friend Expander Maniuplation Started");
+		}
+
+		private void UIElement_OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+		{
+			Debug.WriteLine("[UI Element] Friend Expander Maniuplation Completed");
+		}
+
+		private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("[UI Element] Friend Expander Pointer Entered");
+
+			var button = sender as Button;
+			if (button == null) return;
+			var friend = button.DataContext as Friend;
+			if (friend == null) return;
+
+			// prep story
+			ViewModel.PrepareStory(friend);
+
+			e.Handled = false;
+		}
+
+		private void UIElement_OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
+		{
+			Debug.WriteLine("[UI Element] Friend Expander Pointer Capture Lost ;_;");
+
+			// hide story
+			ViewModel.HideStories();
+
+			e.Handled = false;
 		}
 	}
 }

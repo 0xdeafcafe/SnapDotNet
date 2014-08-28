@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
@@ -37,12 +38,20 @@ namespace SnapDotNet.Utilities
 		{
 			Contract.Requires<ArgumentNullException>(data != null);
 
-			using (var stream = new MemoryStream(data))
-			using (var gzip = new GZipStream(stream, CompressionMode.Decompress))
-			using (var outputStream = new MemoryStream())
+			try
 			{
-				await gzip.CopyToAsync(outputStream);
-				return outputStream.ToArray();
+				using (var stream = new MemoryStream(data))
+				using (var gzip = new GZipStream(stream, CompressionMode.Decompress))
+				using (var outputStream = new MemoryStream())
+				{
+					await gzip.CopyToAsync(outputStream);
+					return outputStream.ToArray();
+				}
+			}
+			catch (InvalidDataException)
+			{
+				Debug.WriteLine("[Gzip] Invalid magic. Skipping.");
+				return data;
 			}
 		}
 

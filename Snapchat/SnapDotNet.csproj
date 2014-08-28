@@ -83,6 +83,8 @@
     <Compile Include="Converters\Json\UnixDateTimeConverter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ApiSettings.cs" />
+    <Compile Include="Extentions\ByteArrayExtentions.cs" />
+    <Compile Include="Extentions\ObservableCollectionExtentions.cs" />
     <Compile Include="Extentions\EnumerableExtentions.cs" />
     <Compile Include="Friend.cs" />
     <Compile Include="Responses\AccountResponse.cs" />
@@ -95,17 +97,23 @@
     <Compile Include="Responses\SnapResponse.cs" />
     <Compile Include="Responses\StoriesResponces.cs" />
     <Compile Include="Story.cs" />
+    <Compile Include="Utilities\Aes.cs" />
+    <Compile Include="Utilities\AsyncHelpers.cs" />
     <Compile Include="Utilities\CustomTypes\FriendsKeyGroup.cs" />
     <Compile Include="Utilities\CustomTypes\IAlphaKeyGroup.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Responses\Response.cs" />
     <Compile Include="Utilities\Gzip.cs" />
+    <Compile Include="Utilities\Storage.cs" />
     <Compile Include="Utilities\Timestamps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateManager.cs" />
     <Compile Include="EndpointManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle">
+      <HintPath>..\Dependencies\BouncyCastle.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
