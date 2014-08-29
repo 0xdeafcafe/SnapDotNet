@@ -333,19 +333,21 @@
 								ContentTemplateSelector="{StaticResource StoryMediaTypeSelector}" />
 
 				<!-- User Interface -->
-				<Grid Width="50" Height="50" Margin="0,9,9,0"
+				<Grid Width="55" Height="55" Margin="0,9,9,0"
 					  VerticalAlignment="Top" HorizontalAlignment="Right">
 					<Grid>
-						<Ellipse Stroke="#FF808080" StrokeThickness="2" Fill="Transparent"/>
-						<Ellipse StrokeThickness="4" Stroke="Transparent" Fill="#FF000000" Opacity="0.5" />
+						<Ellipse Fill="#88000000" HorizontalAlignment="Center" VerticalAlignment="Center" Height="42" Width="42"/>
+						<controls:CircularProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" 
+							Percentage="100"
+							StrokeThickness="2" SegmentColor="#EE808080" Radius="21" />
+						<controls:CircularProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" 
+							Percentage="{Binding ActiveStory.PercentageLeft, FallbackValue=80}" 
+							StrokeThickness="2" SegmentColor="#FFFFFFFF" Radius="21" />
 					</Grid>
-					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-3,0,0"
+					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,-2,0,0"
 							   FontFamily="Segoe WP" FontWeight="SemiBold" FontSize="20" 
 							   Text="{Binding Path=TotalSecondsRemaining, FallbackValue=''}"/>
 				</Grid>
-				<ProgressBar VerticalAlignment="Top" HorizontalAlignment="Right" 
-							 Width="50" Value="{Binding Path=ActiveStory.PercentageLeft, FallbackValue=0}"
-							 Margin="0,62,9,0" />
 			</Grid>
 		</Grid>
 	</DataTemplate>

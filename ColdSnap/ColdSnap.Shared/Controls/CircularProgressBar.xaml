@@ -1,0 +1,24 @@
+﻿<UserControl 
+	x:Name="UserControl" x:Class="ColdSnap.Controls.CircularProgressBar"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<Grid>
+		<Path x:Name="PathRoot" Stroke="{Binding SegmentColor, ElementName=UserControl}" StrokeThickness="{Binding StrokeThickness, ElementName=UserControl}" HorizontalAlignment="Left" VerticalAlignment="Top">
+			<Path.Data>
+				<PathGeometry>
+					<PathGeometry.Figures>
+						<PathFigureCollection>
+							<PathFigure x:Name="PathFigure">
+								<PathFigure.Segments>
+									<PathSegmentCollection>
+										<ArcSegment x:Name="ArcSegment" SweepDirection="Clockwise" />
+									</PathSegmentCollection>
+								</PathFigure.Segments>
+							</PathFigure>
+						</PathFigureCollection>
+					</PathGeometry.Figures>
+				</PathGeometry>
+			</Path.Data>
+		</Path>
+	</Grid>
+</UserControl>
