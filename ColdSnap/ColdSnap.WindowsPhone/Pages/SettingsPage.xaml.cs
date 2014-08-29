@@ -1,4 +1,5 @@
-﻿using Windows.UI.ViewManagement;
+﻿using Windows.Graphics.Display;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using ColdSnap.Common;
 using ColdSnap.ViewModels;
@@ -15,6 +16,7 @@ namespace ColdSnap.Pages
 		{
 			InitializeComponent();
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+			DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
 
 			NavigationHelper = new NavigationHelper(this);
 			NavigationHelper.LoadState += NavigationHelper_LoadState;

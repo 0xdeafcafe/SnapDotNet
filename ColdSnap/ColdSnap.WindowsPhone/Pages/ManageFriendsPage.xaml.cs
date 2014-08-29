@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.Graphics.Display;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using ColdSnap.Common;
 using System;
 using Windows.UI.Xaml.Controls;
@@ -13,6 +15,8 @@ namespace ColdSnap.Pages
 		public ManageFriendsPage()
 		{
 			InitializeComponent();
+			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
+			DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
 
 			_navigationHelper = new NavigationHelper(this);
 			_navigationHelper.LoadState += NavigationHelper_LoadState;
