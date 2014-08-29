@@ -202,7 +202,8 @@ namespace SnapDotNet.Utilities
 				return null;
 
 			var file = await StorageManager.Local.StorageFolder.GetFileAsync(GenerateFileName());
-			return await StorageManager.Local.ReadBytesAsync(file);
+			var data = await StorageManager.Local.ReadBytesAsync(file);
+			return data;
 		}
 
 		public string GenerateFileName()

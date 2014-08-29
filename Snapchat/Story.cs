@@ -417,19 +417,7 @@ namespace SnapDotNet
 				return null;
 			}
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public async Task<byte[]> GetMediaOverlayAsync()
-		{
-			if (LocalMedia)
-				await StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryOverlay).ReadDataAsync();
-
-			return null;
-		}
-
+		
 		/// <summary>
 		/// Gets this stories thumbnail data.
 		/// </summary>
@@ -460,7 +448,15 @@ namespace SnapDotNet
 		[JsonIgnore]
 		public byte[] MediaOverlayData
 		{
-			get { return AsyncHelpers.RunSync(GetMediaOverlayAsync); }
+			get
+			{
+				if (!LocalMedia)
+					return null;
+
+				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryOverlay);
+				var data = AsyncHelpers.RunSync(storageObject.ReadDataAsync);
+				return data;
+			}
 		}
 
 		/// <summary>
@@ -495,10 +491,7 @@ namespace SnapDotNet
 		public delegate void MediaElapsedEventHandler(object sender);
 		private event MediaElapsedEventHandler MediaElapsed;
 		private DispatcherTimer _mediaElapsedTimer;
-		private DispatcherTimer _mediaPercentageElapsedTimer;
 		private DispatcherTimer _mediaIntervalTimer;
-		private int _millisecondsTotal;
-		private int _millisecondsCurrent;
 
 		public async void InitalizeStory(MediaElapsedEventHandler mediaElapsed)
 		{
@@ -508,7 +501,6 @@ namespace SnapDotNet
 			// Set Seconds Remaining
 			SecondsRemaining = (int) SecondLength;
 			PercentageLeft = 100;
-			_millisecondsCurrent = _millisecondsTotal = (int) TimeSpan.FromSeconds(SecondLength).TotalMilliseconds;
 
 			_mediaIntervalTimer = new DispatcherTimer{ Interval = new TimeSpan(0, 0, 1)};
 			_mediaIntervalTimer.Tick += (sender, o) =>
@@ -519,14 +511,8 @@ namespace SnapDotNet
 					SecondsRemaining--;
 				else
 					SecondsRemaining = 1;
-			};
-			_mediaPercentageElapsedTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 200) };
-			_mediaPercentageElapsedTimer.Tick += delegate
-			{
-				_millisecondsCurrent -= 200;
 
-				// calulcate percentage based off of this bae
-				PercentageLeft = (_millisecondsCurrent / _millisecondsTotal) * 100;
+				PercentageLeft = (SecondsRemaining / SecondLength) * 100;
 			};
 			_mediaElapsedTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, (int) SecondLength)};
 			_mediaElapsedTimer.Tick += (sender, o) =>
@@ -543,13 +529,13 @@ namespace SnapDotNet
 			if (!IsImage)
 			{
 				// Create Media Element
+				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story);
+				var storageFile = await StorageManager.Local.StorageFolder.GetFileAsync(storageObject.GenerateFileName());
+				var stream = await storageFile.OpenAsync(FileAccessMode.Read);
 				MediaElement = new MediaElement
 				{
 					AutoPlay = true
 				};
-				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story);
-				var storageFile = await StorageManager.Local.StorageFolder.GetFileAsync(storageObject.GenerateFileName());
-				var stream = await storageFile.OpenAsync(FileAccessMode.Read);
 				MediaElement.Loaded += delegate
 				{
 					MediaElement.SetSource(stream, "video/mp4");
@@ -558,7 +544,6 @@ namespace SnapDotNet
 					// Start timers when the media element is initalized
 					_mediaIntervalTimer.Start();
 					_mediaElapsedTimer.Start();
-					_mediaPercentageElapsedTimer.Start();
 				};
 				MediaElement.MediaEnded += delegate
 				{
@@ -569,7 +554,6 @@ namespace SnapDotNet
 			{
 				_mediaIntervalTimer.Start();
 				_mediaElapsedTimer.Start();
-				_mediaPercentageElapsedTimer.Start();
 			}
 		}
 
