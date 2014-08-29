@@ -147,7 +147,8 @@ namespace ColdSnap.Pages.Sections
 		{
 			Debug.WriteLine("[StoryOverlayGrid] Tapped Event Fired");
 
-			ViewModel.ProgressToNextStory();
+			// TODO: fix this
+			//ViewModel.ProgressToNextStory();
 		}
 	}
 }
