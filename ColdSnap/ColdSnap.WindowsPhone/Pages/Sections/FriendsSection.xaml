@@ -341,7 +341,7 @@
 					</Grid>
 					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-3,0,0"
 							   FontFamily="Segoe WP" FontWeight="SemiBold" FontSize="20" 
-							   Text="{Binding Path=ActiveStory.SecondsRemaining, FallbackValue=''}"/>
+							   Text="{Binding Path=TotalSecondsRemaining, FallbackValue=''}"/>
 				</Grid>
 				<ProgressBar VerticalAlignment="Top" HorizontalAlignment="Right" 
 							 Width="50" Value="{Binding Path=ActiveStory.PercentageLeft, FallbackValue=0}"

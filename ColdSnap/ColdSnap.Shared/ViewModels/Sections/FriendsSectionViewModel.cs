@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using ColdSnap.Common;
 using ColdSnap.Dialogs;
@@ -36,6 +37,13 @@ namespace ColdSnap.ViewModels.Sections
 		{
 			get { return ActiveStories.FirstOrDefault(); }
 		}
+
+		public int TotalSecondsRemaining
+		{
+			get { return _totalSecondsRemaining; }
+			set { SetValue(ref _totalSecondsRemaining, value); }
+		}
+		private int _totalSecondsRemaining;
 
 		public ICommand ChangeDisplayNameCommand
 		{
@@ -135,14 +143,30 @@ namespace ColdSnap.ViewModels.Sections
 
 		#region Stories Logic
 
+		private DispatcherTimer _totalSecondsElapsedTimer;
+
 		public void PrepareStory(Friend friend)
 		{
 			if (!friend.Stories.Any()) return;
 
 			// this way, we can keep our inpc shit xox
 			ActiveStories.Clear();
-			foreach (var story in friend.Stories)
+			foreach (var story in friend.Stories.Where(s => s.LocalMedia && !s.Expired))
 				ActiveStories.Add(story);
+
+			// Calculate seconds
+			TotalSecondsRemaining = (int) ActiveStories.Sum(s => s.SecondLength);
+
+			// Start timer
+			_totalSecondsElapsedTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 1) };
+			_totalSecondsElapsedTimer.Tick += delegate
+			{
+				if (TotalSecondsRemaining > 1)
+					TotalSecondsRemaining--;
+				else
+					TotalSecondsRemaining = 1;
+			};
+			_totalSecondsElapsedTimer.Start();
 
 			ProgressToNextStory(true);
 		}
@@ -172,6 +196,9 @@ namespace ColdSnap.ViewModels.Sections
 			ActiveStory.DisposeStory();
 			ActiveStories.Clear();
 			OnPropertyChanged("ActiveStory");
+
+			_totalSecondsElapsedTimer.Stop();
+			_totalSecondsElapsedTimer = null;
 		}
 
 		#endregion
