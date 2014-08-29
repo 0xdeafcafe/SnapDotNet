@@ -41,8 +41,12 @@ namespace SnapDotNet.Utilities
 			Debug.WriteLine("[Storage Manager] Saving Storage Objects");
 			var x = new List<StorageObject>(_storageObjects);
 			var json = await Task.Factory.StartNew(() => JsonConvert.SerializeObject(x));
-			var file = await StorageFolder.CreateFileAsync(StorageObjectsFileName, CreationCollisionOption.ReplaceExisting);
-			await WriteTextAsync(file, json, UnicodeEncoding.Utf8);
+			try
+			{
+				var file = await StorageFolder.CreateFileAsync(StorageObjectsFileName, CreationCollisionOption.ReplaceExisting);
+				await WriteTextAsync(file, json, UnicodeEncoding.Utf8);
+			}
+			catch (UnauthorizedAccessException) { Debug.WriteLine("[Storage Manager] Unauthorized Access Exception when saving storage objects"); }
 		}
 
 		public void AddStorageObject(StorageObject storageObject)
@@ -72,6 +76,11 @@ namespace SnapDotNet.Utilities
 				_storageObjects = new List<StorageObject>();
 
 			return _storageObjects.FirstOrDefault(s => s.SnapchatId == snapchatId && s.StorageType == storageType);
+		}
+
+		public async Task<StorageFile> CreateTemporaryFileAsync()
+		{
+			return await ApplicationData.Current.TemporaryFolder.CreateFileAsync(Guid.NewGuid().ToString(), CreationCollisionOption.GenerateUniqueName);
 		}
 
 		#endregion
@@ -165,10 +174,11 @@ namespace SnapDotNet.Utilities
 
 	public enum StorageType
 	{
-		Story,
-		StoryThumbnail,
-		Snap,
-		Chat
+		Story = 0x00,
+		StoryThumbnail = 0x01,
+		StoryOverlay = 0x02,
+		Snap = 0x10,
+		Chat = 0x20
 	}
 
 	public class StorageObject

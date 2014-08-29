@@ -177,18 +177,11 @@ namespace SnapDotNet
 			var response = await GetAsync(endpointName, null);
 
 			// Obtain the JSON data (and decompress it if it is gzipped).
-			byte[] data;
-			if (response.Content.Headers.ContentEncoding.Contains(HttpContentCodingHeaderValue.Parse("gzip")))
-			{
-				var compressedData = await response.Content.ReadAsBufferAsync();
-				data = await GZip.DecompressAsync(compressedData);
-			}
-			else
-			{
-				data = (await response.Content.ReadAsBufferAsync()).ToArray();
-			}
+			var data = (await response.Content.ReadAsBufferAsync()).ToArray();
 
-			// Deserialize the JSON data and return it.
+			if (response.Content.Headers.ContentEncoding.Contains(HttpContentCodingHeaderValue.Parse("gzip")))
+				data = await GZip.DecompressAsync(data);
+
 			Debug.WriteLine("[Endpoint Manager] Incoming data");
 			return data;
 		}

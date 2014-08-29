@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Newtonsoft.Json;
+using SnapDotNet.Extentions;
 using SnapDotNet.Responses;
 using SnapDotNet.Utilities;
 
@@ -312,18 +315,58 @@ namespace SnapDotNet
 			try
 			{
 				var mediaData = await EndpointManager.Managers["bq"].GetAsync(String.Format("story_blob?story_id={0}", MediaId));
-				if (Compressed) mediaData = await GZip.DecompressAsync(mediaData);
 				mediaData = Aes.DecryptDataWithIv(mediaData, Convert.FromBase64String(MediaKey), Convert.FromBase64String(MediaIv));
+				Debug.WriteLine("[Story] Processing Media Compressed: {0}", Compressed);
 
-				// create storage object, downlaod thumbnail, insert object, write media
-				var storageObject = new StorageObject
+				if (Compressed)
 				{
-					ExpiresAt = DateTime.UtcNow.AddDays(2),
-					SnapchatId = Id,
-					StorageType = StorageType.Story
-				};
-				StorageManager.Local.AddStorageObject(storageObject);
-				storageObject.WriteDataAsync(mediaData);
+					// well, this is going to be fun.
+					Debug.WriteLine("[Story] Decompressing the story archive");
+					var zipArchive = new ZipArchive(mediaData.ToMemoryStream());
+					foreach (var entry in zipArchive.Entries)
+					{
+						if (entry.Name.StartsWith("overlay"))
+						{
+							Debug.WriteLine("[Story] Detected png overlay in the archive");
+
+							var storageObject = new StorageObject
+							{
+								ExpiresAt = DateTime.UtcNow.AddDays(2),
+								SnapchatId = Id,
+								StorageType = StorageType.StoryOverlay
+							};
+							using (var stream = entry.Open())
+								storageObject.WriteDataAsync(stream.ToByteArray());
+							StorageManager.Local.AddStorageObject(storageObject);
+						}
+						else if (entry.Name.StartsWith("media"))
+						{
+							Debug.WriteLine("[Story] Detected video media in the archive");
+
+							var storageObject = new StorageObject
+							{
+								ExpiresAt = DateTime.UtcNow.AddDays(2),
+								SnapchatId = Id,
+								StorageType = StorageType.Story
+							};
+							using (var stream = entry.Open())
+								storageObject.WriteDataAsync(stream.ToByteArray());
+							StorageManager.Local.AddStorageObject(storageObject);
+						}
+					}
+				}
+				else
+				{
+					// create storage object, downlaod thumbnail, insert object, write media
+					var storageObject = new StorageObject
+					{
+						ExpiresAt = DateTime.UtcNow.AddDays(2),
+						SnapchatId = Id,
+						StorageType = StorageType.Story
+					};
+					storageObject.WriteDataAsync(mediaData);
+					StorageManager.Local.AddStorageObject(storageObject);
+				}
 
 				OnPropertyChanged("LocalMedia");
 
@@ -349,7 +392,7 @@ namespace SnapDotNet
 			{
 				var thumbnailData =
 					await EndpointManager.Managers["bq"].GetAsync(String.Format("story_thumbnail?story_id={0}", MediaId));
-				if (Compressed) thumbnailData = await GZip.DecompressAsync(thumbnailData);
+				Debug.WriteLine("[Story] Processing Thumbnail Compressed: {0}", Compressed);
 				thumbnailData = Aes.DecryptDataWithIv(thumbnailData, Convert.FromBase64String(MediaKey), Convert.FromBase64String(ThumbnailIv));
 
 				// create storage object, downlaod thumbnail, insert object, write media
@@ -359,8 +402,8 @@ namespace SnapDotNet
 					SnapchatId = Id,
 					StorageType = StorageType.StoryThumbnail
 				};
-				StorageManager.Local.AddStorageObject(storageObject);
 				storageObject.WriteDataAsync(thumbnailData);
+				StorageManager.Local.AddStorageObject(storageObject);
 
 				OnPropertyChanged("LocalThumbnail");
 				OnPropertyChanged("Thumbnail");
@@ -374,7 +417,19 @@ namespace SnapDotNet
 				return null;
 			}
 		}
-		
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<byte[]> GetMediaOverlayAsync()
+		{
+			if (LocalMedia)
+				await StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryOverlay).ReadDataAsync();
+
+			return null;
+		}
+
 		/// <summary>
 		/// Gets this stories thumbnail data.
 		/// </summary>
@@ -397,6 +452,15 @@ namespace SnapDotNet
 			{
 				return AsyncHelpers.RunSync(GetMediaAsync);
 			}
+		}
+
+		/// <summary>
+		/// Gets this stories media data.
+		/// </summary>
+		[JsonIgnore]
+		public byte[] MediaOverlayData
+		{
+			get { return AsyncHelpers.RunSync(GetMediaOverlayAsync); }
 		}
 
 		/// <summary>
@@ -431,7 +495,10 @@ namespace SnapDotNet
 		public delegate void MediaElapsedEventHandler(object sender);
 		private event MediaElapsedEventHandler MediaElapsed;
 		private DispatcherTimer _mediaElapsedTimer;
+		private DispatcherTimer _mediaPercentageElapsedTimer;
 		private DispatcherTimer _mediaIntervalTimer;
+		private int _millisecondsTotal;
+		private int _millisecondsCurrent;
 
 		public async void InitalizeStory(MediaElapsedEventHandler mediaElapsed)
 		{
@@ -441,26 +508,7 @@ namespace SnapDotNet
 			// Set Seconds Remaining
 			SecondsRemaining = (int) SecondLength;
 			PercentageLeft = 100;
-
-			if (!IsImage)
-			{
-				// Create Media Element
-				MediaElement = new MediaElement
-				{
-					AutoPlay = true
-				};
-				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story);
-				var storageFile = await StorageManager.Local.StorageFolder.GetFileAsync(storageObject.GenerateFileName());
-				var stream = await storageFile.OpenAsync(FileAccessMode.Read);
-				MediaElement.Loaded += delegate
-				{
-					MediaElement.SetSource(stream, "video/mp4");
-				};
-				MediaElement.MediaEnded += delegate
-				{
-					MediaElapsed(this);
-				};
-			}
+			_millisecondsCurrent = _millisecondsTotal = (int) TimeSpan.FromSeconds(SecondLength).TotalMilliseconds;
 
 			_mediaIntervalTimer = new DispatcherTimer{ Interval = new TimeSpan(0, 0, 1)};
 			_mediaIntervalTimer.Tick += (sender, o) =>
@@ -471,9 +519,14 @@ namespace SnapDotNet
 					SecondsRemaining--;
 				else
 					SecondsRemaining = 1;
+			};
+			_mediaPercentageElapsedTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 200) };
+			_mediaPercentageElapsedTimer.Tick += delegate
+			{
+				_millisecondsCurrent -= 200;
 
 				// calulcate percentage based off of this bae
-				PercentageLeft = (SecondsRemaining / SecondLength) * 100;
+				PercentageLeft = (_millisecondsCurrent / _millisecondsTotal) * 100;
 			};
 			_mediaElapsedTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, (int) SecondLength)};
 			_mediaElapsedTimer.Tick += (sender, o) =>
@@ -487,8 +540,37 @@ namespace SnapDotNet
 				if (IsImage)
 					MediaElapsed(this); // If it isn't an image, we fire this inside the MediaElement
 			};
-			_mediaIntervalTimer.Start();
-			_mediaElapsedTimer.Start();
+			if (!IsImage)
+			{
+				// Create Media Element
+				MediaElement = new MediaElement
+				{
+					AutoPlay = true
+				};
+				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.Story);
+				var storageFile = await StorageManager.Local.StorageFolder.GetFileAsync(storageObject.GenerateFileName());
+				var stream = await storageFile.OpenAsync(FileAccessMode.Read);
+				MediaElement.Loaded += delegate
+				{
+					MediaElement.SetSource(stream, "video/mp4");
+					MediaElement.Play();
+
+					// Start timers when the media element is initalized
+					_mediaIntervalTimer.Start();
+					_mediaElapsedTimer.Start();
+					_mediaPercentageElapsedTimer.Start();
+				};
+				MediaElement.MediaEnded += delegate
+				{
+					MediaElapsed(this);
+				};
+			}
+			else
+			{
+				_mediaIntervalTimer.Start();
+				_mediaElapsedTimer.Start();
+				_mediaPercentageElapsedTimer.Start();
+			}
 		}
 
 		public void DisposeStory()

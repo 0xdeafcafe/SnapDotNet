@@ -86,6 +86,7 @@
     <Compile Include="Extentions\ByteArrayExtentions.cs" />
     <Compile Include="Extentions\ObservableCollectionExtentions.cs" />
     <Compile Include="Extentions\EnumerableExtentions.cs" />
+    <Compile Include="Extentions\StreamExtentions.cs" />
     <Compile Include="Friend.cs" />
     <Compile Include="Responses\AccountResponse.cs" />
     <Compile Include="Responses\AllUpdatesResponse.cs" />

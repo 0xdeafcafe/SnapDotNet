@@ -293,7 +293,7 @@ namespace SnapDotNet
 			}
 
 			// Check expired ones, remove them
-			foreach (var redundantStory in Stories.Where(s => friendStoryResponse.Stories.FirstOrDefault(s1 => s1.Story.Id == s.Id) == null || s.Expired))
+			foreach (var redundantStory in Stories.Where(s => friendStoryResponse.Stories.FirstOrDefault(s1 => s1.Story.Id == s.Id) == null || s.Expired).ToList())
 				Stories.Remove(redundantStory);
 		}
 

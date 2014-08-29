@@ -317,6 +317,9 @@
 					<DataTemplate x:Key="VideoMediaTemplate">
 						<Grid d:DataContext="{d:DesignInstance Type=sdn:Story}" Background="#FF000000">
 							<ContentControl Content="{Binding Path=MediaElement}" />
+							<Image d:DataContext="{d:DesignInstance Type=sdn:Story}"
+								   Source="{Binding Path=MediaOverlayData, Converter={StaticResource BytesToBitmapImageConverter}}" 
+								   Stretch="UniformToFill" IsHitTestVisible="False" />
 						</Grid>
 					</DataTemplate>
 					

@@ -38,20 +38,12 @@ namespace SnapDotNet.Utilities
 		{
 			Contract.Requires<ArgumentNullException>(data != null);
 
-			try
+			using (var stream = new MemoryStream(data))
+			using (var gzip = new GZipStream(stream, CompressionMode.Decompress))
+			using (var outputStream = new MemoryStream())
 			{
-				using (var stream = new MemoryStream(data))
-				using (var gzip = new GZipStream(stream, CompressionMode.Decompress))
-				using (var outputStream = new MemoryStream())
-				{
-					await gzip.CopyToAsync(outputStream);
-					return outputStream.ToArray();
-				}
-			}
-			catch (InvalidDataException)
-			{
-				Debug.WriteLine("[Gzip] Invalid magic. Skipping.");
-				return data;
+				await gzip.CopyToAsync(outputStream);
+				return outputStream.ToArray();
 			}
 		}
 

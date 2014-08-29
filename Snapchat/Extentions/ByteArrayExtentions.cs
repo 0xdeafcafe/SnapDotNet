@@ -1,4 +1,5 @@
-﻿using Windows.Storage.Streams;
+﻿using System.IO;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace SnapDotNet.Extentions
@@ -23,6 +24,16 @@ namespace SnapDotNet.Extentions
 				image.SetSource(stream);
 				return image;
 			}
+		}
+
+		public static Stream ToMemoryStream(this byte[] arr)
+		{
+			return new MemoryStream(arr);
+		}
+
+		public static IRandomAccessStream ToRandomAccessStream(this byte[] arr)
+		{
+			return new MemoryStream(arr).AsRandomAccessStream();
 		}
 	}
 }
