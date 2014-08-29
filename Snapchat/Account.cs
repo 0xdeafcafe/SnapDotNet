@@ -93,6 +93,25 @@ namespace SnapDotNet
 		}
 
 		/// <summary>
+		/// Authenticates a user using the given <paramref name="username"/> and <paramref name="authToken"/>,
+		/// and creates a dummy <see cref="Account"/> object to be used in conjunction with <see cref="UpdateAccountAsync"/>.
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="authToken">The snapchat authentication token.</param>
+		/// <returns>
+		/// If authenticated, an <see cref="Account"/> object containing the account data.
+		/// </returns>
+		[Pure]
+		public static Account AuthenticateFromAuth(string username, string authToken)
+		{
+			return new Account
+			{
+				AuthToken = authToken, 
+				Username = username
+			};
+		}
+
+		/// <summary>
 		/// 
 		/// </summary>
 		private Account()
@@ -548,6 +567,7 @@ namespace SnapDotNet
 			{
 				foreach (var story in friend.Stories)
 				{
+					if (!alwaysDownload) continue;
 					await story.GetThumbnailAsync();
 					await story.GetMediaAsync();
 				}
