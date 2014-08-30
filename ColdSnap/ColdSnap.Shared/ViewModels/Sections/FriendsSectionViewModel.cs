@@ -149,6 +149,9 @@ namespace ColdSnap.ViewModels.Sections
 		{
 			if (!friend.Stories.Any()) return;
 
+			if (_totalSecondsElapsedTimer != null)
+				_totalSecondsElapsedTimer.Stop();
+
 			// this way, we can keep our inpc shit xox
 			ActiveStories.Clear();
 			foreach (var story in friend.Stories.Where(s => s.LocalMedia && !s.Expired))

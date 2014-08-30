@@ -500,6 +500,11 @@ namespace SnapDotNet
 			// Attach Elpased Event
 			MediaElapsed += mediaElapsed;
 
+			if (_mediaIntervalTimer != null)
+				_mediaIntervalTimer.Stop();
+			if (_mediaElapsedTimer != null)
+				_mediaElapsedTimer.Stop();
+
 			// Set Seconds Remaining
 			SecondsRemaining = (int) SecondLength;
 			PercentageLeft = 100;

@@ -170,6 +170,7 @@ namespace ColdSnap.Pages.Sections
 		private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
 		{
 			Debug.WriteLine("[StoryOverlayGrid] Tapped Event Fired");
+			e.Handled = true;
 
 			// TODO: fix this
 			//ViewModel.ProgressToNextStory();

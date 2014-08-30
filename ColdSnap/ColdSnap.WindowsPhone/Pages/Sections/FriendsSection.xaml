@@ -385,7 +385,7 @@
 					<DataTemplate x:Key="ImageMediaTemplate">
 						<Image d:DataContext="{d:DesignInstance Type=sdn:Story}"
 							   Source="{Binding Path=MediaData, Converter={StaticResource BytesToBitmapImageConverter}}" 
-							   Stretch="UniformToFill" IsHitTestVisible="False" />
+							   Stretch="Uniform" IsHitTestVisible="False" />
 					</DataTemplate>
 					<DataTemplate x:Key="VideoMediaTemplate">
 						<Grid d:DataContext="{d:DesignInstance Type=sdn:Story}" Background="#FF000000">
@@ -393,7 +393,7 @@
 
 							<Image d:DataContext="{d:DesignInstance Type=sdn:Story}"
 								   Source="{Binding Path=MediaOverlayData, Converter={StaticResource BytesToBitmapImageConverter}}" 
-								   Stretch="UniformToFill" IsHitTestVisible="False" />
+								   Stretch="Uniform" IsHitTestVisible="False" />
 						</Grid>
 					</DataTemplate>
 
@@ -417,9 +417,9 @@
 							Percentage="{Binding ActiveStory.PercentageLeft, FallbackValue=80}" 
 							StrokeThickness="2" SegmentColor="#FFFFFFFF" Radius="21" />
 					</Grid>
-					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2,-2,0,0"
+					<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
 							   FontFamily="Segoe WP" FontWeight="SemiBold" FontSize="20" 
-							   Text="{Binding Path=TotalSecondsRemaining, FallbackValue=''}"/>
+							   Text="{Binding Path=TotalSecondsRemaining, FallbackValue=''}"/> <!-- Margin="2,-2,0,0" -->
 				</Grid>
 			</Grid>
 		</Grid>
