@@ -37,6 +37,25 @@ namespace SnapDotNet
 	public sealed class Friend
 		: ObservableObject
 	{
+		/// <summary>
+		/// Create a Friend model based on a <see cref="FriendResponse" />.
+		/// </summary>
+		/// <param name="friendResponse">The <see cref="FriendResponse" /> to create the Friend model from.</param>
+		/// <returns></returns>
+		[Pure]
+		internal static Friend Create(FriendResponse friendResponse)
+		{
+			Contract.Requires<ArgumentNullException>(friendResponse != null);
+
+			return new Friend
+			{
+				CanSeeCustomStories = friendResponse.CanSeeCustomStories,
+				DisplayName = friendResponse.DisplayName,
+				Name = friendResponse.Name,
+				FriendRequestState = (FriendRequestState)friendResponse.FriendRequestState
+			};
+		}
+
 		public Friend()
 		{
 			_stories.CollectionChanged += (sender, args) => OnObservableCollectionChanged(args, "Stories");
@@ -298,24 +317,5 @@ namespace SnapDotNet
 		}
 
 		#endregion
-		
-		/// <summary>
-		/// Create a Friend model based on a <see cref="FriendResponse" />.
-		/// </summary>
-		/// <param name="friendResponse">The <see cref="FriendResponse" /> to create the Friend model from.</param>
-		/// <returns></returns>
-		[Pure]
-		internal static Friend Create(FriendResponse friendResponse)
-		{
-			Contract.Requires<ArgumentNullException>(friendResponse != null);
-
-			return new Friend
-			{
-				CanSeeCustomStories = friendResponse.CanSeeCustomStories,
-				DisplayName = friendResponse.DisplayName,
-				Name = friendResponse.Name,
-				FriendRequestState = (FriendRequestState) friendResponse.FriendRequestState
-			};
-		}
 	}
 }

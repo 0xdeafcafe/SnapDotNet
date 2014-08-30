@@ -146,6 +146,7 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Styles/NoTiltListViewStyle.xaml"/>
 				<ResourceDictionary Source="Controls/ExpanderView.xaml"/>
+				<ResourceDictionary Source="Controls/Test/ExpanderResource.xaml"/>
 				<ResourceDictionary Source="Controls/StateTextBox.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

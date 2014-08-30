@@ -9,14 +9,14 @@ namespace SnapDotNet.Responses
 	[DataContract]
 	internal sealed class StoriesResponse
 	{
-		[DataMember(Name = "friend_stories")]
-		public FriendStoryResponse[] FriendStories { get; set; }
-
 		[DataMember(Name = "mature_content_text")]
 		public MatureContentTextResponse MatureContentText { get; set; }
 
-		[DataMember(Name = "story_extras")]
+		[DataMember(Name = "my_stories")]
 		public MyStoryResponse[] MyStories { get; set; }
+
+		[DataMember(Name = "friend_stories")]
+		public FriendStoryResponse[] FriendStories { get; set; }
 
 		// TODO: map out 'my_group_stories'
 	}

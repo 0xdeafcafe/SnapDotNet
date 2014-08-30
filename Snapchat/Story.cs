@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -659,6 +661,182 @@ namespace SnapDotNet
 		{
 			// Don't set the Viewed field, we want to keep that from our own records
 			Update(storyResponse.Story);
+		}
+	}
+
+	public class PersonalStory
+		: ObservableObject
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="storyResponse"></param>
+		/// <returns></returns>
+		[Pure]
+		internal static PersonalStory Create(MyStoryResponse storyResponse)
+		{
+			Contract.Requires<ArgumentNullException>(storyResponse != null);
+
+			var personalStory = new PersonalStory
+			{
+				Story = Story.Create(storyResponse.Story),
+				ScreenshotCount = storyResponse.StoryExtras.ScreenshotCount,
+				ViewCount = storyResponse.StoryExtras.ViewCount,
+				StoryNotes = new ObservableCollection<StoryNote>(storyResponse.StoryNotes.Select(SnapDotNet.StoryNote.Create))
+			};
+			return personalStory;
+		}
+
+		#region Properties
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public Story Story
+		{
+			get { return _story; }
+			set { SetValue(ref _story, value); }
+		}
+		private Story _story;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public int ViewCount
+		{
+			get { return _viewCount; }
+			set { SetValue(ref _viewCount, value); }
+		}
+		private int _viewCount;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public ObservableCollection<StoryNote> StoryNotes
+		{
+			get { return _storyNotes; }
+			set { SetValue(ref _storyNotes, value); }
+		}
+		private ObservableCollection<StoryNote> _storyNotes = new ObservableCollection<StoryNote>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public int ScreenshotCount
+		{
+			get { return _screenshot; }
+			set { SetValue(ref _screenshot, value); }
+		}
+		private int _screenshot;
+
+		#endregion
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="storyResponse"></param>
+		internal void Update(MyStoryResponse storyResponse)
+		{
+			Contract.Requires<ArgumentNullException>(storyResponse != null);
+
+			// Update Story
+			Story.Update(storyResponse.Story);
+
+			// Update Properties
+			ViewCount = storyResponse.StoryExtras.ViewCount;
+			ScreenshotCount = storyResponse.StoryExtras.ViewCount;
+
+			// Add new Notes
+			foreach(var note in storyResponse.StoryNotes.Where(n1 => StoryNotes.FirstOrDefault(n => n.Viewer == n1.Viewer) == null))
+				StoryNotes.Add(StoryNote.Create(note));
+			
+			// Update exisiting notes
+			foreach (var note in StoryNotes)
+			{
+				var updatedNote = storyResponse.StoryNotes.FirstOrDefault(n => n.Viewer == note.Viewer);
+				if (updatedNote == null) continue;
+				note.Update(updatedNote);
+			}
+
+			// Remove non-existant notes
+			foreach (
+				var redudantStory in
+					StoryNotes.Where(n => storyResponse.StoryNotes.FirstOrDefault(n1 => n1.Viewer == n.Viewer) == null).ToList())
+				StoryNotes.Remove(redudantStory);
+		}
+	}
+
+	public class StoryNote
+		: ObservableObject
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="storyNoteResponse"></param>
+		/// <returns></returns>
+		[Pure]
+		internal static StoryNote Create(StoryNoteResponse storyNoteResponse)
+		{
+			Contract.Requires<ArgumentNullException>(storyNoteResponse != null);
+
+			return new StoryNote
+			{
+				ScreenShotted = storyNoteResponse.ScreenShotted,
+				ViewedAt = storyNoteResponse.Timestamp,
+				Viewer = storyNoteResponse.Viewer
+			};
+		}
+
+		#region Properties
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public string Viewer
+		{
+			get { return _viewer; }
+			set { SetValue(ref _viewer, value); }
+		}
+		private string _viewer;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public DateTime ViewedAt
+		{
+			get { return _viewedAt; }
+			set { SetValue(ref _viewedAt, value); }
+		}
+		private DateTime _viewedAt;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public bool ScreenShotted
+		{
+			get { return _screenShotted; }
+			set { SetValue(ref _screenShotted, value); }
+		}
+		private bool _screenShotted;
+
+		#endregion
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="storyNoteResponse"></param>
+		internal void Update(StoryNoteResponse storyNoteResponse)
+		{
+			Viewer = storyNoteResponse.Viewer;
+			ViewedAt = storyNoteResponse.Timestamp;
+			ScreenShotted = storyNoteResponse.ScreenShotted;
 		}
 	}
 }

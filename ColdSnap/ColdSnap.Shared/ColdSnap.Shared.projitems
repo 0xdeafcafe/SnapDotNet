@@ -28,6 +28,11 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\ExpanderView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\HeaderedItemsControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\HierarchicalDataTemplate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\ItemsControlHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\VisualTreeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BytesToBitmapImageConverter.cs" />
@@ -67,6 +72,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="$(MSBuildThisFileDirectory)Controls\StateTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\Test\ExpanderResource.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

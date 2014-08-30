@@ -190,6 +190,26 @@ namespace SnapDotNet
 		/// 
 		/// </summary>
 		[JsonIgnore]
+		public Friend Me
+		{
+			get { return Friends.FirstOrDefault(f => f.Name == Username); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public ObservableCollection<PersonalStory> PersonalStories
+		{
+			get { return _personalStories; }
+			set { SetValue(ref _personalStories, value); }
+		} 
+		private ObservableCollection<PersonalStory> _personalStories = new ObservableCollection<PersonalStory>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonIgnore]
 		public ObservableCollection<FriendsKeyGroup> SortedFriends
 		{
 			get { return _sortedFriends; }
@@ -552,17 +572,32 @@ namespace SnapDotNet
 		{
 			Contract.Requires<ArgumentNullException>(storiesResponse != null);
 
+			// Check for new personal stories
+			foreach (var personalStory in storiesResponse.MyStories.OrderByDescending(s => s.Story.TimeLeft).Where(friendStory => PersonalStories.FirstOrDefault(s => s.Story.Id == friendStory.Story.Id) == null))
+				PersonalStories.Add(PersonalStory.Create(personalStory));
+
+			// Check for active personal stories, and update them
+			foreach (var personalStory in PersonalStories)
+			{
+				var personalStoryMetadata = storiesResponse.MyStories.FirstOrDefault(s => s.Story.Id == personalStory.Story.Id);
+				if (personalStoryMetadata == null) continue;
+				personalStory.Update(personalStoryMetadata);
+			}
+
+			// Check for expired personal stories, and delete them
+			foreach (var redundantStory in PersonalStories.Where(s => storiesResponse.MyStories.FirstOrDefault(s1 => s1.Story.Id == s.Story.Id) == null).ToList())
+				PersonalStories.Remove(redundantStory);
+
 			// Update Friends Stories xox
 			foreach (var friendStory in storiesResponse.FriendStories)
 			{
-				var friend = Friends.FirstOrDefault(f => f.Name == friendStory.Username);
+				var friend = Friends.FirstOrDefault(f => f.Name == friendStory.Username && f.Name != Username);
 				if (friend == null) continue;
 				friend.UpdateStories(friendStory);
 			}
 
 			// Download Snaps, depending on user settings
 			const bool alwaysDownload = true; // hehe
-
 			foreach (var friend in Friends)
 			{
 				foreach (var story in friend.Stories)

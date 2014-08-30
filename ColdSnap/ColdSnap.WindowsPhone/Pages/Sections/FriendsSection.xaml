@@ -14,6 +14,7 @@
 	xmlns:controls1="using:WinRTXamlToolkit.Controls"
 	xmlns:friends="using:ColdSnap.Converters.Sections.Friends"
 	xmlns:friends1="using:ColdSnap.Selectors.Sections.Friends"
+	xmlns:test="using:ColdSnap.Controls.Test"
 	mc:Ignorable="d"
 
 	AccentColor="#FF9b55a0"
@@ -137,7 +138,7 @@
 					<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 					<converters:BytesToBitmapImageConverter x:Key="BytesToBitmapImageConverter" />
 					<friends:StoryAngleConverter x:Key="StoryAngleConverter" />
-					
+
 					<JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
 					<JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
 					<CollectionViewSource x:Key="FriendGroups" IsSourceGrouped="True"
@@ -162,7 +163,8 @@
 												
 												PointerEntered="UIElement_OnPointerEntered"
 												PointerCaptureLost="UIElement_OnPointerCaptureLost">
-											<Grid Background="#4CFF0000" /> <!-- Marks the clickable area - Debug Only -->
+											<!--<Grid Background="#4CFF0000" />-->
+											<!-- Marks the clickable area - Debug Only -->
 										</Button>
 									</DataTemplate>
 								</controls:ExpanderView.HeaderCoverContentTemplate>
@@ -260,48 +262,119 @@
 					</DataTemplate>
 				</ResourceDictionary>
 			</Grid.Resources>
-			
+
 			<ScrollViewer>
-				<StackPanel>
-					<SemanticZoom>
-						<SemanticZoom.ZoomedInView>
-							<ListView x:Name="FriendsList" IsHoldingEnabled="False"
+				<SemanticZoom>
+					<SemanticZoom.ZoomedInView>
+						<ListView x:Name="FriendsList" IsHoldingEnabled="False"
 									  Loaded="FriendsList_OnLoaded"
 									  ItemTemplate="{StaticResource ItemTemplate}"
 									  ItemsSource="{Binding Source={StaticResource FriendGroups}}" 
 									  IsSwipeEnabled="False" IsRightTapEnabled="False" IsDoubleTapEnabled="False">
-								<ListView.ItemContainerStyle>
-									<Style TargetType="ListViewItem" BasedOn="{StaticResource NoTiltListViewStyle}">
-										<Setter Property="HorizontalContentAlignment" Value="Stretch" />
-									</Style>
-								</ListView.ItemContainerStyle>
-								<ListView.Template>
-									<ControlTemplate TargetType="ListView">
-										<ScrollViewer>
-											<ItemsPresenter Margin="0,0,0,25" />
-										</ScrollViewer>
-									</ControlTemplate>
-								</ListView.Template>
-								<ListView.GroupStyle>
-									<GroupStyle HidesIfEmpty="True"
+							<ListView.ItemContainerStyle>
+								<Style TargetType="ListViewItem" BasedOn="{StaticResource NoTiltListViewStyle}">
+									<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+								</Style>
+							</ListView.ItemContainerStyle>
+							<ListView.Template>
+								<ControlTemplate TargetType="ListView">
+									<ScrollViewer>
+										<Grid>
+											<Grid.RowDefinitions>
+												<RowDefinition Height="Auto" />
+												<RowDefinition Height="*" />
+											</Grid.RowDefinitions>
+
+											<!-- This ma guy xox -->
+											<StackPanel>
+												<controls:ExpanderView HeaderText="{Binding Path=Account.Me.FriendlyName, FallbackValue='Alex Reed', UpdateSourceTrigger=PropertyChanged}"
+																	   SubHeaderText="{Binding Path=Account.Me.Name, FallbackValue='alexerax', UpdateSourceTrigger=PropertyChanged}"
+																	   ShowSubHeader="{Binding Path=Account.Me.HasDisplayName}"
+																	   Tag="{Binding Path=Account.Me.Name, UpdateSourceTrigger=PropertyChanged}"
+																	   HeaderHeight="60"
+																	   ContentHeight="105"
+																	   Expanded="UserStoryExpanderView_OnExpanded">
+													<controls:ExpanderView.HeaderCoverContentTemplate>
+														<DataTemplate>
+															<Button Style="{StaticResource CleanButtonStyle}" 
+																	VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+																	VerticalContentAlignment="Stretch"
+												
+																	PointerEntered="UIElement_OnPointerEntered"
+																	PointerCaptureLost="UIElement_OnPointerCaptureLost">
+																<!--<Grid Background="#4CFF0000" />-->
+																<!-- Marks the clickable area - Debug Only -->
+															</Button>
+														</DataTemplate>
+													</controls:ExpanderView.HeaderCoverContentTemplate>
+													<controls:ExpanderView.AdditionalHeaderContentTemplate>
+														<DataTemplate>
+															<Grid VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,30,0">
+																<Button Style="{StaticResource EditAccountButtonStyle}" Click="EditFriendButton_OnClick" />
+															</Grid>
+														</DataTemplate>
+													</controls:ExpanderView.AdditionalHeaderContentTemplate>
+													<controls:ExpanderView.PrimaryHeaderContentTemplate>
+														<DataTemplate>
+															<Grid>
+																<ItemsControl ItemsSource="{Binding Path=Account.PersonalStories}">
+																	<ItemsControl.ItemsPanel>
+																		<ItemsPanelTemplate>
+																			<Grid/>
+																		</ItemsPanelTemplate>
+																	</ItemsControl.ItemsPanel>
+																	<ItemsControl.ItemTemplate>
+																		<DataTemplate>
+																			<controls1:PieSlice Radius="25" EndAngle="360" Margin="0,0,8,0"
+																								StartAngle="{Binding Path=Story.ExpiresAt, Converter={StaticResource StoryAngleConverter}}">
+																				<controls1:PieSlice.Fill>
+																					<ImageBrush Stretch="UniformToFill" 
+																								ImageSource="{Binding Path=Story.ThumbnailData, Converter={StaticResource BytesToBitmapImageConverter}}"/>
+																				</controls1:PieSlice.Fill>
+																			</controls1:PieSlice>
+																		</DataTemplate>
+																	</ItemsControl.ItemTemplate>
+																</ItemsControl>
+															</Grid>
+														</DataTemplate>
+													</controls:ExpanderView.PrimaryHeaderContentTemplate>
+													<controls:ExpanderView.ExpandableContentTemplate>
+														<DataTemplate>
+															<Grid Background="#eeeeee">
+																<TextBlock Foreground="#333333" Margin="0,2,0,0" FontSize="17">
+																	<Run Text="TODO: this. " />
+																	<Run Text="&#x1F61A;" FontSize="24" />
+																</TextBlock>
+															</Grid>
+														</DataTemplate>
+													</controls:ExpanderView.ExpandableContentTemplate>
+												</controls:ExpanderView>
+											</StackPanel>
+
+											<ItemsPresenter Grid.Row="1" Margin="0,0,0,25" />
+										</Grid>
+									</ScrollViewer>
+								</ControlTemplate>
+							</ListView.Template>
+							<ListView.GroupStyle>
+								<GroupStyle HidesIfEmpty="True"
 												HeaderTemplate="{StaticResource GroupHeaderTemplate}">
-										<GroupStyle.HeaderContainerStyle>
-											<Style TargetType="ListViewHeaderItem">
-												<Setter Property="HorizontalContentAlignment" Value="Stretch" />
-											</Style>
-										</GroupStyle.HeaderContainerStyle>
-									</GroupStyle>
-								</ListView.GroupStyle>
-							</ListView>
-						</SemanticZoom.ZoomedInView>
-						<SemanticZoom.ZoomedOutView>
-							<GridView Background="#AAFFFFFF" 
+									<GroupStyle.HeaderContainerStyle>
+										<Style TargetType="ListViewHeaderItem">
+											<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+										</Style>
+									</GroupStyle.HeaderContainerStyle>
+								</GroupStyle>
+							</ListView.GroupStyle>
+						</ListView>
+					</SemanticZoom.ZoomedInView>
+					<SemanticZoom.ZoomedOutView>
+						<GridView Background="#AAFFFFFF" 
 									  ItemsSource="{Binding Source={StaticResource FriendGroups}, Path=CollectionGroups}"
 									  ItemTemplate="{StaticResource JumpListTemplate}">
-							</GridView>
-						</SemanticZoom.ZoomedOutView>
-					</SemanticZoom>
-				</StackPanel>
+						</GridView>
+					</SemanticZoom.ZoomedOutView>
+				</SemanticZoom>
 			</ScrollViewer>
 
 			<!-- StoryOverlayGrid -->
@@ -317,13 +390,13 @@
 					<DataTemplate x:Key="VideoMediaTemplate">
 						<Grid d:DataContext="{d:DesignInstance Type=sdn:Story}" Background="#FF000000">
 							<ContentControl Content="{Binding Path=MediaElement}" />
-							
+
 							<Image d:DataContext="{d:DesignInstance Type=sdn:Story}"
 								   Source="{Binding Path=MediaOverlayData, Converter={StaticResource BytesToBitmapImageConverter}}" 
 								   Stretch="UniformToFill" IsHitTestVisible="False" />
 						</Grid>
 					</DataTemplate>
-					
+
 					<friends1:StoryMediaTypeSelector x:Key="StoryMediaTypeSelector" 
 													 ImageDataTemplate="{StaticResource ImageMediaTemplate}"
 													 VideoDataTemplate="{StaticResource VideoMediaTemplate}"/>

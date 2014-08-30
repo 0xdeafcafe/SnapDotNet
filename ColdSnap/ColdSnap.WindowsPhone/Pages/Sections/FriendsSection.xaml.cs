@@ -65,6 +65,22 @@ namespace ColdSnap.Pages.Sections
 				itemExpander.Contract();
 		}
 
+		private void UserStoryExpanderView_OnExpanded(object sender, bool e)
+		{
+			var expander = sender as ExpanderView;
+			if (expander == null) return;
+
+			if (_friendsListView.Items == null) return;
+
+			// Hide the others
+			foreach (
+				var itemExpander in
+					_friendsListView.Items.Select(item => _friendsListView.ContainerFromItem(item))
+						.Select(VariousHelpers.FindVisualChild<ExpanderView>)
+						.Where(itemExpander => itemExpander.Tag != expander.Tag))
+				itemExpander.Contract();
+		}
+
 		private void EditFriendButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			var button = sender as Button;
@@ -92,21 +108,28 @@ namespace ColdSnap.Pages.Sections
 		private DispatcherTimer _isFingerStillChillinTimer;
 		private bool _fingerDown;
 		private Button _selectedButton;
+		private Friend _selectedFriend;
 		private void UIElement_OnPointerEntered(object sender, PointerRoutedEventArgs e)
 		{
 			Debug.WriteLine("[UI Element] Friend Expander Pointer Entered");
+			if (_isFingerStillChillinTimer != null)
+				_isFingerStillChillinTimer.Stop();
+
+			if (_fingerDown) return;
 
 			var button = sender as Button;
 			if (button == null) return;
 			var friend = button.DataContext as Friend;
-			if (friend == null) return;
+			if (friend == null || friend.Stories == null || !friend.Stories.Any() || friend.Stories.All(s => s.Expired)) return;
 
 			_isFingerStillChillinTimer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 300)};
 			_isFingerStillChillinTimer.Tick += delegate
 			{
 				_isFingerStillChillinTimer.Stop();
 
-				if (!_fingerDown) return;
+				Debug.WriteLine("[Dispatcher Timer] Tick elapsed. Elapsed over friend {0}", _selectedFriend.Name);
+
+				if (!_fingerDown || friend.Name != _selectedFriend.Name) return;
 
 				// prep manipulation mode
 				if (_selectedButton != null)
@@ -120,6 +143,7 @@ namespace ColdSnap.Pages.Sections
 				StatusBarHelpers.HideStatusBar();
 			};
 			_selectedButton = button;
+			_selectedFriend = friend;
 			_fingerDown = true;
 			_isFingerStillChillinTimer.Start();
 		}
