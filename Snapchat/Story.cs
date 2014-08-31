@@ -43,6 +43,7 @@ namespace SnapDotNet
 				SecondLength = storyResponse.Time,
 				Caption = storyResponse.CaptionTextDisplay,
 				Compressed = storyResponse.Zipped,
+				IsShared = storyResponse.IsShared,
 				ExpiresAt = DateTime.UtcNow + storyResponse.TimeLeft,
 				MediaUrl = storyResponse.MediaUrl,
 				ThumbnailUrl = storyResponse.ThumbnailUrl
@@ -193,6 +194,17 @@ namespace SnapDotNet
 			set { SetValue(ref _compressed, value); }
 		}
 		private bool _compressed;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public bool IsShared
+		{
+			get { return _isShared; }
+			set { SetValue(ref _isShared, value); }
+		}
+		private bool _isShared;
 
 		/// <summary>
 		/// 
@@ -605,6 +617,7 @@ namespace SnapDotNet
 			SecondLength = storyResponse.Time;
 			Caption = storyResponse.CaptionTextDisplay;
 			Compressed = storyResponse.Zipped;
+			IsShared = storyResponse.IsShared;
 			ExpiresAt = DateTime.UtcNow + storyResponse.TimeLeft;
 			MediaUrl = storyResponse.MediaUrl;
 			ThumbnailUrl = storyResponse.ThumbnailUrl;

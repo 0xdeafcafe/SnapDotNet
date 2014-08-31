@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using SnapDotNet.Utilities;
 using SnapDotNet.Responses;
 using System.Diagnostics.Contracts;
+using SnapDotNet.Utilities.CustomTypes;
 
 namespace SnapDotNet
 {
@@ -35,7 +36,7 @@ namespace SnapDotNet
 	/// Represents a friend.
 	/// </summary>
 	public sealed class Friend
-		: ObservableObject
+		: ObservableObject, IKeyGroupItem
 	{
 		/// <summary>
 		/// Create a Friend model based on a <see cref="FriendResponse" />.
@@ -52,7 +53,13 @@ namespace SnapDotNet
 				CanSeeCustomStories = friendResponse.CanSeeCustomStories,
 				DisplayName = friendResponse.DisplayName,
 				Name = friendResponse.Name,
-				FriendRequestState = (FriendRequestState)friendResponse.FriendRequestState
+				FriendRequestState = (FriendRequestState)friendResponse.FriendRequestState,
+				Expiration = friendResponse.Expiration,
+				DontDecayThumbnail = friendResponse.DontDecayThumbnail,
+				SharedStoryId = friendResponse.SharedStoryId,
+				IsSharedStory = friendResponse.IsSharedStory,
+				HasCustomDescription = friendResponse.HasCustomDescription,
+				Venue = friendResponse.Venue
 			};
 		}
 
@@ -158,6 +165,72 @@ namespace SnapDotNet
 		private uint _score;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public DateTime Expiration
+		{
+			get { return _expiration; }
+			set { SetValue(ref _expiration, value); }
+		}
+		private DateTime _expiration;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public bool DontDecayThumbnail
+		{
+			get { return _dontDecayThumbnail; }
+			set { SetValue(ref _dontDecayThumbnail, value); }
+		}
+		private bool _dontDecayThumbnail;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public string SharedStoryId
+		{
+			get { return _sharedStoryId; }
+			set { SetValue(ref _sharedStoryId, value); }
+		}
+		private string _sharedStoryId;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public bool IsSharedStory
+		{
+			get { return _isSharedStory; }
+			set { SetValue(ref _isSharedStory, value); }
+		}
+		private bool _isSharedStory;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public bool HasCustomDescription
+		{
+			get { return _hasCustomDescription; }
+			set { SetValue(ref _hasCustomDescription, value); }
+		}
+		private bool _hasCustomDescription;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		[JsonProperty]
+		public string Venue
+		{
+			get { return _venue; }
+			set { SetValue(ref _venue, value); }
+		}
+		private string _venue;
+
+		/// <summary>
 		/// Gets or sets the best friends of this friend.
 		/// </summary>
 		[JsonProperty]
@@ -178,7 +251,7 @@ namespace SnapDotNet
 			set { SetValue(ref _stories, value); }
 		}
 		private ObservableCollection<FriendStory> _stories = new ObservableCollection<FriendStory>();
-
+		
 		/// <summary>
 		/// Gets if this friend has any <seealso cref="BestFriends"/>.
 		/// </summary>
@@ -269,6 +342,12 @@ namespace SnapDotNet
 			Name = friendResponse.Name;
 			DisplayName = friendResponse.DisplayName;
 			FriendRequestState = (FriendRequestState)friendResponse.FriendRequestState;
+			Expiration = friendResponse.Expiration;
+			DontDecayThumbnail = friendResponse.DontDecayThumbnail;
+			SharedStoryId = friendResponse.SharedStoryId;
+			IsSharedStory = friendResponse.IsSharedStory;
+			HasCustomDescription = friendResponse.HasCustomDescription;
+			Venue = friendResponse.Venue;
 		}
 
 		/// <summary>

@@ -154,6 +154,9 @@ namespace SnapDotNet.Responses
 		[DataMember(Name = "zipped")]
 		public bool Zipped { get; set; }
 
+		[DataMember(Name = "is_shared")]
+		public bool IsShared { get; set; }
+
 		#region IComparable Members
 
 		public int CompareTo(object obj)
