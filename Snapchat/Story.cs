@@ -678,6 +678,7 @@ namespace SnapDotNet
 		internal void Update(StoryMetadataResponse storyResponse)
 		{
 			// Don't set the Viewed field, we want to keep that from our own records
+
 			Update(storyResponse.Story);
 		}
 	}

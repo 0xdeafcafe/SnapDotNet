@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Converters;
 using SnapDotNet.Utilities;
 using System;
-using System.Diagnostics.Contracts;
 
 namespace SnapDotNet.Converters.Json
 {
@@ -16,7 +15,7 @@ namespace SnapDotNet.Converters.Json
 
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
-			writer.WriteValue(Timestamps.ToJScriptTime((DateTime) value));
+			writer.WriteValue(((DateTime) value).ToJScriptTime());
 		}
 	}
 }

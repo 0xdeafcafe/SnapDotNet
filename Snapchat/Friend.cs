@@ -36,7 +36,7 @@ namespace SnapDotNet
 	/// Represents a friend.
 	/// </summary>
 	public sealed class Friend
-		: ObservableObject, IKeyGroupItem
+		: ObservableObject
 	{
 		/// <summary>
 		/// Create a Friend model based on a <see cref="FriendResponse" />.
