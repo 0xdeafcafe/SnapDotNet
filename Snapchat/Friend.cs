@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using SnapDotNet.Utilities;
 using SnapDotNet.Responses;
 using System.Diagnostics.Contracts;
-using SnapDotNet.Utilities.CustomTypes;
 
 namespace SnapDotNet
 {
