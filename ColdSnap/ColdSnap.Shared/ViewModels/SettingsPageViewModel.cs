@@ -1,4 +1,5 @@
 ﻿using ColdSnap.Common;
+using ColdSnap.Pages;
 using SnapDotNet;
 using System;
 using System.Threading.Tasks;
@@ -14,9 +15,8 @@ namespace ColdSnap.ViewModels
 	{
 		public SettingsPageViewModel()
 		{
-			UpgradeProCommand = new RelayCommand(() =>
-			{
-			});
+			UpgradeProCommand = new RelayCommand(UpgradeToPro);
+			LogoutCommand = new RelayCommand(Logout);
 		}
 
 		/// <summary>
@@ -28,6 +28,13 @@ namespace ColdSnap.ViewModels
 			private set { SetValue(ref _upgradeProCommand, value); }
 		}
 		private ICommand _upgradeProCommand;
+
+		public ICommand LogoutCommand
+		{
+			get { return _logoutCommand; }
+			private set { SetValue(ref _logoutCommand, value); }
+		}
+		private ICommand _logoutCommand;
 
 		/// <summary>
 		/// Gets or sets whether the app tile should be live.
@@ -72,6 +79,16 @@ namespace ColdSnap.ViewModels
 		public string NextReplay
 		{
 			get { return (DateTime.Now - Account.LastReplayed).ToString(); }
+		}
+
+		private void UpgradeToPro()
+		{
+
+		}
+
+		private void Logout()
+		{
+			Window.Current.Navigate(typeof(StartPage), Account);
 		}
     }
 }

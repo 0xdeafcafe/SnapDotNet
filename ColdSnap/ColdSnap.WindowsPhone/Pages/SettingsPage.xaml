@@ -188,7 +188,7 @@
 
 	<Page.BottomAppBar>
 		<CommandBar Background="#FF00a182" Foreground="White" ClosedDisplayMode="Minimal">
-			<AppBarButton Label="logout" Icon="LeaveChat"/>
+			<AppBarButton Label="logout" Icon="ClosePane" Command="{Binding LogoutCommand}"/>
 		</CommandBar>
 	</Page.BottomAppBar>
 

@@ -84,14 +84,23 @@ namespace SnapDotNet
 				if (account.SortedFriends == null || (account.Friends.Count > 0 && account.SortedFriends.Count == 0))
 					account.CreateSortedFriends();
 
-				// TODO: initalize async updating
-
 				return account;
 			}
 			catch (FileNotFoundException)
 			{
 				return null;
 			}
+		}
+
+		public async Task DeleteAccountStateAsync()
+		{
+			try
+			{
+				Debug.WriteLine("[State Manager] Deleting account state from {0}", Location.Path);
+				var file = await Location.GetFileAsync(AccountStateFileName);
+				await file.DeleteAsync();
+			}
+			catch (FileNotFoundException) { }
 		}
 	}
 }

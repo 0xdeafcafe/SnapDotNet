@@ -66,7 +66,7 @@ namespace ColdSnap.Pages
 		/// <param name="hubContent"></param>
 		public void GoToHubSection(HubContent hubContent)
 		{
-			Hub.SetSectionIndex((int) hubContent);
+			Hub.SetSectionIndex((int) hubContent, true);
 		}
 
 		public void HideCommandBar()
@@ -110,7 +110,7 @@ namespace ColdSnap.Pages
 
 			if (e.PageState != null)
 				if (e.PageState.ContainsKey("CurrentSectionIndex"))
-					Hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]));
+					Hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]), false);
 
 			foreach (var section in Hub.Sections.Cast<SnazzyHubSection>())
 				section.LoadState(e);

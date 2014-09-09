@@ -90,8 +90,26 @@ namespace ColdSnap.Pages
 		/// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
 		/// a dictionary of state preserved by this page during an earlier
 		/// session.  The state will be null the first time a page is visited.</param>
-		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+		private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
+			// Sign out if account data is passed as a navigation parameter.
+			if (e.NavigationParameter is Account)
+			{
+				await StateManager.Local.DeleteAccountStateAsync();
+
+				// Clear backstack.
+				var backstack = (Window.Current.Content as Frame).BackStack;
+				foreach (var entry in backstack)
+				{
+					if (entry.SourcePageType == typeof(StartPage))
+					{
+						backstack.Clear();
+						break;
+					}
+				}
+
+				// TODO: Invoke the logout API function
+			}
 		}
 
 		/// <summary>

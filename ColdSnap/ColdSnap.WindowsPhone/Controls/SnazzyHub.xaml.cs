@@ -80,13 +80,13 @@ namespace ColdSnap.Controls
 			get { return Sections[CurrentSectionIndex] as SnazzyHubSection; }
 		}
 
-		public void SetSectionIndex(int index)
+		public void SetSectionIndex(int index, bool animated)
 		{
 			var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(10) };
 			timer.Tick += delegate
 			{
 				_scrollViewer.HorizontalSnapPointsType = SnapPointsType.None;
-				if (!_scrollViewer.ChangeView(ActualWidth * index, null, null, true)) return;
+				if (!_scrollViewer.ChangeView(ActualWidth * index, null, null, !animated)) return;
 				timer.Stop();
 				_scrollViewer.HorizontalSnapPointsType = SnapPointsType.MandatorySingle;
 			};
