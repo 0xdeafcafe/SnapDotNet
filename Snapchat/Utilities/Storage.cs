@@ -12,17 +12,19 @@ namespace SnapDotNet.Utilities
 {
 	public class StorageManager
 	{
+		private const string StorageObjectsFileName = "storage-objects";
+
 		public static readonly StorageManager Local = new StorageManager(ApplicationData.Current.LocalFolder);
+
+		public readonly StorageFolder StorageFolder;
+		private List<StorageObject> _storageObjects = new List<StorageObject>();
+		private Task _loadTask;
 
 		public StorageManager(StorageFolder storageFolder)
 		{
 			StorageFolder = storageFolder;
-			LoadStorageObjects();
+			_loadTask = Task.Run(() => LoadStorageObjects());
 		}
-
-		private const string StorageObjectsFileName = "storage-objects";
-		private List<StorageObject> _storageObjects = new List<StorageObject>();
-		public readonly StorageFolder StorageFolder;
 
 		#region Storage Object Actions
 

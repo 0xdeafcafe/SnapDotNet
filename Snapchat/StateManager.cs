@@ -82,7 +82,7 @@ namespace SnapDotNet
 				var account = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<Account>(jsonData));
 
 				if (account.SortedFriends == null || (account.Friends.Count > 0 && account.SortedFriends.Count == 0))
-					account.CreateSortedFriends();
+					await account.CreateSortedFriendsAsync();
 
 				return account;
 			}

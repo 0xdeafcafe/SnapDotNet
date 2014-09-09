@@ -462,16 +462,10 @@ namespace SnapDotNet
 		[JsonIgnore]
 		public byte[] MediaOverlayData
 		{
-			get
-			{
-				if (!LocalMedia)
-					return null;
-
-				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryOverlay);
-				var data = AsyncHelpers.RunSync(storageObject.ReadDataAsync);
-				return data;
-			}
+			get { return _mediaOverlayData; }
+			set { SetValue(ref _mediaOverlayData, value); }
 		}
+		private byte[] _mediaOverlayData;
 
 		/// <summary>
 		/// 
@@ -602,7 +596,7 @@ namespace SnapDotNet
 		/// Update a Story from the <seealso cref="StoryResponse"/>.
 		/// </summary>
 		/// <param name="storyResponse">The story response to update the model from.</param>
-		internal void Update(StoryResponse storyResponse)
+		internal async void Update(StoryResponse storyResponse)
 		{
 			Id = storyResponse.Id;
 			Owner = storyResponse.Username;
@@ -621,6 +615,16 @@ namespace SnapDotNet
 			ExpiresAt = DateTime.UtcNow + storyResponse.TimeLeft;
 			MediaUrl = storyResponse.MediaUrl;
 			ThumbnailUrl = storyResponse.ThumbnailUrl;
+
+			MediaOverlayData = await Task.Run<byte[]>(() =>
+			{
+				if (!LocalMedia)
+					return null;
+
+				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryOverlay);
+				var data = AsyncHelpers.RunSync(storageObject.ReadDataAsync);
+				return data;
+			});
 		}
 	}
 

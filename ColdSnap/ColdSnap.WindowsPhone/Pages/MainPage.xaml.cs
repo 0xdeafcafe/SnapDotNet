@@ -103,7 +103,7 @@ namespace ColdSnap.Pages
 			{
 				if (entry.SourcePageType == typeof(StartPage))
 				{
-					ViewModel.RefreshContent();
+					var refreshTask = ViewModel.RefreshContentAsync();
 					backstack.Clear();
 					break;
 				}

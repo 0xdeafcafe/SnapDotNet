@@ -428,9 +428,9 @@ namespace SnapDotNet
 		/// <summary>
 		/// 
 		/// </summary>
-		public void CreateSortedFriends()
+		public Task CreateSortedFriendsAsync()
 		{
-			SortedFriends = FriendsKeyGroup.CreateGroups(Friends, Username);
+			return Task.Run(() => { SortedFriends = FriendsKeyGroup.CreateGroups(Friends, Username); });
 		}
 
 		public void UpdateSortedFriends()
@@ -502,7 +502,7 @@ namespace SnapDotNet
 		/// Update the data in this model from <paramref name="accountResponse"/>
 		/// </summary>
 		/// <param name="accountResponse">The Account Response to update from</param>
-		private void UpdateAccount(AccountResponse accountResponse)
+		private async void UpdateAccount(AccountResponse accountResponse)
 		{
 			Contract.Requires<ArgumentNullException>(accountResponse != null);
 
@@ -524,7 +524,7 @@ namespace SnapDotNet
 			// TODO: Save the fields that are missing to this model
 
 			if (SortedFriends == null)
-				CreateSortedFriends();
+				await CreateSortedFriendsAsync();
 
 			// Remove removed friends.
 			var removedFriends = Friends.Where(f => accountResponse.Friends.FirstOrDefault(f1 => f1.Name == f.Name) == null);
