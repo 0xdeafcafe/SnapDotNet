@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using ColdSnap.Controls;
 using Windows.UI.ViewManagement;
+using System.Threading.Tasks;
 
 namespace ColdSnap.Pages
 {
@@ -93,6 +94,17 @@ namespace ColdSnap.Pages
 		/// session.  The state will be null the first time a page is visited.</param>
 		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
+			// Clear backstack if navigated from StartPage.
+			var backstack = (Window.Current.Content as Frame).BackStack;
+			foreach (var entry in backstack)
+			{
+				if (entry.SourcePageType == typeof(StartPage))
+				{
+					backstack.Clear();
+					break;
+				}
+			}
+
 			if (e.NavigationParameter is Account)
 				ViewModel.Account = e.NavigationParameter as Account;
 
@@ -102,6 +114,11 @@ namespace ColdSnap.Pages
 
 			foreach (var section in Hub.Sections.Cast<SnazzyHubSection>())
 				section.LoadState(e);
+
+			if (e.NavigationParameter == null)
+			{
+				Task.Run(() => ViewModel.RefreshCommand.Execute(null));
+			}
 		}
 
 		/// <summary>

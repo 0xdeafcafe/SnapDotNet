@@ -92,7 +92,7 @@
     <Compile Include="Responses\AllUpdatesResponse.cs" />
     <Compile Include="Responses\ChatMessageResponses.cs" />
     <Compile Include="Responses\ConversationResponces.cs" />
-    <Compile Include="Responses\FriendResponces.cs" />
+    <Compile Include="Responses\FriendResponses.cs" />
     <Compile Include="Responses\MessagingGatewayResponses.cs" />
     <Compile Include="Responses\PublicActivityResponse.cs" />
     <Compile Include="Responses\SnapResponse.cs" />

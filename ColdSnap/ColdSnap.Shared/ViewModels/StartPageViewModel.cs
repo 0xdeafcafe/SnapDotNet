@@ -15,7 +15,7 @@ namespace ColdSnap.ViewModels
 				account = Account.AuthenticateFromAuth(username.Replace("auth:", ""), password);
 			else
 				account = await Account.AuthenticateAsync(username, password);
-			await account.UpdateAccountAsync();
+			//await account.UpdateAccountAsync();
 			await StateManager.Local.SaveAccountStateAsync(account);
 			return account;
 #else
