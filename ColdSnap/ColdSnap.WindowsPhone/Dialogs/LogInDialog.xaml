@@ -11,6 +11,7 @@
 	PrimaryButtonText="log in"  
 	SecondaryButtonText="cancel"
 	
+	RequestedTheme="Dark"
 	Background="#FFF36136">
 
 	<StackPanel>

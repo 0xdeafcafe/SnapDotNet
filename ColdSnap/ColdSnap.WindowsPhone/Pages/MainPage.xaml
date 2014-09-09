@@ -10,6 +10,7 @@
 	xmlns:vm="using:ColdSnap.ViewModels"
 	mc:Ignorable="d"
 	
+	RequestedTheme="Light"
 	Background="White">
 
 	<d:DesignProperties.DataContext>

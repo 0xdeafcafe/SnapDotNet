@@ -6,6 +6,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:dvm="using:ColdSnap.ViewModels.Dialogs"
 	
+	RequestedTheme="Dark"
 	Title="SIGN UP"
 	PrimaryButtonText="continue"  
 	SecondaryButtonText="cancel"

@@ -94,19 +94,20 @@ namespace ColdSnap.Pages
 		/// session.  The state will be null the first time a page is visited.</param>
 		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
-			// Clear backstack if navigated from StartPage.
+			if (e.NavigationParameter is Account)
+				ViewModel.Account = e.NavigationParameter as Account;
+
+			// Clear backstack and automatically refresh if navigated from StartPage.
 			var backstack = (Window.Current.Content as Frame).BackStack;
 			foreach (var entry in backstack)
 			{
 				if (entry.SourcePageType == typeof(StartPage))
 				{
+					ViewModel.RefreshContent();
 					backstack.Clear();
 					break;
 				}
 			}
-
-			if (e.NavigationParameter is Account)
-				ViewModel.Account = e.NavigationParameter as Account;
 
 			if (e.PageState != null)
 				if (e.PageState.ContainsKey("CurrentSectionIndex"))
@@ -114,11 +115,6 @@ namespace ColdSnap.Pages
 
 			foreach (var section in Hub.Sections.Cast<SnazzyHubSection>())
 				section.LoadState(e);
-
-			if (e.NavigationParameter == null)
-			{
-				Task.Run(() => ViewModel.RefreshCommand.Execute(null));
-			}
 		}
 
 		/// <summary>

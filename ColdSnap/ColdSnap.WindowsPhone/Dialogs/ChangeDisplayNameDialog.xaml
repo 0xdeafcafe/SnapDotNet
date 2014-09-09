@@ -11,6 +11,7 @@
 	PrimaryButtonText="change"  
 	SecondaryButtonText="cancel"
 	
+	RequestedTheme="Dark"
 	Background="#FF9B55A0">
 
 	<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
