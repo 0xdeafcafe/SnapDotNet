@@ -4,6 +4,7 @@ using SnapDotNet;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Globalization.DateTimeFormatting;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -78,7 +79,18 @@ namespace ColdSnap.ViewModels
 
 		public string NextReplay
 		{
-			get { return (DateTime.Now - Account.LastReplayed).ToString(); }
+			get
+			{
+				var nextReplay = DateTime.Now - Account.LastReplayed;
+				if (nextReplay.TotalHours >= 24)
+				{
+					return App.Strings.GetString("ReplayAvailableText");
+				}
+				else
+				{
+					return string.Format(App.Strings.GetString("ReplayFormattedText"), nextReplay.Hours, nextReplay.Minutes);
+				}
+			}
 		}
 
 		private void UpgradeToPro()

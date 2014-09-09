@@ -201,6 +201,12 @@
   <data name="PasswordBox.Header" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="ReplayAvailableText" xml:space="preserve">
+    <value>replay available!</value>
+  </data>
+  <data name="ReplayFormattedText" xml:space="preserve">
+    <value>{0} hours and {1} minutes</value>
+  </data>
   <data name="SignUpButton.Content" xml:space="preserve">
     <value>SIGN UP</value>
   </data>
