@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.Web.Http;
 
 namespace SnapDotNet
@@ -428,9 +430,9 @@ namespace SnapDotNet
 		/// <summary>
 		/// 
 		/// </summary>
-		public Task CreateSortedFriendsAsync()
+		public async Task CreateSortedFriendsAsync()
 		{
-			return Task.Run(() => { SortedFriends = FriendsKeyGroup.CreateGroups(Friends, Username); });
+			await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, delegate { SortedFriends = FriendsKeyGroup.CreateGroups(Friends, Username); });
 		}
 
 		public void UpdateSortedFriends()

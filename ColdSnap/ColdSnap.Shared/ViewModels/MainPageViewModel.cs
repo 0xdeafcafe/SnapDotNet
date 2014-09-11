@@ -28,25 +28,22 @@ namespace ColdSnap.ViewModels
 		{
 			await ProgressHelper.ShowStatusBarAsync(App.Strings.GetString("StatusBarUpdating"));
 
-			try
+			Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async delegate
 			{
-				Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async delegate
+				try
 				{
 					await Account.UpdateAccountAsync();
-				});
-				await Task.Run(() => StateManager.Local.SaveAccountStateAsync(Account));
-			}
-			catch (InvalidCredentialsException)
-			{
-				Window.Current.Navigate(typeof(StartPage), Account);
-			}
-#if !DEBUG
-			catch { }
-#endif
-			finally
-			{
-				var hideTask = ProgressHelper.HideStatusBarAsync();
-			}
+				}
+				catch (InvalidCredentialsException)
+				{
+					Window.Current.Navigate(typeof(StartPage), Account);
+				}
+				finally
+				{
+					var hideTask = ProgressHelper.HideStatusBarAsync();
+				}
+			});
+			await Task.Run(() => StateManager.Local.SaveAccountStateAsync(Account));
 		}
 	}
 }
