@@ -622,8 +622,12 @@ namespace SnapDotNet
 					return null;
 
 				var storageObject = StorageManager.Local.RetrieveStorageObject(Id, StorageType.StoryOverlay);
-				var data = AsyncHelpers.RunSync(storageObject.ReadDataAsync);
-				return data;
+				if (storageObject != null)
+				{
+					var data = AsyncHelpers.RunSync(storageObject.ReadDataAsync);
+					return data;
+				}
+				return null;
 			});
 		}
 	}

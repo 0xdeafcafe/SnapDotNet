@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Navigation;
 using ColdSnap.Controls;
 using Windows.UI.ViewManagement;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ColdSnap.Pages
 {
@@ -103,8 +104,16 @@ namespace ColdSnap.Pages
 			{
 				if (entry.SourcePageType == typeof(StartPage))
 				{
-					var refreshTask = ViewModel.RefreshContentAsync();
 					backstack.Clear();
+
+					var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+					timer.Tick += async delegate
+					{
+						await ViewModel.RefreshContentAsync();
+						timer.Stop();
+					};
+					timer.Start();
+
 					break;
 				}
 			}

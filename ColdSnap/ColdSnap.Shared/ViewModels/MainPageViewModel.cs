@@ -33,6 +33,7 @@ namespace ColdSnap.ViewModels
 				try
 				{
 					await Account.UpdateAccountAsync();
+					await StateManager.Local.SaveAccountStateAsync(Account);
 				}
 				catch (InvalidCredentialsException)
 				{
@@ -43,7 +44,6 @@ namespace ColdSnap.ViewModels
 					var hideTask = ProgressHelper.HideStatusBarAsync();
 				}
 			});
-			await Task.Run(() => StateManager.Local.SaveAccountStateAsync(Account));
 		}
 	}
 }

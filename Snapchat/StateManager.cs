@@ -94,13 +94,23 @@ namespace SnapDotNet
 
 		public async Task DeleteAccountStateAsync()
 		{
-			try
+			/*try
 			{
 				Debug.WriteLine("[State Manager] Deleting account state from {0}", Location.Path);
 				var file = await Location.GetFileAsync(AccountStateFileName);
 				await file.DeleteAsync();
 			}
-			catch (FileNotFoundException) { }
+			catch (FileNotFoundException)
+			{
+				Debug.WriteLine("[State Manager] Account state not found in {0}", Location.Path);
+			}*/
+
+			Debug.WriteLine("[State Manager] Deleting account state from {0}", Location.Path);
+			foreach (var file in await Location.GetFilesAsync())
+			{
+				Debug.WriteLine("[State Manager] Deleted {0} from {1}", file.Name, Location.Path);
+				await file.DeleteAsync();
+			}
 		}
 	}
 }
