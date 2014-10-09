@@ -1,34 +1,28 @@
 ﻿<ContentDialog
-	x:Class="ColdSnap.Dialogs.SignUpDialog"
-	x:Uid="SignUpContentDialog"
-	
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:dvm="using:ColdSnap.ViewModels.Dialogs"
-	
-	RequestedTheme="Dark"
-	Title="SIGN UP"
-	PrimaryButtonText="continue"  
-	SecondaryButtonText="cancel"
-	Background="#FF00A2FF">
-	
-	<ContentDialog.DataContext>
-		<dvm:SignUpDialogViewModel/>
-	</ContentDialog.DataContext>
+    x:Class="ColdSnap.Dialogs.SignUpDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ColdSnap.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="DIALOG TITLE"
+    PrimaryButtonText="sign in"  
+    SecondaryButtonText="cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
-    <StackPanel>
-        <TextBox Name="email"
-				 x:Uid="EmailAddressTextBox"
-				 Header="Email"
-				 InputScope="EmailSmtpAddress"/>
-		<PasswordBox Name="password"
-					 x:Uid="PasswordBox"
-					 Header="Password"/>
-		<DatePicker Name="birthday"
-					x:Uid="BirthdayDatePicker"
-					Header="Birthday"
-					Margin="0,8,0,0"
-					MaxYear="{Binding MaxBirthdayYear}"
-					Date="{Binding MaxBirthdayYear}"/>
-	</StackPanel>
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TextBox Name="email" Header="Email address"/>
+        <PasswordBox  Name="password" Header="Password"/>
+        <CheckBox Name="showPassword" Content="Show password"/>
+
+        <!-- Content body -->
+        <TextBlock Name="body" Style="{StaticResource MessageDialogContentStyle}" TextWrapping="Wrap">
+            <TextBlock.Text>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </TextBlock.Text>
+        </TextBlock>
+    </StackPanel>
 </ContentDialog>

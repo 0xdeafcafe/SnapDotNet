@@ -18,21 +18,17 @@ namespace ColdSnap.Dialogs
 		public LogInDialog()
 		{
 			InitializeComponent();
-
 			IsPrimaryButtonEnabled = false;
+			SecondaryButtonClick += delegate { Password = String.Empty; };
+			Action togglePrimaryButton = () => IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(username.Text) && !String.IsNullOrWhiteSpace(password.Password);
+			username.TextChanged += delegate { togglePrimaryButton(); };
+			password.PasswordChanged += delegate { togglePrimaryButton(); };
+
 #if DEBUG
 			IsPrimaryButtonEnabled = true;
+#else
+			IsPrimaryButtonEnabled = false;
 #endif
-			SecondaryButtonClick += delegate { Password = String.Empty; };
-
-			username.TextChanged += delegate
-			{
-				IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(username.Text) && !String.IsNullOrWhiteSpace(password.Password);
-			};
-			password.PasswordChanged += delegate
-			{
-				IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(username.Text) && !String.IsNullOrWhiteSpace(password.Password);
-			};
 		}
 
 		public string Username

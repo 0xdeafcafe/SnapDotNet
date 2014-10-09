@@ -20,31 +20,31 @@ namespace ColdSnap.Controls
 
 		public int Radius
 		{
-			get { return (int)GetValue(RadiusProperty); }
+			get { return (int) GetValue(RadiusProperty); }
 			set { SetValue(RadiusProperty, value); }
 		}
 
 		public SolidColorBrush SegmentColor
 		{
-			get { return (SolidColorBrush)GetValue(SegmentColorProperty); }
+			get { return (SolidColorBrush) GetValue(SegmentColorProperty); }
 			set { SetValue(SegmentColorProperty, value); }
 		}
 
 		public int StrokeThickness
 		{
-			get { return (int)GetValue(StrokeThicknessProperty); }
+			get { return (int) GetValue(StrokeThicknessProperty); }
 			set { SetValue(StrokeThicknessProperty, value); }
 		}
 
 		public double Percentage
 		{
-			get { return (double)GetValue(PercentageProperty); }
+			get { return (double) GetValue(PercentageProperty); }
 			set { SetValue(PercentageProperty, value); }
 		}
 
 		public double Angle
 		{
-			get { return (double)GetValue(AngleProperty); }
+			get { return (double) GetValue(AngleProperty); }
 			set { SetValue(AngleProperty, value); }
 		}
 
@@ -110,7 +110,7 @@ namespace ColdSnap.Controls
 			// convert to radians
 			var angleRad = (Math.PI / 180.0) * (angle - 90);
 			var x = radius * Math.Cos(angleRad);
-			var y = radius*Math.Sin(angleRad);
+			var y = radius * Math.Sin(angleRad);
 			return new Point(x, y);
 		}
 	}

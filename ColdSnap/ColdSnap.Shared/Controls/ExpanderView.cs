@@ -16,6 +16,7 @@ namespace ColdSnap.Controls
 		public static DependencyProperty ExpandableContentTemplateDependencyProperty;
 		public static DependencyProperty HeaderHeightDependencyProperty;
 		public static DependencyProperty ContentHeightDependencyProperty;
+		public static DependencyProperty ShowAdditionalHeaderDependencyProperty;
 
 		public bool IsExpanded { get; private set; }
 
@@ -38,6 +39,8 @@ namespace ColdSnap.Controls
 
 			HeaderHeightDependencyProperty = DependencyProperty.Register("HeaderHeight", typeof(int), typeof(ExpanderView), new PropertyMetadata(60));
 			ContentHeightDependencyProperty = DependencyProperty.Register("ContentHeight", typeof(int), typeof(ExpanderView), new PropertyMetadata(60));
+
+			ShowAdditionalHeaderDependencyProperty = DependencyProperty.Register("ShowAdditionalHeader", typeof(Boolean), typeof(ExpanderView), new PropertyMetadata(true));
 		}
 
 		/// <summary>
@@ -105,7 +108,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public String HeaderText
 		{
-			get { return (String)GetValue(HeaderTextDependencyProperty); }
+			get { return (String) GetValue(HeaderTextDependencyProperty); }
 			set { SetValue(HeaderTextDependencyProperty, value); }
 		}
 
@@ -114,7 +117,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public DataTemplate HeaderCoverContentTemplate
 		{
-			get { return (DataTemplate)GetValue(HeaderCoverContentTemplateDependencyProperty); }
+			get { return (DataTemplate) GetValue(HeaderCoverContentTemplateDependencyProperty); }
 			set { SetValue(HeaderCoverContentTemplateDependencyProperty, value); }
 		}
 
@@ -123,7 +126,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public String SubHeaderText
 		{
-			get { return (String)GetValue(SubHeaderTextDependencyProperty); }
+			get { return (String) GetValue(SubHeaderTextDependencyProperty); }
 			set { SetValue(SubHeaderTextDependencyProperty, value); }
 		}
 
@@ -132,8 +135,17 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public Boolean ShowSubHeader
 		{
-			get { return (Boolean)GetValue(ShowSubHeaderDependencyProperty); }
+			get { return (Boolean) GetValue(ShowSubHeaderDependencyProperty); }
 			set { SetValue(ShowSubHeaderDependencyProperty, value); }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public Boolean ShowAdditionalHeader
+		{
+			get { return (Boolean) GetValue(ShowAdditionalHeaderDependencyProperty); }
+			set { SetValue(ShowAdditionalHeaderDependencyProperty, value); }
 		}
 
 		/// <summary>
@@ -141,7 +153,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public DataTemplate PrimaryHeaderContentTemplate
 		{
-			get { return (DataTemplate)GetValue(PrimaryHeaderContentTemplateDependencyProperty); }
+			get { return (DataTemplate) GetValue(PrimaryHeaderContentTemplateDependencyProperty); }
 			set { SetValue(PrimaryHeaderContentTemplateDependencyProperty, value); }
 		}
 
@@ -150,7 +162,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public DataTemplate AdditionalHeaderContentTemplate
 		{
-			get { return (DataTemplate)GetValue(AdditionalHeaderContentTemplateDependencyProperty); }
+			get { return (DataTemplate) GetValue(AdditionalHeaderContentTemplateDependencyProperty); }
 			set { SetValue(AdditionalHeaderContentTemplateDependencyProperty, value); }
 		}
 
@@ -159,7 +171,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public DataTemplate ExpandableContentTemplate
 		{
-			get { return (DataTemplate)GetValue(ExpandableContentTemplateDependencyProperty); }
+			get { return (DataTemplate) GetValue(ExpandableContentTemplateDependencyProperty); }
 			set { SetValue(ExpandableContentTemplateDependencyProperty, value); }
 		}
 
@@ -168,7 +180,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public int HeaderHeight
 		{
-			get { return (int)GetValue(HeaderHeightDependencyProperty); }
+			get { return (int) GetValue(HeaderHeightDependencyProperty); }
 			set { SetValue(HeaderHeightDependencyProperty, value); }
 		}
 
@@ -177,7 +189,7 @@ namespace ColdSnap.Controls
 		/// </summary>
 		public int ContentHeight
 		{
-			get { return (int)GetValue(ContentHeightDependencyProperty); }
+			get { return (int) GetValue(ContentHeightDependencyProperty); }
 			set { SetValue(ContentHeightDependencyProperty, value); }
 		}
 

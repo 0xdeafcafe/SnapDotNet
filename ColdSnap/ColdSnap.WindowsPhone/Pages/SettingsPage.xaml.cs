@@ -3,10 +3,10 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using ColdSnap.Common;
 using ColdSnap.ViewModels;
-using SnapDotNet;
 using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using SnapDotNet.Data;
 
 namespace ColdSnap.Pages
 {
@@ -62,7 +62,7 @@ namespace ColdSnap.Pages
 		/// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
 		/// <param name="e">Event data that provides an empty dictionary to be populated with
 		/// serializable state.</param>
-		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e) {  }
+		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e) { }
 
 		#region NavigationHelper registration
 

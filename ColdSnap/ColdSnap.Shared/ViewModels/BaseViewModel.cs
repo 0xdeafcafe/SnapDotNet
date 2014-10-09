@@ -1,4 +1,4 @@
-﻿using SnapDotNet;
+﻿using SnapDotNet.Data;
 using SnapDotNet.Utilities;
 
 namespace ColdSnap.ViewModels

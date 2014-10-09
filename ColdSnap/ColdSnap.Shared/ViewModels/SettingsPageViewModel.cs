@@ -1,24 +1,23 @@
-﻿using ColdSnap.Common;
-using ColdSnap.Pages;
-using SnapDotNet;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.Globalization.DateTimeFormatting;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using ColdSnap.Common;
+using ColdSnap.Pages;
+using SnapDotNet.Utilities;
 
 namespace ColdSnap.ViewModels
 {
-	public sealed class SettingsPageViewModel
+    public sealed class SettingsPageViewModel
 		: BaseViewModel
-	{
-		public SettingsPageViewModel()
-		{
+    {
+	    public SettingsPageViewModel()
+	    {
 			UpgradeProCommand = new RelayCommand(UpgradeToPro);
-			LogoutCommand = new RelayCommand(Logout);
-		}
+			LogoutCommand = new RelayCommand(async () => await LogoutAsync());
+	    }
 
 		/// <summary>
 		/// Gets the command to upgrade to Pro status.
@@ -30,6 +29,9 @@ namespace ColdSnap.ViewModels
 		}
 		private ICommand _upgradeProCommand;
 
+		/// <summary>
+		/// Gets the command to log out.
+		/// </summary>
 		public ICommand LogoutCommand
 		{
 			get { return _logoutCommand; }
@@ -60,7 +62,7 @@ namespace ColdSnap.ViewModels
 			{
 				AppSettings.Set("TileTransparencyEnabled", value);
 				OnPropertyChanged();
-				OnPropertyChanged("TileTransparencyUiExampleBrush");
+				OnPropertyChanged(() => TileTransparencyUiExampleBrush);
 			}
 		}
 
@@ -95,12 +97,16 @@ namespace ColdSnap.ViewModels
 
 		private void UpgradeToPro()
 		{
-
+			// TODO: To be implemented
 		}
 
-		private void Logout()
+		private async Task LogoutAsync()
 		{
-			Window.Current.Navigate(typeof(StartPage), Account);
+			var logoutTask = Account.LogoutAsync();
+			var deleteFilesTask = StorageManager.Local.EmptyFolderAsync();
+			Window.Current.Navigate(typeof(StartPage));
+			await logoutTask;
+			await deleteFilesTask;
 		}
     }
 }

@@ -1,34 +1,41 @@
-﻿using Windows.Graphics.Display;
+﻿using System;
+using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using ColdSnap.Common;
-using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using ColdSnap.Common;
+using ColdSnap.ViewModels;
+using SnapDotNet.Data;
 
 namespace ColdSnap.Pages
 {
 	public sealed partial class ManageFriendsPage
 	{
-		private readonly NavigationHelper _navigationHelper;
-
 		public ManageFriendsPage()
 		{
 			InitializeComponent();
+
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 			DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
 
-			_navigationHelper = new NavigationHelper(this);
-			_navigationHelper.LoadState += NavigationHelper_LoadState;
-			_navigationHelper.SaveState += NavigationHelper_SaveState;
+			NavigationHelper = new NavigationHelper(this);
+			NavigationHelper.LoadState += NavigationHelper_LoadState;
+			NavigationHelper.SaveState += NavigationHelper_SaveState;
+
+			DataContext = new ManageFriendsPageViewModel();
 		}
 
 		/// <summary>
 		/// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
 		/// </summary>
-		public NavigationHelper NavigationHelper
+		public NavigationHelper NavigationHelper { get; private set; }
+
+		/// <summary>
+		/// Gets the view model of this page.
+		/// </summary>
+		public ManageFriendsPageViewModel ViewModel
 		{
-			get { return _navigationHelper; }
+			get { return DataContext as ManageFriendsPageViewModel; }
 		}
 
 		/// <summary>
@@ -42,7 +49,10 @@ namespace ColdSnap.Pages
 		/// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
 		/// a dictionary of state preserved by this page during an earlier
 		/// session.  The state will be null the first time a page is visited.</param>
-		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e) { }
+		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+		{
+			ViewModel.Account = e.NavigationParameter as Account;
+		}
 
 		/// <summary>
 		/// Preserves state associated with this page in case the application is suspended or the
@@ -52,7 +62,9 @@ namespace ColdSnap.Pages
 		/// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
 		/// <param name="e">Event data that provides an empty dictionary to be populated with
 		/// serializable state.</param>
-		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e) {  }
+		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
+		{
+		}
 
 		#region NavigationHelper registration
 
@@ -71,19 +83,14 @@ namespace ColdSnap.Pages
 		/// handlers that cannot cancel the navigation request.</param>
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			_navigationHelper.OnNavigatedTo(e);
+			NavigationHelper.OnNavigatedTo(e);
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
 		{
-			_navigationHelper.OnNavigatedFrom(e);
+			NavigationHelper.OnNavigatedFrom(e);
 		}
 
 		#endregion
-
-		private void GoBackButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			Frame.GoBack();
-		}
 	}
 }

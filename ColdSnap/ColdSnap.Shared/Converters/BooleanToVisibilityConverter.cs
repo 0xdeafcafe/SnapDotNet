@@ -7,8 +7,6 @@ namespace ColdSnap.Converters
 	public sealed class BooleanToVisibilityConverter
 		: IValueConverter
 	{
-		#region IValueConverter Members
-
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
 			if (!IsInverted)
@@ -22,8 +20,6 @@ namespace ColdSnap.Converters
 			throw new NotImplementedException();
 		}
 
-		public Boolean IsInverted { get; set; }
-
-		#endregion
+		public bool IsInverted { get; set; }
 	}
 }

@@ -3,13 +3,19 @@
 	
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:vm="using:ColdSnap.ViewModels"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:viewModels="using:ColdSnap.ViewModels"
 	mc:Ignorable="d"
 
+	NavigationCacheMode="Enabled"
 	RequestedTheme="Light"
 	Background="#FFFFFFFF">
+
+	<d:DesignProperties.DataContext>
+		<viewModels:SettingsPageViewModel/>
+	</d:DesignProperties.DataContext>
+
 	<Page.Resources>
 		<SolidColorBrush x:Key="PageAccentBrush" Color="#FF00a182" />
 
@@ -171,7 +177,75 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style x:Key="FluidButtonStyle" TargetType="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Padding" Value="5"/>
+			<Setter Property="MinHeight" Value="0"/>
+			<Setter Property="MinWidth" Value="0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Grid x:Name="Grid" IsHitTestVisible="True" Background="Transparent">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualState x:Name="Normal">
+										<Storyboard>
+											<DoubleAnimation Duration="0:0:0.2" To="1" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+												<DoubleAnimation.EasingFunction>
+													<BackEase Amplitude="1" EasingMode="EaseOut"/>
+												</DoubleAnimation.EasingFunction>
+											</DoubleAnimation>
+											<DoubleAnimation Duration="0:0:0.2" To="1" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+												<DoubleAnimation.EasingFunction>
+													<BackEase Amplitude="1" EasingMode="EaseOut"/>
+												</DoubleAnimation.EasingFunction>
+											</DoubleAnimation>
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Pressed">
+										<Storyboard>
+											<DoubleAnimation Duration="0:0:0.2" To="1.4" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+												<DoubleAnimation.EasingFunction>
+													<BackEase Amplitude="1" EasingMode="EaseOut"/>
+												</DoubleAnimation.EasingFunction>
+											</DoubleAnimation>
+											<DoubleAnimation Duration="0:0:0.2" To="1.4" 
+																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" 
+																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
+												<DoubleAnimation.EasingFunction>
+													<BackEase Amplitude="1" EasingMode="EaseOut"/>
+												</DoubleAnimation.EasingFunction>
+											</DoubleAnimation>
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+							<Grid x:Name="InnerGrid" RenderTransformOrigin="0.5,0.5">
+								<Grid.RenderTransform>
+									<CompositeTransform ScaleX="1" ScaleY="1" />
+								</Grid.RenderTransform>
+								<ContentPresenter x:Name="ContentPresenter" 
+												  AutomationProperties.AccessibilityView="Raw" 
+												  ContentTemplate="{TemplateBinding ContentTemplate}" 
+												  Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
+												  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+												  Margin="{TemplateBinding Padding}" 
+												  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+								</ContentPresenter>
+							</Grid>
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Page.Resources>
+	
 	<Page.Transitions>
 		<TransitionCollection>
 			<NavigationThemeTransition>
@@ -182,13 +256,9 @@
 		</TransitionCollection>
 	</Page.Transitions>
 
-	<d:DesignProperties.DataContext>
-		<vm:SettingsPageViewModel/>
-	</d:DesignProperties.DataContext>
-
 	<Page.BottomAppBar>
-		<CommandBar Background="#FF00a182" Foreground="White" ClosedDisplayMode="Minimal">
-			<AppBarButton Label="logout" Icon="ClosePane" Command="{Binding LogoutCommand}"/>
+		<CommandBar Background="{StaticResource PageAccentBrush}" Foreground="{StaticResource WhiteBrush}" ClosedDisplayMode="Minimal">
+			<AppBarButton x:Uid="AppBarLogout" Label="logout" Icon="ClosePane" Command="{Binding LogoutCommand}"/>
 		</CommandBar>
 	</Page.BottomAppBar>
 
@@ -211,8 +281,8 @@
 						  StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"
 						  Data="M 13,0 0,11 13,21"/>
 				</Button>
-				
-				<TextBlock Text="settings" TextTrimming="CharacterEllipsis" 
+
+				<TextBlock x:Uid="SettingsHeaderText" Text="settings" TextTrimming="CharacterEllipsis" 
 						   Foreground="{StaticResource PageAccentBrush}" 
 						   Margin="15,0,0,5" FontWeight="SemiLight" FontFamily="Segoe WP" 
 						   FontSize="40"
@@ -225,7 +295,7 @@
 				</TextBlock>
 			</Grid>
 		</Border>
-		
+
 		<!-- Content -->
 		<Pivot Grid.Row="1" Margin="0,-20,0,20"
 			   CommonNavigationTransitionInfo.IsStaggerElement="True">
@@ -254,7 +324,7 @@
 				</ScrollViewer>
 			</PivotItem>
 
-			<PivotItem x:Uid="SettingsPrivacyGroup" Header="SERVICES">
+			<PivotItem x:Uid="SettingsServicesGroup" Header="SERVICES">
 				<ScrollViewer>
 					<StackPanel Margin="0,0,0,0">
 						<ToggleSwitch Header="Front camera flash" IsOn="True"/>
@@ -293,7 +363,7 @@
 						<CheckBox x:Uid="SettingsInstantNotifications" Content="Instant notifications" IsChecked="True"/>
 						<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Content="Unlock this feature"/>
 						<TextBlock x:Uid="InstantNotificationsDisclaimer" TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
-							If you enable instant notifications, you give us permission to store your Snapchat auth token on our secure cloud service.<LineBreak/><LineBreak/>It may take up to one minute for your phone to be notified when instant notifications are enabled.
+							When you enable instant notifications, you give us permission to store your Snapchat auth token on our secure cloud service.
 						</TextBlock>
 					</StackPanel>
 				</ScrollViewer>
@@ -303,7 +373,7 @@
 				<Grid>
 					<StackPanel>
 						<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="{Binding LiveTileEnabled, Mode=TwoWay}"/>
-						<ToggleSwitch x:Uid="SettingsTileTransaprency" Header="Tile Transparency" IsOn="{Binding TileTransparencyEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsTileTransaprency" Header="Tile transparency" IsOn="{Binding TileTransparencyEnabled, Mode=TwoWay}"/>
 
 					</StackPanel>
 
@@ -387,27 +457,12 @@
 			<PivotItem x:Uid="SettingsAppGroup" Header="APP">
 				<ScrollViewer>
 					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsHoldToViewSnap" Header="Hold to view snaps" IsOn="True"/>
 						<ToggleSwitch x:Uid="SettingsFrontCameraMirrorEffect" Header="Front camera mirror effect" IsOn="True"/>
 						<ComboBox x:Uid="SettingsAutomaticallyDownloadSnaps" Header="Automatically download snaps" SelectedIndex="1">
 							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsNever">Never</ComboBoxItem>
 							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsWifi">Wi-Fi only</ComboBoxItem>
 							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsAlways">Always</ComboBoxItem>
 						</ComboBox>
-
-						<TextBlock x:Uid="SettingsCameraShutterSoundHeader"
-							   Text="Change camera shutter sound"
-							   Margin="0,4,0,0"
-							   FontFamily="Segoe WP"
-							   FontSize="15"
-							   Foreground="#FF8C8C8C"/>
-						<TextBlock x:Uid="SettingsCameraShutterSoundBody"
-							   Text="To toggle the camera shutter sound, go to ringtones+sounds in settings."
-							   Margin="0,5,0,0"
-							   FontFamily="Segoe WP"
-							   FontSize="20"
-							   TextWrapping="Wrap"
-							   Foreground="#FF000000"/>
 					</StackPanel>
 				</ScrollViewer>
 			</PivotItem>

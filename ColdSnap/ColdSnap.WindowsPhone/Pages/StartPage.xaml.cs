@@ -1,56 +1,48 @@
-﻿using Windows.Graphics.Display;
-using ColdSnap.Common;
-using ColdSnap.Dialogs;
-using ColdSnap.ViewModels;
-using SnapDotNet;
-using System;
-using Windows.UI.Core;
-using Windows.UI.Popups;
+﻿using System;
+using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
+using ColdSnap.Common;
+using ColdSnap.Dialogs;
+using ColdSnap.ViewModels;
 
 namespace ColdSnap.Pages
 {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
 	public sealed partial class StartPage
 	{
-		private readonly NavigationHelper _navigationHelper;
-		private readonly StartPageViewModel _viewModel = new StartPageViewModel();
-
-		private LogInDialog _logInDialog;
-		private SignUpDialog _signUpDialog;
+		private readonly LogInDialog _logInDialog;
+		private readonly SignUpDialog _signUpDialog;
 
 		public StartPage()
 		{
 			InitializeComponent();
+			DataContext = ViewModel = new StartPageViewModel();
+
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 			DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
-			DataContext = ViewModel;
 
-			_navigationHelper = new NavigationHelper(this);
-			_navigationHelper.LoadState += NavigationHelper_LoadState;
-			_navigationHelper.SaveState += NavigationHelper_SaveState;
+			NavigationHelper = new NavigationHelper(this);
+			NavigationHelper.LoadState += NavigationHelper_LoadState;
+			NavigationHelper.SaveState += NavigationHelper_SaveState;
 
-			Loaded += StartPage_Loaded;
+			_logInDialog = new LogInDialog();
+			_logInDialog.PrimaryButtonClick += LogInDialog_PrimaryButtonClick;
+
+			_signUpDialog = new SignUpDialog();
 		}
 
 		/// <summary>
 		/// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
 		/// </summary>
-		public NavigationHelper NavigationHelper
-		{
-			get { return _navigationHelper; }
-		}
+		public NavigationHelper NavigationHelper { get; private set; }
 
-		public StartPageViewModel ViewModel
-		{
-			get { return _viewModel; }
-		}
+		/// <summary>
+		/// Gets the view model for this page.
+		/// </summary>
+		public StartPageViewModel ViewModel { get; private set; }
 
 		#region NavigationHelper registration
 
@@ -69,12 +61,12 @@ namespace ColdSnap.Pages
 		/// handlers that cannot cancel the navigation request.</param>
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			_navigationHelper.OnNavigatedTo(e);
+			NavigationHelper.OnNavigatedTo(e);
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
 		{
-			_navigationHelper.OnNavigatedFrom(e);
+			NavigationHelper.OnNavigatedFrom(e);
 		}
 
 		#endregion
@@ -90,26 +82,10 @@ namespace ColdSnap.Pages
 		/// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
 		/// a dictionary of state preserved by this page during an earlier
 		/// session.  The state will be null the first time a page is visited.</param>
-		private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
+		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
-			// Sign out if account data is passed as a navigation parameter.
-			if (e.NavigationParameter is Account)
-			{
-				await StateManager.Local.DeleteAccountStateAsync();
-
-				// Clear backstack.
-				var backstack = (Window.Current.Content as Frame).BackStack;
-				foreach (var entry in backstack)
-				{
-					if (entry.SourcePageType == typeof(StartPage))
-					{
-						backstack.Clear();
-						break;
-					}
-				}
-
-				// TODO: Invoke the logout API function
-			}
+			// Clear backstack.
+			(Window.Current.Content as Frame).BackStack.Clear();
 		}
 
 		/// <summary>
@@ -134,56 +110,13 @@ namespace ColdSnap.Pages
 			await _signUpDialog.ShowAsync();
 		}
 
-		private async void StartPage_Loaded(object sender, RoutedEventArgs e)
-		{
-			// Preload content dialogs
-			await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-			{
-				_logInDialog = new LogInDialog();
-				_logInDialog.PrimaryButtonClick += LogInDialog_PrimaryButtonClick;
-
-				_signUpDialog = new SignUpDialog();
-			});
-		}
-
 		private async void LogInDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
 		{
 			var deferral = args.GetDeferral();
 			sender.IsEnabled = sender.IsPrimaryButtonEnabled = sender.IsSecondaryButtonEnabled = false;
 
-			// Display progress indicator.
-			var progress = StatusBar.GetForCurrentView().ProgressIndicator;
-			progress.Text = App.Strings.GetString("StatusLoggingIn");
-			await progress.ShowAsync();
-
-			string errorMessage = null;
-			try
-			{
-				// Try to log in with the given credentials.
-				var account = await ViewModel.LogInAsync(_logInDialog.Username, _logInDialog.Password);
-
-				// Navigate to MainPage upon success.
-				Window.Current.Navigate(typeof(MainPage), account);
-			}
-			catch (InvalidCredentialsException)
-			{
-				errorMessage = App.Strings.GetString("InvalidCredentialsException");
-			}
-			catch
-			{
-				errorMessage = App.Strings.GetString("UnknownLogInException");
-			}
-
-			// Display error message if there's one.
-			if (errorMessage != null)
-				await new MessageDialog(errorMessage).ShowAsync();
-
-			// Clear the password field.
+			await ViewModel.LogInAsync(_logInDialog.Username, _logInDialog.Password);
 			_logInDialog.Password = String.Empty;
-
-			// Hide progress indicator.
-			progress.Text = String.Empty;
-			await progress.HideAsync();
 
 			sender.IsEnabled = sender.IsPrimaryButtonEnabled = sender.IsSecondaryButtonEnabled = true;
 			deferral.Complete();

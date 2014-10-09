@@ -4,11 +4,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
-	RequestedTheme="Dark"
-	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-	
+	NavigationCacheMode="Enabled"
+	RequestedTheme="Dark">
+
 	<Page.Resources>
-		
+
 		<!-- Brushes -->
 		<SolidColorBrush x:Key="LogInButtonBackgroundBrush" Color="#FFF36136"/>
 		<SolidColorBrush x:Key="SignUpButtonBackgroundBrush" Color="#FF00A2FF"/>
@@ -46,21 +46,30 @@
 
 	</Page.Resources>
 
-	<Grid x:Name="LayoutRoot">
+	<Grid>
 
 		<Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-		
-		<!-- TODO: Show logo and app name in Row 0 -->
-		<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-			<TextBlock FontSize="36" HorizontalAlignment="Center">ColdSnap</TextBlock>
-			<TextBlock FontSize="20" HorizontalAlignment="Center" Foreground="#FFC7E5FF">Snapchat for Windows Phone</TextBlock>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<!-- Logo -->
+		<Image Grid.Row="0" Source="ms-appx:///Assets/Logo.png" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="True">
+			<Image.RenderTransform>
+				<CompositeTransform ScaleX="0.5" ScaleY="0.5" TranslateY="-80"/>
+			</Image.RenderTransform>
+		</Image>
+
+		<!-- App name -->
+		<StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+			<StackPanel.RenderTransform>
+				<CompositeTransform TranslateY="25"/>
+			</StackPanel.RenderTransform>
+			<TextBlock x:Uid="StartPageAppTitle" FontSize="36" HorizontalAlignment="Center">ColdSnap</TextBlock>
+			<TextBlock x:Uid="StartPageAppSubtitle" FontSize="20" HorizontalAlignment="Center" Foreground="#FFC7E5FF">Snapchat for Windows Phone</TextBlock>
 		</StackPanel>
-		
-		
+
 		<!-- Log in button -->
 		<Button 
 				x:Uid="LogInButton"
@@ -80,6 +89,6 @@
 				Tapped="SignUpButton_Tapped">
 			SIGN UP
 		</Button>
-		
-    </Grid>
+
+	</Grid>
 </Page>

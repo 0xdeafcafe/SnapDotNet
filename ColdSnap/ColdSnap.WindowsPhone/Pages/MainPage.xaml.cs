@@ -1,46 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.Graphics.Display;
-using Windows.UI.Xaml;
-using ColdSnap.Common;
-using ColdSnap.ViewModels;
-using SnapDotNet;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
-using ColdSnap.Controls;
 using Windows.UI.ViewManagement;
-using System.Threading.Tasks;
-using System.Diagnostics;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
+using ColdSnap.Common;
+using ColdSnap.Controls;
+using ColdSnap.ViewModels;
+using SnapDotNet.Data;
 
 namespace ColdSnap.Pages
 {
-	public enum HubContent
-	{
-		Convo,
-		Camera,
-		Friends
-	}
-
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
 	public sealed partial class MainPage
 	{
-		private readonly MainPageViewModel _viewModel = new MainPageViewModel();
+		private ListView _friendsListView;
 
 		public MainPage()
 		{
 			InitializeComponent();
+			DataContext = ViewModel = new MainPageViewModel();
+
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 			DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
 
 			NavigationHelper = new NavigationHelper(this);
 			NavigationHelper.LoadState += NavigationHelper_LoadState;
 			NavigationHelper.SaveState += NavigationHelper_SaveState;
-
-			DataContext = ViewModel;
-
-			Singleton = this;
 		}
 
 		/// <summary>
@@ -49,38 +38,9 @@ namespace ColdSnap.Pages
 		public NavigationHelper NavigationHelper { get; private set; }
 
 		/// <summary>
-		/// Gets the view model of this page.
+		/// Gets the view model for this page.
 		/// </summary>
-		public MainPageViewModel ViewModel
-		{
-			get { return _viewModel; }
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static MainPage Singleton;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="hubContent"></param>
-		public void GoToHubSection(HubContent hubContent)
-		{
-			Hub.SetSectionIndex((int) hubContent, true);
-		}
-
-		public void HideCommandBar()
-		{
-			if (BottomCommandBar != null)
-				BottomCommandBar.Visibility = Visibility.Collapsed;
-		}
-
-		public void ShowCommandBar()
-		{
-			if (BottomCommandBar != null)
-				BottomCommandBar.Visibility = Visibility.Visible;
-		}
+		public MainPageViewModel ViewModel { get; private set; }
 
 		/// <summary>
 		/// Populates the page with content passed during navigation.  Any saved state is also
@@ -90,7 +50,7 @@ namespace ColdSnap.Pages
 		/// The source of the event; typically <see cref="NavigationHelper"/>
 		/// </param>
 		/// <param name="e">Event data that provides both the navigation parameter passed to
-		/// <see cref="Frame.Navigate(Type, object)"/> when this page was initially requested and
+		/// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
 		/// a dictionary of state preserved by this page during an earlier
 		/// session.  The state will be null the first time a page is visited.</param>
 		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -98,32 +58,13 @@ namespace ColdSnap.Pages
 			if (e.NavigationParameter is Account)
 				ViewModel.Account = e.NavigationParameter as Account;
 
-			// Clear backstack and automatically refresh if navigated from StartPage.
+			// Clear backstack and refresh automatically if navigated from StartPage.
 			var backstack = (Window.Current.Content as Frame).BackStack;
-			foreach (var entry in backstack)
+			if (backstack.Any(entry => entry.SourcePageType == typeof(StartPage)))
 			{
-				if (entry.SourcePageType == typeof(StartPage))
-				{
-					backstack.Clear();
-
-					var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
-					timer.Tick += async delegate
-					{
-						await ViewModel.RefreshContentAsync();
-						timer.Stop();
-					};
-					timer.Start();
-
-					break;
-				}
+				backstack.Clear();
+				ViewModel.RefreshCommand.Execute(null);
 			}
-
-			if (e.PageState != null)
-				if (e.PageState.ContainsKey("CurrentSectionIndex"))
-					Hub.SetSectionIndex(Convert.ToInt32(e.PageState["CurrentSectionIndex"]), false);
-
-			foreach (var section in Hub.Sections.Cast<SnazzyHubSection>())
-				section.LoadState(e);
 		}
 
 		/// <summary>
@@ -136,10 +77,6 @@ namespace ColdSnap.Pages
 		/// serializable state.</param>
 		private void NavigationHelper_SaveState(object sender, SaveStateEventArgs e)
 		{
-			e.PageState["CurrentSectionIndex"] = Hub.CurrentSectionIndex;
-
-			foreach (var section in Hub.Sections.Cast<SnazzyHubSection>())
-				section.SaveState(e);
 		}
 
 		#region NavigationHelper registration
@@ -149,8 +86,8 @@ namespace ColdSnap.Pages
 		/// NavigationHelper to respond to the page's navigation methods.
 		/// <para>
 		/// Page specific logic should be placed in event handlers for the  
-		/// <see cref="NavigationHelper_LoadState"/>
-		/// and <see cref="NavigationHelper_SaveState"/>.
+		/// <see cref="NavigationHelper.LoadState"/>
+		/// and <see cref="NavigationHelper.SaveState"/>.
 		/// The navigation parameter is available in the LoadState method 
 		/// in addition to page state preserved during an earlier session.
 		/// </para>
@@ -168,5 +105,107 @@ namespace ColdSnap.Pages
 		}
 
 		#endregion
+
+		private readonly List<ExpanderView> _friendsListItems = new List<ExpanderView>();
+
+		private void ExpanderView_OnExpanded(object sender, bool e)
+		{
+			var expander = sender as ExpanderView;
+			if (expander == null) return;
+
+			// Hide the others (this one works with virtualization unlike Alex's original code)
+			if (!_friendsListItems.Contains(expander))
+				_friendsListItems.Add(expander);
+			foreach (var itemExpander in _friendsListItems.Where(itemExpander => itemExpander != expander))
+				itemExpander.Contract();
+		}
+
+		private void FriendsListView_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			_friendsListView = sender as ListView;
+		}
+
+		#region Story viewing and stuff
+
+		private DispatcherTimer _isStillHoldingTimer;
+		private bool _pointerDown;
+		private Button _selectedButton;
+		private Friend _selectedFriend;
+
+		private void FriendItem_OnPointerEntered(object sender, PointerRoutedEventArgs e)
+		{
+			if (_isStillHoldingTimer != null)
+				_isStillHoldingTimer.Stop();
+
+			if (_pointerDown)
+				return;
+
+			var button = sender as Button;
+			if (button == null) return;
+			var friend = button.DataContext as Friend;
+
+			if (friend == null || friend.Stories == null || !friend.Stories.Any() || friend.Stories.All(s => s.IsExpired || friend.Stories.Any(story => !story.IsCached)))
+				return;
+
+			_isStillHoldingTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 0, 0, 300)};
+			_isStillHoldingTimer.Tick += async delegate
+			{
+				_isStillHoldingTimer.Stop();
+
+				if (!_pointerDown || friend.Username != _selectedFriend.Username)
+					return;
+
+				// Prepare manipulation mode.
+				if (_selectedButton != null)
+					_selectedButton.ManipulationMode = ManipulationModes.None;
+
+				// Prepare story.
+				ViewModel.ShowStory(friend);
+
+				// Hide command bar.
+				if (BottomCommandBar != null)
+					BottomCommandBar.Visibility = Visibility.Collapsed;
+			};
+			_selectedButton = button;
+			_selectedFriend = friend;
+			_pointerDown = true;
+			_isStillHoldingTimer.Start();
+		}
+
+		private void FriendItem_OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
+		{
+			_pointerDown = false;
+
+			if (_selectedButton != null)
+				_selectedButton.ManipulationMode = ManipulationModes.All;
+
+			// Hide story.
+			ViewModel.HideStories();
+
+			// Show command bar.
+			if (BottomCommandBar != null)
+				BottomCommandBar.Visibility = Visibility.Visible;
+		}
+
+		#endregion
+
+		private async void FriendItem_OnTapped(object sender, TappedRoutedEventArgs e)
+		{
+			var button = sender as Button;
+			if (button == null) return;
+			var friend = button.DataContext as Friend;
+
+			foreach (var itemExpander in _friendsListItems)
+			{
+				if (itemExpander.Tag == friend.Username && friend.Stories.Any() && itemExpander.IsExpanded)
+				{
+					var downloadStoriesTask = friend.DownloadStoriesAsync();
+					// TODO: Update action text somehow...
+					e.Handled = true;
+					await downloadStoriesTask;
+					break;
+				}
+			}
+		}
 	}
 }

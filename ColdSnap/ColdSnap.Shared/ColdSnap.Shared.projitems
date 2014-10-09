@@ -3,7 +3,7 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>c709a23c-501a-448e-8e21-79a3729ecd2c</SharedGUID>
+    <SharedGUID>b2fc1671-04c1-4d88-8644-3995fbdae713</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>ColdSnap</Import_RootNamespace>
@@ -15,42 +15,28 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\NavigationHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Common\SuspensionManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AppSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\ProgressGlobe.xaml.cs">
-      <DependentUpon>ProgressGlobe.xaml</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\StateTextBox.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\ExpanderView.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\HeaderedItemsControl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\HierarchicalDataTemplate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\ItemsControlHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Controls\Test\VisualTreeExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\PieSlice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\BytesToBitmapImageConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\DebugConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\NumberWithDelimiterConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\Sections\Friends\StoryAngleConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converters\Settings\NumberOfBestFriendsToIndexConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ProgressHelpers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\StatusBarHelpers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\VariousFunctions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Selectors\Sections\Friends\StoryMediaTypeSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\ByteArrayToBitmapConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\FriendRequestStateToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\StoryActionTextConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\StoryAngleConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\StatusBarHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\VisualTreeHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConversationPageViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Dialogs\SignUpDialogViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CameraPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainPageViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Sections\CameraSectionViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Sections\ConvoListSectionViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\Sections\FriendsSectionViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ManageFriendsPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StartPageViewModel.cs" />
   </ItemGroup>
@@ -62,30 +48,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\ProgressGlobe.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Controls\ExpanderView.xaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\StateTextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\Test\ExpanderResource.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="$(MSBuildThisFileDirectory)Styles\NoTiltListViewStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Placeholder\Story.scale-240.png" />
-    <Content Include="$(MSBuildThisFileDirectory)Assets\Placeholder\StoryThumbnail.scale-240.png" />
   </ItemGroup>
 </Project>

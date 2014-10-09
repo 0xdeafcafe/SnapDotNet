@@ -12,7 +12,6 @@
 						<StackPanel.Resources>
 							<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 							<converters:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" IsInverted="True" />
-							<converters:DebugConverter x:Key="DebugConverter" />
 						</StackPanel.Resources>
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="CommonStates">
@@ -21,33 +20,37 @@
 								<VisualState x:Name="Pressed" />
 								<VisualState x:Name="Expanded">
 									<Storyboard>
-										<DoubleAnimation Duration="0:0:0.25" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SubHeaderTextBlock" />
-										<DoubleAnimation Duration="0:0:0.25" To="-14" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock" />
+										<DoubleAnimation Duration="0:0:0.15" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SubHeaderTextBlock" />
+										<DoubleAnimation Duration="0:0:0.15" To="-14" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock">
+											<DoubleAnimation.EasingFunction>
+												<QuadraticEase EasingMode="EaseOut"/>
+											</DoubleAnimation.EasingFunction>
+										</DoubleAnimation>
 
-										<DoubleAnimation Duration="0:0:0.25" To="{Binding ContentHeight, RelativeSource={RelativeSource TemplatedParent}}" Storyboard.TargetProperty="(Grid.Height)" Storyboard.TargetName="ContentGrid" EnableDependentAnimation="True" />
-										<DoubleAnimation Duration="0:0:0.25" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
+										<DoubleAnimation Duration="0:0:0.0" To="{Binding ContentHeight, RelativeSource={RelativeSource TemplatedParent}}" Storyboard.TargetProperty="(Grid.Height)" Storyboard.TargetName="ContentGrid" EnableDependentAnimation="True" />
+										<DoubleAnimation Duration="0:0:0.0" To="1" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
 
-										<DoubleAnimation Duration="0:0:0.25" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
+										<DoubleAnimation Duration="0:0:0.0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="AdditionalHeaderContentGrid">
-											<DiscreteObjectKeyFrame KeyTime="0">
-												<DiscreteObjectKeyFrame.Value>
-													<Visibility>Visible</Visibility>
-												</DiscreteObjectKeyFrame.Value>
-											</DiscreteObjectKeyFrame>
+											<DiscreteObjectKeyFrame KeyTime="0" Value="{Binding ShowAdditionalHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 										</ObjectAnimationUsingKeyFrames>
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="Contracted">
 									<Storyboard>
-										<DoubleAnimation Duration="0:0:0.25" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SubHeaderTextBlock" />
-										<DoubleAnimation Duration="0:0:0.25" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock" />
+										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SubHeaderTextBlock" />
+										<DoubleAnimation Duration="0:0:0.15" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="HeaderTextBlock">
+											<DoubleAnimation.EasingFunction>
+												<QuadraticEase EasingMode="EaseOut"/>
+											</DoubleAnimation.EasingFunction>
+										</DoubleAnimation>
 
-										<DoubleAnimation Duration="0:0:0.25" To="0" Storyboard.TargetProperty="(Grid.Height)" Storyboard.TargetName="ContentGrid" EnableDependentAnimation="True" />
-										<DoubleAnimation Duration="0:0:0.25" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
+										<DoubleAnimation Duration="0:0:0.0" To="0" Storyboard.TargetProperty="(Grid.Height)" Storyboard.TargetName="ContentGrid" EnableDependentAnimation="True" />
+										<DoubleAnimation Duration="0:0:0.0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" Storyboard.TargetName="ContentGrid" />
 
-										<DoubleAnimation Duration="0:0:0.25" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
+										<DoubleAnimation Duration="0:0:0.0" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="AdditionalHeaderContentGrid" />
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="AdditionalHeaderContentGrid">
-											<DiscreteObjectKeyFrame KeyTime="0:0:0.25">
+											<DiscreteObjectKeyFrame KeyTime="0:0:0.0">
 												<DiscreteObjectKeyFrame.Value>
 													<Visibility>Collapsed</Visibility>
 												</DiscreteObjectKeyFrame.Value>
@@ -70,7 +73,7 @@
 											ContentTemplate="{Binding PrimaryHeaderContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
 											VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
 											HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
-							
+
 							<Grid x:Name="HeaderGrid" Grid.Column="1"
 								  IsHitTestVisible="True" Background="Transparent">
 								<Grid Visibility="{Binding ShowSubHeader, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
@@ -99,7 +102,7 @@
 									</TextBlock>
 								</Grid>
 							</Grid>
-							
+
 							<!-- This shit can detect events that happen on-top of the header woohoo! -->
 							<ContentControl x:Name="HeaderEventCover" Grid.Column="0" Grid.ColumnSpan="2" 
 											ContentTemplate="{Binding HeaderCoverContentTemplate, RelativeSource={RelativeSource TemplatedParent}}"
