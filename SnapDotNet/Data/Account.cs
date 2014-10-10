@@ -623,10 +623,9 @@ namespace SnapDotNet.Data
 			{
 				var response = await EndpointManager.Managers["loq"].PostAsync<AllUpdatesResponse>("all_updates", data, AuthToken);
 
-				var updatePublicActivityTask = UpdateFriendsPublicActivityAsync();
+				await UpdateFriendsPublicActivityAsync();
 				UpdateFromResponse(response.AccountResponse);
 				UpdateStoriesFromResponse(response.StoriesResponse);
-				await updatePublicActivityTask;
 
 				// TODO: Parse the rest of the data
 			}

@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using ColdSnap.Common;
 using ColdSnap.Controls;
+using ColdSnap.Converters.SnapDotNet;
 using ColdSnap.ViewModels;
 using SnapDotNet.Data;
 
@@ -113,6 +114,11 @@ namespace ColdSnap.Pages
 			var expander = sender as ExpanderView;
 			if (expander == null) return;
 
+			// Update action text.
+			var friend = (from f in ViewModel.Account.Friends where f.Username == expander.Tag select f).First();
+			var converter = new StoryActionTextConverter();
+			expander.SubHeaderText = converter.Convert(friend, typeof (string), null, "") as string;
+
 			// Hide the others (this one works with virtualization unlike Alex's original code)
 			if (!_friendsListItems.Contains(expander))
 				_friendsListItems.Add(expander);
@@ -200,9 +206,14 @@ namespace ColdSnap.Pages
 				if (itemExpander.Tag == friend.Username && friend.Stories.Any() && itemExpander.IsExpanded)
 				{
 					var downloadStoriesTask = friend.DownloadStoriesAsync();
-					// TODO: Update action text somehow...
+
+					// Update action text
+					var converter = new StoryActionTextConverter();
+					itemExpander.SubHeaderText = converter.Convert(friend, typeof(string), null, "") as string;
+
 					e.Handled = true;
 					await downloadStoriesTask;
+
 					break;
 				}
 			}

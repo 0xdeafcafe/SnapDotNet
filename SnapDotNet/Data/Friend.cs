@@ -1,4 +1,5 @@
-﻿using SnapDotNet.Data.ApiResponses;
+﻿using System.ComponentModel;
+using SnapDotNet.Data.ApiResponses;
 using SnapDotNet.Utilities;
 using System;
 using System.Collections.Generic;
@@ -144,6 +145,7 @@ namespace SnapDotNet.Data
 			{
 				SetValue(ref _readOnlyStories, value); 
 				OnPropertyChanged(() => LatestStory);
+				OnPropertyChanged(() => IsAnyStoryDownloading);
 			}
 		}
 		private ReadOnlyObservableCollection<FriendStory> _readOnlyStories;
@@ -155,6 +157,26 @@ namespace SnapDotNet.Data
 		public FriendStory LatestStory
 		{
 			get { return Stories.FirstOrDefault(); }
+		}
+
+		/// <summary>
+		/// Gets a boolean value indicating whether the thumbnail for this friend in the story
+		/// list shouldn't "decay". In other words, the degree of the thumbnail is always at 360*.
+		/// </summary>
+		public bool DontDecayThumbnail
+		{
+			get { return _dontDecayThumbnail; }
+			private set { SetValue(ref _dontDecayThumbnail, value); }
+		}
+		private bool _dontDecayThumbnail;
+
+		/// <summary>
+		/// Gets a boolean value indicating whether any story posted by this user is currently
+		/// being downloaded.
+		/// </summary>
+		public bool IsAnyStoryDownloading
+		{
+			get { return Stories.Any(friend => friend.IsDownloading); }
 		}
 
 		/*/// <summary>
@@ -180,17 +202,6 @@ namespace SnapDotNet.Data
 		private bool _contiansMatureContent;
 
 		/// <summary>
-		/// Gets or sets the state of the friend request sent to this friend.
-		/// </summary>
-		[JsonProperty]
-		public FriendRequestState FriendRequestState
-		{
-			get { return _friendRequestState; }
-			set { SetValue(ref _friendRequestState, value); }
-		}
-		private FriendRequestState _friendRequestState;
-
-		/// <summary>
 		/// 
 		/// </summary>
 		[JsonProperty]
@@ -200,17 +211,6 @@ namespace SnapDotNet.Data
 			set { SetValue(ref _expiration, value); }
 		}
 		private DateTime _expiration;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		[JsonProperty]
-		public bool DontDecayThumbnail
-		{
-			get { return _dontDecayThumbnail; }
-			set { SetValue(ref _dontDecayThumbnail, value); }
-		}
-		private bool _dontDecayThumbnail;
 
 		/// <summary>
 		/// 
@@ -268,6 +268,8 @@ namespace SnapDotNet.Data
 		{
 			foreach (var story in Stories)
 				await story.DownloadMediaAsync();
+
+			OnPropertyChanged(() => IsAnyStoryDownloading);
 		}
 
 		/// <summary>
@@ -434,9 +436,7 @@ namespace SnapDotNet.Data
 			Contract.Requires<ArgumentNullException>(response != null);
 
 			/*  CanSeeCustomStories = friendResponse.CanSeeCustomStories,
-				FriendRequestState = (FriendRequestState) friendResponse.FriendRequestState,
 				Expiration = friendResponse.Expiration,
-				DontDecayThumbnail = friendResponse.DontDecayThumbnail,
 				SharedStoryId = friendResponse.SharedStoryId,
 				IsSharedStory = friendResponse.IsSharedStory,
 				HasCustomDescription = friendResponse.HasCustomDescription,
@@ -445,6 +445,7 @@ namespace SnapDotNet.Data
 			Username = response.Name;
 			DisplayName = response.DisplayName;
 			FriendRequestState = (FriendRequestState) response.FriendRequestState;
+			DontDecayThumbnail = response.DontDecayThumbnail;
 		}
 
 		/// <summary>
@@ -456,8 +457,15 @@ namespace SnapDotNet.Data
 			Contract.Requires<ArgumentNullException>(response != null);
 
 			// Add new stories.
-			foreach (var friendStory in response.Stories.OrderByDescending(s => s.Story.TimeLeft).Where(friendStory => Stories.FirstOrDefault(s => s.Id == friendStory.Story.Id) == null))
-				_stories.Add(FriendStory.CreateFromResponse(friendStory));
+			foreach (
+				var friendStory in
+					response.Stories.OrderByDescending(s => s.Story.TimeLeft)
+						.Where(friendStory => Stories.FirstOrDefault(s => s.Id == friendStory.Story.Id) == null))
+			{
+				var newStory = FriendStory.CreateFromResponse(friendStory);
+				newStory.PropertyChanged += (object sender, PropertyChangedEventArgs e) => OnPropertyChanged(() => IsAnyStoryDownloading);
+				_stories.Add(newStory);
+			}
 
 			// Check for active ones, and update them.
 			foreach (var friendStory in Stories)
@@ -472,6 +480,7 @@ namespace SnapDotNet.Data
 				_stories.Remove(redundantStory);
 
 			OnPropertyChanged(() => LatestStory);
+			OnPropertyChanged(() => IsAnyStoryDownloading);
 		}
 
 		/// <summary>
