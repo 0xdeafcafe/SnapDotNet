@@ -23,17 +23,28 @@ namespace SnapDotNet.Data
 		private bool _viewed;
 
 		/// <summary>
+		/// Gets the friend that posted this story.
+		/// </summary>
+		public Friend Owner
+		{
+			get { return _owner; }
+			private set { SetValue(ref _owner, value); }
+		}
+		private Friend _owner;
+
+		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="response"></param>
 		/// <returns></returns>
 		[Pure]
-		internal static FriendStory CreateFromResponse(StoryMetadataResponse response)
+		internal static FriendStory CreateFromResponse(Friend owner, StoryMetadataResponse response)
 		{
 			Contract.Requires<ArgumentNullException>(response != null);
 
 			var friendStory = new FriendStory();
 			friendStory.UpdateFromResponse(response);
+			friendStory.Owner = owner;
 			return friendStory;
 		}
 

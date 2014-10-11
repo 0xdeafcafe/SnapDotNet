@@ -183,33 +183,45 @@ namespace ColdSnap.Controls
 				return;
 			}
 
-			var pathGeometry = new PathGeometry();
-			var pathFigure = new PathFigure();
-			pathFigure.StartPoint = new Point(radius, radius);
-			pathFigure.IsClosed = true;
+			if (StartAngle < 360.0)
+			{
+				var pathGeometry = new PathGeometry();
+				var pathFigure = new PathFigure();
+				pathFigure.StartPoint = new Point(radius, radius);
+				pathFigure.IsClosed = true;
 
-			// Starting Point
-			var lineSegment = 
-                new LineSegment
-				{
-					Point = new Point(
-						radius + Math.Sin(StartAngle * Math.PI / 180) * radius,
-						radius - Math.Cos(StartAngle * Math.PI / 180) * radius)
-				};
+				// Starting Point
+				var lineSegment =
+					new LineSegment
+					{
+						Point = new Point(
+							radius + Math.Sin(StartAngle*Math.PI/180)*radius,
+							radius - Math.Cos(StartAngle*Math.PI/180)*radius)
+					};
 
-			// Arc
-			var arcSegment = new ArcSegment();
-			arcSegment.IsLargeArc = (EndAngle - StartAngle) >= 180.0;
-			arcSegment.Point =
-				new Point(
-						radius + Math.Sin(EndAngle * Math.PI / 180) * radius,
-						radius - Math.Cos(EndAngle * Math.PI / 180) * radius);
-			arcSegment.Size = new Size(radius, radius);
-			arcSegment.SweepDirection = SweepDirection.Clockwise;
-			pathFigure.Segments.Add(lineSegment);
-			pathFigure.Segments.Add(arcSegment);
-			pathGeometry.Figures.Add(pathFigure);
-			this.Data = pathGeometry;
+				// Arc
+				var arcSegment = new ArcSegment();
+				arcSegment.IsLargeArc = (EndAngle - StartAngle) >= 180.0;
+				arcSegment.Point =
+					new Point(
+						radius + Math.Sin(EndAngle*Math.PI/180)*radius,
+						radius - Math.Cos(EndAngle*Math.PI/180)*radius);
+				arcSegment.Size = new Size(radius, radius);
+				arcSegment.SweepDirection = SweepDirection.Clockwise;
+				pathFigure.Segments.Add(lineSegment);
+				pathFigure.Segments.Add(arcSegment);
+				pathGeometry.Figures.Add(pathFigure);
+				this.Data = pathGeometry;
+			}
+			else
+			{
+				var elliptialGeometry = new EllipseGeometry();
+				elliptialGeometry.Center = new Point(radius, radius);
+				elliptialGeometry.RadiusX = radius;
+				elliptialGeometry.RadiusY = radius;
+				this.Data = elliptialGeometry;
+			}
+
 			this.InvalidateArrange();
 		}
 	}

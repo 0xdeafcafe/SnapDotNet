@@ -565,7 +565,7 @@
 												</controls:ExpanderView.HeaderCoverContentTemplate>
 												<controls:ExpanderView.PrimaryHeaderContentTemplate>
 													<DataTemplate>
-														<controls:PieSlice IsHitTestVisible="False" ManipulationMode="None" Radius="25" Visibility="{Binding LatestStory, Converter={StaticResource NullToVisibilityConverter}}" EndAngle="360" Margin="0,0,8,0" StartAngle="{Binding LatestStory.ExpiresAt, Converter={StaticResource StoryAngleConverter}}" IsDoubleTapEnabled="False" IsHoldingEnabled="False" IsRightTapEnabled="False" IsTapEnabled="False">
+														<controls:PieSlice IsHitTestVisible="False" ManipulationMode="None" Radius="25" Visibility="{Binding LatestStory, Converter={StaticResource NullToVisibilityConverter}}" EndAngle="360" Margin="0,0,8,0" StartAngle="{Binding LatestStory, Converter={StaticResource StoryAngleConverter}}" IsDoubleTapEnabled="False" IsHoldingEnabled="False" IsRightTapEnabled="False" IsTapEnabled="False">
 															<controls:PieSlice.Fill>
 																<ImageBrush Stretch="UniformToFill" ImageSource="{Binding LatestStory.ThumbnailData, Converter={StaticResource BytesToBitmapImageConverter}}"/>
 															</controls:PieSlice.Fill>

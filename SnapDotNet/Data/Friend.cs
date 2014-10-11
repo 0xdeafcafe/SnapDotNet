@@ -462,7 +462,7 @@ namespace SnapDotNet.Data
 					response.Stories.OrderByDescending(s => s.Story.TimeLeft)
 						.Where(friendStory => Stories.FirstOrDefault(s => s.Id == friendStory.Story.Id) == null))
 			{
-				var newStory = FriendStory.CreateFromResponse(friendStory);
+				var newStory = FriendStory.CreateFromResponse(this, friendStory);
 				newStory.PropertyChanged += (object sender, PropertyChangedEventArgs e) => OnPropertyChanged(() => IsAnyStoryDownloading);
 				_stories.Add(newStory);
 			}
