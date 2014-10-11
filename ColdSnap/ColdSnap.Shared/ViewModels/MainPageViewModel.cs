@@ -259,7 +259,7 @@ namespace ColdSnap.ViewModels
 			{
 				SortedFriends = FriendsKeyGroup.CreateGroups(Account.Friends, Account.Username);
 
-				var storiesGroup = new FriendsKeyGroup(null, null, Colors.Black, Colors.Transparent);
+				var storiesGroup = new FriendsKeyGroup("\uE181", null, Colors.Black, Colors.Transparent);
 				storiesGroup.Add(Account.Me);
 				SortedFriends.Insert(0, storiesGroup);
 			});
@@ -360,18 +360,22 @@ namespace ColdSnap.ViewModels
 
 		private static ObservableCollection<FriendsKeyGroup> CreateGroups()
 		{
-			const string keys = "abcdefghijklmnopqrstuvwxyz#";
+			string keys = "abcdefghijklmnopqrstuvwxyz";
+			var list = new List<FriendsKeyGroup>();
 
-			var list = keys.Select(
+			// our story
+			list.Add(new FriendsKeyGroup(
+				"\uE113",
+				"LIVE",
+				Color.FromArgb(0xFF, 0x9B, 0x55, 0xA0),
+				Color.FromArgb(0x00, 0x00, 0x00, 0x00)));
+
+			// abc...
+			list.AddRange(keys.Select(
 				key =>
 					new FriendsKeyGroup(key.ToString(), key.ToString().ToUpperInvariant(),
 						Color.FromArgb(0xFF, 0x9B, 0x55, 0xA0),
-						Color.FromArgb(0x00, 0x00, 0x00, 0x00))).ToList();
-
-			/*list.Add(new FriendsKeyGroup("!",
-				"BLOCKED",
-				Color.FromArgb(0xFF, 0xFF, 0xFF, 0xFF),
-				Color.FromArgb(0xFF, 0xE9, 0x27, 0x54)));*/
+						Color.FromArgb(0x00, 0x00, 0x00, 0x00))).ToList());
 
 			return new ObservableCollection<FriendsKeyGroup>(list);
 		}
@@ -380,14 +384,11 @@ namespace ColdSnap.ViewModels
 		{
 			Debug.WriteLine("[FriendsKeyGroup] Starting to Insert Items, based off of {0} friends", items.Count());
 
+			// TODO: Add Our Stories to LIVE section
+
 			foreach (var friend in items.Where(friend => friend.Username != userToIgnore))
 			{
-				if (friend.FriendRequestState == FriendRequestState.Blocked)
-				{
-					//groups.FirstOrDefault(a => a.Key == "!").Add(friend);
-					//Debug.WriteLine("[FriendsKeyGroup] Added friend {0} to Blocked", friend.FriendlyName);
-				}
-				else
+				if (friend.FriendRequestState != FriendRequestState.Blocked)
 				{
 					var key = friend.FriendlyName.ToUpperInvariant()[0];
 					if (char.IsLetter(key))
