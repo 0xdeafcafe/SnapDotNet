@@ -328,4 +328,7 @@
   <data name="UpgradeToProButton.Content" xml:space="preserve">
     <value>Unlock this feature now</value>
   </data>
+  <data name="PrivacyPolicyLink.Text" xml:space="preserve">
+    <value>privacy policy</value>
+  </data>
 </root>

@@ -90,10 +90,5 @@ namespace ColdSnap.Pages
 		}
 
 		#endregion
-
-		private void GoBackButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			Frame.GoBack();
-		}
 	}
 }

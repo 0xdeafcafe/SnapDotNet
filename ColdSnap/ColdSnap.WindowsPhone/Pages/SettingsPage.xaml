@@ -10,14 +10,14 @@
 
 	NavigationCacheMode="Enabled"
 	RequestedTheme="Light"
-	Background="#FFFFFFFF">
+	Background="{StaticResource WhiteBrush}">
 
 	<d:DesignProperties.DataContext>
 		<viewModels:SettingsPageViewModel/>
 	</d:DesignProperties.DataContext>
 
 	<Page.Resources>
-		<SolidColorBrush x:Key="PageAccentBrush" Color="#FF00a182" />
+		<SolidColorBrush x:Key="PageAccentBrush" Color="#FF00A2FF" />
 
 		<x:Double x:Key="TextStyleExtraLargeFontSize">25.5</x:Double>
 		<FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
@@ -177,73 +177,6 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		<Style x:Key="FluidButtonStyle" TargetType="Button">
-			<Setter Property="Background" Value="Transparent"/>
-			<Setter Property="Padding" Value="5"/>
-			<Setter Property="MinHeight" Value="0"/>
-			<Setter Property="MinWidth" Value="0"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Button">
-						<Grid x:Name="Grid" IsHitTestVisible="True" Background="Transparent">
-							<VisualStateManager.VisualStateGroups>
-								<VisualStateGroup x:Name="CommonStates">
-									<VisualState x:Name="Normal">
-										<Storyboard>
-											<DoubleAnimation Duration="0:0:0.2" To="1" 
-																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" 
-																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
-												<DoubleAnimation.EasingFunction>
-													<BackEase Amplitude="1" EasingMode="EaseOut"/>
-												</DoubleAnimation.EasingFunction>
-											</DoubleAnimation>
-											<DoubleAnimation Duration="0:0:0.2" To="1" 
-																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" 
-																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
-												<DoubleAnimation.EasingFunction>
-													<BackEase Amplitude="1" EasingMode="EaseOut"/>
-												</DoubleAnimation.EasingFunction>
-											</DoubleAnimation>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Pressed">
-										<Storyboard>
-											<DoubleAnimation Duration="0:0:0.2" To="1.4" 
-																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)" 
-																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
-												<DoubleAnimation.EasingFunction>
-													<BackEase Amplitude="1" EasingMode="EaseOut"/>
-												</DoubleAnimation.EasingFunction>
-											</DoubleAnimation>
-											<DoubleAnimation Duration="0:0:0.2" To="1.4" 
-																 Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)" 
-																 Storyboard.TargetName="InnerGrid" d:IsOptimized="True">
-												<DoubleAnimation.EasingFunction>
-													<BackEase Amplitude="1" EasingMode="EaseOut"/>
-												</DoubleAnimation.EasingFunction>
-											</DoubleAnimation>
-										</Storyboard>
-									</VisualState>
-								</VisualStateGroup>
-							</VisualStateManager.VisualStateGroups>
-							<Grid x:Name="InnerGrid" RenderTransformOrigin="0.5,0.5">
-								<Grid.RenderTransform>
-									<CompositeTransform ScaleX="1" ScaleY="1" />
-								</Grid.RenderTransform>
-								<ContentPresenter x:Name="ContentPresenter" 
-												  AutomationProperties.AccessibilityView="Raw" 
-												  ContentTemplate="{TemplateBinding ContentTemplate}" 
-												  Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" 
-												  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-												  Margin="{TemplateBinding Padding}" 
-												  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-								</ContentPresenter>
-							</Grid>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
 	</Page.Resources>
 	
 	<Page.Transitions>
@@ -271,17 +204,6 @@
 		<!-- Header -->
 		<Border Background="White" BorderBrush="#f5f5f5" BorderThickness="0,0,0,1">
 			<Grid>
-				<Button Style="{StaticResource FluidButtonStyle}"
-						Click="GoBackButton_OnClick"
-						HorizontalAlignment="Left" VerticalAlignment="Bottom"
-						Height="28" Width="17"
-						Margin="20,0,0,12" Padding="0">
-					<Path Fill="Transparent"  
-						  Stroke="{StaticResource PageAccentBrush}" StrokeThickness="2" StrokeLineJoin="Round"
-						  StrokeDashCap="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"
-						  Data="M 13,0 0,11 13,21"/>
-				</Button>
-
 				<TextBlock x:Uid="SettingsHeaderText" Text="settings" TextTrimming="CharacterEllipsis" 
 						   Foreground="{StaticResource PageAccentBrush}" 
 						   Margin="15,0,0,5" FontWeight="SemiLight" FontFamily="Segoe WP" 
@@ -318,21 +240,26 @@
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
 						</ComboBox>
-						<TextBlock Margin="0,7,0,0" x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}">Next replay</TextBlock>
-						<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}"/>
 					</StackPanel>
 				</ScrollViewer>
 			</PivotItem>
 
-			<PivotItem x:Uid="SettingsServicesGroup" Header="SERVICES">
+			<PivotItem x:Uid="SettingsAppGroup" Header="APP">
 				<ScrollViewer>
-					<StackPanel Margin="0,0,0,0">
+					<StackPanel>
+						<TextBlock x:Uid="SettingsNextReplayTextBlock" Style="{StaticResource ControlHeaderTextBlockStyle}" FontFamily="Global User Interface">Next replay</TextBlock>
+						<TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="{Binding NextReplay}" Margin="0,0,0,7"/>
 						<ToggleSwitch Header="Front camera flash" IsOn="True"/>
-						<ToggleSwitch Header="Replay snaps" IsOn="True"/>
-						<ToggleSwitch Header="Special text" IsOn="True"/>
-						<ToggleSwitch Header="Visual filters" IsOn="True"/>
+						<ToggleSwitch x:Uid="SettingsFrontCameraMirrorEffect" Header="Front camera mirror effect" IsOn="True"/>
+						<ComboBox x:Uid="SettingsAutomaticallyDownloadSnaps" Header="Automatically download snaps" SelectedIndex="1">
+							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsNever">Never</ComboBoxItem>
+							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsWifi">Wi-Fi only</ComboBoxItem>
+							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsAlways">Always</ComboBoxItem>
+						</ComboBox>
 						<ToggleSwitch Header="Smart filters" IsOn="True"/>
-						<ToggleSwitch Header="Power-saving mode" IsOn="True"/>
+						<TextBlock x:Uid="SmartFiltersDisclaimer" TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
+							Smart filters require access to your location.
+						</TextBlock>
 					</StackPanel>
 				</ScrollViewer>
 			</PivotItem>
@@ -356,14 +283,16 @@
 			<PivotItem x:Uid="SettingNotificationsGroup" Header="NOTIFICATIONS">
 				<ScrollViewer>
 					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Snap notifications" IsOn="True"/>
-						<ToggleSwitch x:Uid="SettingsChatNotifications" Header="Chat notifications" IsOn="True"/>
-						<ToggleSwitch x:Uid="SettingsScreenshotNotifications" Header="Screenshot notifications" IsOn="True"/>
-
+						<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Toast notifications" IsOn="True"/>
 						<CheckBox x:Uid="SettingsInstantNotifications" Content="Instant notifications" IsChecked="True"/>
 						<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Content="Unlock this feature"/>
-						<TextBlock x:Uid="InstantNotificationsDisclaimer" TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
+						<TextBlock x:Uid="InstantNotificationsDisclaimer" TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}" FontFamily="Global User Interface">
 							When you enable instant notifications, you give us permission to store your Snapchat auth token on our secure cloud service.
+						</TextBlock>
+						<TextBlock Margin="0,10,0,0" HorizontalAlignment="Right" Style="{StaticResource ControlContextualInfoTextBlockStyle}">
+							<Hyperlink>
+								<Run x:Uid="PrivacyPolicyLink" Text="privacy policy"/>
+							</Hyperlink>
 						</TextBlock>
 					</StackPanel>
 				</ScrollViewer>
@@ -454,23 +383,10 @@
 				</Grid>
 			</PivotItem>
 
-			<PivotItem x:Uid="SettingsAppGroup" Header="APP">
-				<ScrollViewer>
-					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsFrontCameraMirrorEffect" Header="Front camera mirror effect" IsOn="True"/>
-						<ComboBox x:Uid="SettingsAutomaticallyDownloadSnaps" Header="Automatically download snaps" SelectedIndex="1">
-							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsNever">Never</ComboBoxItem>
-							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsWifi">Wi-Fi only</ComboBoxItem>
-							<ComboBoxItem x:Uid="AutomaticallyDownloadSnapsAlways">Always</ComboBoxItem>
-						</ComboBox>
-					</StackPanel>
-				</ScrollViewer>
-			</PivotItem>
-
 			<PivotItem x:Uid="SettingsAboutGroup" Header="ABOUT">
 				<ScrollViewer>
 					<StackPanel Margin="0,0,0,20">
-						<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}">ColdSnap</TextBlock>
+						<TextBlock x:Uid="AboutAppName" Style="{StaticResource SubheaderTextBlockStyle}" FontFamily="Global User Interface">ColdSnap</TextBlock>
 						<TextBlock x:Uid="AboutAppVersion" Style="{StaticResource BodyTextBlockStyle}">Version 1.0 Beta</TextBlock>
 
 						<!-- Street creds -->
@@ -491,16 +407,6 @@
 							<TextBlock Style="{StaticResource BodyTextBlockStyle}">
 										<Run>Collin Dillinger&#160;</Run>
 										<Hyperlink NavigateUri="https://twitter.com/cddillinger" Foreground="{StaticResource PageAccentBrush}">@cddillinger</Hyperlink>
-							</TextBlock>
-						</StackPanel>
-
-						<!-- External creds -->
-						<StackPanel>
-							<TextBlock x:Uid="AboutThanksToGroup" Margin="0,25,0,5" Style="{StaticResource GroupHeaderTextBlockStyle}">Special Thanks</TextBlock>
-
-							<TextBlock Style="{StaticResource BodyTextBlockStyle}">Tim Boelaars</TextBlock>
-							<TextBlock>
-							<Hyperlink NavigateUri="http://thenounproject.com/term/gear/12185/#_=_" Foreground="{StaticResource PageAccentBrush}">Settings Cog Icon</Hyperlink>
 							</TextBlock>
 						</StackPanel>
 

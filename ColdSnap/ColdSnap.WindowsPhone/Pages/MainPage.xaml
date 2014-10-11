@@ -19,8 +19,6 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary>
-					<SolidColorBrush x:Key="ThemeColorBrush" Color="#FF3cb2e2"/>
-
 					<CollectionViewSource x:Key="FriendGroups" IsSourceGrouped="True"
 									  Source="{Binding SortedFriends}" />
 
@@ -341,7 +339,7 @@
 	</d:DesignProperties.DataContext>
 
 	<Page.BottomAppBar>
-		<CommandBar x:Name="BottomCommandBar" Background="{StaticResource ThemeColorBrush}" Foreground="{StaticResource WhiteBrush}">
+		<CommandBar x:Name="BottomCommandBar" Background="{StaticResource AppThemeColorBrush}" Foreground="{StaticResource WhiteBrush}">
 			<CommandBar.PrimaryCommands>
 				<AppBarButton x:Uid="AppBarCamera" Icon="Camera" Label="camera" Command="{Binding GoToCameraCommand}"/>
 			</CommandBar.PrimaryCommands>
@@ -353,7 +351,7 @@
 		</CommandBar>
 	</Page.BottomAppBar>
 
-	<Grid Background="{StaticResource ThemeColorBrush}">
+	<Grid Background="{StaticResource AppThemeColorBrush}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="80"/>
 			<RowDefinition Height="*"/>
@@ -366,6 +364,7 @@
 				   Text="snapchat"
 				   FontWeight="SemiLight"
 				   FontSize="40"
+				   FontFamily="Segoe WP"
 				   Margin="0,0,0,5"/>
 
 		<Pivot Grid.Row="1" Margin="0,-40,0,0">
@@ -424,7 +423,7 @@
 					</Setter>
 				</Style>
 				<DataTemplate x:Key="HeaderDataTemplate">
-					<TextBlock Foreground="{StaticResource ThemeColorBrush}" Margin="0,10,0,0" Text="{Binding}" FontSize="24" FontFamily="Global User Interface"/>
+					<TextBlock Foreground="{StaticResource AppThemeColorBrush}" Margin="0,10,0,0" Text="{Binding}" FontSize="24" FontFamily="Global User Interface"/>
 				</DataTemplate>
 			</Pivot.Resources>
 
@@ -439,7 +438,7 @@
 			<!-- Stories -->
 			<PivotItem x:Uid="StoriesPivotItem" x:Name="StoriesPivotItem" Background="{StaticResource WhiteBrush}" Header="stories">
 				<Grid>
-					<ProgressRing IsActive="True" Foreground="{StaticResource ThemeColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" Width="100" Visibility="{Binding SortedFriends, Converter={StaticResource InvertedNullToVisibilityConverter}}">
+					<ProgressRing IsActive="True" Foreground="{StaticResource AppThemeColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" Width="100" Visibility="{Binding SortedFriends, Converter={StaticResource InvertedNullToVisibilityConverter}}" FontFamily="Global User Interface">
 						<ProgressRing.RenderTransform>
 							<TranslateTransform Y="-60"/>
 						</ProgressRing.RenderTransform>
@@ -511,9 +510,9 @@
 																<MenuFlyout>
 																	<MenuFlyout.MenuFlyoutPresenterStyle>
 																		<Style TargetType="MenuFlyoutPresenter">
-																			<Setter Property="BorderBrush" Value="{StaticResource ThemeColorBrush}"/>
+																			<Setter Property="BorderBrush" Value="{StaticResource AppThemeColorBrush}"/>
 																			<Setter Property="BorderThickness" Value="5"/>
-																			<Setter Property="Foreground" Value="{StaticResource ThemeColorBrush}"/>
+																			<Setter Property="Foreground" Value="{StaticResource AppThemeColorBrush}"/>
 																			<Setter Property="Background" Value="{StaticResource WhiteBrush}"/>
 																		</Style>
 																	</MenuFlyout.MenuFlyoutPresenterStyle>
@@ -608,7 +607,7 @@
 			<!-- Conversations -->
 			<PivotItem x:Uid="MessagesPivotItem" Background="{StaticResource WhiteBrush}" Header="messages">
 				<Grid>
-					<ProgressRing IsActive="True" Foreground="{StaticResource ThemeColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" Width="100">
+					<ProgressRing IsActive="True" Foreground="{StaticResource AppThemeColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" Width="100">
 						<ProgressRing.RenderTransform>
 							<TranslateTransform Y="-60"/>
 						</ProgressRing.RenderTransform>

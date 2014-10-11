@@ -4,5 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Application.Resources>
 		<SolidColorBrush x:Key="WhiteBrush" Color="White"/>
+		<SolidColorBrush x:Key="AppThemeColorBrush" Color="#FF00A2FF"/>
 	</Application.Resources>
 </Application>

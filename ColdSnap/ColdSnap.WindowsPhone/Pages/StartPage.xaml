@@ -5,13 +5,12 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
 	NavigationCacheMode="Enabled"
+	Background="{StaticResource AppThemeColorBrush}"
 	RequestedTheme="Dark">
 
 	<Page.Resources>
 
 		<!-- Brushes -->
-		<SolidColorBrush x:Key="LogInButtonBackgroundBrush" Color="#FFF36136"/>
-		<SolidColorBrush x:Key="SignUpButtonBackgroundBrush" Color="#FF00A2FF"/>
 		<SolidColorBrush x:Key="BigButtonPressedBackgroundBrush" Color="#FF3A3A3A"/>
 
 		<!-- Styles -->
@@ -47,48 +46,62 @@
 	</Page.Resources>
 
 	<Grid>
+		<Grid.Background>
+			<ImageBrush ImageSource="ms-appx:///Assets/Logo.png" Stretch="UniformToFill">
+				<ImageBrush.RelativeTransform>
+					<CompositeTransform CenterY="0.37" CenterX="0.66" ScaleY="2.0" ScaleX="2.0"/>
+				</ImageBrush.RelativeTransform>
+			</ImageBrush>
+		</Grid.Background>
 
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="12"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="12"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="12"/>
 		</Grid.RowDefinitions>
-
-		<!-- Logo -->
-		<Image Grid.Row="0" Source="ms-appx:///Assets/Logo.png" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="True">
-			<Image.RenderTransform>
-				<CompositeTransform ScaleX="0.5" ScaleY="0.5" TranslateY="-80"/>
-			</Image.RenderTransform>
-		</Image>
 
 		<!-- App name -->
 		<StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
 			<StackPanel.RenderTransform>
-				<CompositeTransform TranslateY="25"/>
+				<CompositeTransform TranslateY="38"/>
 			</StackPanel.RenderTransform>
-			<TextBlock x:Uid="StartPageAppTitle" FontSize="36" HorizontalAlignment="Center">ColdSnap</TextBlock>
-			<TextBlock x:Uid="StartPageAppSubtitle" FontSize="20" HorizontalAlignment="Center" Foreground="#FFC7E5FF">Snapchat for Windows Phone</TextBlock>
+			<TextBlock x:Uid="StartPageAppTitle" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center">ColdSnap</TextBlock>
+			<TextBlock x:Uid="StartPageAppSubtitle" FontSize="20" FontWeight="Light" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+				<TextBlock.RenderTransform>
+					<CompositeTransform TranslateY="-8"/>
+				</TextBlock.RenderTransform>
+				
+				Snapchat for Windows Phone
+			</TextBlock>
 		</StackPanel>
+
+		<Rectangle Fill="White" Grid.Row="1"/>
 
 		<!-- Log in button -->
 		<Button 
 				x:Uid="LogInButton"
-				Grid.Row="1"
+				Grid.Row="2"
 				Style="{StaticResource BigButtonStyle}"
-				Background="{StaticResource LogInButtonBackgroundBrush}"
-				Tapped="LogInButton_Tapped">
+				Background="{StaticResource AppThemeColorBrush}"
+				Tapped="LogInButton_Tapped" FontFamily="Global User Interface">
 			LOG IN
 		</Button>
+
+		<Rectangle Fill="White" Grid.Row="3"/>
 
 		<!-- Sign up button -->
 		<Button
 				x:Uid="SignUpButton"
-				Grid.Row="2"
+				Grid.Row="4"
 				Style="{StaticResource BigButtonStyle}"
-				Background="{StaticResource SignUpButtonBackgroundBrush}"
+				Background="{StaticResource AppThemeColorBrush}"
 				Tapped="SignUpButton_Tapped">
 			SIGN UP
 		</Button>
 
+		<Rectangle Fill="White" Grid.Row="5"/>
 	</Grid>
 </Page>

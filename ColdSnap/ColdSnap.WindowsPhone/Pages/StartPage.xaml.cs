@@ -33,12 +33,8 @@ namespace ColdSnap.Pages
 
 			_signUpDialog = new SignUpDialog();
 
-			// Show log-in page by default plus this makes the dialogs open faster because reasons...
-			Loaded += async delegate
-			{
-				var dialog = new LogInDialog();
-				await dialog.ShowAsync();
-			};
+			// Show log-in page by default...
+			Loaded += async delegate { await _logInDialog.ShowAsync(); };
 		}
 
 		/// <summary>

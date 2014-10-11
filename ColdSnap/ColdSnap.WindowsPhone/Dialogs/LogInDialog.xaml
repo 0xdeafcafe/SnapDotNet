@@ -12,7 +12,7 @@
 	SecondaryButtonText="cancel"
 	
 	RequestedTheme="Dark"
-	Background="#FFF36136">
+	Background="{StaticResource AppThemeColorBrush}">
 	<ContentDialog.Resources>
 		<x:Double x:Key="TextControlThemeMinWidth">51</x:Double>
 		<x:Double x:Key="TextControlThemeMinHeight">33</x:Double>
