@@ -1,8 +1,10 @@
-﻿using Windows.Graphics.Display;
+﻿using Windows.ApplicationModel.Appointments;
+using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using ColdSnap.Common;
+using ColdSnap.Helpers;
 using ColdSnap.ViewModels;
 using SnapDotNet.Data;
 
@@ -10,10 +12,11 @@ namespace ColdSnap.Pages
 {
 	public sealed partial class CameraPage
 	{
+		private CameraControlHelper camch = new CameraControlHelper();
 		public CameraPage()
 		{
-			InitializeComponent();
 
+			InitializeComponent();
 			ApplicationView.GetForCurrentView().SetDesiredBoundsMode(ApplicationViewBoundsMode.UseCoreWindow);
 			DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
 
@@ -22,7 +25,27 @@ namespace ColdSnap.Pages
 			NavigationHelper.SaveState += NavigationHelper_SaveState;
 
 			DataContext = new CameraPageViewModel();
+
+			//StartInitializing(); -> going out for a bit, audioDevice throwing exceptions, need to fix
 		}
+
+		private async void StartInitializing()
+		{
+			CameraTriggerButton.IsTapEnabled = false;
+
+			await camch.InitializeCameraAsync();
+			await camch.StartPreviewAsync();
+
+			ViewModel.MediaCaptureSource = camch.MediaCapture; //must be done post initilization :( == messy.
+			CapturePreview.Source = ViewModel.MediaCaptureSource;
+
+			CameraTriggerButton.IsTapEnabled = true;
+		}
+		private void CaptureButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+		{
+
+		}
+
 
 		/// <summary>
 		/// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.

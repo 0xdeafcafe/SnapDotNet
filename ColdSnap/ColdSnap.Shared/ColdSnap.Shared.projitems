@@ -31,6 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\FriendRequestStateToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\StoryActionTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\StoryAngleConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CameraControlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\StatusBarHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\VisualTreeHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BaseViewModel.cs" />
