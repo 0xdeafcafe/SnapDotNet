@@ -34,7 +34,7 @@ namespace ColdSnap.Dialogs
 		public string Username
 		{
 			get { return GetValue(UsernameProperty) as string; }
-			set { SetValue(PasswordProperty, value); }
+			set { SetValue(UsernameProperty, value); }
 		}
 
 		public string Password

@@ -1,36 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage.Pickers.Provider;
+using Windows.System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace ColdSnap.Dialogs
 {
-	public sealed partial class SignUpDialog : ContentDialog
+	public sealed partial class SignUpDialog
 	{
+		public static DependencyProperty EmailProperty = DependencyProperty.Register("Email", typeof(string), typeof(SignUpDialog), new PropertyMetadata(String.Empty));
+		public static DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof(string), typeof(SignUpDialog), new PropertyMetadata(String.Empty));
+
 		public SignUpDialog()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
+			IsPrimaryButtonEnabled = false;
+			SecondaryButtonClick += delegate
+			{
+				Password = String.Empty;
+				Email = String.Empty;
+			};
+			Action togglePrimaryButton = () => IsPrimaryButtonEnabled = !String.IsNullOrWhiteSpace(email.Text) && !String.IsNullOrWhiteSpace(password.Password);
+			email.TextChanged += delegate { togglePrimaryButton(); };
+			password.PasswordChanged += delegate { togglePrimaryButton(); };
 		}
 
-		private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+		public string Email
 		{
+			get { return GetValue(EmailProperty) as string; }
+			set { SetValue(EmailProperty, value); }
 		}
 
-		private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+		public string Password
 		{
+			get { return GetValue(PasswordProperty) as string; }
+			set { SetValue(PasswordProperty, value); }
+		}
+
+		private void Email_OnKeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == VirtualKey.Enter)
+				password.Focus(FocusState.Keyboard);
+		}
+
+		private void Password_OnKeyDown(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == VirtualKey.Enter)
+				birthday.Focus(FocusState.Keyboard);
 		}
 	}
 }
