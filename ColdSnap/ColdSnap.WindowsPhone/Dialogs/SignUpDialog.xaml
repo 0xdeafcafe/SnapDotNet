@@ -209,7 +209,6 @@
 		<SolidColorBrush x:Key="HyperlinkButtonBackgroundThemeBrush" Color="Transparent"/>
 		<SolidColorBrush x:Key="HyperlinkButtonBorderThemeBrush" Color="Transparent"/>
 		<Thickness x:Key="HyperlinkButtonBorderThemeThickness">0</Thickness>
-		<FontFamily x:Key="PhoneFontFamilySemiLight">Segoe WP SemiLight</FontFamily>
 		<Style x:Key="HyperlinkButtonStyle" TargetType="HyperlinkButton">
 			<Setter Property="Foreground" Value="{ThemeResource HyperlinkForegroundThemeBrush}"/>
 			<Setter Property="Background" Value="{ThemeResource HyperlinkButtonBackgroundThemeBrush}"/>
@@ -218,8 +217,9 @@
 			<Setter Property="Padding" Value="0,3,0,4"/>
 			<Setter Property="HorizontalAlignment" Value="Left"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilySemiLight}"/>
-			<Setter Property="FontWeight" Value="SemiLight"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontFamily" Value="Segoe WP Semibold"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="HyperlinkButton">
@@ -278,6 +278,13 @@
 				<CompositeTransform TranslateY="8"/>
 			</DatePicker.RenderTransform>
 		</DatePicker>
+
+		<HyperlinkButton x:Uid="PrivacyPolicyButton"
+						 HorizontalAlignment="Right"
+						 NavigateUri=""
+						 Margin="2,15,2,2"
+						 Content="privacy policy"
+						 Style="{StaticResource HyperlinkButtonStyle}"/>
 	</StackPanel>
 
 </ContentDialog>

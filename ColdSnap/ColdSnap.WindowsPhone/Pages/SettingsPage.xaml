@@ -283,8 +283,8 @@
 			<PivotItem x:Uid="SettingNotificationsGroup" Header="NOTIFICATIONS">
 				<ScrollViewer>
 					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Toast notifications" IsOn="True"/>
-						<CheckBox x:Uid="SettingsInstantNotifications" Content="Instant notifications" IsChecked="True"/>
+						<ToggleSwitch x:Uid="SettingsSnapNotifications" Header="Toast notifications" IsOn="{Binding IsToastNotificationsEnabled}"/>
+						<CheckBox x:Uid="SettingsInstantNotifications" Content="Instant notifications" IsChecked="{Binding IsInstantNotificationsEnabled}"/>
 						<Button x:Uid="UpgradeToProButton" HorizontalAlignment="Stretch" Content="Unlock this feature"/>
 						<TextBlock x:Uid="InstantNotificationsDisclaimer" TextWrapping="WrapWholeWords" Style="{StaticResource ControlContextualInfoTextBlockStyle}" FontFamily="Global User Interface">
 							When you enable instant notifications, you give us permission to store your Snapchat auth token on our secure cloud service.

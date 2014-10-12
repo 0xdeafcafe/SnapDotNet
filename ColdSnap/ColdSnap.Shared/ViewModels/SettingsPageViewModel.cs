@@ -80,6 +80,19 @@ namespace ColdSnap.ViewModels
 		}
 
 		/// <summary>
+		/// Gets or sets whether instant notifications are enabled.
+		/// </summary>
+		public bool IsInstantNotificationsEnabled
+		{
+			get { return AppSettings.Get("IsInstantNotificationsEnabled", false); }
+			set
+			{
+				AppSettings.Set("IsInstantNotificationsEnabled", value);
+				OnPropertyChanged();
+			}
+		}
+
+		/// <summary>
 		/// Gets the example colour of the app tile for the phone example
 		/// </summary>
 		public SolidColorBrush TileTransparencyUiExampleBrush

@@ -209,7 +209,6 @@
 		<SolidColorBrush x:Key="HyperlinkButtonBackgroundThemeBrush" Color="Transparent"/>
 		<SolidColorBrush x:Key="HyperlinkButtonBorderThemeBrush" Color="Transparent"/>
 		<Thickness x:Key="HyperlinkButtonBorderThemeThickness">0</Thickness>
-		<FontFamily x:Key="PhoneFontFamilySemiLight">Segoe WP SemiLight</FontFamily>
 		<Style x:Key="HyperlinkButtonStyle" TargetType="HyperlinkButton">
 			<Setter Property="Foreground" Value="{ThemeResource HyperlinkForegroundThemeBrush}"/>
 			<Setter Property="Background" Value="{ThemeResource HyperlinkButtonBackgroundThemeBrush}"/>
@@ -218,8 +217,9 @@
 			<Setter Property="Padding" Value="0,3,0,4"/>
 			<Setter Property="HorizontalAlignment" Value="Left"/>
 			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilySemiLight}"/>
-			<Setter Property="FontWeight" Value="SemiLight"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontFamily" Value="Segoe WP Semibold"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="HyperlinkButton">
@@ -270,16 +270,22 @@
 					 MaxLength="32"
 					 Password="{Binding Password, Mode=TwoWay}" Style="{StaticResource PasswordBoxStyle}"/>
 
-		<HyperlinkButton Name="forgotPasswordButton"
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+			<HyperlinkButton
+						 x:Uid="PrivacyPolicyButton"
+						 NavigateUri=""
+						 Margin="2,2,5,2"
+						 Content="privacy policy"
+						 Style="{StaticResource HyperlinkButtonStyle}"/>
+			<TextBlock>&#183;</TextBlock>
+			<HyperlinkButton Name="forgotPasswordButton"
 						 x:Uid="ForgotPasswordButton"
 						 NavigateUri="http://support.snapchat.com/password-reset-request"
-						 HorizontalAlignment="Right"
-						 FontSize="16"
-						 FontFamily="Segoe WP Semibold"
-						 FontWeight="SemiBold"
-						 Margin="2"
+						 Margin="5,2,2,2"
 						 Content="forgot password?"
 						 Style="{StaticResource HyperlinkButtonStyle}"/>
+
+		</StackPanel>
 	</StackPanel>
 
 </ContentDialog>
