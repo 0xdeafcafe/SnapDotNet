@@ -1,25 +1,73 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.ApplicationModel.Resources;
-using Windows.System;
+using Windows.Networking.PushNotifications;
+using Windows.System.Profile;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using ColdSnap.Pages;
+using ColdSnap.Utilities;
+using Microsoft.WindowsAzure.MobileServices;
 using SnapDotNet.Utilities;
 
 namespace ColdSnap
 {
-    public sealed partial class App : Application
+    public sealed partial class App
     {
 		public static readonly ResourceLoader Strings = new ResourceLoader();
+
+		public static MobileServiceClient MobileService = new MobileServiceClient(
+			"https://snapdotnet.azure-mobile.net/",
+			"sTdykEmtfJsTQmafUMxrKalcdkaphW67"
+		);
+
+		public static string DeviceIdent =
+			Sha.Sha256(BitConverter.ToString(HardwareIdentification.GetPackageSpecificToken(null).Id.ToArray()));
 
         public App()
         {
             InitializeComponent();
             Suspending += OnSuspending;
         }
+
+		internal static async Task StopPushNotificationsAsync()
+		{
+			// TODO
+		}
+
+		private static async Task RegisterPushChannelAsync()
+		{
+			if (await BackgroundExecutionManager.RequestAccessAsync() == BackgroundAccessStatus.Denied)
+			{
+				Debug.WriteLine("[SettingsPageViewModel] Background task access request was denied");
+				await new MessageDialog(App.Strings.GetString("BackgroundAccessStatusDeniedMessage")).ShowAsync();
+				return;
+			}
+
+			// Get rid of existing registrations.
+			foreach (var task in BackgroundTaskRegistration.AllTasks)
+				task.Value.Unregister(false);
+
+			// Register a background task.
+			var builder = new BackgroundTaskBuilder
+			{
+				Name = "Notifications Push Task",
+				TaskEntryPoint = typeof(BackgroundPushTask.BackgroundPushTask).FullName
+			};
+			builder.SetTrigger(new PushNotificationTrigger());
+			builder.Register();
+
+			var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+			await MobileService.GetPush().RegisterNativeAsync(channel.Uri, new[] { "SnapDotNetUser", App.DeviceIdent });
+
+			Debug.WriteLine("[SettingsPageViewModel] Background task registered");
+		}
 
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
@@ -49,29 +97,15 @@ namespace ColdSnap
 		            ? typeof (MainPage)
 		            : typeof (StartPage);
 
+				// Register for push notifications.
+				RegisterPushChannelAsync();
+
                 if (!rootFrame.Navigate(destination))
                     throw new Exception("Failed to create initial page");
             }
 
 			// Activate the window.
             Window.Current.Activate();
-
-			// Memory usage monitoring
-#if DEBUG
-			Debug.WriteLine("[App] Allocated memory: {0} MB", MemoryManager.AppMemoryUsageLimit / 1024 / 1024);
-	        MemoryManager.AppMemoryUsageIncreased += delegate
-	        {
-		        Debug.WriteLine("[App] Memory usage increased to {0} (allocated memory: {1} MB)", MemoryManager.AppMemoryUsageLevel.ToString().ToUpperInvariant(), MemoryManager.AppMemoryUsageLimit / 1024 / 1024);
-	        };
-			MemoryManager.AppMemoryUsageDecreased += delegate
-			{
-				Debug.WriteLine("[App] Memory usage decreased to {0} (allocated memory: {1} MB)", MemoryManager.AppMemoryUsageLevel.ToString().ToUpperInvariant(), MemoryManager.AppMemoryUsageLimit / 1024 / 1024);
-			};
-			MemoryManager.AppMemoryUsageLimitChanging += (sender, args) =>
-			{
-				Debug.WriteLine("[App] Memory usage limit set to {0} MB (previously {1} MB)", args.NewLimit / 1024 / 1024, args.OldLimit / 1024 / 1024);
-			};
-#endif
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)

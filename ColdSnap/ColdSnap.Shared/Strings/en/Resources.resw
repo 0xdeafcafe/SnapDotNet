@@ -117,4 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BackgroundAccessStatusDeniedMessage" xml:space="preserve">
+    <value>This app does not have permission to enable notifications.</value>
+  </data>
+  <data name="ReplayAvailableText" xml:space="preserve">
+    <value>replay available!</value>
+  </data>
+  <data name="ReplayFormattedText" xml:space="preserve">
+    <value>{0} hours and {1} minutes</value>
+    <comment>Tokens: {0} = hours; {1} = minutes</comment>
+  </data>
 </root>

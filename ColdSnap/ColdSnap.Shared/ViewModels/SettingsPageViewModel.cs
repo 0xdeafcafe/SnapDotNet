@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using ColdSnap.Atlas;
 using ColdSnap.Common;
+using ColdSnap.Helpers;
 using ColdSnap.Pages;
 using SnapDotNet.Utilities;
 
@@ -76,6 +80,8 @@ namespace ColdSnap.ViewModels
 			{
 				AppSettings.Set("IsToastNotificationsEnabled", value);
 				OnPropertyChanged();
+
+				if (!value) IsInstantNotificationsEnabled = false;
 			}
 		}
 
@@ -89,8 +95,21 @@ namespace ColdSnap.ViewModels
 			{
 				AppSettings.Set("IsInstantNotificationsEnabled", value);
 				OnPropertyChanged();
+
+				ToggleInstantNotificationsAsync(value);
 			}
 		}
+
+		/// <summary>
+		/// Gets a boolean value indicating whether the instant notifications setting was
+		/// saved to the cloud.
+		/// </summary>
+		public bool IsInstantNotificationsSettingSaved
+		{
+			get { return _isInstantNotificationsSettingSaved; }
+			private set { SetValue(ref _isInstantNotificationsSettingSaved, value); }
+		}
+	    private bool _isInstantNotificationsSettingSaved = true;
 
 		/// <summary>
 		/// Gets the example colour of the app tile for the phone example
@@ -114,10 +133,8 @@ namespace ColdSnap.ViewModels
 				{
 					return App.Strings.GetString("ReplayAvailableText");
 				}
-				else
-				{
-					return string.Format(App.Strings.GetString("ReplayFormattedText"), nextReplay.Hours, nextReplay.Minutes);
-				}
+
+				return string.Format(App.Strings.GetString("ReplayFormattedText"), nextReplay.Hours, nextReplay.Minutes);
 			}
 		}
 
@@ -134,5 +151,46 @@ namespace ColdSnap.ViewModels
 			await logoutTask;
 			await deleteFilesTask;
 		}
+
+	    private async Task ToggleInstantNotificationsAsync(bool enabled)
+	    {
+		    IsInstantNotificationsSettingSaved = false;
+		    await StatusBarHelper.ShowStatusBarAsync("");
+
+			// Get or create user object, update the settings and send it back on its way.
+		    bool create = false;
+		    var user = (await App.MobileService.GetTable<AtlasUser>()
+			    .Where(
+				    u =>
+					    u.DeviceId == App.DeviceIdent && u.SnapchatUsername == Account.Username &&
+					    u.AuthToken == Account.AuthToken).ToListAsync()).FirstOrDefault();
+
+		    if (user == null)
+		    {
+			    user = new AtlasUser
+			    {
+				    DeviceId = App.DeviceIdent,
+					Probation = false,
+					LastPushServed = DateTime.UtcNow,
+					Subscribed = true,
+					SnapchatUsername = Account.Username
+			    };
+			    create = true;
+		    }
+			user.AuthToken = Account.AuthToken;
+			user.AuthTokenExpired = false;
+			user.Subscribed = enabled;
+			user.ChatNotify = true;
+			user.ScreenshotNotify = true;
+			user.SnapNotify = true;
+			user.NewUser = true;
+			user.NextUpdate = DateTime.UtcNow;
+		    if (create) await App.MobileService.GetTable<AtlasUser>().InsertAsync(user);
+
+			IsInstantNotificationsSettingSaved = true;
+		    await StatusBarHelper.HideStatusBarAsync();
+
+		    Debug.WriteLine("[SettingsPageViewModel] Updated user info on Atlas");
+	    }
     }
 }
