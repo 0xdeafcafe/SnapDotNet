@@ -291,6 +291,17 @@ namespace SnapDotNet.Data
 		private ReadOnlyObservableCollection<Friend> _readOnlyRecentFriends;
 		private readonly ObservableCollection<Friend> _recentFriends;
 
+		/// <summary>
+		/// Gets the number of best friends of this user.
+		/// </summary>
+		/// <seealso cref="SetBestFriendsCountAsync"/>
+		public int NumberOfBestFriends
+		{
+			get { return _bestFriendCount; }
+			private set { SetValue(ref _bestFriendCount, value); }
+		}
+		private int _bestFriendCount;
+
 		/* TODO:
 			[DataMember(Name = "added_friends")]
 			public ObservableCollection<AddedFriend> AddedFriends { get; set; }
@@ -406,10 +417,13 @@ namespace SnapDotNet.Data
 		#region Settings
 		
 		/// <summary>
+		/// Sets the number of best friends for this user.
 		/// 
+		/// Acceptable values are 3, 5 or 7.
 		/// </summary>
-		/// <param name="count"></param>
-		/// <returns></returns>
+		/// <param name="count">The number of friends.</param>
+		/// <returns>A new collection of best friends.</returns>
+		/// <seealso cref="NumberOfBestFriends"/>
 		public async Task<IEnumerable<Friend>> SetBestFriendsCountAsync(int count)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(count == 3 || count == 5 || count == 7);
@@ -425,18 +439,15 @@ namespace SnapDotNet.Data
 			try
 			{
 				var response = await EndpointManager.Managers["bq"].PostAsync<BestFriendsResponse>("set_num_best_friends", data, AuthToken);
-				if (response.IsLogged)
-				{
-					Debug.WriteLine("[Account] Set number of best friends to {0}", count);
+				Debug.WriteLine("[Account] Set number of best friends to {0}", count);
 
-					foreach (var bestFriend in response.BestFriends)
-					{
-						var friend = Friends.FirstOrDefault(f => f.Username == bestFriend);
-						if (friend != null) bestFriends.Add(friend);
-					}
-					return bestFriends;
+				foreach (var bestFriend in response.BestFriends)
+				{
+					var friend = Friends.FirstOrDefault(f => f.Username == bestFriend);
+					if (friend != null) bestFriends.Add(friend);
 				}
-				Debug.WriteLine("[Account] Failed to change number of best friends to {0}. Reason: {1}", count, response.Message);
+
+				NumberOfBestFriends = bestFriends.Count;
 				return bestFriends;
 			}
 			catch (InvalidHttpResponseException ex)
@@ -452,19 +463,20 @@ namespace SnapDotNet.Data
 		/// 
 		/// </summary>
 		/// <param name="email"></param>
+		/// <returns><c>null</c> if succeeded; otherwise, the error message.</returns>
 		/// <exception cref="InvalidCredentialsException">
 		/// <see cref="AuthToken"/> is expired or invalid.
 		/// </exception>
-		public async Task<bool> SetEmailAsync(string email)
+		public async Task<string> SetEmailAsync(string email)
 		{
 			Contract.Requires<ArgumentNullException>(email != null);
-			if (await UpdateSettingAsync("updateEmail", new Dictionary<string, string> { { "email", email } }, verify: email))
+			var response = await UpdateSettingAsync("updateEmail", new Dictionary<string, string> {{"email", email}}, verify: email);
+			if (response == null)
 			{
 				Debug.WriteLine("[Account] Success! Email = \"{0}\"", email);
 				Email = email;
-				return true;
 			}
-			return false;
+			return response;
 		}
 
 		/// <summary>
@@ -488,19 +500,20 @@ namespace SnapDotNet.Data
 		/// 
 		/// </summary>
 		/// <param name="canViewMatureContent"></param>
+		/// <returns><c>null</c> if succeeded; otherwise, the error message.</returns>
 		/// <exception cref="InvalidCredentialsException">
 		/// <see cref="AuthToken"/> is expired or invalid.
 		/// </exception>
-		public async Task<bool> SetCanViewMatureContentAsync(bool canViewMatureContent)
+		public async Task<string> SetCanViewMatureContentAsync(bool canViewMatureContent)
 		{
 			string canView = canViewMatureContent ? "true" : "false";
-			if (await UpdateSettingAsync("updateCanViewMatureContent", new Dictionary<string, string> { { "canViewMatureContent", canView } }))
+			var response = await UpdateSettingAsync("updateCanViewMatureContent", new Dictionary<string, string> {{"canViewMatureContent", canView}});
+			if (response == null)
 			{
 				Debug.WriteLine("[Account] Success! CanViewMatureContent = {0}", canViewMatureContent);
 				CanViewMatureContent = canViewMatureContent;
-				return true;
 			}
-			return false;
+			return response;
 		}
 
 		/// <summary>
@@ -543,21 +556,22 @@ namespace SnapDotNet.Data
 		/// </summary>
 		/// <param name="month">The month this user was born.</param>
 		/// <param name="day">The day this user was born.</param>
+		/// <returns><c>null</c> if succeeded; otherwise, the error message.</returns>
 		/// <exception cref="InvalidCredentialsException">
 		/// <see cref="AuthToken"/> is expired or invalid.
 		/// </exception>
-		public async Task<bool> SetBirthdayAsync(int month, int day)
+		public async Task<string> SetBirthdayAsync(int month, int day)
 		{
 			string birthday = string.Format("{0:D2}-{1:D2}", month, day);
 			string verification = Birthday.Year + "-" + birthday;
 
-			if (await UpdateSettingAsync("updateBirthday", new Dictionary<string, string> { { "birthday", birthday } }, verify: verification))
+			var response = await UpdateSettingAsync("updateBirthday", new Dictionary<string, string> {{"birthday", birthday}}, verify: verification);
+			if (response == null)
 			{
 				Birthday = new DateTime(Birthday.Year, month, day);
 				Debug.WriteLine("[Account] Success! Birthday = {0}", Birthday);
-				return true;
 			}
-			return false;
+			return response;
 		}
 
 		/// <summary>
@@ -566,8 +580,8 @@ namespace SnapDotNet.Data
 		/// <param name="actionName"></param>
 		/// <param name="data"></param>
 		/// <param name="verify"></param>
-		/// <returns></returns>
-		private async Task<bool> UpdateSettingAsync(string actionName, Dictionary<string, string> data, string verify = null)
+		/// <returns><c>null</c> if succeeded; otherwise, the error message.</returns>
+		private async Task<string> UpdateSettingAsync(string actionName, Dictionary<string, string> data, string verify = null)
 		{
 			Contract.Requires<ArgumentNullException>(actionName != null);
 			Debug.WriteLine("[Account] Updating setting [actionName: \"{0}\"]", actionName);
@@ -582,14 +596,14 @@ namespace SnapDotNet.Data
 				if (response.IsLogged)
 				{
 					if (verify != null)
-						return verify == response.Parameter;
-					else
-						return true;
+						return verify == response.Parameter ? null : response.Message;
+
+					return null;
 				}
 				else
 				{
 					Debug.WriteLine("[Account] Failed to update setting. Reason: {0}", response.Message);
-					return false;
+					return response.Message;
 				}
 			}
 			catch (InvalidHttpResponseException ex)
@@ -736,6 +750,7 @@ namespace SnapDotNet.Data
 			CanViewMatureContent = response.CanViewMatureContent;
 			IsBlockedFromOurStory = response.BlockedFromOurStory;
 			ShouldPlayNotificationSound = (response.NotificationSoundSetting == "ON");
+			NumberOfBestFriends = response.NumberOfBestFriends;
 
 			// Update recent friends.
 			_recentFriends.Clear();

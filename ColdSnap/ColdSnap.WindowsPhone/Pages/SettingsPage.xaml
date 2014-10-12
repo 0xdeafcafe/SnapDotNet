@@ -6,6 +6,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:viewModels="using:ColdSnap.ViewModels"
+	xmlns:snapDotNet="using:ColdSnap.Converters.SnapDotNet"
 	mc:Ignorable="d"
 
 	NavigationCacheMode="Enabled"
@@ -17,6 +18,8 @@
 	</d:DesignProperties.DataContext>
 
 	<Page.Resources>
+		<snapDotNet:NumberOfBestFriendsToIndexConverter x:Key="NumberOfBestFriendsToIndexConverter"/>
+		
 		<SolidColorBrush x:Key="PageAccentBrush" Color="#FF00A2FF" />
 
 		<x:Double x:Key="TextStyleExtraLargeFontSize">25.5</x:Double>
@@ -233,9 +236,13 @@
 			<PivotItem x:Uid="SettingsProfileGroup" Header="PROFILE">
 				<ScrollViewer>
 					<StackPanel>
-						<TextBox x:Uid="SettingsEmailTextBox" Header="Email" InputScope="EmailSmtpAddress" Text="{Binding Account.Email}"/>
-						<TextBox x:Uid="SettingsPhoneTextBox" Header="Phone" InputScope="TelephoneNumber" Text="{Binding Account.PhoneNumber}"/>
-						<ComboBox x:Uid="SettingsNumberOfBestFriends" Header="Number of best friends" Margin="0,7,0,0">
+						<TextBox x:Uid="SettingsEmailTextBox" Header="Email" LostFocus="EmailTextBox_OnLostFocus" InputScope="EmailSmtpAddress" Text="{Binding Account.Email}"/>
+						<TextBox x:Uid="SettingsPhoneTextBox" IsReadOnly="True" Header="Phone" LostFocus="PhoneTextBox_OnLostFocus" InputScope="TelephoneNumber" Text="{Binding Account.PhoneNumber}"/>
+						<ComboBox x:Uid="SettingsNumberOfBestFriends"
+								  x:Name="NumberOfBestFriendsComboBox"
+								  Header="Number of best friends" Margin="0,8,0,0"
+								  SelectionChanged="BestFriends_OnSelectionChanged"
+								  SelectedIndex="{Binding Account.NumberOfBestFriends, Converter={StaticResource NumberOfBestFriendsToIndexConverter}}">
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends3">3</ComboBoxItem>
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends5">5</ComboBoxItem>
 							<ComboBoxItem x:Uid="SettingsNumberOfBestFriends7">7</ComboBoxItem>
@@ -272,7 +279,7 @@
 							<ComboBoxItem x:Uid="StoryPrivacyFriends">Friends</ComboBoxItem>
 							<ComboBoxItem x:Uid="StoryPrivacyCustom">Custom</ComboBoxItem>
 						</ComboBox>
-						<ComboBox x:Uid="SettingsMessagePrivacy" Header="Who can send me snaps?" SelectedIndex="1">
+						<ComboBox x:Uid="SettingsMessagePrivacy" Header="Who can send me snaps?" SelectedIndex="1" FontFamily="Global User Interface">
 							<ComboBoxItem x:Uid="MessagePrivacyEveryone">Everyone</ComboBoxItem>
 							<ComboBoxItem x:Uid="MessagePrivacyFriends">Friends</ComboBoxItem>
 						</ComboBox>

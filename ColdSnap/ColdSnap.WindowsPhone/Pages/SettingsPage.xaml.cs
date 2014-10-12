@@ -1,7 +1,10 @@
-﻿using Windows.Graphics.Display;
+﻿using System.Linq;
+using Windows.Graphics.Display;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using ColdSnap.Common;
+using ColdSnap.Helpers;
 using ColdSnap.ViewModels;
 using System;
 using Windows.UI.Xaml.Controls;
@@ -90,5 +93,31 @@ namespace ColdSnap.Pages
 		}
 
 		#endregion
+
+		private async void EmailTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+		{
+			await StatusBarHelper.ShowStatusBarAsync("");
+
+			var response = await ViewModel.Account.SetEmailAsync((sender as TextBox).Text);
+			if (response != null) // error
+			{
+				(sender as TextBox).Text = ViewModel.Account.Email;
+				await new MessageDialog(response).ShowAsync();
+			}
+
+			await StatusBarHelper.HideStatusBarAsync();
+		}
+
+		private async void PhoneTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+		{
+			
+		}
+
+		private async void BestFriends_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			await StatusBarHelper.ShowStatusBarAsync("");
+			await ViewModel.Account.SetBestFriendsCountAsync((NumberOfBestFriendsComboBox.SelectedIndex*2 + 3));
+			await StatusBarHelper.HideStatusBarAsync();
+		}
 	}
 }

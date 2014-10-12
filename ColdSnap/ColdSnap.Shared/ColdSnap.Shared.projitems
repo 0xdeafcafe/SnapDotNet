@@ -30,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\ByteArrayToBitmapConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\FriendRequestStateToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\NumberOfBestFriendsToIndexConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\StoryActionTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\SnapDotNet\StoryAngleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\CameraControlHelper.cs" />
