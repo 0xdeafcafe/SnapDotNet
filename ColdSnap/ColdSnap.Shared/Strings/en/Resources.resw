@@ -227,7 +227,7 @@
     <value>ABOUT</value>
   </data>
   <data name="SettingsAppGroup.Header" xml:space="preserve">
-    <value>APP</value>
+    <value>FEATURES</value>
   </data>
   <data name="SettingsAutomaticallyDownloadSnaps.Header" xml:space="preserve">
     <value>Automatically download snaps</value>
@@ -284,7 +284,7 @@
     <value>SERVICES</value>
   </data>
   <data name="SettingsSnapNotifications.Header" xml:space="preserve">
-    <value>Snap notifications</value>
+    <value>Toast notifications</value>
   </data>
   <data name="SettingsStoryPrivacy.Header" xml:space="preserve">
     <value>Who can see my story?</value>

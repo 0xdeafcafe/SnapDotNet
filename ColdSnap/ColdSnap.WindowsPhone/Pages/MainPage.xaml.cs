@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
@@ -55,6 +56,9 @@ namespace ColdSnap.Pages
 		/// session.  The state will be null the first time a page is visited.</param>
 		private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
 		{
+			// Restore bottom app bar.
+			BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Compact;
+
 			if (e.NavigationParameter is Account)
 				ViewModel.Account = e.NavigationParameter as Account;
 
@@ -216,6 +220,17 @@ namespace ColdSnap.Pages
 					break;
 				}
 			}
+		}
+
+		private void SettingsAppBarButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			/*
+			 * Since it takes a noticeable amount of time to navigate to settings page, we can jump
+			 * start the bottom app bar close animation to make the app seem faster.
+			 */
+			BottomAppBar.ClosedDisplayMode = AppBarClosedDisplayMode.Minimal;
+			BottomAppBar.IsOpen = false;
+			ViewModel.GoToSettingsCommand.Execute(null);
 		}
 	}
 }

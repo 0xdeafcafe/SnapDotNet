@@ -301,13 +301,16 @@
 			<PivotItem x:Uid="SettingsTileGroup" Header="TILE">
 				<Grid>
 					<StackPanel>
-						<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="{Binding LiveTileEnabled, Mode=TwoWay}"/>
-						<ToggleSwitch x:Uid="SettingsTileTransaprency" Header="Tile transparency" IsOn="{Binding TileTransparencyEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsLiveTile" Header="Live tile" IsOn="{Binding IsLiveTileEnabled, Mode=TwoWay}"/>
+						<ToggleSwitch x:Uid="SettingsTileTransaprency" Header="Tile transparency" IsOn="{Binding IsTileTransparencyEnabled, Mode=TwoWay}"/>
 
 					</StackPanel>
 
 					<Border VerticalAlignment="Bottom" HorizontalAlignment="Center"
 							Height="290" Width="340" BorderThickness="2,2,2,0" BorderBrush="#FF808080" CornerRadius="10,10,0,0">
+						<Border.CacheMode>
+							<BitmapCache/>
+						</Border.CacheMode>
 						<Border VerticalAlignment="Bottom" HorizontalAlignment="Center"
 								Height="270" Width="305" BorderThickness="2,2,2,0" BorderBrush="#FF808080" Background="#FFDDDDDD" CornerRadius="10,10,0,0">
 							<Grid>

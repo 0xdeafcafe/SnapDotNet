@@ -42,12 +42,12 @@ namespace ColdSnap.ViewModels
 		/// <summary>
 		/// Gets or sets whether the app tile should be live.
 		/// </summary>
-		public bool LiveTileEnabled
+		public bool IsLiveTileEnabled
 		{
-			get { return AppSettings.Get("LiveTileEnabled", true); }
+			get { return AppSettings.Get("IsLiveTileEnabled", true); }
 			set
 			{
-				AppSettings.Set("LiveTileEnabled", value);
+				AppSettings.Set("IsLiveTileEnabled", value);
 				OnPropertyChanged();
 			}
 		}
@@ -55,14 +55,27 @@ namespace ColdSnap.ViewModels
 		/// <summary>
 		/// Gets or sets whether the app tile should be transparent should be enabled.
 		/// </summary>
-		public bool TileTransparencyEnabled
+		public bool IsTileTransparencyEnabled
 		{
-			get { return AppSettings.Get("TileTransparencyEnabled", true); }
+			get { return AppSettings.Get("IsTileTransparencyEnabled", true); }
 			set
 			{
-				AppSettings.Set("TileTransparencyEnabled", value);
+				AppSettings.Set("IsTileTransparencyEnabled", value);
 				OnPropertyChanged();
 				OnPropertyChanged(() => TileTransparencyUiExampleBrush);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether toast notifications are enabled.
+		/// </summary>
+		public bool IsToastNotificationsEnabled
+		{
+			get { return AppSettings.Get("IsToastNotificationsEnabled", true); }
+			set
+			{
+				AppSettings.Set("IsToastNotificationsEnabled", value);
+				OnPropertyChanged();
 			}
 		}
 
@@ -73,7 +86,7 @@ namespace ColdSnap.ViewModels
 		{
 			get
 			{
-				return TileTransparencyEnabled
+				return IsTileTransparencyEnabled
 					? Application.Current.Resources["PhoneAccentBrush"] as SolidColorBrush
 					: new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xB2, 0xE2));
 			}

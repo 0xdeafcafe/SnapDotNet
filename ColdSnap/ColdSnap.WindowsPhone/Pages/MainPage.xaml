@@ -346,7 +346,7 @@
 			<CommandBar.SecondaryCommands>
 				<AppBarButton x:Uid="AppBarRefresh" Label="refresh" Command="{Binding RefreshCommand}"/>
 				<AppBarButton x:Uid="AppBarManageFriends" Label="manage friends" Command="{Binding GoToManageFriendsCommand}"/>
-				<AppBarButton x:Uid="AppBarSettings" Label="settings" Command="{Binding GoToSettingsCommand}"/>
+				<AppBarButton x:Uid="AppBarSettings" Click="SettingsAppBarButton_OnClick"  Label="settings"/>
 			</CommandBar.SecondaryCommands>
 		</CommandBar>
 	</Page.BottomAppBar>
@@ -453,10 +453,17 @@
 								      ItemsSource="{Binding Source={StaticResource FriendGroups}}"
 								      Loaded="FriendsListView_OnLoaded"
 								      Height="{Binding ActualHeight, ElementName=StoriesPivotItem}">
-
+								
 								<ListView.ItemsPanel>
 									<ItemsPanelTemplate>
-										<ItemsStackPanel ItemsUpdatingScrollMode="KeepScrollOffset"/>
+										<ItemsStackPanel ItemsUpdatingScrollMode="KeepScrollOffset" CacheLength="2" >
+											<ItemsStackPanel.ChildrenTransitions>
+												<TransitionCollection>
+													<EntranceThemeTransition/>
+													<AddDeleteThemeTransition/>
+												</TransitionCollection>
+											</ItemsStackPanel.ChildrenTransitions>
+										</ItemsStackPanel>
 									</ItemsPanelTemplate>
 								</ListView.ItemsPanel>
 
@@ -487,6 +494,11 @@
 										<GroupStyle.HeaderContainerStyle>
 											<Style TargetType="ListViewHeaderItem">
 												<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+												<Setter Property="Transitions">
+													<Setter.Value>
+														<TransitionCollection/>
+													</Setter.Value>
+												</Setter>
 											</Style>
 										</GroupStyle.HeaderContainerStyle>
 									</GroupStyle>
