@@ -1,4 +1,5 @@
-﻿using Windows.ApplicationModel.Appointments;
+﻿using System.Threading.Tasks;
+using Windows.ApplicationModel.Appointments;
 using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
@@ -26,10 +27,10 @@ namespace ColdSnap.Pages
 
 			DataContext = new CameraPageViewModel();
 
-			//StartInitializing(); -> going out for a bit, audioDevice throwing exceptions, need to fix
+			//StartInitializingAsync(); -> going out for a bit, audioDevice throwing exceptions, need to fix
 		}
 
-		private async void StartInitializing()
+		private async Task StartInitializingAsync()
 		{
 			CameraTriggerButton.IsTapEnabled = false;
 
